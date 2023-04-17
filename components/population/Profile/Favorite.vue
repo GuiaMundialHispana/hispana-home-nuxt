@@ -26,13 +26,14 @@ export default {
     return {
       user:useUserStore(),
       favorite: false,
-      properties: {}
+      properties: {},
+      auth: ''
     }
   },
   methods: {
     // TODO no agregar favoritos con el mismo id
     async getFavorites() {
-      const {data} = await useFetch(this.user.auth.API+'users/favorites',{
+      const {data} = await useFetch(this.auth.API+'users/favorites',{
         method: 'get',
         headers: {
           'Authorization': 'Bearer ' + this.user.token,
@@ -46,6 +47,7 @@ export default {
     }
   },
   created() {
+    this.auth = useRuntimeConfig();
     this.getFavorites();
   }
 }

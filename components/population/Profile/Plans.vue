@@ -28,12 +28,13 @@ export default {
     return {
       user:useUserStore(),
       isPlan: false,
-      plans: {}
+      plans: {},
+      auth: ''
     }
   },
   methods: {
     async getPlans() {
-      const {data} = await useFetch(this.user.auth.API+'user-plans',{
+      const {data} = await useFetch(this.auth.API+'user-plans',{
         method: 'get',
         headers: {
           'Authorization': 'Bearer ' + this.user.token,
@@ -47,6 +48,7 @@ export default {
     }
   },
   created() {
+    this.auth = useRuntimeConfig();
     this.getPlans();
   }
 }

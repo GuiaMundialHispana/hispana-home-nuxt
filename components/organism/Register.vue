@@ -37,13 +37,14 @@ export default {
       lastname: '',
       email: '',
       password: '',
-      password_confirmation: ''
+      password_confirmation: '',
+      auth: ''
     }
   },
   methods: {
     async register() {
       this.$emit('close');
-      const {pending, data} = await useFetch(this.user.auth.API+'auth/register',
+      const {pending, data} = await useFetch(this.auth.API+'auth/register',
         {
           method: 'POST',
           body: {
@@ -76,6 +77,9 @@ export default {
         });
       }
     }
+  },
+  created() {
+    this.auth = useRuntimeConfig();
   }
 }
 </script>

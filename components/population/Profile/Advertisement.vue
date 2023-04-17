@@ -50,7 +50,8 @@ export default {
       ],
       user:useUserStore(),
       test: false,
-      propertys: []
+      propertys: [],
+      auth: ''
     }
   },
   methods: {
@@ -60,7 +61,7 @@ export default {
       //aqui haremos el fetch para cada vez que le den click enviarle al endpoint el parametro que recivimos
     },
     async getAdvertisement() {
-      const {data} = await useFetch(this.user.auth.API+'advertisements',{
+      const {data} = await useFetch(this.auth.API+'advertisements',{
         method: 'get',
         headers: {
           'Authorization': 'Bearer ' + this.user.token,
@@ -75,6 +76,7 @@ export default {
     }
   },
   created() {
+    this.auth = useRuntimeConfig();
     this.getAdvertisement();
   }
 }

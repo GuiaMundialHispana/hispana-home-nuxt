@@ -75,6 +75,7 @@ export default {
     return {
       user: useUserStore(),
       favorite: false,
+      auth: ''
     }
   },
   props: {
@@ -109,7 +110,7 @@ export default {
       }
     },
     async deleteFavorite() {
-      const {data} = await useFetch(this.user.auth.API+'users/favorites',{
+      const {data} = await useFetch(this.API+'users/favorites',{
         method: 'delete',
         headers: {
           'Authorization': 'Bearer ' + this.user.token,
@@ -135,6 +136,9 @@ export default {
         return this.deleteFavorite();
       } else { return this.addFavorite(); }
     }
+  },
+  created() {
+    this.auth = useRuntimeConfig();
   }
 }
 </script>
