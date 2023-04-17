@@ -44,7 +44,7 @@ export default {
   methods: {
     async register() {
       this.$emit('close');
-      const {pending, data} = await useFetch(this.auth.API+'auth/register',
+      const {pending, data} = await useFetch(this.$config.public.API+'auth/register',
         {
           method: 'POST',
           body: {

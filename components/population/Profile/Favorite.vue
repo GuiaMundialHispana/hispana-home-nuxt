@@ -33,7 +33,7 @@ export default {
   methods: {
     // TODO no agregar favoritos con el mismo id
     async getFavorites() {
-      const {data} = await useFetch(this.auth.API+'users/favorites',{
+      const {data} = await useFetch(this.$config.public.API+'users/favorites',{
         method: 'get',
         headers: {
           'Authorization': 'Bearer ' + this.user.token,

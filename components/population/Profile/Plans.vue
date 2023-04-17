@@ -34,7 +34,7 @@ export default {
   },
   methods: {
     async getPlans() {
-      const {data} = await useFetch(this.auth.API+'user-plans',{
+      const {data} = await useFetch(this.$config.public.API+'user-plans',{
         method: 'get',
         headers: {
           'Authorization': 'Bearer ' + this.user.token,

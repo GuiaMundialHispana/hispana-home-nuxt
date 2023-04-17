@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     async login() {
-      const { data, pending }  = await useFetch(this.auth.API+'auth/login',{
+      const { data, pending }  = await useFetch(this.$config.public.API+'auth/login',{
         method: 'POST',
         body: {
           email: this.email,
@@ -64,11 +64,6 @@ export default {
         });
       }
     }
-  },
-  created() {
-    this.auth = useRuntimeConfig();
-    console.log(this.user.auth.API)
-    console.log(this.auth.API)
   }
 }
 </script>

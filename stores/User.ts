@@ -17,28 +17,31 @@ export const useUserStore = defineStore('user', {
         profile_pic: null
       },
       token: '',
-      auth: useRuntimeConfig(),
       getEmail: '',
       nextStep: false,
       emailPassword: '',
       passwordToken: '',
       newPassword: '',
-      repeatPassword: ''
+      repeatPassword: '',
+
     }
   },
   actions: {
     async getProfile(){
-      const { data }  = await useFetch(this.auth.API+'auth/profile',{
+      const { data }  = await useFetch(useRuntimeConfig().API+'auth/profile',{
         method: 'POST',
         body: {
           token: this.token
-        }
+        },
+        headers: {
+          'Authorization': 'Bearer ' + this.token
+        },
       });
       const res = data.value.results.user;
       this.userData = res;
     },
     async getGoogle(){
-      const { data,error }  = await useFetch(this.auth.API+'auth/social/google',{
+      const { data,error }  = await useFetch(this.$config.public.API+'auth/social/google',{
         method: 'GET',
         headers: {
           'access-control-allow-origin': "*",
@@ -48,12 +51,10 @@ export const useUserStore = defineStore('user', {
 
       });
       const res = error;
-      console.log(res)
       const res2 = data;
-      console.log(res2)
     },
     async logOut() {
-      await useFetch(this.auth.API+'auth/logout',{
+      await useFetch(useRuntimeConfig().API+'auth/logout',{
         method: 'POST',
         body: {
           token: this.token
@@ -63,7 +64,7 @@ export const useUserStore = defineStore('user', {
       useRouter().push("/")
     },
     async sendPassWordEmail() {
-      const { data, pending } = await useFetch(this.auth.API+'auth/forgot-password',{
+      const { data, pending } = await useFetch(useRuntimeConfig().API+'auth/forgot-password',{
         method: 'POST',
         body: {
           email: this.getEmail
@@ -84,7 +85,7 @@ export const useUserStore = defineStore('user', {
       }
     },
     async changePassword() {
-      const { data }  = await useFetch(this.auth.API+'auth/change-password',{
+      const { data }  = await useFetch(useRuntimeConfig().API+'auth/change-password',{
         method: 'POST',
         body: {
           email: this.emailPassword,

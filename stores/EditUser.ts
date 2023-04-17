@@ -21,7 +21,6 @@ export const useUserEditStore = defineStore('UserEdit', {
         password_confirmation: Number,
       },
       token: '',
-      auth: useRuntimeConfig(),
       images: null
     }
   },
@@ -38,7 +37,7 @@ export const useUserEditStore = defineStore('UserEdit', {
     async updateUser() {
       const formData = new FormData();
       formData.append('file', this.images);
-      await useFetch(this.auth.API+'users/update',{
+      await useFetch(useRuntimeConfig().API+'users/update',{
         method: 'put',
         body: {
           user_id: this.editUserData.user_id,
