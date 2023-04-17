@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600;700&display=swap');
+@import "./text.css";
+@import "./range-slider.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Poppins', sans-serif;
+  &.modal-open {
+    @apply relative w-screen h-screen overflow-hidden;
+    @apply after:fixed after:w-full after:h-full after:z-[70] after:top-0 after:left-0 after:bg-neutral-black after:bg-opacity-40;
+  }
+}
+
+.nuxt-icon svg { @apply mb-0 !important; }
+
+.navigation-button {
+  @apply w-8 h-8 flex items-center justify-center border border-gray-300 bg-neutral-white rounded-full;
+}
+
+.filterStatus-tabs-lg {
+  @apply h-20 font-semibold w-fit !important;
+  & .btn{
+    @apply h-full px-6 text-xl !important;
+  }
+}
+.filterStatus-tabs-sm {
+  @apply h-10 w-full 2xl:w-fit !important;
+  & .btn{
+    @apply h-full w-full 2xl:px-[9px] !important;
+  }
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}

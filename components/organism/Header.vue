@@ -1,0 +1,143 @@
+<template>
+  <header>
+    <div class='w-full mx-auto flex items-center justify-between xl:px-14 px-10'>
+      <NuxtLink to="/">
+        <figure>
+          <img src='/img/logo-header.png' alt='Hispana Homes' class="lg:w-32 w-24 object-contain">
+        </figure>
+      </NuxtLink>
+      <nav :class="{'hidden':!showMenu}">
+        <ul>
+          <li v-for='item in menu' :key='item.name' class="text-sm text-neutral-black font-normal hover:text-primary-100 mb-4 lg:mb-0 cursor-pointer">
+            <NuxtLink :to='item.route'>{{item.name}}</NuxtLink>
+          </li>
+          
+          <li class="mb-4 lg:mb-0" v-show="!user.isLoggedIn">
+            <AtomsButtons @click="showMenu = false; displayModal = true">
+              Iniciar sesión
+            </AtomsButtons>
+          </li>
+          <!-- User Logged -->
+          <li class="user-wrapper" v-if="user.isLoggedIn" @click="userDropdown = !userDropdown">
+            <div class="flex items-center gap-2">
+              <img src="/img/user.jpg" />
+              <NuxtLink to="/profile">{{user.userData.name}} {{user.userData.lastname}}</NuxtLink>
+              <AtomsIcon name="arrows/arrow-down" v-show="!userDropdown" :size=15 class="text-primary-100" />
+              <AtomsIcon name="arrows/arrow-down" v-show="userDropdown" :size=15 class="text-primary-100 rotate-180" />
+            </div>
+            <div class="user-dropdown" v-show="userDropdown">
+              <ul>
+                <li>
+                  <AtomsIcon name="general/border-all" class="mr-2.5 text-primary-100" />
+                  Mis anuncios
+                </li>
+                <li>
+                  <AtomsIcon name="general/favorite" class="mr-2.5" />
+                  Mis favoritos
+                </li>
+                <li>
+                  <AtomsIcon name="general/user-document" class="mr-2.5" />
+                  Mis planes
+                </li>
+                <li @click="user.logOut(), showMenu = false">
+                  <AtomsIcon name="general/logout" class="mr-2.5" />
+                  Cerrar sesión
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li v-show="user.isLoggedIn">
+            <AtomsButtons
+              icon-name="general/plus"
+              icon-position="left"
+              :icon-size=14
+              btnStyle="outline-primary"
+            >
+              Publicar
+            </AtomsButtons>
+          </li>
+        </ul>
+      </nav>
+      <!-- Open Menu -->
+      <button
+        v-show="viewport.isLessThan('lg')"
+        class="bg-primary-100 w-8 h-8 flex items-center justify-center"
+        @click="showMenu = !showMenu"
+      >
+        <AtomsIcon name="general/menu" class="text-neutral-white"></AtomsIcon>
+      </button>
+    </div>
+  </header>
+  <!-- Modal login and register component -->
+  <OrganismLogInaAndRegister
+    @closeModal="displayModal = false"
+    v-show="displayModal"
+  />
+</template>
+
+<script>
+import menu from '~/assets/mocks/Header';
+import { useUserStore } from '~/stores/User';
+export default {
+  name: 'AppHeader',
+  data() {
+    return {
+      menu: menu.menu,
+      viewport: useViewport(),
+      showMenu: false,
+      user: useUserStore(),
+      userDropdown: false,
+      displayModal: false,
+    }
+  },
+  watch: {
+    showMenu: function() {
+      if(this.showMenu) {
+        document.body.classList.add('modal-open')
+      } else {
+        document.body.classList.remove('modal-open')
+      }
+    },
+    displayModal: function() {
+      if(this.displayModal) {
+        document.body.classList.add('modal-open')
+      } else {
+        document.body.classList.remove('modal-open')
+      }
+    }
+  },
+}
+</script>
+
+<style lang="postcss" scoped>
+
+header {
+  @apply w-full lg:h-[102px] h-16 flex items-center py-2 absolute top-0 lg:z-[60] z-[71] bg-neutral-white border-b border-gray-300;
+}
+
+nav {
+  @apply lg:block lg:static absolute lg:top-0 top-16 right-0 lg:h-full h-screen lg:w-max w-full md:max-w-sm lg:max-w-none max-w-full lg:p-0 p-6 z-[60] bg-neutral-white;
+
+  & > ul { @apply flex lg:items-center xl:gap-x-8 lg:gap-3 lg:flex-row flex-col; }
+
+  & .user-wrapper {
+    @apply flex lg:items-center font-semibold text-primary-100 lg:ml-8 md:mr-4 cursor-pointer mb-4 lg:mb-0 lg:flex-row flex-col;
+
+    & img { @apply w-8 h-8 rounded-full border-[2px] border-primary-90 object-cover; }
+
+    & .user-dropdown {
+      @apply lg:absolute lg:mt-0 mt-4 top-20 lg:w-56 w-full h-auto z-50 bg-neutral-white bottom-0;
+
+      & ul {
+        @apply flex flex-col overflow-hidden lg:border border-gray-100 rounded-lg;
+        & li { @apply px-4 py-2 flex items-center border-b border-gray-100 text-sm text-neutral-black font-normal hover:bg-[#FFE9E9] hover:text-primary-100 bg-neutral-white; }
+        & li:last-child { @apply border-b-0 }
+      }
+    }
+  }
+}
+
+.router-link-active {
+  @apply text-primary-100 font-semibold
+}
+</style>
