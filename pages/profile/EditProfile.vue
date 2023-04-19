@@ -144,7 +144,7 @@
         <AtomsButtons
           btn-size="xsmall"
           btn-style="solid-primary"
-          @click="editUser.updateUser()"
+          @click="updateUser()"
           >Guardar
         </AtomsButtons>
       </div>
@@ -152,10 +152,73 @@
   </section>
 </template>
 
-//TODO no esta devolviendo la imagen
+<!-- <script setup>
+import { useUserStore } from '~/stores/User';
+import { useUserEditStore } from '~/stores/EditUser';
+import FormData from 'form-data';
+import { watch, ref } from 'vue';
+definePageMeta({
+  middleware: ["logger"]
+});
+
+const user = useUserStore();
+const editUser = useUserEditStore ();
+const showChangePasswd = ref(false);
+let profilePic = ref('');
+let images = ref(null);
+
+watch(profilePic, () => 
+  editUser.editUserData.profile_pic = profilePic,
+  console.log(profilePic)
+)
+
+function previewFiles(event) {
+  images = event.target.files[0]
+  profilePic = URL.createObjectURL(images);
+  editUser.images = images;
+  // console.log(profilePic)
+}
+
+async function updateUser() {
+  const form = new FormData();
+  form.append('user_id', editUser.editUserData.user_id);
+  form.append('email', editUser.editUserData.email)
+  form.append('name', editUser.editUserData.name);
+  form.append('lastname', editUser.editUserData.lastname);
+  form.append('birthdate', editUser.editUserData.birthdate);
+  form.append('country_id', editUser.editUserData.country_id);
+  form.append('cellphone', editUser.editUserData.cellphone);
+  form.append('phone', editUser.editUserData.phone);
+  form.append('profile_pic', editUser.images);
+
+  await useFetch(useRuntimeConfig().API+'users/update?_method=PUT',{
+    method: 'POST',
+    body: form,
+    headers: {
+      'Authorization': 'Bearer ' + editUser.user.token,
+      'Accept': 'application/json',
+    },
+    onResponseError({ request, response, options }) {
+      const res = response._data;
+      Swal.fire({
+        icon: 'error',
+        text: 'Tenemos un error para validar tus datos, por favor intente mas tarde',
+        showConfirmButton: false,
+        timer: 3000
+      });
+    }
+  });
+}
+
+onMounted(()=> {
+  user.getProfile();
+});
+</script> -->
+
 <script>
 import { useUserStore } from '~/stores/User';
 import { useUserEditStore } from '~/stores/EditUser';
+import FormData from 'form-data';
 export default {
   data() {
     return {
@@ -176,6 +239,42 @@ export default {
       this.images = event.target.files[0]
       this.profilePic = URL.createObjectURL(this.images);
       this.editUser.images = this.images;
+    },
+    async updateUser() {
+      const form = new FormData();
+      form.append('user_id', this.editUser.editUserData.user_id);
+      form.append('email', this.editUser.editUserData.email)
+      form.append('name', this.editUser.editUserData.name);
+      form.append('lastname', this.editUser.editUserData.lastname);
+      form.append('birthdate', this.editUser.editUserData.birthdate);
+      form.append('country_id', this.editUser.editUserData.country_id);
+      form.append('cellphone', this.editUser.editUserData.cellphone);
+      form.append('phone', this.editUser.editUserData.phone);
+      form.append('profile_pic', this.editUser.images);
+
+      await useFetch(useRuntimeConfig().API+'users/update?_method=PUT',{
+        method: 'POST',
+        body: form,
+        headers: {
+          'Authorization': 'Bearer ' + this.editUser.user.token,
+          'Accept': 'application/json',
+        }
+      });
+
+      try {
+        this.$swal({
+          icon: 'success',
+          text: 'Sus datos han sido actualizados',
+          showConfirmButton: false,
+          timer: 2000
+        });
+        useRouter().push("/profile?tab=anuncio");
+      } catch (error) {
+        this.$swal({
+          icon: 'error',
+          text: 'Confirma que todos los datos esten completos'
+        });
+      }
     }
   },
   created() {
