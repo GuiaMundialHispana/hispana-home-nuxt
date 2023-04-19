@@ -55,7 +55,7 @@ export default {
         });
         this.user.isLoggedIn = true;
         this.user.token = res.access_token.original.access_token;
-        useRouter().push("/profile");
+        useRouter().push("/profile?tab=anuncio");
         this.$emit('close');
       } catch (error) {
         this.$swal({

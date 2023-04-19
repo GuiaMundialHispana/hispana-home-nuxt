@@ -21,23 +21,29 @@
           <li class="user-wrapper" v-if="user.isLoggedIn" @click="userDropdown = !userDropdown">
             <div class="flex items-center gap-2">
               <img src="/img/user.jpg" />
-              <NuxtLink to="/profile">{{user.userData.name}} {{user.userData.lastname}}</NuxtLink>
+              {{user.userData.name}} {{user.userData.lastname}}
               <AtomsIcon name="arrows/arrow-down" v-show="!userDropdown" :size=15 class="text-primary-100" />
               <AtomsIcon name="arrows/arrow-down" v-show="userDropdown" :size=15 class="text-primary-100 rotate-180" />
             </div>
             <div class="user-dropdown" v-show="userDropdown">
               <ul>
                 <li>
-                  <AtomsIcon name="general/border-all" class="mr-2.5 text-primary-100" />
-                  Mis anuncios
+                  <NuxtLink :to="{ path: 'profile', query: { tab: 'anuncio' }}">
+                    <AtomsIcon name="general/border-all" class="mr-2.5" />
+                    Mis anuncios
+                  </NuxtLink>
                 </li>
                 <li>
-                  <AtomsIcon name="general/favorite" class="mr-2.5" />
-                  Mis favoritos
+                  <NuxtLink :to="{ path: 'profile', query: { tab: 'favorite' }}">
+                    <AtomsIcon name="general/favorite" class="mr-2.5" />
+                    Mis favoritos
+                  </NuxtLink>
                 </li>
                 <li>
-                  <AtomsIcon name="general/user-document" class="mr-2.5" />
-                  Mis planes
+                  <NuxtLink :to="{ path: 'profile', query: { tab: 'plan' }}">
+                    <AtomsIcon name="general/user-document" class="mr-2.5" />
+                    Mis planes
+                  </NuxtLink>
                 </li>
                 <li @click="user.logOut(), showMenu = false">
                   <AtomsIcon name="general/logout" class="mr-2.5" />
@@ -130,7 +136,7 @@ nav {
 
       & ul {
         @apply flex flex-col overflow-hidden lg:border border-gray-100 rounded-lg;
-        & li { @apply px-4 py-2 flex items-center border-b border-gray-100 text-sm text-neutral-black font-normal hover:bg-[#FFE9E9] hover:text-primary-100 bg-neutral-white; }
+        & li > a, & li:last-child { @apply px-4 py-2 flex items-center border-b border-gray-100 text-sm text-neutral-black font-normal hover:bg-[#FFE9E9] hover:text-primary-100 bg-neutral-white; }
         & li:last-child { @apply border-b-0 }
       }
     }

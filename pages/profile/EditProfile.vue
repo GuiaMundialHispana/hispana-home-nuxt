@@ -4,13 +4,13 @@
       <AtomsLink
         btn-type="btn-icon"
         iconName="arrows/arrow-left"
-        link-to="/profile"
+        link-to="/profile?tab=anuncio"
       />
       <h3 class="text-[28px] leading-[42px] font-semibold">Editar perfil</h3>
     </div>
     <p class="text-sm leading-[22px]">Actualiza tu información personal y detalles aquí.</p>
     <hr class="bg-gray-300 h-[1px] w-full border-none mt-8 mb-[22px]">
-    <!-- <div class="form">
+    <div class="form">
       <div class="flex flex-col">
         <h4>Información personal</h4>
         <div>
@@ -148,19 +148,19 @@
           >Guardar
         </AtomsButtons>
       </div>
-    </div> -->
+    </div>
   </section>
 </template>
 
 //TODO no esta devolviendo la imagen
 <script>
-// import { useUserStore } from '~/stores/User';
-// import { useUserEditStore } from '~/stores/EditUser';
+import { useUserStore } from '~/stores/User';
+import { useUserEditStore } from '~/stores/EditUser';
 export default {
   data() {
     return {
-      // user: useUserStore(),
-      // editUser:useUserEditStore (),
+      user: useUserStore(),
+      editUser:useUserEditStore (),
       showChangePasswd: false,
       profilePic: '',
       images: null,
@@ -178,9 +178,9 @@ export default {
       this.editUser.images = this.images;
     }
   },
-  // created() {
-  //   this.user.getProfile();
-  // }
+  created() {
+    this.user.getProfile();
+  }
 }
 </script>
 

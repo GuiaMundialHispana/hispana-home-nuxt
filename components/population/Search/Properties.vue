@@ -2,8 +2,8 @@
   <!-- Featured propertys -->
   <div class="mt-20 pb-14">
     <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-      <li v-for="slide in 10" :key="slide">
-        <!-- <MoleculesProperty /> -->
+      <li v-for="property in properties" :key="property">
+        <MoleculesProperty :is-favorite="false" :property="property" />
       </li>
     </ul>
     <!-- Pagination -->
@@ -32,10 +32,13 @@
     </ul>
   </div>
 </template>
-<script>
-export default {
-  name: 'SearchProperty'
-}
+
+<script setup>
+let properties = ref({});
+const {data: item } = await useFetch(useRuntimeConfig().API+'properties',{
+  method: 'get'
+});
+properties = item._value.results.data;
 </script>
 
 <style lang="postcss" scoped>

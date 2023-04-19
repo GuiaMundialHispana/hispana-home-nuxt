@@ -14,34 +14,47 @@
         </div>
       </div>
       <nav class="user-filter">
-        <button
-          v-for="(buttonTab,index) in tabs"
-          :key="buttonTab"
-          :class="[{ active: tab === index}]"
+        <NuxtLink
           class="btn-tab"
-          @click="tab = index"
+          :class="{ active: $route.fullPath === '/profile?tab=anuncio'} "
+          :to="{ path: 'profile', query: { tab: 'anuncio' }}"
         >
-          {{ buttonTab }}
-        </button>
+          Mis anuncios
+        </NuxtLink>
+        <NuxtLink
+          class="btn-tab"
+          :to="{ path: 'profile', query: { tab: 'favorite' }}"
+          :class="{ active: $route.fullPath === '/profile?tab=favorite'} "
+        >
+          Mis favoritos
+        </NuxtLink>
+        <NuxtLink
+          class="btn-tab"
+          :to="{ path: 'profile', query: { tab: 'plan' }}"
+          :class="{ active: $route.fullPath === '/profile?tab=plan'} "
+        >
+          Mis planes
+        </NuxtLink>
       </nav>
-      <PopulationProfileAdvertisement v-show="tab === 0" />
-      <PopulationProfileFavorite v-show="tab === 1" />
-      <PopulationProfilePlans v-show="tab === 2" />
+      <PopulationProfileAdvertisement v-show="$route.query.tab === 'anuncio'" />
+      <PopulationProfileFavorite v-show="$route.query.tab === 'favorite'" />
+      <PopulationProfilePlans v-show="$route.query.tab === 'plan'" />
     </div>
   </section>
 </template>
 
 <script setup>
-  import { useUserStore } from '~/stores/User';
-  const tabs = ref(['Mis anuncios','Favoritos','Mis Planes'])
-  const tab = ref(0);
-  const user = useUserStore();
-  definePageMeta({
-    middleware: ["logger"]
-  });
-  onBeforeMount(() => {
-    user.getProfile()
-  });
+import { useUserStore } from '~/stores/User';
+const tabs = ref(['Mis anuncios','Favoritos','Mis Planes'])
+let tab = ref(0);
+const user = useUserStore();
+
+definePageMeta({
+  middleware: ["logger"]
+});
+onBeforeMount(() => {
+  user.getProfile()
+});
 </script>
 
 <style lang="postcss" scoped>

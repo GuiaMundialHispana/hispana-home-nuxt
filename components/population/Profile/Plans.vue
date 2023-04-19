@@ -8,7 +8,7 @@
       <p class="text-sm text-neutral-black text-center">¡No dejes pasar esta oportunidad de mostrar tu propiedad al mundo!</p>
     </div>
     <div v-if="isPlan">
-      <h3 class="font-semibold text-sm text-black text-[28px] leading-[42px] mb-5">Nuestros planes</h3>
+      <h3 class="font-semibold text-sm text-black md:text-[28px] md:leading-[42px] mb-5">Nuestros planes</h3>
       <!-- TODO Le vas a enviar el objeto plan -->
       <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         <li v-for="planItem in plans" :key="planItem">

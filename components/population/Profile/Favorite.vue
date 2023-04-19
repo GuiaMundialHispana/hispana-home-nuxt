@@ -8,49 +8,34 @@
       <p class="text-sm text-neutral-black text-center">¡No dejes pasar esta oportunidad de mostrar tu propiedad al mundo!</p>
     </div>
     <div v-if="favorite">
-      <h3 class="font-semibold text-sm text-black text-[28px] leading-[42px] mb-5">Mis Favoritos</h3>
+      <h3 class="font-semibold text-sm text-black md:text-[28px] md:leading-[42px] mb-5">Mis Favoritos</h3>
       <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        <li v-for="property in properties" :key="property">
-          <MoleculesProperty :property="property" :is-favorite="true" @propertyChanged="getFavorites" />
+        <li v-for="item in properties" :key="item">
+          <MoleculesProperty 
+            :property="item.property" 
+            :is-favorite="true"
+          />
         </li>
       </ul>
     </div>
   </section>
 </template>
 
-<script>
+<script setup>
 import { useUserStore } from '~/stores/User';
-export default {
-  name: 'Favorite',
-  data() {
-    return {
-      user:useUserStore(),
-      favorite: false,
-      properties: {},
-      auth: ''
-    }
-  },
-  methods: {
-    // TODO no agregar favoritos con el mismo id
-    async getFavorites() {
-      const {data} = await useFetch(this.$config.public.API+'users/favorites',{
-        method: 'get',
-        headers: {
-          'Authorization': 'Bearer ' + this.user.token,
-        },
-      });
-      const res = data._value.results;
-      if(res.length > 0) {
-        this.favorite = true;
-        this.properties = res;
-      }
-    }
-  },
-  created() {
-    this.auth = useRuntimeConfig();
-    this.getFavorites();
+let favorite = ref(false);
+const user = useUserStore();
+let properties = ref([]);
+
+const {data: item} = await useFetch(useRuntimeConfig().API+'users/favorites', {
+  method: 'get',
+  headers: {
+    'Authorization': 'Bearer ' + user.token,
   }
-}
+});
+
+properties = item.value.results;
+properties.length > 0 ? favorite = true : favorite = false;
 </script>
 
 <style lang="postcss" scoped>

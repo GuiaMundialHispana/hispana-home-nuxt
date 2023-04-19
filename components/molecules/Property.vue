@@ -2,11 +2,19 @@
   <article>
     <!-- Favorite -->
     <AtomsButtons
+      v-if="route.path !== '/profile'"
       btn-type="btn-icon"
       icon-name="general/favorite"
       class="favorite-button"
       :class="{active: isFavorite}"
-      @click="toggleFavorite, $emit('propertyChanged')"
+      @click="addFavorite()"
+    />
+    <AtomsButtons
+      v-if="route.path === '/profile'"
+      btn-type="btn-icon"
+      icon-name="general/favorite"
+      class="favorite-button active"
+      @click="deleteFavorite(), $emit('propertyChanged')"
     />
     <Swiper
       class="relative rounded-lg overflow-hidden"
@@ -29,7 +37,7 @@
       }">
       <SwiperSlide>
         <figure class="h-52">
-          <img :src="property.property.image" :alt="property.property.name" class="object-cover h-full w-full">
+          <img :src="property.image" :alt="property.name" class="object-cover h-full w-full">
         </figure>
       </SwiperSlide>
       <AtomsPropertyPlans class="absolute bottom-0 right-0 z-10" />
@@ -50,95 +58,80 @@
         />
       </nav>
     </Swiper>
-    <NuxtLink to="/search/propiedad-1">{{ property.property.name }}</NuxtLink>
+    <NuxtLink to="/search/propiedad-1">{{property.name }}</NuxtLink>
     <p class="flex items-start font-normal text-neutral-black my-3">
       <AtomsIcon name="general/share-location" :size=20 class="text-primary-100 mr-2.5 pt-1"/>
-      {{ property.property.address }}
+      {{ property.address }}
     </p>
     <!-- Caracteristicas -->
     <MoleculesCharacteristics class="my-3"
-      :bedroom="property.property.bedroom"
-      :bath="property.property.bathroom"
-      :area="property.property.solar_meters"
+      :bedroom="property.bedroom"
+      :parking="property.parking"
+      :bath="property.bathroom"
+      :area="property.solar_meters"
     />
     <!-- Price -->
     <p class="text-sm text-neutral-black font-normal">Desde:</p>
-    <p class="text-primary-100 font-semibold text-xl uppercase">US${{property.property.price}}</p>
+    <p class="text-primary-100 font-semibold text-xl uppercase">US${{property.price}}</p>
   </article>
 </template>
 
-<script>
+<script setup>
 import { useUserStore } from '~/stores/User';
-export default {
-  name: 'Property',
-  data() {
-    return {
-      user: useUserStore(),
-      favorite: false,
-      auth: ''
-    }
-  },
-  props: {
-    property: {
-      type: Object,
-      default: () => {}
-    },
-    isFavorite: {
-      type: Boolean,
-      default: false
-    }
-  },
-  methods: {
-    async addFavorite() {
-      const {data} = await useFetch(this.user.auth.API+'users/favorites',{
-        method: 'post',
-        headers: {
-          'Authorization': 'Bearer ' + this.user.token,
-        },
-        body: {
-          property_id: this.property.property.id
-        }
-      });
+import Swal from 'sweetalert2';
+const user = useUserStore();
+const route = useRoute();
 
-      if(data) {
-        this.$swal({
-          icon: 'success',
-          text: data._value.message,
-          showConfirmButton: false,
-          timer: 2000
-        });
-      }
-    },
-    async deleteFavorite() {
-      const {data} = await useFetch(this.API+'users/favorites',{
-        method: 'delete',
-        headers: {
-          'Authorization': 'Bearer ' + this.user.token,
-        },
-        body: {
-          property_id: this.property.property.id
-        }
-      });
+const props = defineProps({
+  property: {
+    type: Object,
+    default: () => {}
+  },
+  isFavorite: {
+    type: Boolean,
+    default: false
+  }
+});
 
-      if(data) {
-        this.$swal({
-          icon: 'success',
-          text: data._value.message,
-          showConfirmButton: false,
-          timer: 2000
-        });
-      }
+async function addFavorite() {
+  if(user.isLoggedIn) {
+    const {data} = await useFetch(useRuntimeConfig().API+'users/favorites',{
+      method: 'post',
+      headers: {'Authorization': 'Bearer ' + user.token},
+      body: { property_id: props.property.id}
+    });
+
+    if(data) {
+      Swal.fire({
+        icon: 'success',
+        text: data._value.message,
+        showConfirmButton: false,
+        timer: 2000
+      });
     }
-  },
-  computed: {
-    toggleFavorite() {
-      if(this.isFavorite) {
-        return this.deleteFavorite();
-      } else { return this.addFavorite(); }
-    }
-  },
-  created() {
-    this.auth = useRuntimeConfig();
+  } else {
+    Swal.fire({
+      icon: 'error',
+      text: 'Necesitas iniciar sesion para poder agregar esta propiedad a favoritos',
+      showConfirmButton: true,
+      timer: 2000
+    });
+  }
+};
+
+async function deleteFavorite() {
+  const {data} = await useFetch(useRuntimeConfig().API+'users/favorites',{
+    method: 'delete',
+    headers: {'Authorization': 'Bearer ' + user.token},
+    body: { property_id: props.property.id}
+  });
+  if(data) {
+    Swal.fire({
+      icon: 'success',
+      text: data._value.message,
+      showConfirmButton: true,
+      timer: 2000
+    });
   }
 }
 </script>
