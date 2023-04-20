@@ -45,10 +45,7 @@
 
 <script setup>
 import { useUserStore } from '~/stores/User';
-const tabs = ref(['Mis anuncios','Favoritos','Mis Planes'])
-let tab = ref(0);
 const user = useUserStore();
-
 definePageMeta({
   middleware: ["logger"]
 });

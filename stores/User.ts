@@ -29,14 +29,13 @@ export const useUserStore = defineStore('user', {
   actions: {
     async getProfile(){
       const { data }  = await useFetch(useRuntimeConfig().API+'auth/profile',{
-        method: 'POST',
-        body: {
-          token: this.token
-        },
+        method: 'GET',
         headers: {
           'Authorization': 'Bearer ' + this.token
         },
       });
+      console.log(this.token)
+      console.log(data)
       const res = data.value.results.user;
       this.userData = res;
     },
