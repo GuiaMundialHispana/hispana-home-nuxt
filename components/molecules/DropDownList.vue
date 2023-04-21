@@ -54,7 +54,7 @@
     after:bg-no-repeat
     after:bg-center
     after:bg-[length:10px]
-    after:bg-[url('check.svg')];
+    after:bg-[url('~/assets/icons/general/check.svg')];
   }
 }
 

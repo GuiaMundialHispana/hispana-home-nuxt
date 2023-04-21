@@ -1,6 +1,6 @@
 <template>
   <header>
-    <div class='w-full mx-auto flex items-center justify-between xl:px-14 px-10'>
+    <div class='w-full mx-auto flex items-center justify-between xl:px-14 px-4'>
       <NuxtLink to="/">
         <figure>
           <img src='/img/logo-header.png' alt='Hispana Homes' class="lg:w-32 w-24 object-contain">
@@ -127,7 +127,7 @@ nav {
   & > ul { @apply flex lg:items-center xl:gap-x-8 lg:gap-3 lg:flex-row flex-col; }
 
   & .user-wrapper {
-    @apply flex lg:items-center font-semibold text-primary-100 lg:ml-8 md:mr-4 cursor-pointer mb-4 lg:mb-0 lg:flex-row flex-col;
+    @apply flex lg:items-center font-semibold text-primary-100 lg:ml-4 md:mr-4 cursor-pointer mb-4 lg:mb-0 lg:flex-row flex-col;
 
     & img { @apply w-8 h-8 rounded-full border-[2px] border-primary-90 object-cover; }
 
