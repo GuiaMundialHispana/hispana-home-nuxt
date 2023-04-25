@@ -24,5 +24,9 @@ export default {
       name: 'Calcula tu préstamo',
       route: ''
     },
+    {
+      name: 'Planes',
+      route: ''
+    },
   ]
 }

@@ -36,7 +36,7 @@
   </nav>
   <PopulationPostPropertiesSellOrRent v-if="step === 1" />
   <PopulationPostPropertiesCategory v-if="step === 2" />
-  <div v-if="step === 3">3</div>
+  <PopulationPostPropertiesPlans v-if="step === 3" />
   <PopulationPostPropertiesDetails v-if="step === 4" />
   <PopulationPostPropertiesUploadPhotos v-if="step === 5" />
   <PopulationPostPropertiesFinalStep v-if="step === 6" />

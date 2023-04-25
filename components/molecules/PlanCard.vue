@@ -1,18 +1,18 @@
 <template>
   <div class="plan-wrapper">
     <span class="plan-category" :class="[renderPlanText]">
-      {{ plan.plan.name }}
+      {{ plan.name }}
     </span>
     <ul class="plan-benefits">
       <li>
         <AtomsIcon name="general/check" :size=16 class="text-[#FFAE10] mr-2" />
-        Fotos por anuncio: {{plan.plan.pictures }}
+        Fotos por anuncio: {{plan.pictures }}
       </li>
       <li>
         <AtomsIcon name="general/check" :size=16 class="text-[#FFAE10] mr-2" />
-        Duración del anuncio: {{plan.plan.duration }} días
+        Duración del anuncio: {{plan.duration }} días
       </li>
-      <!-- <li>
+      <li>
         <AtomsIcon name="general/check" :size=16 class="text-[#FFAE10] mr-2" />
         Opción para subir videos
       </li>
@@ -23,40 +23,31 @@
       <li>
         <AtomsIcon name="general/check" :size=16 class="text-[#FFAE10] mr-2" />
         Exclusividad en página de inicio
-      </li> -->
+      </li>
     </ul>
-    <p
+    <!-- <p
       v-if="$route.path === '/profile'"
       class="text-xs mt-4 font-bold"
     >
       Actualmente tienes {{ plan.quantity }} cantidades de este plan
-    </p>
-    <AtomsButtons
-      v-if="$route.path != '/profile'"
-      btn-style="outline-gray"
-      btn-size="xsmall"
-      class="w-full my-4"
-    >
+    </p> -->
+    <AtomsButtons :isDisabled="disabledPayment" @click="payment()" v-if="$route.path != '/profile'" btn-style="outline-gray" btn-size="xsmall" class="w-full my-4">
       Seleccionar
     </AtomsButtons>
-    <p
-      class="price"
-      v-if="$route.path != '/profile'"
-    >
-      <span class="text-base">RD$ </span>
-      2,400
-    </p>
-    <div class="action-buttons" v-if="$route.path != '/profile'">
+    <div class="action-buttons" v-if="$route.path != '/profile' && plan.price != 0">
       <div class="cantidad">
         <button @click="planQuantity--">-</button>
         <input type="number" :value="planQuantity">
         <button @click="planQuantity++">+</button>
       </div>
-      <AtomsButtons btn-size="medium" class="flex-none">
+      <!--  -->
+      <AtomsButtons btn-size="xsmall" class="flex-none">
         <span class="total-plans">{{planQuantity}}</span>
-        RD$2,593
+        RD${{ updatePrice }}
       </AtomsButtons>
     </div>
+    <p class="price" v-if="$route.path === '/profile'"> <span class="text-base">RD$ </span> {{plan.price}}</p>
+    <p v-if="plan.price === 0" class="text-primary-100 text-3xl text-center font-semibold">Gratis</p>
   </div>
 </template>
 
@@ -64,7 +55,7 @@
 export default {
   data() {
     return {
-      planQuantity: 1,
+      planQuantity: 0,
     }
   },
   props: {
@@ -75,15 +66,39 @@ export default {
   },
   computed: {
     renderPlanText() {
-      if(this.plan.plan.name === 'VIP') {
+      if(this.plan.name === 'VIP') {
         return 'vip';
-      } else if (this.plan.plan.name === 'SILVER') {
+      } else if (this.plan.name === 'SILVER') {
         return 'silver';
-      } else if (this.plan.plan.name === 'EXCLUSIVO') {
+      } else if (this.plan.name === 'EXCLUSIVO') {
         return 'exclusive';
-      } else if(this.plan.plan.name === 'DESTACADOS') {
+      } else if(this.plan.name === 'DESTACADOS') {
         return '';
       }
+    },
+    updatePrice() {
+      return this.plan.price * this.planQuantity;
+    },
+    disabledPayment() {
+     if(this.planQuantity <= 0) { return true } else { false}
+    }
+  },
+  methods: {
+    payment() {
+      this.$swal.fire({
+        title: 'Deseas continuar con el pago o seguir seleccionando planes?',
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'Pagar',
+        denyButtonText: `Continuar seleccionando`,
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          this.$swal('Saved!', '', 'success')
+        } else if (result.isDenied) {
+          this.$swal('Changes are not saved', '', 'info')
+        }
+      })
     }
   }
 }
@@ -100,7 +115,6 @@ export default {
       background: linear-gradient(99.8deg, #FFAE10 -9.48%, #FFB800 45.36%, #FFD058 96.88%);
       @apply text-neutral-black;
     }
-
     &.silver { background: linear-gradient(104.59deg, #D9D9D9 8.17%, #ADADAD 51.17%, #FFFFFF 120.16%); }
     &.exclusive { background: linear-gradient(100.63deg, #000000 -6.24%, #2F1C1B 45.46%, #A89494 95.05%); }
 
@@ -115,15 +129,17 @@ export default {
   & .price { @apply text-neutral-black text-3xl font-semibold text-center mb-4; }
 
   & .action-buttons {
-    @apply flex items-center gap-3 md:flex-row flex-col flex-wrap justify-center;
+    @apply flex items-center gap-1.5 md:flex-row flex-col flex-wrap justify-center;
 
     & .cantidad {
-      @apply md:w-28 w-full h-11 border border-neutral-black rounded-lg flex items-center justify-between px-6 py-2.5;
+      @apply md:w-28 w-full h-8 border border-[#ADADAD] rounded-lg flex flex-grow items-center justify-between px-6 py-1;
+
       & input { @apply w-4 h-full text-neutral-black text-center font-semibold; }
+
       & button {
-        @apply text-lg;
+        @apply text-lg flex-grow;
         &:disabled {
-          @apply text-gray-300;
+          @apply text-gray-300 cursor-not-allowed;
         }
       }
     }
@@ -131,6 +147,6 @@ export default {
 }
 
 .total-plans {
-  @apply w-6 h-6 border border-neutral-white rounded-full flex items-center justify-center text-base font-semibold mr-6;
+  @apply w-6 h-6 border border-neutral-white rounded-full flex items-center justify-center text-base font-semibold mr-1.5;
 }
 </style>

@@ -3,6 +3,7 @@
     v-bind="$attrs"
     v-on="$attrs"
     :class="[ setButtonSize, setButtonStyle, setButtonType ]"
+    :disabled="isDisabled"
   >
     <AtomsIcon
       v-if="hasIcon"
