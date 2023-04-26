@@ -1,5 +1,6 @@
 <template>
   <div class="plan-wrapper">
+    <!-- <span class="user-quantity" v-if="">1</span> -->
     <span class="plan-category" :class="[renderPlanText]">
       {{ plan.name }}
     </span>
@@ -25,12 +26,6 @@
         Exclusividad en página de inicio
       </li>
     </ul>
-    <!-- <p
-      v-if="$route.path === '/profile'"
-      class="text-xs mt-4 font-bold"
-    >
-      Actualmente tienes {{ plan.quantity }} cantidades de este plan
-    </p> -->
     <AtomsButtons :isDisabled="disabledPayment" @click="payment()" v-if="$route.path != '/profile'" btn-style="outline-gray" btn-size="xsmall" class="w-full my-4">
       Seleccionar
     </AtomsButtons>
@@ -86,17 +81,16 @@ export default {
   methods: {
     payment() {
       this.$swal.fire({
-        title: 'Deseas continuar con el pago o seguir seleccionando planes?',
-        showDenyButton: true,
+        title: 'Que deseas hacer?',
+        showDenyButton: false,
         showCancelButton: true,
-        confirmButtonText: 'Pagar',
-        denyButtonText: `Continuar seleccionando`,
+        confirmButtonText: 'Pagar plan',
+        denyButtonText: 'Seleccionar otro plan',
       }).then((result) => {
-        /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
-          this.$swal('Saved!', '', 'success')
+          this.$emit('pay', this.plan.id,this.planQuantity)
         } else if (result.isDenied) {
-          this.$swal('Changes are not saved', '', 'info')
+          this.planQuantity = 0;
         }
       })
     }
@@ -106,7 +100,7 @@ export default {
 
 <style lang="postcss" scoped>
 .plan-wrapper {
-  @apply border border-gray-10 rounded-lg p-6 max-w-[345px];
+  @apply border border-gray-10 rounded-lg p-6 max-w-[345px] relative;
 
   & .plan-category {
     @apply w-full rounded-lg text-neutral-white flex items-center h-10 font-semibold justify-center bg-primary-100;
@@ -144,6 +138,9 @@ export default {
       }
     }
   }
+
+  & .user-quantity { @apply w-9 h-9 rounded-full flex items-center justify-center absolute -top-7 -right-4 bg-primary-90 text-base text-neutral-white; }
+
 }
 
 .total-plans {

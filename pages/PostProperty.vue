@@ -71,15 +71,29 @@
     </AtomsButtons>
   </nav>
 </template>
-<script>
+
+<!-- <script>
 export default{
   data() {
     return {
-      step: 1
+      step: 3
     }
   }
 }
+</script> -->
+
+<script setup>
+import { useUserStore } from '~/stores/User';
+const user = useUserStore();
+const step = ref(3)
+definePageMeta({
+  middleware: ["logger"]
+});
+onBeforeMount(() => {
+  user.getProfile()
+});
 </script>
+
 <style lang="postcss" scoped>
 .steps-wrapper{
   @apply flex justify-between  items-center lg:h-48 h-20 w-fit mx-auto lg:px-8;

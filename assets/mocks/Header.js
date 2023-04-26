@@ -26,7 +26,7 @@ export default {
     },
     {
       name: 'Planes',
-      route: ''
+      route: '/postProperty'
     },
   ]
 }
