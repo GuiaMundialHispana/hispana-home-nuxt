@@ -88,7 +88,13 @@ export default {
         denyButtonText: 'Seleccionar otro plan',
       }).then((result) => {
         if (result.isConfirmed) {
-          this.$emit('pay', this.plan.id,this.planQuantity)
+        this.$emit(
+          'pay', 
+          this.plan.id,
+          this.planQuantity,
+          this.plan.name,
+          this.plan.price
+        )
         } else if (result.isDenied) {
           this.planQuantity = 0;
         }
@@ -140,7 +146,6 @@ export default {
   }
 
   & .user-quantity { @apply w-9 h-9 rounded-full flex items-center justify-center absolute -top-7 -right-4 bg-primary-90 text-base text-neutral-white; }
-
 }
 
 .total-plans {
