@@ -5,15 +5,15 @@
     </h4>
     <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 px-16">
       <li v-for="plan in plans" :key="plan">
-        <MoleculesPlanCard @pay="tes" :plan="plan" />
+        <MoleculesPlanCard @pay="planInformation" :plan="plan" />
       </li>
     </ul>
   </div>
   <!-- Process payment -->
-  <div v-if="showPaymentProcess">
-    <div class="grid lg:grid-cols-2 lg:px-0 px-8">
-      <div>
-        <h4 class="font-bold text-[28px] leading-[42px] my-14 lg:text-center">Información de pago</h4>
+  <div v-if="showPaymentProcess" class="lg:px-16">
+    <div class="grid lg:grid-cols-2 lg:px-0 px-8 gap-x-16">
+      <div class="w-full">
+        <h4 class="font-bold text-[28px] leading-[42px] mb-14">Información de pago</h4>
         <ul class="payment-plan-resume">
           <li class="plan-price-card">
             <div class="plan-name-card" :class="[renderPlanText]">
@@ -29,14 +29,35 @@
                 <option value="1">Cantidad: 5</option>
               </select>
             </div>
-            <h6 class="plan-price">RD1,450.00</h6>
+            <h6 class="plan-price">
+              RD$ {{ planSelected.planPrice }}
+            </h6>
           </li>
         </ul>
-
+        <p class="text-sm block text-right mt-8">Pago total</p>
+        <p class="font-bold text-neutral-black text-[28px] leading-[42px] text-right">
+          RD$ {{ planSelected.planPrice }}
+        </p>
       </div>
       <!--  -->
-      <div class="bg-[#F8F8F8]">
-        payment card
+      <div class="bg-[#F8F8F8] w-full">
+        <div class="form-group">
+          <label>Correo</label>
+          <input type="email">
+        </div>
+        <div class="form-group card-information">
+          <label>Información de la tarjeta</label>
+          <input type="text" class="border-b-0" placeholder="1234 4567 1234 4567">
+          <div class="flex items-center">
+            <input type="text" placeholder="MM/YY7">
+            <input type="text" placeholder="CVC">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Nombre de la tarjeta</label>
+          <input type="text">
+        </div>
+        <AtomsButtons class="w-full" @click="processPayment()">Pagar</AtomsButtons>
       </div>
     </div>
   </div>
@@ -44,14 +65,14 @@
 
 <script>
 import { useUserStore } from '~/stores/User';
-
 export default {
   data() {
     return {
       user: useUserStore(),
       plans: [],
       planSelected: {},
-      showPaymentProcess: false
+      plansSelected: [],
+      showPaymentProcess: false,
     }
   },
   computed: {
@@ -68,7 +89,7 @@ export default {
     },
   },
   methods: {
-    tes(planId, quantity, planName, price) {
+    planInformation(planId, quantity, planName, price) {
       this.showPaymentProcess = true;
       this.planSelected = {
         id: planId,
@@ -80,15 +101,20 @@ export default {
     async getPlans() {
       const { data } = useAsyncData('count', () => $fetch(useRuntimeConfig().API+'generals/plans'));
       this.plans = data.value.results;
-      console.log(this.plans)
     },
     async processPayment() {
+      console.log(this.planSelected.id)
+      console.log(this.planSelected.planQuantity)
+      console.log(this.user.token)
+
       const { data }  = await useFetch(useRuntimeConfig().API+'user-plans',{
         method: 'POST',
-        headers: { 'Authorization': 'Bearer ' + this.user.token },
+        headers: {
+          'Authorization': 'Bearer ' + this.user.token
+        },
         body: {
-          plan_id: this.planSelected.planId,
-          quantity: this.planSelected.quantity
+          "plan_id": this.planSelected.planId,
+          "quantity": this.planSelected.quantity
         }
       });
 
@@ -98,7 +124,7 @@ export default {
       } catch (error) {
         this.$swal.fire({
           icon: 'error',
-          text: 'Confirma que tus datos esten correctos'
+          text: 'En este momento estamos presentando un error'
         });
       }
     }
@@ -115,7 +141,7 @@ export default {
     @apply py-4 border-b border-[#D9D9D9] w-full flex gap-3 items-center;
 
     & .plan-name-card {
-      @apply rounded-lg w-[100px] h-[70px] flex items-center justify-center;
+      @apply rounded-lg w-[100px] h-[70px] flex items-center justify-center font-medium;
       &.vip {
         background: linear-gradient(99.8deg, #FFAE10 -9.48%, #FFB800 45.36%, #FFD058 96.88%);
         @apply text-neutral-black;
@@ -132,6 +158,18 @@ export default {
     & .plan-price { @apply ml-auto text-sm text-neutral-black font-medium; }
   }
 }
+
+.form-group {
+  @apply mb-4 w-full;
+  & label { @apply text-neutral-black text-sm mb-1 block; }
+  & input { @apply w-full border border-[#D9D9D9] rounded-sm block px-4 h-8 font-light placeholder:text-[#D9D9D9]; }
+}
+
+.card-information {
+  & input:first-child { @apply border-t-0 border-r-0; }
+  & input:last-child { @apply border-t-0; }
+}
+
 </style>
 
 <!-- <script setup>

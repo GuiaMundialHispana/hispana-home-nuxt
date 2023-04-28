@@ -38,11 +38,17 @@
       <!--  -->
       <AtomsButtons btn-size="xsmall" class="flex-none">
         <span class="total-plans">{{planQuantity}}</span>
-        RD${{ updatePrice }}
+        RD$ {{ updatePrice  }}
       </AtomsButtons>
     </div>
-    <p class="price" v-if="$route.path === '/profile'"> <span class="text-base">RD$ </span> {{plan.price}}</p>
-    <p v-if="plan.price === 0" class="text-primary-100 text-3xl text-center font-semibold">Gratis</p>
+    <p class="price"
+      v-if="$route.path === '/profile'">
+      <span class="text-base">
+      RD$ </span>{{ updatePrice  }}
+    </p>
+    <p v-if="plan.price === 0" class="text-primary-100 text-3xl text-center font-semibold">
+      Gratis
+    </p>
   </div>
 </template>
 
@@ -51,6 +57,7 @@ export default {
   data() {
     return {
       planQuantity: 0,
+      priceUpdated: 0
     }
   },
   props: {
@@ -72,7 +79,7 @@ export default {
       }
     },
     updatePrice() {
-      return this.plan.price * this.planQuantity;
+      return parseInt(this.plan.price * this.planQuantity);
     },
     disabledPayment() {
      if(this.planQuantity <= 0) { return true } else { false}
@@ -93,7 +100,7 @@ export default {
           this.plan.id,
           this.planQuantity,
           this.plan.name,
-          this.plan.price
+          this.updatePrice
         )
         } else if (result.isDenied) {
           this.planQuantity = 0;
@@ -132,7 +139,7 @@ export default {
     @apply flex items-center gap-1.5 md:flex-row flex-col flex-wrap justify-center;
 
     & .cantidad {
-      @apply md:w-28 w-full h-8 border border-[#ADADAD] rounded-lg flex flex-grow items-center justify-between px-6 py-1;
+      @apply md:w-20 w-full h-8 border border-[#ADADAD] rounded-lg flex items-center justify-between px-3 py-1;
 
       & input { @apply w-4 h-full text-neutral-black text-center font-semibold; }
 
@@ -149,6 +156,6 @@ export default {
 }
 
 .total-plans {
-  @apply w-6 h-6 border border-neutral-white rounded-full flex items-center justify-center text-base font-semibold mr-1.5;
+  @apply w-6 h-6 border border-neutral-white rounded-full flex items-center justify-center text-sm font-semibold mr-1.5;
 }
 </style>
