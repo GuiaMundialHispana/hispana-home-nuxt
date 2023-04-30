@@ -35,7 +35,7 @@
     </div>
   </nav>
   <PopulationPostPropertiesSellOrRent @option-selected="getSentOrRent" v-if="step === 1" />
-  <PopulationPostPropertiesCategory v-if="step === 2" />
+  <PopulationPostPropertiesCategory @type-property="getTypeProperty" v-if="step === 2" />
   <PopulationPostPropertiesPlans v-if="step === 3" />
   <PopulationPostPropertiesDetails v-if="step === 4" />
   <PopulationPostPropertiesUploadPhotos v-if="step === 5" />
@@ -85,18 +85,26 @@ export default {
     return {
       user: useUserStore(),
       type: '',
+      typeProperty: 0,
       step: 1
     }
   },
   methods: {
     getSentOrRent(n) {
       this.type = n;
+    },
+    getTypeProperty(n) {
+      this.typeProperty = n;
     }
   },
   watch: {
     type() {
       console.log(this.type)
       this.step++;
+    },
+    typeProperty() {
+      this.step++;
+      console.log(this.typeProperty)
     }
   },
   mounted() {
