@@ -8,12 +8,12 @@
   <div class="mx-4 px-4 md:px-8 sm:grid sm:grid-cols-3 sm:mx-auto gap-4 max-w-[995px]">
     <label class="col-span-3">
       Nombre del proyecto
-      <input class="form-control" placeholder="Nombre del proyecto" type="text">
+      <input class="form-control" v-model="name" placeholder="Nombre del proyecto" type="text">
     </label>
     <div class="flex col-span-3">
       <label class="w-full">
         Precio
-        <input class="form-control" placeholder="Precio" type="number">
+        <input class="form-control" v-model="price" placeholder="Precio" type="number">
       </label>
       <div class="flex items-center ml-2.5">
         <button 
@@ -33,7 +33,7 @@
     </div>
     <select class="form-control sm:mb-2 mb-5 col-span-3">
       <option>Sector</option>
-      <option v-for="(sector) in sectors" :key="sector" class="option-label">
+      <option v-for="(sector) in sectors" value="sector" :key="sector" class="option-label">
       {{ sector }}
       </option>
     </select>
@@ -54,22 +54,22 @@
     <div class="col-span-3 gap-4 sm:grid grid-cols-2">
       <label class="w-full sm:mb-2 mb-5">
         Habitaciones
-        <input class="form-control" placeholder="Cantidad de habitaciones" type="number">
+        <input class="form-control" v-model="bedrooms" placeholder="Cantidad de habitaciones" type="number">
       </label>
       <label class="w-full sm:mb-2 mb-5">
         Baños
-        <input class="form-control" placeholder="Cantidad de baños" type="number">
+        <input class="form-control" v-model="bathrooms" placeholder="Cantidad de baños" type="number">
       </label>
       <label class="w-full sm:mb-2 mb-5">
         Parqueos
-        <input class="form-control" placeholder="Cantidad de parqueos" type="number">
+        <input class="form-control" v-model="parking" placeholder="Cantidad de parqueos" type="number">
       </label>
       <div class="mb-5 sm:mb-0">
         <label for="propertyStatus" class="mb-2">Estado</label>
         <select class="form-control" id="propertyStatus">
-            <option v-for="(status) in propertyStatus" :key="status" class="option-label">
+          <option v-for="(status) in propertyStatus" :key="status" class="option-label">
             {{ status }}
-            </option>
+          </option>
         </select>
       </div>
     </div>
@@ -93,7 +93,7 @@
     </div>
     <div class="flex flex-col col-span-3">
       <label>Descripción</label>
-      <textarea type="text" placeholder="Texto"></textarea>
+      <textarea type="text" v-model="description" placeholder="Texto"></textarea>
     </div>
   </div>
 </template> 
@@ -101,8 +101,14 @@
 export default{
   data() {
     return {
-      message: '',
       currencyTab: true,
+      name: '',
+      price: 0,
+      sector: '',
+      bedrooms: 0,
+      bathrooms: 0,
+      parking: 0,
+      description: 0,
       sectors: [
         "Option", "Option", "Option", "Option", "Option", "Option", "Option", "Option", "Option", "Option", "Option", "Option", "Option", "Option"
       ],

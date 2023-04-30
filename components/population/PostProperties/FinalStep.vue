@@ -8,6 +8,6 @@
         con éxito
       </span>
     </h4>
-    <p class="text-sm leading-[22px] ">Tu anuncio fue enviado con éxito a revisión.</p>
+    <p class="text-sm leading-[22px]">Tu anuncio fue enviado con éxito a revisión.</p>
   </div>
 </template>

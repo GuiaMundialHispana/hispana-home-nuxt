@@ -85,7 +85,7 @@ export default{
 <script setup>
 import { useUserStore } from '~/stores/User';
 const user = useUserStore();
-const step = ref(3)
+const step = ref(1)
 definePageMeta({
   middleware: ["logger"]
 });

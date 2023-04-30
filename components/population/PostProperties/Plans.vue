@@ -113,8 +113,8 @@ export default {
           'Authorization': 'Bearer ' + this.user.token
         },
         body: {
-          "plan_id": this.planSelected.planId,
-          "quantity": this.planSelected.quantity
+          plan_id: this.planSelected.planId,
+          quantity: this.planSelected.quantity
         }
       });
 
