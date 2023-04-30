@@ -99,33 +99,31 @@ export default {
       }
     },
     async getPlans() {
-      const { data } = useAsyncData('count', () => $fetch(useRuntimeConfig().API+'generals/plans'));
-      this.plans = data.value.results;
+      const { data }  = await useFetch(useRuntimeConfig().API+'generals/plans');
+      this.plans = data._value.results;
     },
     async processPayment() {
-      console.log(this.planSelected.id)
-      console.log(this.planSelected.planQuantity)
-      console.log(this.user.token)
-
+      const form = new FormData();
+      form.append('plan_id', this.planSelected.id);
+      form.append('quantity', this.planSelected.planQuantity)
       const { data }  = await useFetch(useRuntimeConfig().API+'user-plans',{
         method: 'POST',
         headers: {
           'Authorization': 'Bearer ' + this.user.token
         },
-        body: {
-          plan_id: this.planSelected.planId,
-          quantity: this.planSelected.quantity
-        }
+        body: form,
       });
 
       try {
         const res = data.value.results;
         console.log(res)
+        this.$emit('plan', this.planSelected.id);
       } catch (error) {
         this.$swal.fire({
           icon: 'error',
-          text: 'En este momento estamos presentando un error'
-        });
+          text: 'En estos momentos estamos presentando un error, intente mas tarde'
+        })
+        console.log(error)
       }
     }
   },

@@ -5,10 +5,13 @@
       <figure class="mb-4">
         <img src="/img/not-found.png" class="object-contain max-w-[308px] mx-auto" />
       </figure>
-      <h6 class="text-4xl text-blue-100 font-bold mb-8 text-center">Aún no publicas <span class="text-primary-100">nada.</span></h6>
+      <h6 class="text-4xl text-blue-100 font-bold mb-8 text-center">Aún no publicas
+        <span class="text-primary-100">nada.</span>
+      </h6>
+      <AtomsLink link-to="/postProperty">Crear un anuncio</AtomsLink>
       <p class="text-sm text-neutral-black text-center">¡No dejes pasar esta oportunidad de mostrar tu propiedad al mundo!</p>
     </div>
-    <div v-if="test">
+    <div v-if="test" class="ads">
       <div class="flex gap-3 mb-14 flex-wrap md:flex-row flex-col">
         <AtomsButtons
           v-for="(item, index) in advertisimentStatus"
@@ -82,12 +85,16 @@ export default {
 </script>
 
 <style lang="postcss" scoped>
-.btn {
-  @apply flex-grow justify-between border-2 hover:border-primary-100 text-neutral-black;
-  & span { @apply w-6 h-6 flex items-center justify-center rounded-full font-medium text-sm bg-[#F5F5F5] text-[#ADADAD]; }
-  &.active {
-    @apply bg-neutral-transparent hover:text-neutral-black !important;
-    & span { @apply text-primary-100 bg-primary-50; }
+
+.ads {
+  .btn {
+    @apply flex-grow justify-between border-2 hover:border-primary-100 text-neutral-black;
+    & span { @apply w-6 h-6 flex items-center justify-center rounded-full font-medium text-sm bg-[#F5F5F5] text-[#ADADAD]; }
+    &.active {
+      @apply bg-neutral-transparent hover:text-neutral-black !important;
+      & span { @apply text-primary-100 bg-primary-50; }
+    }
   }
 }
+
 </style>
