@@ -34,7 +34,7 @@
       </div>
     </div>
   </nav>
-  <PopulationPostPropertiesSellOrRent v-if="step === 1" />
+  <PopulationPostPropertiesSellOrRent @option-selected="getSentOrRent" v-if="step === 1" />
   <PopulationPostPropertiesCategory v-if="step === 2" />
   <PopulationPostPropertiesPlans v-if="step === 3" />
   <PopulationPostPropertiesDetails v-if="step === 4" />
@@ -72,26 +72,37 @@
   </nav>
 </template>
 
-<!-- <script>
-export default{
-  data() {
-    return {
-      step: 3
-    }
-  }
-}
-</script> -->
-
 <script setup>
-import { useUserStore } from '~/stores/User';
-const user = useUserStore();
-const step = ref(1)
 definePageMeta({
   middleware: ["logger"]
 });
-onBeforeMount(() => {
-  user.getProfile()
-});
+</script>
+
+<script>
+import { useUserStore } from '~/stores/User';
+export default {
+  data() {
+    return {
+      user: useUserStore(),
+      type: '',
+      step: 1
+    }
+  },
+  methods: {
+    getSentOrRent(n) {
+      this.type = n;
+    }
+  },
+  watch: {
+    type() {
+      console.log(this.type)
+      this.step++;
+    }
+  },
+  mounted() {
+    this.user.getProfile()
+  }
+}
 </script>
 
 <style lang="postcss" scoped>
