@@ -5,10 +5,12 @@
       <figure class="mb-4">
         <img src="/img/not-found.png" class="object-contain max-w-[308px] mx-auto" />
       </figure>
-      <h6 class="text-4xl text-blue-100 font-bold mb-8 text-center">Aún no publicas
+      <h6 class="text-4xl text-blue-100 font-bold mb-4 text-center">Aún no publicas
         <span class="text-primary-100">nada.</span>
       </h6>
-      <AtomsLink link-to="/postProperty">Crear un anuncio</AtomsLink>
+      <div class="flex justify-center mb-4">
+        <AtomsLink link-to="/postProperty" class="mx-auto">Crear un anuncio</AtomsLink>
+      </div>
       <p class="text-sm text-neutral-black text-center">¡No dejes pasar esta oportunidad de mostrar tu propiedad al mundo!</p>
     </div>
     <div v-if="test" class="ads">
@@ -85,9 +87,8 @@ export default {
 </script>
 
 <style lang="postcss" scoped>
-
 .ads {
-  .btn {
+  & .btn {
     @apply flex-grow justify-between border-2 hover:border-primary-100 text-neutral-black;
     & span { @apply w-6 h-6 flex items-center justify-center rounded-full font-medium text-sm bg-[#F5F5F5] text-[#ADADAD]; }
     &.active {
