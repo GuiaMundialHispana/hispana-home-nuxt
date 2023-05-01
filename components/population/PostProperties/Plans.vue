@@ -116,7 +116,6 @@ export default {
 
       try {
         const res = data.value.results;
-        console.log(res)
         this.$emit('plan', this.planSelected.id);
       } catch (error) {
         this.$swal.fire({
