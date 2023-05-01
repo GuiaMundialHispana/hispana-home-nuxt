@@ -109,14 +109,14 @@
       <textarea type="text" v-model="description" placeholder="Descripcion de la propiedad"></textarea>
     </div>
   </div>
-  <!-- <div class="flex justify-center w-full mt-4">
+  <div class="flex justify-center w-full mt-4">
     <AtomsButtons
       btn-style="solid-primary"
       btn-size="xsmall"
       @click="sendPropertyData()"
       >confirmar
     </AtomsButtons>
-  </div> -->
+  </div>
 </template> 
 <script>
 export default{
@@ -161,17 +161,8 @@ export default{
         solar_meters: this.meter_2,
         description: this.description
       },
-      this.$emit('send-property', this.propertyData)
+      this.$emit('sendProperty', this.propertyData)
     }
-  },
-  mounted() {
-    useFetch('https://api.countrystatecity.in/v1/countries',{
-      method: 'GET',
-      headers: {
-        'X-CSCAPI-KEY': 'Bearer ' + this.user.token
-      },
-      body: form,
-    });
   }
 }
 </script>

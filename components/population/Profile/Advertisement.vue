@@ -29,8 +29,11 @@
       </div>
       <h3 class="font-semibold text-sm text-black text-[28px] leading-[42px] md:mb-12 mb-5">Anuncios {{selectedTab}}</h3>
       <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        <li v-for="slide in 10" :key="slide">
-          <!-- <MoleculesProperty /> -->
+        <li v-for="item in properties" :key="item">
+          <MoleculesProperty 
+            :property="item.property" 
+            :is-favorite="true"
+          />
         </li>
       </ul>
     </div>

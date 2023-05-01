@@ -26,8 +26,11 @@
         Exclusividad en página de inicio
       </li>
     </ul>
-    <AtomsButtons :isDisabled="disabledPayment" @click="payment()" v-if="$route.path != '/profile'" btn-style="outline-gray" btn-size="xsmall" class="w-full my-4">
+    <AtomsButtons :isDisabled="disabledPayment" @click="payment()" v-if="$route.path != '/profile' && plan.price != 0" btn-style="outline-gray" class="w-full my-4">
       Seleccionar
+    </AtomsButtons>
+    <AtomsButtons @click="freePlan()" v-if="$route.path != '/profile' && plan.price === 0" class="w-full my-2">
+      Seleccionar plan basico
     </AtomsButtons>
     <div class="action-buttons" v-if="$route.path != '/profile' && plan.price != 0">
       <div class="cantidad">
@@ -44,7 +47,7 @@
     <p class="price"
       v-if="$route.path === '/profile'">
       <span class="text-base">
-      RD$ </span>{{ updatePrice  }}
+      RD$ </span>{{ plan.price  }}
     </p>
     <p v-if="plan.price === 0" class="text-primary-100 text-3xl text-center font-semibold">
       Gratis
@@ -54,17 +57,17 @@
 
 <script>
 export default {
-  data() {
-    return {
-      planQuantity: 0,
-      priceUpdated: 0
-    }
-  },
   props: {
     plan: {
       type: Object,
       default: () => {}
     },
+  },
+  data() {
+    return {
+      planQuantity: 0,
+      priceUpdated: 0
+    }
   },
   computed: {
     renderPlanText() {
@@ -106,6 +109,15 @@ export default {
           this.planQuantity = 0;
         }
       })
+    },
+    freePlan() {
+      this.$emit(
+        'pay', 
+        this.plan.id,
+        this.planQuantity = 0,
+        this.plan.name,
+        this.updatePrice = 0
+      )
     }
   }
 }
@@ -124,7 +136,6 @@ export default {
     }
     &.silver { background: linear-gradient(104.59deg, #D9D9D9 8.17%, #ADADAD 51.17%, #FFFFFF 120.16%); }
     &.exclusive { background: linear-gradient(100.63deg, #000000 -6.24%, #2F1C1B 45.46%, #A89494 95.05%); }
-
   }
 
   & .plan-benefits {
