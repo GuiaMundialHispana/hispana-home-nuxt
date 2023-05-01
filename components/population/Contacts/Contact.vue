@@ -2,11 +2,11 @@
   <div class="mx-4 sm:w-[568px] mb-6 sm:grid sm:grid-cols-2 sm:mx-auto gap-4">
     <div class="flex flex-col">
       <label for="name">Nombre</label>
-      <input class="form-control mt-2" placeholder="Nombre" type="text" id="name">
+      <input class="form-control mt-2" v-model="name" placeholder="Nombre" type="text" id="name">
     </div>
     <div class="flex flex-col">
       <label for="email">Correo</label>
-      <input class="form-control mt-2" placeholder="Correo" type="email"  id="email">
+      <input class="form-control mt-2" v-model="email" placeholder="Correo" type="email" id="email">
     </div>
     <div class="flex flex-col col-span-2">
       <label for="message">Mensaje</label>
@@ -14,12 +14,7 @@
       <p :class="[{limit: message.length === 100}]" class="ml-auto text-neutral-black text-base opacity-25">{{ message.length }}/100</p>
     </div>
     <div class="mr-auto mt-4 sm:mt-1 col-start-2 sm:mr-0 ml-auto flex justify-end">
-      <AtomsButtons
-          class="font-semibold"
-          btn-size="xsmall"
-          btn-style="solid-primary"
-          >Enviar
-      </AtomsButtons>
+      <AtomsButtons class="font-semibold" @click="sendMessage()">Enviar</AtomsButtons>
     </div>
   </div>
   
@@ -28,8 +23,35 @@
 export default{
   data() {
     return {
+      name: '',
+      email: '',
       message: '',
     }
+  },
+  methods: {
+    async sendMessage() {
+      const form = new FormData();
+      form.append('name', this.name);
+      form.append('email', this.email)
+      form.append('description', this.message)
+      const { data }  = await useFetch(useRuntimeConfig().API+'generals/contact',{
+        method: 'POST',
+        body: form
+      });
+
+      try {
+        this.$swal.fire({
+          icon: 'success',
+          text: 'Su mensaje se ha enviado con exito, estaremos respondiendo lo mas pronto posible'
+        })
+      } catch (error) {
+        this.$swal.fire({
+          icon: 'error',
+          text: 'En estos momentos estamos presentando un error, intente mas tarde'
+        })
+        console.log(error)
+      }
+    },
   }
 }
 </script>
