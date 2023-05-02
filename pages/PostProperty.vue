@@ -71,7 +71,7 @@
           <h4 class="font-semibold text-[28px] leading-[42px] mt-11 mb-14 text-center">
             Planes disponibles para esta publicación.
           </h4>
-          <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 px-16">
+          <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 px-16">
             <li v-for="plan in plans" :key="plan">
               <MoleculesPlanCard @pay="planInformation" :plan="plan" />
             </li>
@@ -171,9 +171,10 @@
               </button>
             </div>
           </div>
-          <!-- <div class="col-span-3">
+          <div class="col-span-3">
+            <div id="map"></div>
             <iframe class="rounded-2xl w-full h-[195px] sm:my-2 my-5" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3784.565950258251!2d-69.94201623463833!3d18.45800652590105!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8ea56202c17cd707%3A0x9abe65a34f683f5c!2sOficina%20Gubernamental%20de%20Tecnolog%C3%ADas%20de%20la%20Informaci%C3%B3n%20y%20Comunicaci%C3%B3n%20(OGTIC)!5e0!3m2!1ses-419!2sdo!4v1676248377093!5m2!1ses-419!2sdo"></iframe>
-          </div> -->
+          </div>
           <select class="form-control sm:mb-2 mb-5 col-span-3">
             <option>Sector</option>
             <option v-for="(sector) in sectors" value="sector" :key="sector" class="option-label">
@@ -339,7 +340,7 @@ export default {
       municipalities: [],
       propertyData: {},
       images: null,
-      previewImages: []
+      previewImages: [],
     }
   },
   methods: {
