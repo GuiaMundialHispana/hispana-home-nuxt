@@ -172,26 +172,26 @@
             </div>
           </div>
           <div class="col-span-3">
-            <div id="map"></div>
-            <iframe class="rounded-2xl w-full h-[195px] sm:my-2 my-5" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3784.565950258251!2d-69.94201623463833!3d18.45800652590105!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8ea56202c17cd707%3A0x9abe65a34f683f5c!2sOficina%20Gubernamental%20de%20Tecnolog%C3%ADas%20de%20la%20Informaci%C3%B3n%20y%20Comunicaci%C3%B3n%20(OGTIC)!5e0!3m2!1ses-419!2sdo!4v1676248377093!5m2!1ses-419!2sdo"></iframe>
+            <!-- <div id="map"></div> -->
+            <!-- <iframe class="rounded-2xl w-full h-[195px] sm:my-2 my-5" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3784.565950258251!2d-69.94201623463833!3d18.45800652590105!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8ea56202c17cd707%3A0x9abe65a34f683f5c!2sOficina%20Gubernamental%20de%20Tecnolog%C3%ADas%20de%20la%20Informaci%C3%B3n%20y%20Comunicaci%C3%B3n%20(OGTIC)!5e0!3m2!1ses-419!2sdo!4v1676248377093!5m2!1ses-419!2sdo"></iframe> -->
           </div>
-          <select class="form-control sm:mb-2 mb-5 col-span-3">
+          <select class="form-control sm:mb-2 mb-5 col-span-3" v-model="country">
+            <option>País</option>
+            <option v-for="country in countries[0]" :value="country.id" :key="country.id" class="option-label">
+            {{ country.name }}
+            </option>
+          </select>
+          <select class="form-control sm:mb-2 mb-5 col-span-3" v-model="sector">
             <option>Sector</option>
-            <option v-for="(sector) in sectors" value="sector" :key="sector" class="option-label">
-            {{ sector }}
+            <option v-for="sector in sectors[0]" :value="sector.id" :key="sector.id" class="option-label">
+            {{ sector.name }}
             </option>
           </select>
           <div class="col-span-3 w-full gap-4 sm:flex">
-            <select class="form-control sm:mb-2 mb-5">
+            <select class="form-control sm:mb-2 mb-5" v-model="city">
               <option>Ciudad</option>
-              <option v-for="(city) in cities" :key="city" class="option-label">
-              {{ city }}
-              </option>
-            </select>
-            <select class="form-control sm:mb-2 mb-5">
-              <option>Municipio</option>
-              <option v-for="(municipality) in municipalities" :key="municipality" class="option-label">
-              {{ municipality }}
+              <option v-for="item in cities[0]" :value="item.id" :key="item.id" class="option-label">
+              {{ item.name }}
               </option>
             </select>
           </div>
@@ -313,6 +313,7 @@ export default {
   data() {
     return {
       user: useUserStore(),
+      config: useRuntimeConfig(),
       step: 1,
       optionSelected: "",
       categorySelected: 'Casa',
@@ -324,7 +325,6 @@ export default {
       name: '',
       price: Number,
       price_us: Number,
-      sector: '',
       bedrooms: Number,
       bathrooms: Number,
       parking: Number,
@@ -335,8 +335,12 @@ export default {
       propertyStatus: ['New', 'Used'],
       ameniti: [],
       amenities: ['Piscina','Terraza comun','Terraza exclusiva','Gimnasio','Cisterna','Estudio','Gazebo','Escaleras','Ascensor','Family Room'],
+      countries: [],
+      country: [],
       sectors: [],
+      sector: [],
       cities: [],
+      city: [],
       municipalities: [],
       propertyData: {},
       images: null,
@@ -354,7 +358,8 @@ export default {
 
       if(this.planSelected.planPrice > 0) {
         this.showPaymentProcess = true;
-      } else {
+      } 
+      else {
         const form = new FormData();
         form.append('plan_id', this.planSelected.id);
         form.append('quantity', this.planSelected.planQuantity)
@@ -415,9 +420,9 @@ export default {
       form.append('description',this.description);
       form.append('type', this.optionSelected);
       form.append('property_category', 2);
-      form.append('town_id', 150);
-      form.append('city_id', 40);
-      form.append('country_id', 22);
+      form.append('town_id', this.sector);
+      form.append('city_id', this.city);
+      form.append('country_id', this.country);
       form.append('bedroom', this.bedrooms);
       form.append('bathroom', this.bathrooms);
       form.append('parking', this.parking);
@@ -428,7 +433,7 @@ export default {
       form.append('property_status', this.property_status);
       form.append('image', this.$refs.file.files[0]);
       
-      for (var i = 0; i < this.$refs.file.files.length; i++ ){
+      for (var i = 0; i < this.$refs.file.files.length; i++ ) {
         let file = this.$refs.file.files[i];
         form.append('images[' + i + ']', file);
       }
@@ -461,9 +466,32 @@ export default {
             });
             useRouter().push("/profile?tab=anuncio");
           }
-        }
-        
+        }    
       });
+    },
+    async getCountries() {
+      const { data } = await useFetch('generals/countries', {
+        baseURL: this.config.public.API
+      })
+      const res = data._value.results.data;
+      this.countries.push(res);
+    },
+    async getStates(country_id) {
+      const { data } = await useFetch('generals/states/'+`${country_id}`, {
+        baseURL: this.config.public.API,
+      })
+      const res = data._value.results.data;
+      this.sectors.splice(0,1);
+      this.sectors.push(res);
+      console.log(this.sectors)
+    },
+    async getCities(sector_id) {
+      const { data } = await useFetch('generals/cities/'+`${sector_id}`, {
+        baseURL: this.config.public.API,
+      })
+      const res = data._value.results.data;
+      this.cities.splice(0,1);
+      this.cities.push(res)
     }
   },
   computed: {
@@ -487,11 +515,18 @@ export default {
   watch: {
     price() {
       this.price_us = parseInt(this.price / 54);
+    },
+    country() {
+      this.getStates(this.country)
+    },
+    sector() {
+      this.getCities(this.sector)
     }
   },
   mounted() {
     this.user.getProfile();
     this.getPlans();
+    this.getCountries();
   }
 }
 </script>
