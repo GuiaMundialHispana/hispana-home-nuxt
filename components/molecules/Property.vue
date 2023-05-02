@@ -2,7 +2,7 @@
   <article>
     <!-- Favorite -->
     <AtomsButtons
-      v-if="route.path !== '/profile'"
+      v-if="$route.path === '/profile?tab=favorite'"
       btn-type="btn-icon"
       icon-name="general/favorite"
       class="favorite-button"
@@ -10,7 +10,7 @@
       @click="addFavorite()"
     />
     <AtomsButtons
-      v-if="route.path === '/profile'"
+      v-if="$route.path === '/profile?tab=favorite'"
       btn-type="btn-icon"
       icon-name="general/favorite"
       class="favorite-button active"
