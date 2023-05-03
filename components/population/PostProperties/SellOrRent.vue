@@ -1,3 +1,4 @@
+
 <template>
   <div class="flex flex-col text-center items-center justify-center">
     <h4 class="font-semibold text-[28px] leading-[42px] my-20">
@@ -9,10 +10,20 @@
     </h4>
     <div class="flex gap-2.5">
       <label class="option" :class="[{checked: optionSelected === 'sell'}]">Vender
-        <input type="radio" value="sell" name="sell" v-model="optionSelected" >
+        <input
+          type="radio"
+          value="Sell"
+          name="sell"
+          @click="$emit('optionSelected', 'Sell'); optionSelected = 'sell'"
+        >
       </label>
       <label class="option" :class="[{checked: optionSelected === 'rent'}]">Alquilar
-        <input type="radio" value="rent" name="rent" v-model="optionSelected" >
+        <input
+          type="radio"
+          value="rent"
+          name="rent"
+          @click="$emit('optionSelected', 'Rent'); optionSelected = 'rent'"
+        >
       </label>
     </div>
   </div>

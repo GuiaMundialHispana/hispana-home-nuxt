@@ -6,8 +6,18 @@
         inmueble?
       </span>
     </h4>
-    <label v-for="(category) in categories" :key="category" class="option" :class="[{checked: categorySelected === category}]">
-      <input type="radio" :value="category" :name="category" v-model="categorySelected">
+    <label
+      v-for="(category, index) in categories"
+      :key="category" class="option"
+      :class="[{checked: categorySelected === category}]"
+    >
+      <input
+        type="radio"
+        :value="category"
+        :name="category"
+        v-model="categorySelected"
+        @click="$emit('typeProperty', index);"
+      >
       {{ category }}
     </label>
   </div>

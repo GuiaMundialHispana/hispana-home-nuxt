@@ -34,8 +34,6 @@ export const useUserStore = defineStore('user', {
           'Authorization': 'Bearer ' + this.token
         },
       });
-      console.log(this.token)
-      console.log(data)
       const res = data.value.results.user;
       this.userData = res;
     },
