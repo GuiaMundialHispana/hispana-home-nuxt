@@ -171,10 +171,15 @@
               </button>
             </div>
           </div>
-          <!-- <div class="col-span-3">
-            <div id="map"></div>
-            <iframe class="rounded-2xl w-full h-[195px] sm:my-2 my-5" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3784.565950258251!2d-69.94201623463833!3d18.45800652590105!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8ea56202c17cd707%3A0x9abe65a34f683f5c!2sOficina%20Gubernamental%20de%20Tecnolog%C3%ADas%20de%20la%20Informaci%C3%B3n%20y%20Comunicaci%C3%B3n%20(OGTIC)!5e0!3m2!1ses-419!2sdo!4v1676248377093!5m2!1ses-419!2sdo"></iframe>
-          </div> -->
+          <div class="col-span-3">
+            <OrganismMap @send-location="getAddress"/>
+          </div>
+          <div class="col-span-3">
+            <label class="w-full sm:mb-2 mb-5">
+            Direccion
+            <input class="form-control" v-model="address" placeholder="Direccion" type="text">
+          </label>
+          </div>
           <label class="w-full sm:mb-2 mb-5">
             País
             <select class="form-control col-span-3" v-model="country">
@@ -305,9 +310,9 @@
 </template>
 
 <script setup>
-definePageMeta({
-  middleware: ["logger"]
-});
+  definePageMeta({
+    middleware: ["logger"]
+  });
 </script>
 
 <script>
@@ -349,6 +354,8 @@ export default {
       propertyData: {},
       images: null,
       previewImages: [],
+      lat: null,
+      long: null
     }
   },
   methods: {
@@ -376,6 +383,19 @@ export default {
         });
         this.step++;
       }
+    },
+    previewFiles(event) {
+      this.images = event.target.files;
+      for (var i = 0; i < this.images.length; i++ ){
+        let file = this.images[i];
+        this.previewImages.push(URL.createObjectURL(file));
+      }
+    },
+    getAddress(lant, long) {
+      this.lat = lant;
+      this.long = long
+      console.log(this.lat)
+      console.log(this.long)
     },
     async getPlans() {
       const { data }  = await useFetch(useRuntimeConfig().API+'generals/plans');
@@ -407,20 +427,13 @@ export default {
         console.log(error)
       }
     },
-    previewFiles(event) {
-      this.images = event.target.files;
-      for (var i = 0; i < this.images.length; i++ ){
-        let file = this.images[i];
-        this.previewImages.push(URL.createObjectURL(file));
-      }
-    },
     async createAdvertisement() {
       const form = new FormData();
       form.append('plan_id', this.planSelected.id);
       form.append('name', this.name);
       form.append('price', this.price);
       form.append('price_us', this.price_us);
-      form.append('address', 'Jacobo Majluta 25');
+      form.append('address', this.address);
       form.append('description',this.description);
       form.append('type', this.optionSelected);
       form.append('property_category', 2);
@@ -432,8 +445,8 @@ export default {
       form.append('parking', this.parking);
       form.append('meters', this.meter);
       form.append('solar_meters', this.meter_2);
-      form.append('latitude', 12.545654654654564);
-      form.append('longitude', 15.545654654654564);
+      form.append('latitude', this.lat);
+      form.append('longitude', this.long);
       form.append('property_status', this.property_status);
       form.append('image', this.$refs.file.files[0]);
       
@@ -496,7 +509,7 @@ export default {
       const res = data._value.results.data;
       this.cities.splice(0,1);
       this.cities.push(res)
-    }
+    },
   },
   computed: {
     renderPlanText() {
@@ -525,6 +538,16 @@ export default {
     },
     sector() {
       this.getCities(this.sector)
+    },
+    lat() {
+      if(this.lat === null || this.lat === '' ) {
+        this.lat = 12.545654654654564
+      }
+    },
+    long() {
+      if(this.long === null || this.long === '' ) {
+        this.long = 15.545654654654564
+      }
     }
   },
   mounted() {
