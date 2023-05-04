@@ -79,7 +79,6 @@
         </div>
         <!-- Process payment -->
         <div v-if="showPaymentProcess">
-          {{ planSelected.id }}
           <div class="grid lg:grid-cols-2 lg:px-0 px-8 gap-x-16">
             <div class="w-full lg:px-8 lg:py-16">
               <h4 class="font-bold text-[28px] leading-[42px] mb-14">Información de pago</h4>
@@ -133,7 +132,7 @@
       </div>
       <div class="step-4" v-if="step === 4">
         <h4 class="font-semibold text-[28px] leading-[42px] mt-11 mb-7 text-center">
-          Cuéntanos sobre tu<span class="text-primary-100">inmueble</span>
+          Cuéntanos sobre tu <span class="text-primary-100">inmueble</span>
         </h4>
         <div class="mx-4 px-4 md:px-8 sm:grid sm:grid-cols-3 sm:mx-auto gap-4 max-w-[995px]">
           <label class="col-span-3 sm:mb-2 mb-5">
@@ -355,7 +354,8 @@ export default {
       images: null,
       previewImages: [],
       lat: null,
-      long: null
+      long: null,
+      address:''
     }
   },
   methods: {
@@ -391,11 +391,16 @@ export default {
         this.previewImages.push(URL.createObjectURL(file));
       }
     },
-    getAddress(lant, long) {
+    getAddress(lant, long, location) {
+      console.log(location)
       this.lat = lant;
-      this.long = long
-      console.log(this.lat)
-      console.log(this.long)
+      this.long = long;
+      this.address = location;
+      // console.log(this.address)
+      // console.log(this.lat)
+      // console.log(this.long)
+      // console.log(this.address)
+
     },
     async getPlans() {
       const { data }  = await useFetch(useRuntimeConfig().API+'generals/plans');
@@ -424,7 +429,6 @@ export default {
           icon: 'error',
           text: 'En estos momentos estamos presentando un error, intente mas tarde'
         })
-        console.log(error)
       }
     },
     async createAdvertisement() {
@@ -500,7 +504,6 @@ export default {
       const res = data._value.results.data;
       this.sectors.splice(0,1);
       this.sectors.push(res);
-      console.log(this.sectors)
     },
     async getCities(sector_id) {
       const { data } = await useFetch('generals/cities/'+`${sector_id}`, {
