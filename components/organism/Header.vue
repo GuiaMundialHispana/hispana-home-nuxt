@@ -27,6 +27,24 @@
             <div class="user-dropdown" v-show="userDropdown">
               <ul>
                 <li>
+                  <NuxtLink to="/profile?tab=anuncio">
+                    <AtomsIcon name="general/border-all" class="mr-2.5" />
+                    Mis anuncios
+                  </NuxtLink>
+                </li>
+                <li>
+                  <NuxtLink to="/profile?tab=favorite">
+                    <AtomsIcon name="general/favorite" class="mr-2.5" />
+                    Mis favoritos
+                  </NuxtLink>
+                </li>
+                <li>
+                  <NuxtLink to="/profile?tab=plan">
+                    <AtomsIcon name="general/user-document" class="mr-2.5" />
+                    Mis planes
+                  </NuxtLink>
+                </li>
+                <!-- <li>
                   <NuxtLink :to="{ path: 'profile', query: { tab: 'anuncio' }}">
                     <AtomsIcon name="general/border-all" class="mr-2.5" />
                     Mis anuncios
@@ -43,7 +61,7 @@
                     <AtomsIcon name="general/user-document" class="mr-2.5" />
                     Mis planes
                   </NuxtLink>
-                </li>
+                </li> -->
                 <li @click="user.logOut(), showMenu = false">
                   <AtomsIcon name="general/logout" class="mr-2.5" />
                   Cerrar sesión
@@ -127,7 +145,7 @@ nav {
   & > ul { @apply flex lg:items-center xl:gap-x-8 lg:gap-3 lg:flex-row flex-col; }
 
   & .user-wrapper {
-    @apply flex lg:items-center font-semibold text-primary-100 lg:ml-4 md:mr-4 cursor-pointer mb-4 lg:mb-0 lg:flex-row flex-col;
+    @apply flex lg:items-center font-semibold text-primary-100 lg:ml-4 cursor-pointer mb-4 lg:mb-0 lg:flex-row flex-col;
 
     & img { @apply w-8 h-8 rounded-full border-[2px] border-primary-90 object-cover; }
 

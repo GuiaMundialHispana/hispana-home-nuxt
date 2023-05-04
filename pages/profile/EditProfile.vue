@@ -152,69 +152,6 @@
   </section>
 </template>
 
-<!-- <script setup>
-import { useUserStore } from '~/stores/User';
-import { useUserEditStore } from '~/stores/EditUser';
-import FormData from 'form-data';
-import { watch, ref } from 'vue';
-definePageMeta({
-  middleware: ["logger"]
-});
-
-const user = useUserStore();
-const editUser = useUserEditStore ();
-const showChangePasswd = ref(false);
-let profilePic = ref('');
-let images = ref(null);
-
-watch(profilePic, () => 
-  editUser.editUserData.profile_pic = profilePic,
-  console.log(profilePic)
-)
-
-function previewFiles(event) {
-  images = event.target.files[0]
-  profilePic = URL.createObjectURL(images);
-  editUser.images = images;
-  // console.log(profilePic)
-}
-
-async function updateUser() {
-  const form = new FormData();
-  form.append('user_id', editUser.editUserData.user_id);
-  form.append('email', editUser.editUserData.email)
-  form.append('name', editUser.editUserData.name);
-  form.append('lastname', editUser.editUserData.lastname);
-  form.append('birthdate', editUser.editUserData.birthdate);
-  form.append('country_id', editUser.editUserData.country_id);
-  form.append('cellphone', editUser.editUserData.cellphone);
-  form.append('phone', editUser.editUserData.phone);
-  form.append('profile_pic', editUser.images);
-
-  await useFetch(useRuntimeConfig().API+'users/update?_method=PUT',{
-    method: 'POST',
-    body: form,
-    headers: {
-      'Authorization': 'Bearer ' + editUser.user.token,
-      'Accept': 'application/json',
-    },
-    onResponseError({ request, response, options }) {
-      const res = response._data;
-      Swal.fire({
-        icon: 'error',
-        text: 'Tenemos un error para validar tus datos, por favor intente mas tarde',
-        showConfirmButton: false,
-        timer: 3000
-      });
-    }
-  });
-}
-
-onMounted(()=> {
-  user.getProfile();
-});
-</script> -->
-
 <script>
 import { useUserStore } from '~/stores/User';
 import { useUserEditStore } from '~/stores/EditUser';
