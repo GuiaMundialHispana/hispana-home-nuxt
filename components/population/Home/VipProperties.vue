@@ -1,5 +1,5 @@
 <template>
-  <section class="pt-6 md:pt-14 lg:px-16 md:px-6 px-4 mx-auto max-w-[97rem] mb-16">
+  <section class="pt-6 md:pt-14 lg:px-16 md:px-6 px-4 mx-auto max-w-[97rem]">
     <div class="flex justify-between border-b border-[#F5F5F5] py-2 mb-6">
       <h2 class="text-[28px] leading-8 text-center md:text-left mx-auto md:mx-0 font-medium">
         Propiedades VIP

@@ -11,7 +11,6 @@
           <li v-for='item in menu' :key='item.name' class="text-sm text-neutral-black font-normal hover:text-primary-100 mb-4 lg:mb-0 cursor-pointer">
             <NuxtLink :to='item.route'>{{item.name}}</NuxtLink>
           </li>
-          
           <li class="mb-4 lg:mb-0" v-show="!user.isLoggedIn">
             <AtomsButtons @click="showMenu = false; displayModal = true">
               Iniciar sesión
@@ -53,14 +52,15 @@
             </div>
           </li>
           <li v-show="user.isLoggedIn">
-            <AtomsButtons
+            <AtomsLink
+              link-to="/PostProperty"
               icon-name="general/plus"
               icon-position="left"
               :icon-size=14
               btnStyle="outline-primary"
             >
               Publicar
-            </AtomsButtons>
+            </AtomsLink>
           </li>
         </ul>
       </nav>

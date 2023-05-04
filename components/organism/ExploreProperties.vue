@@ -33,12 +33,39 @@
         delay: 8000,
         disableOnInteraction: true,
       }">
-      <SwiperSlide v-for="slide in 10" :key="slide">
-        <!-- <MoleculesProperty /> -->
+      <SwiperSlide v-for="property in properties" :key="property">
+        <MoleculesProperty :is-favorite="false" :property="property" />
       </SwiperSlide>
     </Swiper>
   </section>
 </template>
+
+<script>
+export default {
+  name: 'Explore Properties',
+  data() {
+    return {
+      properties: [],
+      config: useRuntimeConfig()
+    }
+  },
+  methods: {
+    async getProperties() {
+      const { data } = await useFetch('properties', {
+        method: 'GET',
+        baseURL: this.config.public.API
+      });
+      const res = data._value.results.data;
+      for(const item in res) {
+        this.properties.push(res[item])
+      }
+    }
+  },
+  created() {
+    this.getProperties();
+  }
+}
+</script>
 
 <style lang="postcss" scoped>
 .swiper-slide { 

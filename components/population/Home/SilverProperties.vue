@@ -1,6 +1,6 @@
 <template>
   <section class="pt-6 md:pt-14 lg:px-16 md:px-6 px-4 mx-auto max-w-[97rem]">
-    <div class="flex justify-between border-b border-[#F5F5F5] py-2">
+    <div class="flex justify-between border-b border-[#F5F5F5] py-2 mb-6">
       <h2 class="text-[28px] leading-8 text-center md:text-left mx-auto md:mx-0 font-medium">
         Propiedades silver
       </h2>
@@ -21,21 +21,55 @@
         />
       </nav>
     </div>
-    <!-- <Swiper
-      class="relative mt-8 pb-3"
-      :modules="[SwiperAutoplay, SwiperEffectCreative]"
-      slidesPerView="auto"
+    <Swiper
+      :modules="[SwiperFreeMode, SwiperNavigation, SwiperAutoplay]"
+      :effect="'fade'"
+      :lazy="true"
+      :space-between="32"
+      slides-per-view="auto"
       :loop="true"
       :autoplay="{
-        delay: 8000,
-        disableOnInteraction: true,
-      }">
-      <SwiperSlide v-for="slide in 10" :key="slide">
-        <MoleculesFeaturedProperties plantype="silver" />
-      </SwiperSlide>
-    </Swiper> -->
+        delay: 4000,
+        disableOnInteraction: true
+      }"
+      :navigation="{
+        nextEl: '.next',
+        prevEl: '.prev'
+      }"
+    >
+      <swiper-slide v-for="plan in plans" :key="plan">
+        <MoleculesFeaturedProperties plantype="silver" :property="plan.property" />
+      </swiper-slide>
+    </Swiper>
   </section>
 </template>
+
+<script>
+export default {
+  name: 'Silver',
+  data() {
+    return {
+      plans: [],
+      config: useRuntimeConfig()
+    }
+  },
+  methods: {
+    async getPlansSilver() {
+      const { data } = await useFetch('advertisements/home?plan=3', {
+        method: 'GET',
+        baseURL: this.config.public.API
+      });
+      const res = data._value.results.data;
+      for(const item in res) {
+        this.plans.push(res[item])
+      }
+    }
+  },
+  created() {
+    this.getPlansSilver();
+  }
+}
+</script>
 
 <style lang="postcss" scoped>
 .swiper-slide { @apply md:w-max; }
