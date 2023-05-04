@@ -42,11 +42,10 @@
           </label>
           <label>
             País:
-            <select>
-              <option value="Option 1">Option 1</option>
-              <option value="Option 2">Option 2</option>
-              <option value="Option 3">Option 3</option>
-              <option value="Option 4">Option 4</option>
+            <select class="form-control col-span-3" v-model="editUser.editUserData.country_id">
+              <option v-for="country in countries[0]" :value="country.id" :key="country.id" class="option-label">
+              {{ country.name }}
+              </option>
             </select>
           </label>
         </div>
@@ -161,9 +160,12 @@ export default {
     return {
       user: useUserStore(),
       editUser:useUserEditStore (),
+      config: useRuntimeConfig(),
       showChangePasswd: false,
       profilePic: '',
       images: null,
+      countries: [],
+      country: [],
     }
   },
   watch:{
@@ -176,6 +178,13 @@ export default {
       this.images = event.target.files[0]
       this.profilePic = URL.createObjectURL(this.images);
       this.editUser.images = this.images;
+    },
+    async getCountries() {
+      const { data } = await useFetch('generals/countries', {
+        baseURL: this.config.public.API
+      })
+      const res = data._value.results.data;
+      this.countries.push(res);
     },
     async updateUser() {
       const form = new FormData();
@@ -216,6 +225,7 @@ export default {
   },
   created() {
     this.user.getProfile();
+    this.getCountries();
   }
 }
 </script>
