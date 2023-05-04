@@ -5,20 +5,8 @@
         Propiedades VIP
       </h2>
       <nav class="hidden md:flex gap-4">
-        <AtomsButtons 
-          btn-type="btn-icon"
-          btn-style="outline-gray" 
-          icon-name="arrows/arrow-left"
-          btn-size="xsmall"
-          :icon-size=15
-        />
-        <AtomsButtons
-          btn-type="btn-icon"
-          btn-style="outline-gray"
-          icon-name="arrows/arrow-right"
-          btn-size="xsmall"
-          :icon-size=15
-        />
+        <AtomsButtons btn-type="btn-icon" btn-style="outline-gray" icon-name="arrows/arrow-left" btn-size="xsmall" :icon-size=15 />
+        <AtomsButtons btn-type="btn-icon" btn-style="outline-gray" icon-name="arrows/arrow-right" btn-size="xsmall" :icon-size=15 />
       </nav>
     </div>
     <Swiper
@@ -30,12 +18,39 @@
         delay: 8000,
         disableOnInteraction: true,
       }">
-      <SwiperSlide v-for="slide in 10" :key="slide">
-        <MoleculesFeaturedProperties plantype="vip" />
+      <SwiperSlide v-for="plan in plans" :key="plan">
+        <MoleculesFeaturedProperties plantype="vip" :property="plan.property" />
       </SwiperSlide>
     </Swiper>
   </section>
 </template>
+
+<script>
+export default {
+  name: 'Advertisement',
+  data() {
+    return {
+      plans: [],
+      config: useRuntimeConfig()
+    }
+  },
+  methods: {
+    async getPlansVip() {
+      const { data } = await useFetch('advertisements/home?plan=1', {
+        method: 'GET',
+        baseURL: this.config.public.API
+      });
+      const res = data._value.results.data;
+      for(const item in res) {
+        this.plans.push(res[item])
+      }
+    }
+  },
+  created() {
+    this.getPlansVip();
+  }
+}
+</script>
 
 <style lang="postcss" scoped>
 .swiper-slide { @apply md:w-max; }

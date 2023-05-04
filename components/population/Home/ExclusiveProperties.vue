@@ -21,7 +21,7 @@
         />
       </nav>
     </div>
-    <Swiper
+    <!-- <Swiper
       class="relative mt-8 pb-3"
       :modules="[SwiperAutoplay, SwiperEffectCreative]"
       slidesPerView="auto"
@@ -33,7 +33,7 @@
       <SwiperSlide v-for="slide in 10" :key="slide">
         <MoleculesFeaturedProperties plantype="exclusive" />
       </SwiperSlide>
-    </Swiper>
+    </Swiper> -->
   </section>
 </template>
 

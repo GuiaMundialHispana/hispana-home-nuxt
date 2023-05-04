@@ -1,35 +1,13 @@
 <template>
   <article>
-    <Swiper
-      class="relative rounded-lg overflow-hidden"
-      :modules="[SwiperAutoplay, SwiperEffectCreative]"
-      :slides-per-view="1"
-      :loop="true"
-      :effect="'creative'"
-      :autoplay="{
-        delay: 8000,
-        disableOnInteraction: true,
-      }"
-      :creative-effect="{
-        prev: {
-          shadow: false,
-          translate: ['-20%', 0, -1],
-        },
-        next: {
-          translate: ['100%', 0, 0],
-        },
-      }">
-      <SwiperSlide v-for="slide in 10" :key="slide">
+    <Swiper class="relative rounded-lg overflow-hidden" :modules="[SwiperAutoplay, SwiperEffectCreative]" :slides-per-view="1" :loop="true" :effect="'creative'" :autoplay="{ delay: 8000, disableOnInteraction: true}">
+      <SwiperSlide>
         <NuxtLink to="/search/propiedad-1" class="h-[305px] block">
-          <img src="/img/property-1.jpg" alt="" class="object-cover h-full w-full">
+          <img src="/img/property-1.jpg" class="object-cover h-full w-full">
         </NuxtLink>
       </SwiperSlide>
-      <AtomsPropertyPlans
-        class="absolute right-0 z-10"
-        :planType="plantype"
-        planPosition="top" 
-      />
-      <AtomsPropertyLocation class="absolute top-2.5 left-2 z-10" />
+      <AtomsPropertyPlans class="absolute right-0 z-10" :planType="plantype" planPosition="top" />
+      <AtomsPropertyLocation class="absolute top-2.5 left-2 z-10" :location="property.address" />
       <nav>
         <AtomsButtons
           btn-type="btn-icon"
@@ -51,7 +29,7 @@
     <MoleculesCharacteristics class="my-3 justify-center" />
     <!-- Price -->
     <p class="text-sm text-neutral-black text-center font-normal">Desde:</p>
-    <p class="text-primary-100 font-semibold text-xl uppercase text-center">US$84,192.00</p>
+    <p class="text-primary-100 font-semibold text-xl uppercase text-center">US${{ property.price_us }}</p>
   </article>
 </template>
 
@@ -61,7 +39,14 @@ export default {
     plantype: {
       type: String,
       default: "exclusive"
-    }
+    },
+    property: {
+      type: Object,
+      default: () => {}
+    },
+  },
+  created(){
+    console.log(this.property.name)
   }
 }
 </script>

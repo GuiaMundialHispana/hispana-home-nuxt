@@ -1,9 +1,18 @@
 <template>
   <span class="w-44">
     <AtomsIcon name="general/share-location" class="mr-2" />
-    Autopista San Isidro
+    {{ location }}
   </span>
 </template>
+
+<script setup>
+const props = defineProps({
+  location: {
+    type: String,
+    default: 'Location'
+  },
+});
+</script>
 
 <style lang="postcss" scoped>
 span {
