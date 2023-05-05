@@ -15,20 +15,28 @@
             </p>
           </div>
         </button>
-        <div class="dropdown w-[230px]" v-if="dropdownLists.location">
+        <OnClickOutside @trigger="toggleList('location')"
+        class="dropdown w-[230px]" 
+        v-if="dropdownLists.location">
           <button class="sector-filter-btn"  :class="{'active': dropdownLists.city}" @click="toggleList('city')">
             Ciudad <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16></AtomsIcon>
           </button>
-          <MoleculesDropDownList v-if="dropdownLists.city" class="mt-[5px] h-[273px]"/>
+          <OnClickOutside @trigger="toggleList('city')" v-if="dropdownLists.city" >
+            <MoleculesDropDownList class="mt-[5px] h-[273px]"/>
+          </OnClickOutside>
           <button class="sector-filter-btn" :class="{'active': dropdownLists.municipality}" @click="toggleList('municipality')">
             Municipio <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16 />
           </button>
-          <MoleculesDropDownList v-if="dropdownLists.municipality" class="mt-[5px] h-[174px]"/>
+          <OnClickOutside @trigger="toggleList('municipality')" v-if="dropdownLists.municipality" >
+            <MoleculesDropDownList v-if="dropdownLists.municipality" class="mt-[5px] h-[174px]"/>
+          </OnClickOutside>
           <button class="sector-filter-btn" :class="{'active': dropdownLists.sector}" @click="toggleList('sector')">
             Sector <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16 />
           </button>
-          <MoleculesDropDownList v-if="dropdownLists.sector" class="mt-[5px] h-[273px]"/>
-        </div>
+          <OnClickOutside @trigger="toggleList('sector')" v-if="dropdownLists.sector" >
+            <MoleculesDropDownList v-if="dropdownLists.sector" class="mt-[5px] h-[273px]"/>
+          </OnClickOutside>
+        </OnClickOutside>
       </div>
       <span class="buttons-separation"></span>
       <div class="flex justify-center">
@@ -43,9 +51,9 @@
           </p>
         </div>
       </button>
-        <div class="absolute top-[95%] w-[288px] h-[273px]">
-          <MoleculesDropDownList v-if="dropdownLists.propertyType" class="shadow-md"/>
-        </div>
+        <OnClickOutside @trigger="toggleList('propertyType')" class="absolute top-[95%] w-[288px] h-[273px]" v-if="dropdownLists.propertyType">
+          <MoleculesDropDownList class="shadow-md"/>
+        </OnClickOutside>
       </div>
       <span class="buttons-separation"></span>
       <div class="h-full flex justify-center">
@@ -60,7 +68,7 @@
           </p>
         </div>
         </button>
-        <div v-if="dropdownLists.priceRange" class="dropdown w-[238px] h-fit">
+        <OnClickOutside @trigger="toggleList('priceRange')" v-if="dropdownLists.priceRange" class="dropdown w-[238px] h-fit">
           <div class="flex justify-between">
             <label class="text-sm leading-[22px]" for="price">Precio</label>
             <div class="flex items-center">
@@ -85,7 +93,7 @@
             <p class="mx-auto text-sm font-medium">Desde {{currency}}{{ showBarMinValue }}</p>
             <p class="mx-auto text-sm font-medium">Hasta {{currency}}{{ showBarMaxValue }} +</p>
           </div>
-        </div>
+        </OnClickOutside>
       </div>
       <span class="buttons-separation"></span>
       <button class="filter-btn rounded-btn">
@@ -95,6 +103,9 @@
   </div>
 </template>
 
+<script setup>
+  import { OnClickOutside } from '@vueuse/components';
+</script>
 <script>
 import MultiRangeSlider from "multi-range-slider-vue";
 export default{
@@ -136,7 +147,15 @@ export default{
       }
     },
     toggleList(list) {
-      this.dropdownLists[list] = !this.dropdownLists[list];
+      if (this.dropdownLists[list]) {
+        setTimeout(() => {
+          this.dropdownLists[list] = false;
+        }, 50);
+      }else{
+          this.dropdownLists[list] = true;
+      }
+      
+
     },
   },
   computed: {
