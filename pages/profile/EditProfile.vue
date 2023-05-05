@@ -1,6 +1,6 @@
 <template>
   <section class="max-w-[972px] mx-auto mt-[72px] px-4 mb-24">
-    <div class="flex items-center gap-x-2  mb-3.5">
+    <div class="flex items-center gap-x-2 mb-3.5">
       <AtomsLink
         btn-type="btn-icon"
         iconName="arrows/arrow-left"
@@ -13,14 +13,14 @@
     <div class="form">
       <div class="flex flex-col">
         <h4>Información personal</h4>
-        <div>
+        <div class="flex md:flex-row flex-col">
           <label>
             Nombre:
             <input
               type="text"
               :placeholder="user.userData.name"
               v-model="editUser.editUserData.name"
-              class="mr-4"
+              class="lg:mr-4 mr-0"
             >
           </label>
           <label>
@@ -31,18 +31,18 @@
             >
           </label>
         </div>
-        <div>
+        <div class="flex md:flex-row flex-col">
           <label class="relative">
             Fecha de nacimiento:
             <input
               type="date"
               v-model="editUser.editUserData.birthdate"
-              class="datePicker uppercase text-[#727272] mr-4"
+              class="datePicker uppercase text-[#727272] lg:mr-4 mr-0"
             >
           </label>
           <label>
             País:
-            <select class="form-control col-span-3" v-model="editUser.editUserData.country_id">
+            <select class="form-control" v-model="editUser.editUserData.country_id">
               <option v-for="country in countries[0]" :value="country.id" :key="country.id" class="option-label">
               {{ country.name }}
               </option>
@@ -51,12 +51,12 @@
         </div>
       </div>
       <h4>Contactos</h4>
-      <div>
+      <div class="flex md:flex-row flex-col">
         <label>
           Teléfono móvil:
           <input
             type="tel"
-            class="mr-4"
+            class="lg:mr-4 mr-0"
             v-model="editUser.editUserData.cellphone"
             :placeholder="user.userData.cellphone"
           >
@@ -128,8 +128,11 @@
           <div class="flex items-center justify-center rounded-full bg-primary-50 w-14 h-14">
             <AtomsIcon name="general/upload" :size=28 class="text-primary-100" />
           </div>
-          <p class="text-[#707070]"><span class="text-primary-100">Click para subir</span> o arrastra y suelta SVG, PNG, <br> JPG or GIF (max. 800px400px)</p>
-          <input type="file" @change="previewFiles"  class="absolute left-0 top-0 scale-[9] cursor-pointer opacity-0">
+          <p class="text-[#707070]">
+            <span class="text-primary-100">Click para subir</span>
+            o arrastra y suelta SVG, PNG, <br> JPG or GIF (max. 800px400px)
+          </p>
+          <input type="file" @change="previewFiles" class="absolute left-0 top-0 scale-[9] cursor-pointer opacity-0">
         </div>
       </div>
       <div class="flex gap-2.5 ml-auto mt-12">
