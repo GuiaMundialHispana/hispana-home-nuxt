@@ -154,8 +154,6 @@ export default{
       }else{
           this.dropdownLists[list] = true;
       }
-      
-
     },
   },
   computed: {
