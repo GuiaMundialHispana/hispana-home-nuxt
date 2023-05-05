@@ -38,7 +38,7 @@
       }"
     >
       <swiper-slide v-for="plan in plans" :key="plan">
-        <MoleculesFeaturedProperties plantype="exclusive" :property="plan.property" />
+        <MoleculesFeaturedProperties :property-id="plan.id" plantype="exclusive" :property="plan.property" />
       </swiper-slide>
     </Swiper>
   </section>

@@ -26,7 +26,7 @@
       }"
     >
       <swiper-slide v-for="plan in plans" :key="plan">
-        <MoleculesFeaturedProperties plantype="vip" :property="plan.property" />
+        <MoleculesFeaturedProperties :property-id="plan.id" plantype="vip" :property="plan.property" />
       </swiper-slide>
     </Swiper>
   </section>

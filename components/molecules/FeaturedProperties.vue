@@ -36,7 +36,7 @@
         />
       </nav>
       <swiper-slide v-for="image in property.images" :key="image">
-        <NuxtLink :to="`/search/${property.id}`" class="h-[305px] relative flex justify-center pb-2 bg-gray-10 rounded-lg">
+        <NuxtLink :to="`/search/${propertyId}`" class="h-[305px] relative flex justify-center pb-2 bg-gray-10 rounded-lg">
           <img
             :src="`https://walrus-app-e2bxo.ondigitalocean.app/${image.image}`"
             :alt="property.name"
@@ -69,6 +69,9 @@ export default {
       type: Object,
       default: () => {}
     },
+    propertyId: {
+      type: Number
+    }
   }
 }
 </script>
