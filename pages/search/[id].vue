@@ -11,6 +11,9 @@
     <PopulationSearchDetailPropertyLoan class="md:px-14 px-4" />
     <OrganismExploreProperties />
   </div>
+  <!-- <div class="property" v-if="property === null">
+    chocolate
+  </div> -->
 </template>
 
 <script>
@@ -25,12 +28,14 @@ export default {
   },
   methods: {
     async getAdsDetails() {
+      this.$swal.showLoading();
       this.propertyId = this.route.params.id; 
       const { data }  = await useFetch(`advertisements/${this.propertyId}`,{
         method: 'GET',
         baseURL: this.config.public.API,
       });
       this.property = data.value.results;
+      this.$swal.close();
     }
   },
   created() {
