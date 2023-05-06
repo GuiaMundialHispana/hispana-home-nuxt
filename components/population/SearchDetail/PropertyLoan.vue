@@ -52,14 +52,27 @@
         <div class="flex md:flex-row flex-col md:items-center md:justify-end">
           <div class="md:mb-0 mb-4">
             <label class="m-0">Cuota mensual estimada</label>
-            <p class="text-[28px] text-primary-100 font-semibold md:text-right">US$1,474</p>
+            <p class="text-[28px] text-primary-100 font-semibold md:text-right"> {{ showParsedPrice }}</p>
           </div>
         </div>
       </div>
     </div>
   </div>
 </template>
-
+<script>
+  export default{
+    data() {
+      return {
+        price: 500000,
+      }
+    },
+    computed: {
+      showParsedPrice(price) {
+        return this.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      },
+    },
+}
+</script>
 <style lang="postcss" scoped>
 label {
   @apply text-sm text-neutral-black font-normal block;
