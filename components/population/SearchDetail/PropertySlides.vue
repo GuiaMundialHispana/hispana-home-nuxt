@@ -1,5 +1,5 @@
 <template>
-  <section class="md:px-14 px-4 mb-10 flex gap-5 mt-8 xl:flex-row flex-col 2xl:max-w-6xl">
+  <section class="md:px-14 px-4 mb-10 flex gap-5 mt-8 xl:flex-row flex-col 2xl:max-w-7xl mx-auto">
     <swiper
       :style="{
         '--swiper-navigation-color': '#fff',
@@ -8,28 +8,18 @@
       :spaceBetween="10"
       :navigation="true"
       :thumbs="{ swiper: thumbsSwiper }"
-      :modules="[SwiperFreeMode,SwiperNavigation,SwiperThumbs]"
-      class="swiper-hero"
-    >
-      <swiper-slide @click="showModal = true">
-        <div class="overlay">
-          <AtomsIcon name="general/zoom" :size=35 class="text-neutral-white" />
-        </div>
-        <img src="/img/property-1.jpg" class="w-full h-full object-cover" />
-      </swiper-slide>
-      <swiper-slide @click="showModal = true">
-        <div class="overlay">
-          <AtomsIcon name="general/zoom" :size=35 class="text-neutral-white" />
-        </div>
-        <img src="/img/property-1.jpg" class="w-full h-full object-cover" />
-      </swiper-slide>
-      <swiper-slide @click="showModal = true">
-        <div class="overlay">
-          <AtomsIcon name="general/zoom" :size=35 class="text-neutral-white" />
-        </div>
-        <img src="/img/property-1.jpg" class="w-full h-full object-cover" />
-      </swiper-slide>
-      <atoms-property-plans plan-type="vip" plan-position="top" />
+      :modules="[SwiperNavigation,SwiperThumbs]"
+      class="swiper-hero">
+        <swiper-slide
+          @click="showModal = true"
+          v-for="image in images" :key="image"
+        >
+          <div class="overlay">
+            <AtomsIcon name="general/zoom" :size=35 class="text-neutral-white" />
+          </div>
+          <img :src="image.image" class="w-full h-full object-cover rounded-lg" />
+        </swiper-slide>
+        <atoms-property-plans :plan-type="renderPlanText" plan-position="top" />
     </swiper>
     <!--  -->
     <!-- Thumbs -->
@@ -38,19 +28,16 @@
       :spaceBetween="10"
       class="swiper-thumbs"
     >
-      <swiper-slide>
-        <img src="/img/property-1.jpg" class="w-full h-full object-cover" />
-      </swiper-slide>
-      <swiper-slide>
-        <img src="/img/property-1.jpg" class="w-full h-full object-cover" />
-      </swiper-slide>
-      <swiper-slide>
-        <img src="/img/property-1.jpg" class="w-full h-full object-cover" />
+      <swiper-slide v-for="image in images" :key="image">
+        <img :src="image.image" class="w-full h-full object-cover rounded-lg" />
       </swiper-slide>
     </swiper>
-    <!--  -->
     <!-- Zoom image -->
-    <PopulationSearchDetailModalZoomSlides @close="showModal = false" v-show="showModal" />
+    <PopulationSearchDetailModalZoomSlides
+      :modalImages="images"
+      @close="showModal = false"
+      v-show="showModal"
+    />
   </section>
 </template>
 
@@ -58,13 +45,25 @@
 import { ref } from 'vue';
 import { Thumbs } from 'swiper';
 export default {
-  setup() {
+  props: ['images','planType'],
+  setup(props) {
     const thumbsSwiper = ref(null);
     const setThumbsSwiper = (swiper) => {
       thumbsSwiper.value = swiper;
     };
     const showModal = ref(false);
-    return { Thumbs, thumbsSwiper, setThumbsSwiper, showModal };
+    const renderPlanText = computed(() => {
+      if(props.planType === 1) {
+        return 'vip';
+      } else if (props.planType === 3 ) {
+        return 'silver';
+      } else if ( props.planType === 2) {
+        return 'exclusive';
+      } else if(props.planType === 4 ) {
+        return 'destacado';
+      }
+    });
+    return { Thumbs, thumbsSwiper, setThumbsSwiper, showModal, renderPlanText};
   }
 }
 </script>
@@ -75,7 +74,7 @@ export default {
   @apply md:h-[560px] h-[360px] flex-grow m-0 !important;
 
   & .swiper-wrapper {
-    @apply h-full w-full rounded-lg  m-0;
+    @apply h-full w-full rounded-lg overflow-hidden m-0;
   }
 
   & > span { @apply absolute z-10 rounded-lg top-4 left-4 h-8 !important; }

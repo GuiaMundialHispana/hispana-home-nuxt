@@ -1,24 +1,14 @@
 <template>
-  <PopulationSearchDetailPropertySlides />
-  {{ property.property.images }}
-  <PopulationSearchDetailPropertyInformation />
-  <PopulationSearchDetailPropertyLoan class="md:px-14 px-4" />
-  <OrganismExploreProperties />
+  <div v-if="property != null">
+    <PopulationSearchDetailPropertySlides
+      :plan-type="property.plan_id"
+      :images="property.property.images"
+    />
+    <PopulationSearchDetailPropertyInformation />
+    <PopulationSearchDetailPropertyLoan class="md:px-14 px-4" />
+    <OrganismExploreProperties />
+  </div>
 </template>
-
-<!-- <script setup>
-const route = useRoute();
-const config = useRuntimeConfig();
-let propertyId = Number;
-
-propertyId = route.params.id; 
-const { data } = useFetch(`advertisements/${propertyId}`,{
-  method: 'GET',
-  baseURL: config.public.API,
-});
-const res = data._value;
-console.log(res)
-</script> -->
 
 <script>
 export default {
@@ -37,10 +27,7 @@ export default {
         method: 'GET',
         baseURL: this.config.public.API,
       });
-
-      console.log(data._value)
-      console.log(data._value.results)
-      console.log(this.property = data.value.results)
+      this.property = data.value.results;
     }
   },
   created() {

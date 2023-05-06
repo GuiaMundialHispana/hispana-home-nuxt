@@ -1,9 +1,6 @@
 <template>
-  <div class="modal-container">
-    <!-- <atoms-buttons class="absolute left-4 top-4" @click="$emit('close')">
-      <AtomsIcon name="general/close"></AtomsIcon>
-    </atoms-buttons> -->
-    <AtomsButtons btn-type="btn-icon" icon-name="general/close" />
+  <div class="modal-container" @keydown.esc="$emit('close')">
+    <AtomsButtons btn-type="btn-icon" icon-name="general/close" @click="$emit('close')" />
     <swiper
       :style="{
         '--swiper-navigation-color': '#fff',
@@ -14,18 +11,22 @@
       :modules="[SwiperFreeMode,SwiperNavigation]"
       class="swiper-hero"
     >
-      <swiper-slide>
-        <img src="/img/property-1.jpg" class="w-full h-full object-contain" />
-      </swiper-slide>
-      <swiper-slide>
-        <img src="/img/property-1.jpg" class="w-full h-full object-contain" />
-      </swiper-slide>
-      <swiper-slide>
-        <img src="/img/property-1.jpg" class="w-full h-full object-contain" />
+      <swiper-slide v-for="image in modalImages" :key="image">
+        <img :src="image.image" class="w-full h-full object-cover rounded-lg">
       </swiper-slide>
     </swiper>
   </div>
 </template>
+
+<script>
+export default {
+  props: {
+    modalImages: {
+      type: null
+    }
+  }
+}
+</script>
 
 <style lang="postcss" scoped>
 .modal-container {
