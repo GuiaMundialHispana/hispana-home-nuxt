@@ -4,7 +4,9 @@
       :plan-type="property.plan_id"
       :images="property.property.images"
     />
-    <PopulationSearchDetailPropertyInformation />
+    <PopulationSearchDetailPropertyInformation
+      :property="property.property"
+    />
     <PopulationSearchDetailPropertyLoan class="md:px-14 px-4" />
     <OrganismExploreProperties />
   </div>

@@ -2,60 +2,69 @@
   <section class="md:px-14 px-4">
     <div class="grid md:grid-cols-12 grid-cols-1 gap-8 justify-center 2xl:max-w-6xl">
       <div class="lg:col-span-8 col-span-12">
-        <h1 class="text-[28px] leading-[28px] font-semibold md:mb-12 mb-8">Vendo Apartamentos En Las Américas de 1, 2, 3 habitaciones</h1>
+        <h1 class="text-[28px] leading-[28px] font-semibold md:mb-12 mb-8">{{ property.name }}</h1>
         <!-- Price -->
         <div class="flex md:items-center md:flex-row flex-col md:gap-6 gap-2 border-b border-gray-100 pb-4 mb-8">
           <p class="text-neutral-black text-base font-normal">
-            Desde
+            Precio
             <br>
-            <span class="text-primary-100 xl:text-[28px] text-xl xl:leading-[28px] font-semibold mt-2">US$84,192.00</span>
+            <span class="text-primary-100 xl:text-[28px] text-xl xl:leading-[28px] font-semibold mt-2">US${{ property.price_us }}</span>
           </p>
-          <p class="text-neutral-black text-base font-normal">
+          <!-- <p class="text-neutral-black text-base font-normal">
             Hasta
             <br>
             <span class="text-primary-100 xl:text-[28px] text-xl xl:leading-[28px] font-semibold mt-2">US$119,192.00</span>
-          </p>
-          <button class="md:ml-auto md:w-max w-full border-2 border-gray-100 rounded-lg h-10 flex items-center justify-center text-sm text-neutral-black font-normal px-2.5 hover:text-neutral-white hover:bg-primary-100 hover:font-semibold hover:border-primary-100-100">
+          </p> -->
+          <button class="btn-loan">
             <AtomsIcon class="mr-2.5" name="general/price" :size=18 />
             Calcula tu préstamo
           </button>
         </div>
         <!-- Caracteristicas -->
-        <div class="md:flex xl:justify-start justify-center grid grid-cols-2 items-center flex-wrap xl:gap-16 md:gap-6 gap-2 md:mb-8 mb-2">
+        <div class="md:flex xl:justify-start justify-center grid grid-cols-2 items-center flex-wrap xl:gap-x-16 md:gap-6 gap-2 md:mb-8 mb-2">
           <!--  -->
           <div class="flex items-center">
             <AtomsIcon name="general/bed" :size=20 class="text-primary-100 mr-1" />
-            <p class="xl:text-base text-xs text-neutral-black font-semibold">4 Habitaciones</p>
+            <p class="xl:text-base text-xs text-neutral-black font-semibold">
+              {{ property.bedroom }} Habitaciones
+            </p>
           </div>
           <div class="flex items-center">
             <AtomsIcon name="general/bathtub" :size=20 class="text-primary-100 mr-1" />
-            <p class="xl:text-base text-xs text-neutral-black font-semibold">3.5 Baños</p>
+            <p class="xl:text-base text-xs text-neutral-black font-semibold">
+              {{ property.bathroom }} Baños
+            </p>
           </div>
           <div class="flex items-center">
             <AtomsIcon name="general/car" :size=20 class="text-primary-100 mr-1" />
-            <p class="xl:text-base text-xs text-neutral-black font-semibold">3 Parqueos</p>
+            <p class="xl:text-base text-xs text-neutral-black font-semibold">
+              {{ property.parking }} Parqueos
+            </p>
           </div>
           <div class="flex items-center">
             <AtomsIcon name="general/area" :size=20 class="text-primary-100 mr-1" />
-            <p class="xl:text-base text-xs text-neutral-black font-semibold">340 m2 de construcción</p>
+            <p class="xl:text-base text-xs text-neutral-black font-semibold">
+              {{property.solar_meters}} m2 de construcción
+            </p>
           </div>
         </div>
         <!-- Estado -->
-        <ul class="max-w-4xl md:p-2.5 md:flex justify-center grid grid-cols-2 md:gap-0 gap-2 md:items-center md:flex-row flex-col bg-[#FFF6F6] rounded">
-          <li class="md:h-11 h-8 flex items-center md:justify-center md:border-r border-primary-100 xl:text-base text-xs text-neutral-black font-semibold xl:pr-14 md:pr-8">
+        <ul class="short-information">
+          <li class="md:border-r border-primary-100 xl:pr-14 md:pr-8">
             <AtomsIcon name="general/share-location" :size=19 class="text-primary-100 mr-2.5" />
             Autopista San Isidro
           </li>
-          <li class="md:h-11 h-8 flex items-center md:justify-center md:border-r border-primary-100 xl:text-base text-xs text-neutral-black font-semibold xl:px-14 md:px-8">
+          <li class="md:border-r border-primary-100 xl:px-14 md:px-8">
             <AtomsIcon name="general/status" :size=19 class="text-primary-100 mr-2.5" />
             Estado: Nuevo
           </li>
-          <li class="md:h-11 h-8 flex items-center md:justify-center xl:text-base text-xs text-neutral-black font-semibold xl:pl-14 md:pl-8">
+          <li class="xl:pl-14 md:pl-8">
             <AtomsIcon name="general/calendar_month" :size=19 class="text-primary-100 mr-2.5" />
             Entrega: 2024
           </li>
         </ul>
       </div>
+      <!-- User information -->
       <div class="lg:col-span-4 md:col-span-8 md:col-start-3 col-span-12 pb-10 border-b border-gray-100 h-max">
         <figure class="user-image">
           <img src="/img/user.jpg" alt="User name">
@@ -126,21 +135,32 @@
       </div>
     </div>
     <!-- Description -->
-    <div class="pb-12 md:pt-16 2xl:max-w-6xl">
-      <h2 class="text-[28px] leading-[28px] font-semibold md:mb-12 mb-8">Descripción del inmueble</h2>
-      <p class="text-sm text-neutral-black font-normal">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32. The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.</p>
+    <div class="pb-12 md:pt-8 2xl:max-w-6xl">
+      <h2 class="text-[28px] leading-[28px] font-semibold mb-8">Descripción del inmueble</h2>
+      <p class="text-sm text-neutral-black font-normal">{{ property.description }}</p>
     </div>
     <!-- Location -->
     <div class="pb-16 2xl:max-w-6xl">
       <h2 class="text-[28px] leading-[28px] font-semibold mb-7">Ubicación</h2>
-      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3783.6136296345717!2d-69.96063644873286!3d18.50115238735866!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8eaf8baa32a7da09%3A0x56ba1ba2dafd11b6!2sDealer%20de%20vehiculos!5e0!3m2!1ses-419!2sdo!4v1679439570462!5m2!1ses-419!2sdo" class="w-full rounded-lg h-96"></iframe>
+      <iframe class="w-full rounded-lg h-96" :src="renderMap"></iframe>
     </div>
   </section>
 </template>
 
 <script>
 export default {
-  name: 'PropertyInformation'
+  name: 'PropertyInformation',
+  props: {
+    property: {
+      type: Object,
+      default: () => {}
+    }
+  },
+  computed: {
+    renderMap() {
+      return  `https://maps.google.com/maps?q=${this.property.latitude},${this.property.longitude}&hl=es;z%3D14&amp&output=embed`;
+    }
+  }
 }
 </script>
 
@@ -167,5 +187,17 @@ export default {
 
   & li:last-child h3 { @apply border-b-0; }
   & li:last-child p { @apply border-b-0; }
+}
+
+.btn-loan { 
+  @apply md:ml-auto md:w-max w-full border-2 border-gray-100 rounded-lg h-10 flex items-center justify-center text-sm text-neutral-black font-normal px-2.5 hover:text-neutral-white hover:bg-primary-100 hover:font-semibold hover:border-primary-100;
+}
+
+.short-information {
+  @apply max-w-4xl md:p-2.5 md:flex justify-center grid grid-cols-2 md:gap-0 gap-2 md:items-center md:flex-row flex-col bg-[#FFF6F6] rounded;
+
+  & li {
+    @apply md:h-11 h-8 flex items-center md:justify-center xl:text-base text-xs text-neutral-black font-semibold;
+  }
 }
 </style>
