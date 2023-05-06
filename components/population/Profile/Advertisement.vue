@@ -94,7 +94,11 @@ export default {
         },
       });
       const res = data._value.results;
-      // console.log(res)
+      console.log(res)
+      for(item in res) {
+        console.log(res)
+      }
+      // console.log( res)
       if(res.length > 0) {
         this.propertys = res;
         this.test = true;

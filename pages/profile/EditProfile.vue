@@ -75,6 +75,7 @@
           <input
             type="email"
             :placeholder="user.userData.email"
+            v-model="editUser.editUserData.email"
           >
         </label>
       </div>
