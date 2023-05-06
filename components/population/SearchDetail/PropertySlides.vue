@@ -65,7 +65,7 @@ export default {
       }
     });
     return { Thumbs, thumbsSwiper, setThumbsSwiper, showModal, renderPlanText};
-  }
+  },
 }
 </script>
 

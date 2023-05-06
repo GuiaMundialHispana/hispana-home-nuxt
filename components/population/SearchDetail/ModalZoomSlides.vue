@@ -1,5 +1,5 @@
 <template>
-  <div class="modal-container" @keydown.esc="$emit('close')">
+  <div class="modal-container">
     <AtomsButtons btn-type="btn-icon" icon-name="general/close" @click="$emit('close')" />
     <swiper
       :style="{
