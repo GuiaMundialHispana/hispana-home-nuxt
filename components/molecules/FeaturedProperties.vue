@@ -54,7 +54,7 @@
       class="my-3 justify-center"
     />
     <p class="title-price">Desde:</p>
-    <p class="price">US${{ property.price_us }}</p>
+    <p class="price">US${{ showParsedPrice(property.price_us) }}</p>
   </article>
 </template>
 
@@ -72,6 +72,11 @@ export default {
     propertyId: {
       type: Number
     }
+  },
+  methods: {
+    showParsedPrice(price) {
+        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      },
   }
 }
 </script>

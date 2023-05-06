@@ -95,7 +95,7 @@
     watch: {
       initial(){
         if (this.initial >= this.propertyPrice) {
-          this.initial = this.propertyPrice - (this.propertyPrice * 0.10)
+          this.initial = this.propertyPrice - (this.propertyPrice * 0.05)
         };
         this.getPercentage(this.initial, this.propertyPrice);
         this.calculateLoan(this.loanAmount, this.interest, this.years);
