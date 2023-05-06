@@ -10,7 +10,7 @@ export default {
     },
     {
       name: 'Vender',
-      route: ''
+      route: '/postProperty'
     },
     {
       name: 'Destacados',
