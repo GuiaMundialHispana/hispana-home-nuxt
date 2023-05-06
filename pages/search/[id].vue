@@ -6,6 +6,7 @@
     />
     <PopulationSearchDetailPropertyInformation
       :property="property.property"
+      :user="property.user"
     />
     <PopulationSearchDetailPropertyLoan class="md:px-14 px-4" />
     <OrganismExploreProperties />

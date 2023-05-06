@@ -67,22 +67,44 @@
       <!-- User information -->
       <div class="lg:col-span-4 md:col-span-8 md:col-start-3 col-span-12 pb-10 border-b border-gray-100 h-max">
         <figure class="user-image">
-          <img src="/img/user.jpg" alt="User name">
+          <img :src="`${user.profile_pic}`" :alt="user.name">
         </figure>
-        <h6 class="user-name">Gustavo Emil Hernandez Campos</h6>
+        <h6 class="user-name">{{ user.name }} {{ user.lastname }}</h6>
+        <p class="user-position">Vendedor inmobiliario</p>
+        <div class="flex justify-center">
+          <a :href="`tel:${user.phone}`" class="contact-whatsapp mx-auto">
+            <AtomsIcon name="general/mail" :size=18 class="mr-2.5"/>
+            Contactar vendedor
+          </a>
+          <!-- <AtomsButtons :link-to="`tel:${user.phone}`" class="mx-auto" iconName="social-media/whatsapp" icon-position="left">Contactar vendedor</AtomsButtons> -->
+        </div>
+        <a :href="`mailto:${user.email}`" class="hover:text-primary-100 flex items-center justify-center mt-4">
+          <AtomsIcon name="general/mail" :size=18 class="mr-2.5"/>
+          {{ user.email }}
+        </a>
+        <a v-if="user.cellphone != ''" href="tel:8091234667" class="hover:text-primary-100 flex items-center justify-center mt-4">
+          <AtomsIcon name="general/phone" :size=18 class="mr-2.5"/>
+          {{  user.cellphone }}
+        </a>
+      </div>
+      <!-- <div class="lg:col-span-4 md:col-span-8 md:col-start-3 col-span-12 pb-10 border-b border-gray-100 h-max">
+        <figure class="user-image">
+          <img :src="`${user.profile_pic}`" :alt="user.name">
+        </figure>
+        <h6 class="user-name">{{ user.name }} {{ user.lastname }}</h6>
         <p class="user-position">Vendedor inmobiliario</p>
         <div class="flex justify-center">
           <AtomsButtons class="mx-auto" iconName="social-media/whatsapp" icon-position="left">Contactar vendedor</AtomsButtons>
         </div>
-        <a href="mailto:gustavo.hernandez@hispana.com" class="hover:text-primary-100 flex items-center justify-center mt-4">
+        <a :href="`mailto:${user.email}`" class="hover:text-primary-100 flex items-center justify-center mt-4">
           <AtomsIcon name="general/mail" :size=18 class="mr-2.5"/>
-          gustavo.hernandez@hispana.com
+          {{ user.email }}
         </a>
-        <a href="tel:8091234667" class="hover:text-primary-100 flex items-center justify-center mt-4">
+        <a v-if="user.cellphone != ''" href="tel:8091234667" class="hover:text-primary-100 flex items-center justify-center mt-4">
           <AtomsIcon name="general/phone" :size=18 class="mr-2.5"/>
-          (809) 123-4667
+          {{  user.cellphone }}
         </a>
-      </div>
+      </div> -->
     </div>
     <!-- Caracteristicas -->
     <div class="pb-[76px] md:pt-16 pt-8 2xl:max-w-6xl">
@@ -154,6 +176,10 @@ export default {
     property: {
       type: Object,
       default: () => {}
+    },
+    user: {
+      type: Object,
+      default: () => {}
     }
   },
   computed: {
@@ -199,5 +225,9 @@ export default {
   & li {
     @apply md:h-11 h-8 flex items-center md:justify-center xl:text-base text-xs text-neutral-black font-semibold;
   }
+}
+
+.contact-whatsapp {
+  @apply inline-flex rounded-lg justify-center items-center no-underline cursor-pointer duration-300 focus:outline-none text-sm px-4 bg-primary-100 border hover:border-primary-90 hover:bg-primary-90 text-neutral-white h-8;
 }
 </style>
