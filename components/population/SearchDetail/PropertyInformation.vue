@@ -1,6 +1,6 @@
 <template>
   <section class="md:px-14 px-4">
-    <div class="grid md:grid-cols-12 grid-cols-1 gap-8 justify-center 2xl:max-w-6xl">
+    <div class="grid md:grid-cols-12 grid-cols-1 gap-8 justify-center 2xl:max-w-[1440px] mx-auto">
       <div class="lg:col-span-8 col-span-12">
         <h1 class="text-[28px] leading-[28px] font-semibold md:mb-12 mb-8">{{ property.name }}</h1>
         <!-- Price -->
@@ -107,7 +107,7 @@
       </div> -->
     </div>
     <!-- Caracteristicas -->
-    <div class="pb-[76px] md:pt-16 pt-8 2xl:max-w-6xl">
+    <div class="pb-[76px] md:pt-16 pt-8 2xl:max-w-[1440px] mx-auto">
       <h2 class="text-[28px] leading-[28px] font-semibold md:mb-12 mb-8">Características</h2>
       <div class="grid xl:grid-cols-2 grid-cols-1 gap-4 overflow-hidden items-center">
         <ul class="characteristics-table">
@@ -157,12 +157,12 @@
       </div>
     </div>
     <!-- Description -->
-    <div class="pb-12 md:pt-8 2xl:max-w-6xl">
+    <div class="pb-12 md:pt-8 2xl:max-w-[1440px] mx-auto">
       <h2 class="text-[28px] leading-[28px] font-semibold mb-8">Descripción del inmueble</h2>
       <p class="text-sm text-neutral-black font-normal">{{ property.description }}</p>
     </div>
     <!-- Location -->
-    <div class="pb-16 2xl:max-w-6xl">
+    <div class="pb-16 2xl:max-w-[1440px] mx-auto">
       <h2 class="text-[28px] leading-[28px] font-semibold mb-7">Ubicación</h2>
       <iframe class="w-full rounded-lg h-96" :src="renderMap"></iframe>
     </div>
