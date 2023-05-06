@@ -29,7 +29,7 @@
       slides-per-view="auto"
       :loop="true"
       :autoplay="{
-        delay: 4000,
+        delay: 5000,
         disableOnInteraction: true
       }"
       :navigation="{
