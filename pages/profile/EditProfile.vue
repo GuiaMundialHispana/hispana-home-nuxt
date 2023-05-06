@@ -169,11 +169,15 @@ export default {
       images: null,
       countries: [],
       country: [],
+      form: new FormData()
     }
   },
   watch:{
     profilePic() {
       this.editUser.editUserData.profile_pic = this.profilePic;
+    },
+    images() {
+      this.form.append('profile_pic', this.editUser.images);
     }
   },
   methods: {
@@ -190,20 +194,18 @@ export default {
       this.countries.push(res);
     },
     async updateUser() {
-      const form = new FormData();
-      form.append('user_id', this.editUser.editUserData.user_id);
-      form.append('email', this.editUser.editUserData.email)
-      form.append('name', this.editUser.editUserData.name);
-      form.append('lastname', this.editUser.editUserData.lastname);
-      form.append('birthdate', this.editUser.editUserData.birthdate);
-      form.append('country_id', this.editUser.editUserData.country_id);
-      form.append('cellphone', this.editUser.editUserData.cellphone);
-      form.append('phone', this.editUser.editUserData.phone);
-      form.append('profile_pic', this.editUser.images);
+      this.form.append('user_id', this.editUser.editUserData.user_id);
+      this.form.append('email', this.editUser.editUserData.email)
+      this.form.append('name', this.editUser.editUserData.name);
+      this.form.append('lastname', this.editUser.editUserData.lastname);
+      this.form.append('birthdate', this.editUser.editUserData.birthdate);
+      this.form.append('country_id', this.editUser.editUserData.country_id);
+      this.form.append('cellphone', this.editUser.editUserData.cellphone);
+      this.form.append('phone', this.editUser.editUserData.phone);
 
       await useFetch(useRuntimeConfig().API+'users/update?_method=PUT',{
         method: 'POST',
-        body: form,
+        body: this.form,
         headers: {
           'Authorization': 'Bearer ' + this.editUser.user.token,
           'Accept': 'application/json',
