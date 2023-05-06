@@ -1,5 +1,5 @@
 <template>
-  <div class="pb-[75px] 2xl:max-w-6xl">
+  <div class="pb-[75px] 2xl:max-w-[1440px] mx-auto">
     <h2 class="text-[28px] leading-[28px] font-semibold mb-12">Calculadora de préstamos</h2>
     <div class="grid lg:grid-cols-2 grid-cols-1">
       <form class="lg:border-r border-[#ECECEC] lg:pr-6">

@@ -1,5 +1,5 @@
 import { defineStore, acceptHMRUpdate } from 'pinia';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 
 export const useUserStore = defineStore('user', {
   state: () => {

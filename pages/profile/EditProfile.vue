@@ -1,6 +1,6 @@
 <template>
   <section class="max-w-[972px] mx-auto mt-[72px] px-4 mb-24">
-    <div class="flex items-center gap-x-2  mb-3.5">
+    <div class="flex items-center gap-x-2 mb-3.5">
       <AtomsLink
         btn-type="btn-icon"
         iconName="arrows/arrow-left"
@@ -13,14 +13,14 @@
     <div class="form">
       <div class="flex flex-col">
         <h4>Información personal</h4>
-        <div>
+        <div class="flex md:flex-row flex-col">
           <label>
             Nombre:
             <input
               type="text"
               :placeholder="user.userData.name"
               v-model="editUser.editUserData.name"
-              class="mr-4"
+              class="lg:mr-4 mr-0"
             >
           </label>
           <label>
@@ -31,18 +31,18 @@
             >
           </label>
         </div>
-        <div>
+        <div class="flex md:flex-row flex-col">
           <label class="relative">
             Fecha de nacimiento:
             <input
               type="date"
               v-model="editUser.editUserData.birthdate"
-              class="datePicker uppercase text-[#727272] mr-4"
+              class="datePicker uppercase text-[#727272] lg:mr-4 mr-0"
             >
           </label>
           <label>
             País:
-            <select class="form-control col-span-3" v-model="editUser.editUserData.country_id">
+            <select class="form-control" v-model="editUser.editUserData.country_id">
               <option v-for="country in countries[0]" :value="country.id" :key="country.id" class="option-label">
               {{ country.name }}
               </option>
@@ -51,12 +51,12 @@
         </div>
       </div>
       <h4>Contactos</h4>
-      <div>
+      <div class="flex md:flex-row flex-col">
         <label>
           Teléfono móvil:
           <input
             type="tel"
-            class="mr-4"
+            class="lg:mr-4 mr-0"
             v-model="editUser.editUserData.cellphone"
             :placeholder="user.userData.cellphone"
           >
@@ -75,6 +75,7 @@
           <input
             type="email"
             :placeholder="user.userData.email"
+            v-model="editUser.editUserData.email"
           >
         </label>
       </div>
@@ -128,8 +129,11 @@
           <div class="flex items-center justify-center rounded-full bg-primary-50 w-14 h-14">
             <AtomsIcon name="general/upload" :size=28 class="text-primary-100" />
           </div>
-          <p class="text-[#707070]"><span class="text-primary-100">Click para subir</span> o arrastra y suelta SVG, PNG, <br> JPG or GIF (max. 800px400px)</p>
-          <input type="file" @change="previewFiles"  class="absolute left-0 top-0 scale-[9] cursor-pointer opacity-0">
+          <p class="text-[#707070]">
+            <span class="text-primary-100">Click para subir</span>
+            o arrastra y suelta SVG, PNG, <br> JPG or GIF (max. 800px400px)
+          </p>
+          <input type="file" @change="previewFiles" class="absolute left-0 top-0 scale-[9] cursor-pointer opacity-0">
         </div>
       </div>
       <div class="flex gap-2.5 ml-auto mt-12">
@@ -166,11 +170,15 @@ export default {
       images: null,
       countries: [],
       country: [],
+      form: new FormData()
     }
   },
   watch:{
     profilePic() {
       this.editUser.editUserData.profile_pic = this.profilePic;
+    },
+    images() {
+      this.form.append('profile_pic', this.editUser.images);
     }
   },
   methods: {
@@ -187,20 +195,18 @@ export default {
       this.countries.push(res);
     },
     async updateUser() {
-      const form = new FormData();
-      form.append('user_id', this.editUser.editUserData.user_id);
-      form.append('email', this.editUser.editUserData.email)
-      form.append('name', this.editUser.editUserData.name);
-      form.append('lastname', this.editUser.editUserData.lastname);
-      form.append('birthdate', this.editUser.editUserData.birthdate);
-      form.append('country_id', this.editUser.editUserData.country_id);
-      form.append('cellphone', this.editUser.editUserData.cellphone);
-      form.append('phone', this.editUser.editUserData.phone);
-      form.append('profile_pic', this.editUser.images);
+      this.form.append('user_id', this.editUser.editUserData.user_id);
+      this.form.append('email', this.editUser.editUserData.email)
+      this.form.append('name', this.editUser.editUserData.name);
+      this.form.append('lastname', this.editUser.editUserData.lastname);
+      this.form.append('birthdate', this.editUser.editUserData.birthdate);
+      this.form.append('country_id', this.editUser.editUserData.country_id);
+      this.form.append('cellphone', this.editUser.editUserData.cellphone);
+      this.form.append('phone', this.editUser.editUserData.phone);
 
       await useFetch(useRuntimeConfig().API+'users/update?_method=PUT',{
         method: 'POST',
-        body: form,
+        body: this.form,
         headers: {
           'Authorization': 'Bearer ' + this.editUser.user.token,
           'Accept': 'application/json',

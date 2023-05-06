@@ -29,7 +29,7 @@
       slides-per-view="auto"
       :loop="true"
       :autoplay="{
-        delay: 4000,
+        delay: 5000,
         disableOnInteraction: true
       }"
       :navigation="{
@@ -38,7 +38,7 @@
       }"
     >
       <swiper-slide v-for="plan in plans" :key="plan">
-        <MoleculesFeaturedProperties plantype="silver" :property="plan.property" />
+        <MoleculesFeaturedProperties :property-id="plan.id" plantype="silver" :property="plan.property" />
       </swiper-slide>
     </Swiper>
   </section>
