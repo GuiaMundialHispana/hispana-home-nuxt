@@ -11,6 +11,7 @@
   "devDependencies": {
     "@nuxt/postcss8": "^1.1.3",
     "@types/node": "^18",
+    "@vueuse/components": "^10.1.2",
     "nuxt": "^3.4.1",
     "nuxt-viewport": "^2.0.3",
     "postcss": "^8.4.21",

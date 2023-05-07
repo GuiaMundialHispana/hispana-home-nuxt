@@ -8,7 +8,7 @@
           <p class="text-neutral-black text-base font-normal">
             Precio
             <br>
-            <span class="text-primary-100 xl:text-[28px] text-xl xl:leading-[28px] font-semibold mt-2">US${{ property.price_us }}</span>
+            <span class="text-primary-100 xl:text-[28px] text-xl xl:leading-[28px] font-semibold mt-2">US${{ showParsedPrice(property.price_us) }}</span>
           </p>
           <!-- <p class="text-neutral-black text-base font-normal">
             Hasta
@@ -186,6 +186,11 @@ export default {
     renderMap() {
       return  `https://maps.google.com/maps?q=${this.property.latitude},${this.property.longitude}&hl=es;z%3D14&amp&output=embed`;
     }
+  },
+  methods: {
+    showParsedPrice(price) {
+        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      },
   }
 }
 </script>

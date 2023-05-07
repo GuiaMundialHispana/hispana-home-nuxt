@@ -1,28 +1,36 @@
 <template>
-  <div class="modal-container">
-    <AtomsButtons btn-type="btn-icon" icon-name="general/close" @click="$emit('close')" />
-    <swiper
-      :style="{
-        '--swiper-navigation-color': '#fff',
-        '--swiper-pagination-color': '#fff',
-      }"
-      :spaceBetween="10"
-      :navigation="true"
-      :modules="[SwiperFreeMode,SwiperNavigation]"
-      class="swiper-hero"
-    >
-      <swiper-slide v-for="image in modalImages" :key="image">
-        <img :src="image.image" class="w-full h-full object-cover rounded-lg">
-      </swiper-slide>
-    </swiper>
+  <div class="modal-container" @keyup.esc="$emit('close')" tabindex="0">
+    <AtomsButtons btn-type="btn-icon" icon-name="general/close" @click="$emit('close')"/>
+    <OnClickOutside @trigger="$emit('close')">
+      <swiper
+        :style="{
+          '--swiper-navigation-color': '#fff',
+          '--swiper-pagination-color': '#fff',
+        }"
+        :spaceBetween="10"
+        :navigation="true"
+        :modules="[SwiperFreeMode,SwiperNavigation]"
+        class="swiper-hero"
+      >
+        <swiper-slide v-for="image in modalImages" :key="image">
+          <img :src="image.image" class="w-full h-full object-cover rounded-lg">
+        </swiper-slide>
+      </swiper>
+    </OnClickOutside>
   </div>
 </template>
-
+<script setup>
+  import { OnClickOutside } from '@vueuse/components';
+</script>
 <script>
 export default {
   props: {
     modalImages: {
       type: null
+    }
+  }, methods: {
+    test(){
+      console.log("Click");
     }
   }
 }
@@ -36,4 +44,4 @@ export default {
     @apply max-w-5xl mx-auto !important;
   }
 }
-</style>
+</style>  

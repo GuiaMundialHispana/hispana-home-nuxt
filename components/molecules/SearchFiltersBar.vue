@@ -11,7 +11,7 @@
       @click="showFilters = !showFilters"
       >Filtrar propiedades
     </AtomsButtons>
-    <div :class="{'hidden': !showFilters, 'flex' : showFilters}" class="filters-overflow">
+    <OnClickOutside @trigger="showFilters = false" :class="{'hidden': !showFilters, 'flex' : showFilters}" class="filters-overflow">
       <AtomsButtons 
         v-show="viewport.isLessThan('2xl')"
         class="flex-none"
@@ -30,20 +30,26 @@
             <p>Sector</p>
             <AtomsIcon name="arrows/arrow-down" class="text-primary-100" :size=15 />
           </button>
-          <div class="dropdown w-full sm:w-[230px] h-fit" v-if="dropdownLists.location">
+          <OnClickOutside @trigger="toggleList('location')" class="dropdown w-full sm:w-[230px] h-fit" v-if="dropdownLists.location">
             <button class="filter-btn" :class="{'active': dropdownLists.city}" @click="toggleList('city')">
               Ciudad <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16></AtomsIcon>
             </button>
-            <MoleculesDropDownList v-if="dropdownLists.city" class="mt-[5px] h-[273px]"/>
+            <OnClickOutside @trigger="toggleList('city')" v-if="dropdownLists.city">
+              <MoleculesDropDownList class="mt-[5px] h-[273px]"/>
+            </OnClickOutside>
             <button class="filter-btn" :class="{'active': dropdownLists.municipality}" @click="toggleList('municipality')">
               Municipio <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16 />
             </button>
-            <MoleculesDropDownList v-if="dropdownLists.municipality" class="mt-[5px] h-[174px]"/>
+            <OnClickOutside @trigger="toggleList('municipality')" v-if="dropdownLists.municipality">
+              <MoleculesDropDownList class="mt-[5px] h-[174px]"/>
+            </OnClickOutside>
             <button class="filter-btn" :class="{'active': dropdownLists.sector}" @click="toggleList('sector')">
               Sector <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16 />
             </button>
-            <MoleculesDropDownList v-if="dropdownLists.sector" class="mt-[5px] h-[273px]"/>
-          </div>
+            <OnClickOutside @trigger="toggleList('sector')" v-if="dropdownLists.sector">
+              <MoleculesDropDownList v-if="dropdownLists.sector" class="mt-[5px] h-[273px]"/>
+            </OnClickOutside>
+          </OnClickOutside>
         </div>
       </div>
       <div class="flex flex-col relative w-full mx-auto sm:w-[230px] 2xl:w-fit items-center">
@@ -52,7 +58,9 @@
           <p>Inmueble</p>
           <AtomsIcon name="arrows/arrow-down" class="text-primary-100" :size=15 />
         </button>
-        <MoleculesDropDownList v-if="dropdownLists.propertyType"  class="h-[273px] w-full 2xl:w-[205px]" :class="importedDropdownLists" />
+        <OnClickOutside @trigger="toggleList('propertyType')" v-if="dropdownLists.propertyType" class="h-[273px] w-full 2xl:w-[205px]">
+          <MoleculesDropDownList :class="importedDropdownLists" />
+        </OnClickOutside>
       </div>  
 
       <div class="flex flex-col relative w-full mx-auto sm:w-[230px] 2xl:w-fit">
@@ -61,7 +69,7 @@
           <p>Habitaciones</p>
           <AtomsIcon name="arrows/arrow-down" class="text-primary-100" :size=15 />
         </button>
-        <div v-if="dropdownLists.bedroom"  class="dropdown text-sm leading-[22px] 2xl:absolute top-[95%] mt-[5px] h-fit 2xl:w-[220px] w-full" >
+        <OnClickOutside @trigger="toggleList('bedroom')"  v-if="dropdownLists.bedroom"  class="dropdown text-sm leading-[22px] 2xl:absolute top-[95%] mt-[5px] h-fit 2xl:w-[220px] w-full" >
           <p class="mb-[5px]">Cantidad de habitaciones</p>
           <div class="flex flex-nowrap">
             <label class="property-quantity-btn" :class="{'active':(bedroomQuantity == 1)}">
@@ -77,7 +85,7 @@
               <input type="radio" value=4 v-model="bedroomQuantity">4<span class="text-primary-100">+</span>
             </label>
           </div>
-        </div>
+        </OnClickOutside>
       </div>  
       
       <div class="flex flex-col relative w-full mx-auto sm:w-[230px] 2xl:w-fit">
@@ -86,7 +94,7 @@
           <p>Baños</p>
           <AtomsIcon name="arrows/arrow-down" class="text-primary-100" :size=15 />
         </button>
-        <div v-if="dropdownLists.bathroom"  class="dropdown text-sm leading-[22px] 2xl:absolute top-[95%] mt-[5px] h-fit w-full 2xl:w-[170px]" >
+        <OnClickOutside @trigger="toggleList('bathroom')" v-if="dropdownLists.bathroom"  class="dropdown text-sm leading-[22px] 2xl:absolute top-[95%] mt-[5px] h-fit w-full 2xl:w-[170px]" >
           <p class="mb-[5px]">Cantidad de baños</p>
           <div class="flex flex-nowrap">
             <label class="property-quantity-btn" :class="{'active':(bathroomQuantity == 1)}">
@@ -99,7 +107,7 @@
               <input type="radio" value=3 v-model="bathroomQuantity">3<span class="text-primary-100">+</span>
             </label>
           </div>
-        </div>
+        </OnClickOutside>
       </div>  
       <div class="flex flex-col relative w-full mx-auto sm:w-[230px] 2xl:w-fit">
         <button class="flex relative gap-2.5 filter-btn" @click="toggleList('parkingLot')" :class="{'active': dropdownLists.parkingLot}">
@@ -107,7 +115,7 @@
           <p>Parqueo</p>
           <AtomsIcon name="arrows/arrow-down" class="text-primary-100" :size=15 />
         </button>
-        <div v-if="dropdownLists.parkingLot" class="dropdown text-sm leading-[22px] 2xl:absolute top-[95%] mt-[5px] h-fit w-full 2xl:w-[190px]" >
+        <OnClickOutside @trigger="toggleList('parkingLot')" v-if="dropdownLists.parkingLot" class="dropdown text-sm leading-[22px] 2xl:absolute top-[95%] mt-[5px] h-fit w-full 2xl:w-[190px]" >
           <p class="mb-[5px]">Cantidad de parqueos</p>
           <div class="flex">
             <label class="property-quantity-btn" :class="{'active':(parkingLotQuantity == 1)}">
@@ -120,7 +128,7 @@
               <input type="radio" value=3 v-model="parkingLotQuantity">3<span class="text-primary-100">+</span>
             </label>
           </div>
-        </div>
+        </OnClickOutside>
       </div>  
       <div class="flex flex-col relative w-full mx-auto sm:w-[230px] 2xl:w-fit">
         <button class="flex gap-2.5 filter-btn" @click="toggleList('priceRange')" :class="{'active': dropdownLists.priceRange}">
@@ -128,7 +136,7 @@
           <p>Rango de precio</p>
           <AtomsIcon name="arrows/arrow-down" class="text-primary-100" :size=15 />
         </button>
-        <div v-if="dropdownLists.priceRange" class="dropdown 2xl:w-[238px] w-full h-fit">
+        <OnClickOutside @trigger="toggleList('priceRange')" v-if="dropdownLists.priceRange" class="dropdown 2xl:w-[238px] w-full h-fit">
           <div class="flex justify-between">
             <label class="text-sm leading-[22px]" for="price">Precio</label>
             <div class="flex items-center">
@@ -153,7 +161,7 @@
             <p class="mx-auto text-sm font-medium">Desde {{currency}}{{ showBarMinValue }}</p>
             <p class="mx-auto text-sm font-medium">Hasta {{currency}}{{ showBarMaxValue }} +</p>
           </div>
-        </div>
+        </OnClickOutside>
       </div>  
       <div class="flex flex-col relative w-full mx-auto sm:w-[230px] 2xl:w-fit" :class="{'modal-open': dropdownLists.status}">
         <button class="flex gap-2.5 filter-btn" @click="toggleList('status')" :class="{'active': dropdownLists.status}">
@@ -161,7 +169,9 @@
           <p>Estado</p>
           <AtomsIcon name="arrows/arrow-down" class="text-primary-100" :size=15 />
         </button>
-        <MoleculesDropDownList v-if="dropdownLists.status" class="h-[174px] 2xl:w-[168px]" :class="importedDropdownLists" />
+        <OnClickOutside @trigger="toggleList('status')" v-if="dropdownLists.status">
+          <MoleculesDropDownList class="h-[174px] 2xl:w-[168px]" :class="importedDropdownLists" />
+        </OnClickOutside>
       </div>  
       <div class="flex flex-col relative w-full mx-auto sm:w-[230px] 2xl:w-fit">
         <button class="flex gap-2.5 filter-btn" @click="toggleList('other')" :class="{'active': dropdownLists.other}">
@@ -169,15 +179,20 @@
           <p>Otros</p>
           <AtomsIcon name="arrows/arrow-down" class="text-primary-100" :size=15 />
         </button>
-        <MoleculesDropDownList v-if="dropdownLists.other"  class="h-fit 2xl:w-[205px]" :class="importedDropdownLists"/>
+        <OnClickOutside @trigger="toggleList('other')" v-if="dropdownLists.other">
+          <MoleculesDropDownList class="h-fit 2xl:w-[205px]" :class="importedDropdownLists"/>
+        </OnClickOutside>
       </div>
       <button class="flex bg-primary-100 w-full mx-auto sm:w-[230px] p-2 h-12 2xl:w-10 2xl:h-10 rounded-full items-center justify-center hover:bg-primary-90 border-primary-100 border flex-none text-neutral-white">
         <p class="2xl:hidden mr-3 font-semibold">Buscar propiedades</p>
         <AtomsIcon name="general/search" :size=17  />
       </button>
-    </div>
+    </OnClickOutside>
   </div>
 </template>
+<script setup>
+  import { OnClickOutside } from '@vueuse/components';
+</script>
 <script>
   import MultiRangeSlider from "multi-range-slider-vue";
   export default{
@@ -229,23 +244,29 @@
         }
       },
       toggleList(list) {
-        this.dropdownLists[list] = !this.dropdownLists[list];
+        if (this.dropdownLists[list]) {
+          setTimeout(() => {
+            this.dropdownLists[list] = false;
+          }, 50);
+        }else{
+            this.dropdownLists[list] = true;
+        }
       },
     },
     computed: {
       importedDropdownLists(){
         return "2xl:absolute 2xl:top-[95%] mt-[5px] left-0 z-10"
-      }
+      }      
     },
     watch: {
       showFilters: function() {
       if(this.showFilters) {
-        document.body.classList.add('modal-open')
+        document.body.classList.add('modal-open')        
       }else {
         document.body.classList.remove('modal-open')
       }      
-    },
-  }
+    }
+    }
 }
 </script>
 <style lang="postcss" scoped>
@@ -271,7 +292,7 @@
   & input { @apply appearance-none; }
 }
 .filters-overflow {
-  @apply w-full sm:w-fit h-screen 2xl:mt-12 lg:mt-[102px] 2xl:h-fit py-4 2xl:py-0 fixed top-0 md:absolute 2xl:relative 2xl:flex flex-col 2xl:flex-row gap-4 2xl:gap-1.5 md:items-end bg-neutral-white z-[60] right-0 2xl:mr-0 mt-0 px-4 md:px-6 2xl:px-0;
+  @apply w-full sm:w-fit h-screen 2xl:mt-12 lg:mt-[102px] 2xl:h-fit py-4 2xl:py-0 fixed top-0 md:absolute 2xl:relative 2xl:flex flex-col 2xl:flex-row gap-4 2xl:gap-1.5 md:items-end bg-neutral-white z-[80] right-0 2xl:mr-0 mt-0 px-4 md:px-6 2xl:px-0;
   @media (max-width:1536px) {
     @apply overflow-y-auto overflow-hidden border-l-2 border-l-gray-300;
   }

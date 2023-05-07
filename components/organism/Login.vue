@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col w-full  items-center justify-center">
     <div class="relative w-full">
-      <input placeholder="Correo electrónico" type="email" v-model="email">
+      <input placeholder="Correo electrónico" type="email" v-model="email" @keyup.enter="login()">
       <AtomsIcon
         name="general/user"
         :size=14
@@ -9,7 +9,7 @@
       />
     </div>
     <div class="relative w-full">
-      <input placeholder="Contraseña" type="password" v-model="password">
+      <input placeholder="Contraseña" type="password" v-model="password" @keyup.enter="login()">
       <AtomsIcon
         name="general/lock"
         :size=14
