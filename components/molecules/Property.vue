@@ -72,7 +72,7 @@
     />
     <!-- Price -->
     <p class="text-sm text-neutral-black font-normal">Desde:</p>
-    <p class="text-primary-100 font-semibold text-xl uppercase">US${{property.price}}</p>
+    <p class="text-primary-100 font-semibold text-xl uppercase">US${{showParsedPrice(property.price)}}</p>
   </article>
 </template>
 
@@ -135,7 +135,15 @@ async function deleteFavorite() {
   }
 }
 </script>
-
+<script>
+  export default{
+    methods: {
+      showParsedPrice(price) {
+        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      },
+    },
+}
+</script>
 <style lang="postcss" scoped>
 article {
   @apply rounded-2xl bg-neutral-white p-2 w-full lg:max-w-[350px] relative;
