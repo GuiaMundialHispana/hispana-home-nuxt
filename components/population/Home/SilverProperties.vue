@@ -109,7 +109,7 @@ export default {
   </section>
   <!-- TODO Skeleton -->
   <div v-if="pending">
-    cargando
+    <OrganismSkeleton class="w-12 h-8"></OrganismSkeleton>
   </div>
 </template>
 

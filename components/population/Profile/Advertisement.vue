@@ -212,3 +212,76 @@ export default {
 }
 
 </style>
+
+
+<!-- <template>
+  <section>
+    {{ actives }}
+  </section>
+</template>
+
+
+<script setup>
+import { useUserStore } from '~/stores/User';
+const config = useRuntimeConfig();
+const user = useUserStore();
+let actives = ref([]);
+let expired = [];
+let revision = [];
+let rejected = [];
+let inactive = [];
+
+
+const { data: properties, pending, error} = await useFetch('advertisements', {
+  headers: {
+    'Authorization': 'Bearer ' + user.token,
+  },
+  method: 'GET',
+  baseURL: config.public.API,
+  transform:(_properties) => _properties.results
+});
+
+function test() {
+  console.log(properties)
+  for (let i = 0; i < properties.length; i++) {
+    const objeto = res[i];
+    console.log(objeto)
+    
+    // Aplica tu condición aquí
+    if (objeto.status === 'active') {
+      // actives.push(objeto);
+      // console.log(objeto)
+    }
+    if(objeto.status === 'expired') {
+      expired.push(objeto)
+    }
+    if(objeto.status === 'revision') {
+      revision.push(objeto)
+    }
+    if(objeto.status === 'rejected' || objeto.status === 'rechazado') {
+      rejected.push(objeto)
+    }
+
+    if(objeto.status === 'inactive' || objeto.status === 'borrados') {
+      inactive.push(objeto)
+    }
+  }
+}
+test()
+</script>
+
+<style lang="postcss" scoped>
+.ads {
+  & nav {
+    & .btn {
+      @apply flex-grow justify-between border-2 hover:border-primary-100 text-neutral-black;
+      & span { @apply w-6 h-6 flex items-center justify-center rounded-full font-medium text-sm bg-[#F5F5F5] text-[#ADADAD]; }
+      &.active {
+        @apply bg-primary-100 text-neutral-white border-primary-100 hover:text-neutral-black !important;
+        & span { @apply text-primary-100 bg-primary-50; }
+      }
+    }
+  }
+}
+
+</style> -->
