@@ -1,10 +1,12 @@
 <template>
   <div class="flex items-center overflow-hidden rounded-lg border-2 border-gray-100 bg-neutral-white text-[#232323] shadow-sm w-fit flex-none">
-  <AtomsButtons
-    v-for="(buttonTab,index) in tabs" :key="buttonTab"
-    :class="[{active: tab === index}]"
-    @click="tab = index">{{ buttonTab }}
-  </AtomsButtons>
+    <AtomsButtons
+      v-for="btn in tabs"
+      :key="btn"
+      @click="$router.push({ path: '/search', query: { type: btn.query } })"
+    >
+      {{ btn.name }}
+    </AtomsButtons>
   </div>
 </template>
 
@@ -12,8 +14,20 @@
 export default {
   data() {
     return {
-      tabs: ['Todos', 'Comprar', 'Alquiler'],
-      tab: 0
+      tabs: {
+        all: {
+          query: 'All',
+          name: 'Todos'
+        },
+        buy: {
+          query: 'Sell',
+          name: 'Comprar'
+        },
+        rent: {
+          query: 'Rent',
+          name: 'Alquilar'
+        }
+      },
     }
   }
 }

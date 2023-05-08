@@ -2,20 +2,20 @@ export default {
   menu: [
     {
       name: 'Comprar',
-      route: `/search`,
+      route: '/search?type=Sell',
     },
     {
       name: 'Alquilar',
-      route: '',
+      route: '/search?type=Rent',
     },
     {
       name: 'Vender',
       route: '/postProperty'
     },
-    {
-      name: 'Destacados',
-      route: ''
-    },
+    // {
+    //   name: 'Destacados',
+    //   route: ''
+    // },
     {
       name: 'Contacto',
       route: '/contact'
