@@ -219,15 +219,15 @@ export default {
       } else { this.dropdownLists[list] = true; }
     },
     async getCountries() {
-      const countriesApi =  await $fetch(this.config.public.API+'generals/countries');
+      const countriesApi = await $fetch(this.config.public.API+'generals/countries');
       this.countries = countriesApi.results.data;
     },
     async getStates(country_id) {
-      const statesApi =  await $fetch(this.config.public.API+'generals/states/'+`${country_id}`);
+      const statesApi = await $fetch(this.config.public.API+'generals/states/'+`${country_id}`);
       this.states = statesApi.results.data;
     }, 
     async getCities(state_id) {
-      const citiesApi =  await $fetch(this.config.public.API+'generals/cities/'+`${state_id}`);
+      const citiesApi = await $fetch(this.config.public.API+'generals/cities/'+`${state_id}`);
       this.cities = citiesApi.results.data;
     },
     async searchProperties() {

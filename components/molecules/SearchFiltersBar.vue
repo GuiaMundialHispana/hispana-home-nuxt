@@ -27,7 +27,7 @@
           </div>
         </OnClickOutside>
         <!--  -->
-        <button class="sector-filter-btn" :class="{'active': dropdownLists.sector}" @click="toggleList('sector')">
+        <button v-if="states.length > 0" class="sector-filter-btn" :class="{'active': dropdownLists.sector}" @click="toggleList('sector')">
           Sector <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16 />
         </button>
         <OnClickOutside @trigger="toggleList('sector')" v-if="dropdownLists.sector">
@@ -46,7 +46,7 @@
           </div>
         </OnClickOutside>
         <!--  -->
-        <button class="sector-filter-btn" :class="{'active': dropdownLists.city}" @click="toggleList('city')">
+        <button v-if="cities.length > 0" class="sector-filter-btn" :class="{'active': dropdownLists.city}" @click="toggleList('city')">
           Ciudad <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16></AtomsIcon>
         </button>
         <OnClickOutside @trigger="toggleList('city')" v-if="dropdownLists.city">
@@ -182,7 +182,6 @@
         </p>
       </OnClickOutside>
     </div>
-    <!-- PropertyStatus (recuerda que la primera letra se debe enviar en mayuscula) -->
     <div class="filter-content" :class="{'modal-open': dropdownLists.status}">
       <button class="flex gap-2.5 filter-btn" @click="toggleList('status')" :class="{'active': dropdownLists.status}">
         <AtomsIcon name="general/status" class="text-primary-100" :size=20  />
@@ -242,9 +241,9 @@ export default {
       showBarMaxValue:0,
       countries: null,
       country_id:0,
-      cities :null,
+      cities:[],
       city_id:0,
-      states:null,
+      states:[],
       state_id:0,
       picked:'USD',
       price:'',
@@ -274,28 +273,16 @@ export default {
       } else { this.dropdownLists[list] = true; }
     },
     async getCountries() {
-      const { data: countriesApi } = await useFetch('generals/countries', {
-        method: 'GET',
-        baseURL: this.config.public.API,
-        transform:(_countriesApi) => _countriesApi.results.data
-      });
-      this.countries = countriesApi;
+      const countriesApi = await $fetch(this.config.public.API+'generals/countries');
+      this.countries = countriesApi.results.data;
     },
     async getStates(country_id) {
-      const { data:statesApi } = await useFetch('generals/states/'+`${country_id}`, {
-        method: 'GET',
-        baseURL: this.config.public.API,
-        transform:(_statesApi) => _statesApi.results.data
-      })
-      this.states = statesApi;
+      const statesApi = await $fetch(this.config.public.API+'generals/states/'+`${country_id}`);
+      this.states = statesApi.results.data;
     }, 
     async getCities(state_id) {
-      const { data:citiesApi } = await useFetch('generals/cities/'+`${state_id}`, {
-        method: 'GET',
-        baseURL: this.config.public.API,
-        transform:(_citiesApi) => _citiesApi.results.data
-      })
-      this.cities = citiesApi;
+      const citiesApi = await $fetch(this.config.public.API+'generals/cities/'+`${state_id}`);
+      this.cities = citiesApi.results.data;
     }
   },
   watch: {
@@ -324,7 +311,7 @@ export default {
       this.queryBody.country_id = country_id;
       this.$emit('sendProperties', this.queryBody);
     },
-    state(state_id) {
+    state_id(state_id) {
       this.getCities(this.state_id);
       this.queryBody.town_id = state_id;
       this.$emit('sendProperties', this.queryBody);
@@ -350,7 +337,6 @@ export default {
 </script>
 
 <style lang="postcss" scoped>
-
 .property-quantity-btn {
   @apply m-0 w-full h-10 flex items-center justify-center border-gray-300 border-r border-t border-b first:border-l first:rounded-tl-sm first:rounded-bl-sm last:rounded-tr-sm last:rounded-br-sm hover:bg-primary-50 checked:bg-primary-50;
   &.active {
