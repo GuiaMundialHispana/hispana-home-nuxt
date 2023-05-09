@@ -190,78 +190,76 @@
 </template> -->
 
 <template>
-  <div class="flex flex-wrap justify-end 2xl:justify-start">
-    <MoleculesFilterStatusProperties @send-route="getRoute" class="filterStatus-tabs-sm mx-auto" />
+  <div class="flex flex-wrap gap-2 xl:flex-row flex-col">
+    <!-- <MoleculesFilterStatusProperties class="filterStatus-tabs-sm mx-auto" /> -->
     <!-- Direccion -->
     <div class="filter-content flex-row relative">
-      <div class="w-full mx-auto sm:w-[230px] 2xl:w-fit">
-        <button class="flex gap-2.5 filter-btn w-full" @click="toggleList('location')" :class="{'active': dropdownLists.location}">
-          <AtomsIcon name="general/sector" class="text-primary-100" :size=20  />
-          <p>Ubicacion</p>
-          <AtomsIcon name="arrows/arrow-down" class="text-primary-100" :size=15 />
+      <button class="flex gap-2.5 filter-btn w-full" @click="toggleList('location')" :class="{'active': dropdownLists.location}">
+        <AtomsIcon name="general/sector" class="text-primary-100" :size=20  />
+        <p>Ubicacion</p>
+        <AtomsIcon name="arrows/arrow-down" class="text-primary-100" :size=15 />
+      </button>
+      <OnClickOutside @trigger="toggleList('location')" class="dropdown w-full sm:w-[230px] h-fit" v-if="dropdownLists.location">
+        <button class="sector-filter-btn" :class="{'active': dropdownLists.country}" @click="toggleList('country')">
+          Pais <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16></AtomsIcon>
         </button>
-        <OnClickOutside @trigger="toggleList('location')" class="dropdown w-full sm:w-[230px] h-fit" v-if="dropdownLists.location">
-          <button class="sector-filter-btn" :class="{'active': dropdownLists.country}" @click="toggleList('country')">
-            Pais <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16></AtomsIcon>
-          </button>
-          <OnClickOutside @trigger="toggleList('country')" v-if="dropdownLists.country">
-            <div class="dropdown-wrapper scrollbar mt-[5px] min-h-max max-h-[273px]">
-              <label class="checkbox-labels" :for="country.name" v-for="country in countries" :key="country">
-                <input
-                  type="radio"
-                  class="checkbox"
-                  name="country"
-                  v-model="country_id"
-                  :value="country.id"
-                  :id="country.name"
-                >
-                {{ country.name }}
-              </label>
-            </div>
-          </OnClickOutside>
-          <!--  -->
-          <button class="sector-filter-btn" :class="{'active': dropdownLists.sector}" @click="toggleList('sector')">
-            Sector <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16 />
-          </button>
-          <OnClickOutside @trigger="toggleList('sector')" v-if="dropdownLists.sector">
-            <div class="dropdown-wrapper scrollbar mt-[5px] min-h-max max-h-[273px]">
-              <label class="checkbox-labels" :for="sector.name" v-for="sector in states" :key="sector">
-                <input
-                  type="radio"
-                  class="checkbox"
-                  name="sector"
-                  v-model="state_id"
-                  :value="sector.id"
-                  :id="sector.name"
-                >
-                {{ sector.name }}
-              </label>
-            </div>
-          </OnClickOutside>
-          <!--  -->
-          <button class="sector-filter-btn" :class="{'active': dropdownLists.city}" @click="toggleList('city')">
-            Ciudad <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16></AtomsIcon>
-          </button>
-          <OnClickOutside @trigger="toggleList('city')" v-if="dropdownLists.city">
-            <div class="dropdown-wrapper scrollbar mt-[5px] min-h-max max-h-[273px]">
-              <label class="checkbox-labels" :for="city.name" v-for="city in cities" :key="city">
-                <input
-                  type="radio"
-                  class="checkbox"
-                  name="city"
-                  v-model="city_id"
-                  :value="city.id"
-                  :id="city.name"
-                >
-                {{ city.name }}
-              </label>
-            </div>
-          </OnClickOutside>
+        <OnClickOutside @trigger="toggleList('country')" v-if="dropdownLists.country">
+          <div class="dropdown-wrapper scrollbar mt-[5px] min-h-max max-h-[273px]">
+            <label class="checkbox-labels" :for="country.name" v-for="country in countries" :key="country">
+              <input
+                type="radio"
+                class="checkbox"
+                name="country"
+                v-model="country_id"
+                :value="country.id"
+                :id="country.name"
+              >
+              {{ country.name }}
+            </label>
+          </div>
         </OnClickOutside>
-      </div>
+        <!--  -->
+        <button class="sector-filter-btn" :class="{'active': dropdownLists.sector}" @click="toggleList('sector')">
+          Sector <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16 />
+        </button>
+        <OnClickOutside @trigger="toggleList('sector')" v-if="dropdownLists.sector">
+          <div class="dropdown-wrapper scrollbar mt-[5px] min-h-max max-h-[273px]">
+            <label class="checkbox-labels" :for="sector.name" v-for="sector in states" :key="sector">
+              <input
+                type="radio"
+                class="checkbox"
+                name="sector"
+                v-model="state_id"
+                :value="sector.id"
+                :id="sector.name"
+              >
+              {{ sector.name }}
+            </label>
+          </div>
+        </OnClickOutside>
+        <!--  -->
+        <button class="sector-filter-btn" :class="{'active': dropdownLists.city}" @click="toggleList('city')">
+          Ciudad <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16></AtomsIcon>
+        </button>
+        <OnClickOutside @trigger="toggleList('city')" v-if="dropdownLists.city">
+          <div class="dropdown-wrapper scrollbar mt-[5px] min-h-max max-h-[273px]">
+            <label class="checkbox-labels" :for="city.name" v-for="city in cities" :key="city">
+              <input
+                type="radio"
+                class="checkbox"
+                name="city"
+                v-model="city_id"
+                :value="city.id"
+                :id="city.name"
+              >
+              {{ city.name }}
+            </label>
+          </div>
+        </OnClickOutside>
+      </OnClickOutside>
     </div>
     <!-- Tipo de inmueble -->
-    <div class="filter-content items-center" v-if="categories.length > 0">
+    <!-- <div class="filter-content items-center" v-if="categories.length > 0">
       <button class="flex gap-2.5 filter-btn" @click="toggleList('propertyType')" :class="{'active': dropdownLists.propertyType}">
         <AtomsIcon name="general/property" class="text-primary-100" :size=20  />
         <p>Inmueble</p>
@@ -270,7 +268,7 @@
       <OnClickOutside @trigger="toggleList('propertyType')" v-if="dropdownLists.propertyType" class="h-[273px] w-full 2xl:w-[205px]">
         <MoleculesDropDownList :class="importedDropdownLists" />
       </OnClickOutside>
-    </div>
+    </div> -->
     <!-- Habitaciones -->
     <div class="filter-content">
       <button class="flex gap-2.5 filter-btn" @click="toggleList('bedroom')" :class="{'active': dropdownLists.bedroom}">
@@ -354,7 +352,7 @@
             <input type="radio" id="RD" value="RD" v-model="picked">
           </label>
           <label for="USD" class="price-btn">
-            <input type="radio" id="USD" value="USD" v-model="picked">
+            <input type="radio" id="USD" checked value="USD" v-model="picked">
           </label>
         </p>
         <!--  -->
@@ -383,8 +381,8 @@
         <p>Estado</p>
         <AtomsIcon name="arrows/arrow-down" class="text-primary-100" :size=15 />
       </button>
-      <OnClickOutside @trigger="toggleList('status')" v-if="dropdownLists.status">
-        <div class="dropdown-wrapper scrollbar mt-[5px] min-h-max max-h-[273px]">
+      <OnClickOutside @trigger="toggleList('status')" v-if="dropdownLists.status" class="dropdown w-full sm:w-[230px] h-fit">
+        <div class="dropdown-wrapper border-none scrollbar mt-[5px] min-h-max max-h-[273px]">
           <label class="checkbox-labels" for="New">
             <input type="radio" class="checkbox" name="status" v-model="status" value="New" id="New">
             Nuevo
@@ -397,7 +395,7 @@
       </OnClickOutside>
     </div>
     <!-- Featured -->
-    <div class="filter-content" v-if="features.length > 0">
+    <!-- <div class="filter-content" v-if="features.length > 0">
       <button class="flex gap-2.5 filter-btn" @click="toggleList('other')" :class="{'active': dropdownLists.other}">
         <AtomsIcon name="general/tune" class="text-primary-100" :size=20  />
         <p>Otros</p>
@@ -406,219 +404,47 @@
       <OnClickOutside @trigger="toggleList('other')" v-if="dropdownLists.other">
         <MoleculesDropDownList class="h-fit 2xl:w-[205px]" :class="importedDropdownLists"/>
       </OnClickOutside>
-    </div>
-    <button class="search-button" @click="searchProperties()">
-      <p class="2xl:hidden mr-3 font-semibold">Buscar propiedades</p>
-      <AtomsIcon name="general/search" :size=17  />
-    </button>
+    </div> -->
   </div>
 </template>
 
 <script setup>
 import { OnClickOutside } from '@vueuse/components';
-import  MultiRangeSlider  from "multi-range-slider-vue";
-
-MultiRangeSlider;
-const emit = defineEmits(['submit'])
-const route = useRoute()
-const config = useRuntimeConfig();
-let propertyType = ref('/search');
-let dropdownLists = ref({
-  location: false,
-  propertyType: false,
-  priceRange: false,
-  country: false,
-  city: false,
-  municipality: false, 
-  sector: false,
-})
-let barMinValue = ref(0);
-let barMaxValue = ref(1000000);
-let showBarMinValue =  ref(0);
-let showBarMaxValue = ref(0);
-let countries;
-let country_id = ref(0);
-let cities  = ref(null);
-let city_id = ref(0);
-let states = ref(null);
-let state_id = ref(0);
-let picked = ref('USD');
-let price = ref('');
-let bedroomQuantity = ref(0);
-let bathroomQuantity = ref(0);
-let parkingLotQuantity = ref(0);
-let status = ref('')
-const param1 = ref('value1');
-let queryBody = {
-  type: route.query.type,
-};
-
-// Functions
-const { data:categories } = await useFetch('generals/categories', {
-  method: 'GET',
-  baseURL: config.public.API,
-  transform:(_categories) => _categories.results
-})
-
-const { data:features } = await useFetch('generals/features', {
-  method: 'GET',
-  baseURL: config.public.API,
-  transform:(_features) => _features.results
-})
-
-function getRoute(e) {
-  propertyType = e;
-}
-
-function UpdateValues(e) {
-  barMinValue = e.minValue;
-  barMaxValue = e.maxValue;
-  showBarMinValue.value = barMinValue.toString();
-  showBarMaxValue.value = barMaxValue.toString();
-  price.value = showBarMinValue.value + '-' + showBarMaxValue.value;
-};
-
-function toggleList(list) {
-  if (this.dropdownLists[list]) {
-    setTimeout(() => {
-      this.dropdownLists[list] = false;
-    }, 50);
-  }else{
-      this.dropdownLists[list] = true;
-  }
-};
-
-async function getCountries() {
-  const { data: countriesApi } = await useFetch('generals/countries', {
-    method: 'GET',
-    baseURL: config.public.API,
-    transform:(_countriesApi) => _countriesApi.results.data
-  });
-  countries = countriesApi;
-}
-
-async function getStates(country_id) {
-  const { data:statesApi } = await useFetch('generals/states/'+`${country_id}`, {
-    method: 'GET',
-    baseURL: config.public.API,
-    transform:(_statesApi) => _statesApi.results.data
-  })
-  states = statesApi;
-};
-
-async function getCities(state_id) {
-  const { data:citiesApi } = await useFetch('generals/cities/'+`${state_id}`, {
-    method: 'GET',
-    baseURL: config.public.API,
-    transform:(_citiesApi) => _citiesApi.results.data
-  })
-  cities = citiesApi;
-};
-
-watch(route,(newv)=>{
-  queryBody.type = newv.query.type;
-  searchProperties();
-});
-
-watch(picked,(newPicked)=>{
-  queryBody.price_type = newPicked;
-})
-
-watch(bedroomQuantity,()=> {
-  queryBody.bedroom = bedroomQuantity.value;
-});
-
-watch(bathroomQuantity,()=> {
-  queryBody.bathroom = bathroomQuantity.value;
-});
-
-watch(parkingLotQuantity,()=> {
-  queryBody.parking = parkingLotQuantity.value;
-});
-
-watch(status,()=> {
-  queryBody.property_status = status.value;
-});
-
-watch(country_id,()=> {
-  getStates(country_id.value);
-  queryBody.country_id = country_id.value;
-});
-
-watch(state_id,()=> {
-  getCities(state_id.value);
-  queryBody.town_id = state_id.value;
-});
-
-watch(city_id,()=> {
-  queryBody.city_id = city_id.value;
-});
-
-watch(picked,()=> {
-  queryBody.price_type = price.value;
-});
-
-watch(price,()=> {
-  queryBody.price = price.value;
-});
-
-async function searchProperties() {
-  const { data:properties } = await useFetch('advertisements/search?', {
-    method: 'GET',
-    baseURL: config.public.API,
-    transform:(_properties) => _properties.results.data,
-    query: queryBody
-  })
-  emit('submit', properties)
-};
-
-onBeforeMount(()=>{
-  getCountries();
-  searchProperties();
-});
-
 </script>
 
-<!-- <script setup>
-  import { OnClickOutside } from '@vueuse/components';
-</script>
 <script>
-import MultiRangeSlider from "multi-range-slider-vue";
-export default{
+import  MultiRangeSlider  from "multi-range-slider-vue";
+export default {
   data() {
     return {
+      route: useRoute(),
+      config:useRuntimeConfig(),
       dropdownLists: {
         location: false,
         propertyType: false,
-        bedroom: false,
-        bathroom: false,
-        parkingLot: false, 
         priceRange: false,
-        status: false,
-        other: false,
+        country: false,
         city: false,
-        municipality: false,
+        municipality: false, 
         sector: false,
       },
-      viewport: useViewport(),
-      showFilters: false,
-      bedroomQuantity: 0,
-      bathroomQuantity: 0,
-      parkingLotQuantity: 0,
-      currencyTab: true,
-      currency: "RD$",
-      barMinValue: 0,
-      barMaxValue: 40000000,
-      showBarMinValue: "0",
-      showBarMaxValue: "40,000,000",
-      //
-      config = useRuntimeConfig();
+      barMinValue:0,
+      barMaxValue:1000000,
+      showBarMinValue: 0,
+      showBarMaxValue:0,
       countries: null,
-      country_id: 63,
-      cities:null,
-      city_id: 0,
+      country_id:0,
+      cities :null,
+      city_id:0,
       states:null,
-      state_id: 0
+      state_id:0,
+      picked:'USD',
+      price:'',
+      bedroomQuantity:0,
+      bathroomQuantity:0,
+      parkingLotQuantity:0,
+      status:'',
+      queryBody: {}
     }
   },
   components: {
@@ -628,89 +454,97 @@ export default{
     UpdateValues(e) {
       this.barMinValue = e.minValue;
       this.barMaxValue = e.maxValue;
-      this.showBarMinValue = this.barMinValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      this.showBarMaxValue = this.barMaxValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    },
-    changeCurrency(){
-      if(this.currencyTab === true){
-        this.currencyTab = false;
-        this.currency = "USD$"
-      }else{
-        this.currencyTab = true;
-        this.currency = "RD$"
-      }
+      this.showBarMinValue = this.barMinValue.toString();
+      this.showBarMaxValue = this.barMaxValue.toString();
+      this.price = this.showBarMinValue + '-' + this.showBarMaxValue;
     },
     toggleList(list) {
       if (this.dropdownLists[list]) {
         setTimeout(() => {
           this.dropdownLists[list] = false;
         }, 50);
-      }else{
-          this.dropdownLists[list] = true;
-      }
+      } else { this.dropdownLists[list] = true; }
     },
     async getCountries() {
       const { data: countriesApi } = await useFetch('generals/countries', {
         method: 'GET',
-        baseURL: config.public.API,
+        baseURL: this.config.public.API,
         transform:(_countriesApi) => _countriesApi.results.data
       });
       this.countries = countriesApi;
-      getStates(63);
-      //
     },
     async getStates(country_id) {
       const { data:statesApi } = await useFetch('generals/states/'+`${country_id}`, {
         method: 'GET',
-        baseURL: config.public.API,
+        baseURL: this.config.public.API,
         transform:(_statesApi) => _statesApi.results.data
       })
       this.states = statesApi;
-      this.getCities(1074);
-      //
-    },
+    }, 
     async getCities(state_id) {
       const { data:citiesApi } = await useFetch('generals/cities/'+`${state_id}`, {
         method: 'GET',
-        baseURL: config.public.API,
+        baseURL: this.config.public.API,
         transform:(_citiesApi) => _citiesApi.results.data
       })
       this.cities = citiesApi;
-      //
     }
   },
-  computed: {
-    importedDropdownLists(){
-      return "2xl:absolute 2xl:top-[95%] mt-[5px] left-0 z-10"
-    }      
-  },
   watch: {
-    showFilters: function() {
-    if(this.showFilters) {
-      document.body.classList.add('modal-open')        
-    }else {
-      document.body.classList.remove('modal-open')
-    }      
-  }
+    picked(newPicked) {
+      this.queryBody.price_type = newPicked;
+      this.$emit('sendProperties', this.queryBody);
+    },
+    bedroomQuantity(bedroomQuantity) {
+      this.queryBody.bedroom = bedroomQuantity;
+      // this.queryBody.type = this.route.query.type;
+      this.$emit('sendProperties', this.queryBody);
+    },
+    bathroomQuantity(bathroomQuantity) {
+      this.queryBody.bedroom = bathroomQuantity;
+      // this.queryBody.type = this.route.query.type;
+       this.$emit('sendProperties', this.queryBody);
+    },
+    parkingLotQuantity(parkingLotQuantity) {
+      this.queryBody.parking = parkingLotQuantity;
+       this.$emit('sendProperties', this.queryBody);
+    },
+    status(status) {
+      this.queryBody.status = status;
+       this.$emit('sendProperties', this.queryBody);
+    },
+    country_id(country_id) {
+      this.getStates(this.country_id);
+      this.queryBody.country_id = country_id;
+      this.$emit('sendProperties', this.queryBody);
+    },
+    state(state) {
+      this.getCities(this.state_id);
+      this.queryBody.town_id = state_id;
+      this.$emit('sendProperties', this.queryBody);
+    },
+    city_id(city_id) {
+      this.queryBody.city_id = city_id;
+       this.$emit('sendProperties', this.queryBody);
+    },
+    picked(picked) {
+      this.queryBody.price_type = picked;
+       this.$emit('sendProperties', this.queryBody);
+    },
+    price(price) {
+      this.queryBody.price = price;
+       this.$emit('sendProperties', this.queryBody);
+    }
   },
   mounted() {
     this.getCountries();
+    this.queryBody.price_type = this.picked;
   }
 }
-</script> -->
+</script>
+
 <style lang="postcss" scoped>
-.filter-btn {
-  @apply flex justify-between w-full items-center border-2 rounded-lg border-gray-100 mt-2.5 font-normal text-sm leading-[22px] h-10 px-2.5 first:mt-0 hover:bg-primary-50 hover:border-primary-100 bg-neutral-white whitespace-nowrap mx-auto text-neutral-black !important;
-  &.active { @apply border-primary-100 bg-neutral-white !important; }
-  & p { @apply flex-none !important; }
-}
-.price-btn {
-  @apply border-y border-gray-300 text-primary-100 w-[37px] h-5 text-[12px];
-  &.active { @apply bg-primary-100 text-neutral-white border-none; }
-}
-.dropdown {
-  @apply 2xl:absolute right-full 2xl:left-0 2xl:top-[95%] bg-neutral-white border-2 border-gray-100 rounded-lg p-2.5 shadow-md mt-[5px] mr-1.5 2xl:mr-0 z-10;
-}
+
 .property-quantity-btn {
   @apply m-0 w-full h-10 flex items-center justify-center border-gray-300 border-r border-t border-b first:border-l first:rounded-tl-sm first:rounded-bl-sm last:rounded-tr-sm last:rounded-br-sm hover:bg-primary-50 checked:bg-primary-50;
   &.active {
@@ -727,6 +561,12 @@ export default{
   }
 }
 /*  */
+
+.filter-btn {
+  @apply flex justify-between w-full items-center border-2 rounded-lg border-gray-100 mt-2.5 font-normal text-sm leading-[22px] h-10 px-2.5 first:mt-0 hover:bg-primary-50 hover:border-primary-100 bg-neutral-white whitespace-nowrap mx-auto text-neutral-black !important;
+  &.active { @apply border-primary-100 bg-neutral-white !important; }
+  & p { @apply flex-none !important; }
+}
 
 .price-btn {
   @apply cursor-pointer select-none flex items-center font-normal text-xs;
@@ -751,7 +591,7 @@ export default{
 }
 
 .filter-content {
-  @apply flex flex-col relative w-full mx-auto sm:w-[230px] 2xl:w-fit;
+  @apply flex flex-col relative xl:w-fit;
 }
 
 .search-button {
@@ -766,11 +606,6 @@ export default{
 }
 
 .dropdown{
-  @apply bg-neutral-white border-2 border-gray-100 rounded-lg p-2.5 shadow-md;
+  @apply bg-neutral-white border-2 border-gray-100 rounded-lg p-2.5 shadow-md  2xl:absolute right-full 2xl:left-0 2xl:top-[95%] mt-[5px] mr-1.5 2xl:mr-0 z-10;
 }
 </style>
-
-
-<!-- bedroomQuantity: 0,
-      bathroomQuantity: 0,
-      parkingLotQuantity: 0, -->

@@ -26,9 +26,9 @@ body {
   }
 }
 .filterStatus-tabs-sm {
-  @apply h-10 w-full 2xl:w-fit !important;
+  @apply h-10 xl:w-fit w-full !important;
   & .btn{
-    @apply h-full w-full 2xl:px-[9px] !important;
+    @apply h-full w-full px-[9px] !important;
   }
 }
 input::-webkit-outer-spin-button,

@@ -2,11 +2,11 @@ export default {
   menu: [
     {
       name: 'Comprar',
-      route: '/search?type=Sell',
+      route: '/sales?type=Sale',
     },
     {
       name: 'Alquilar',
-      route: '/search?type=Rent',
+      route: '/rent?type=Rent',
     },
     {
       name: 'Vender',
