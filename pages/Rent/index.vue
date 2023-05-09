@@ -37,11 +37,22 @@
     </div>
     <div class="mt-8 pb-14">
       <ul class="property-list">
-        <li v-for="property in testProperty[0] " :key="property">
+        <li v-for="property in testProperty[0]" :key="property">
           <MoleculesProperty :is-favorite="false" :property="property" />
         </li>
       </ul>
-      <p v-if="pending">Cargando</p>
+      <div v-if="pending">
+        <h6 class="text-4xl text-blue-100 font-bold mb-4 text-center">No hemos encontramos propiedades <br/>con estos resultados</h6>
+      </div>
+      <div v-if="testProperty[0].length === 0">
+        <figure class="mb-4">
+          <img src="/img/not-found.png" class="object-contain max-w-[308px] mx-auto" />
+        </figure>
+        <h6 class="text-4xl text-blue-100 font-bold mb-4 text-center">No hemos encontramos propiedades <br/>con estos resultados</h6>
+        <div class="flex justify-center mb-4">
+          <AtomsButtons class="mx-auto">Borrar filtros</AtomsButtons>
+        </div>
+      </div>
       <!-- Pagination -->
       <!-- <ul class="flex items-center gap-2 mt-16 justify-center">
         <li>
@@ -79,7 +90,7 @@ let testProperty = reactive([]);
 let showFilters = ref(false)
 const viewport = useViewport();
 
-const { data, pending } = await useFetch('advertisements/search?type=All', {
+const { data, pending } = await useFetch('advertisements/search?type=Rent', {
   method: 'GET',
   baseURL: config.public.API,
   transform:(_data) => _data.results.data
@@ -91,7 +102,7 @@ function getFilterResults(e) {
 }
 
 async function searchProperties() {
-  const { data } = await useFetch('advertisements/search?type=All', {
+  const { data } = await useFetch('advertisements/search?type=Rent', {
     method: 'GET',
     baseURL: config.public.API,
     transform:(_data) => _data.results.data,

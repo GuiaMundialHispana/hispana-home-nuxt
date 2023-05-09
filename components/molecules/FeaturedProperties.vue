@@ -1,37 +1,25 @@
 <template>
   <article>
+    <AtomsPropertyPlans class="property-type-component" :planType="plantype" planPosition="top" />
+    <AtomsPropertyLocation class="property-location-component" :location="property.address" />
     <Swiper
-      class="relative rounded-lg overflow-hidden"
-      :modules="[SwiperAutoplay, SwiperEffectCreative]"
-      :slides-per-view="1"
-      :loop="true"
-      :effect="'creative'"
+      :modules="[SwiperFreeMode, SwiperNavigation]"
+      :effect="'fade'"
+      :lazy="true"
+      slides-per-view="auto"
+      :space-between="2"
       :autoplay="{
-        delay: 8000,
-        disableOnInteraction: true,
+        delay: 4000,
+        disableOnInteraction: true
       }"
-      :creative-effect="{
-        prev: {
-          shadow: false,
-          translate: ['-20%', 0, -1],
-        },
-        next: {
-          translate: ['100%', 0, 0],
-        },
-      }">
-      <SwiperSlide v-for="slide in 10" :key="slide">
-        <NuxtLink to="/search/propiedad-1" class="h-[305px] block">
-          <img src="/img/property-1.jpg" alt="" class="object-cover h-full w-full">
-        </NuxtLink>
-      </SwiperSlide>
-      <AtomsPropertyPlans
-        class="absolute right-0 z-10"
-        :planType="plantype"
-        planPosition="top" 
-      />
-      <AtomsPropertyLocation class="absolute top-2.5 left-2 z-10" />
+      :navigation="{
+        nextEl: '.nextF',
+        prevEl: '.prevF'
+      }"
+    >
       <nav>
         <AtomsButtons
+          class="prevF"
           btn-type="btn-icon"
           btn-size="xsmall"
           btn-style="outline-gray"
@@ -39,6 +27,7 @@
           :icon-size=15
         />
         <AtomsButtons
+          class="nextF"
           btn-type="btn-icon"
           btn-size="xsmall"
           btn-style="outline-gray"
@@ -46,12 +35,26 @@
           :icon-size=15
         />
       </nav>
+      <swiper-slide v-for="image in property.images" :key="image">
+        <NuxtLink :to="`/search/${propertyId}`" class="h-[305px] relative flex justify-center pb-2 bg-gray-10 rounded-lg">
+          <img
+            :src="`https://walrus-app-e2bxo.ondigitalocean.app/${image.image}`"
+            :alt="property.name"
+            class="object-cover h-full w-full absolute top-0 left-0"
+          >
+          <p class="property-name">{{ property.name }}</p>
+        </NuxtLink>
+      </swiper-slide>
     </Swiper>
-    <!-- Caracteristicas -->
-    <MoleculesCharacteristics class="my-3 justify-center" />
-    <!-- Price -->
-    <p class="text-sm text-neutral-black text-center font-normal">Desde:</p>
-    <p class="text-primary-100 font-semibold text-xl uppercase text-center">US$84,192.00</p>
+    <MoleculesCharacteristics
+      :bedroom="property.bedroom"
+      :bath="property.bathroom"
+      :parking="property.parking"
+      :area="property.meters"
+      class="my-3 justify-center"
+    />
+    <p class="title-price">Desde:</p>
+    <p class="price">US${{ showParsedPrice(property.price_us) }}</p>
   </article>
 </template>
 
@@ -61,20 +64,44 @@ export default {
     plantype: {
       type: String,
       default: "exclusive"
+    },
+    property: {
+      type: Object,
+      default: () => {}
+    },
+    propertyId: {
+      type: Number
     }
+  },
+  methods: {
+    showParsedPrice(price) {
+      return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
   }
 }
 </script>
 
 <style lang="postcss" scoped>
 article {
-  @apply rounded-2xl bg-neutral-white p-2 w-full sm:max-w-[350px] relative;
-  &:hover {
-    box-shadow: 0px 4px 11px rgba(0, 0, 0, 0.07);
+  @apply rounded-2xl p-2 w-full sm:w-[350px] bg-neutral-white shadow-sm hover:shadow-xl border relative;
+
+  & .property-type-component { @apply absolute right-2 z-10 top-2 rounded-tr-lg; }
+
+  & .property-location-component { @apply absolute top-3 left-3 z-10; }
+
+  & nav {
+    @apply hidden absolute top-1/2 z-10 w-full justify-between px-4; 
+    & button { @apply bg-neutral-white hover:bg-primary-100 border-none !important; }
   }
-  & nav { @apply hidden absolute top-1/2 z-10 w-full justify-between px-4; 
-  & button { @apply bg-neutral-white hover:bg-primary-100 border-none !important; }}
+
+  & .swiper {
+    & .property-name {
+      @apply text-neutral-white font-semibold text-2xl relative mt-auto text-center overflow-hidden truncate whitespace-nowrap w-11/12;
+    } 
+  }
   & .swiper:hover > nav { @apply flex; }
-  & button { @apply bg-neutral-white hover:bg-primary-100 border-none !important; }
+  
+  & .title-price { @apply text-sm text-neutral-black text-center font-normal; }
+  & .price { @apply text-primary-100 font-semibold text-xl uppercase text-center; }
 }
 </style>

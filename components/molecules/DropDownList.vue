@@ -1,10 +1,14 @@
 <template>
   <div class="dropdown-wrapper scrollbar">
-    <label for="option1" class="checkbox-labels">
-      <input type="checkbox" class="checkbox" id="option1">
-      Opcion 1
+    <label :for="options.name" class="checkbox-labels">
+      <input
+        type="checkbox"
+        class="checkbox"
+        :id="options.name"
+      >
+      {{ options.name }}
     </label>
-    <label for="option2" class="checkbox-labels">
+    <!-- <label for="option2" class="checkbox-labels">
       <input type="checkbox" class="checkbox active" id="option2">
       Opcion 2
     </label>
@@ -35,9 +39,19 @@
     <label for="option9" class="checkbox-labels">
       <input type="checkbox" class="checkbox active" id="option9">
       Opcion 9
-    </label>
+    </label> -->
   </div>
 </template>
+
+<script setup>
+const props = defineProps({
+  options: {
+    type: Array
+  }
+});
+</script>
+
+
 <style lang="postcss" scoped>
 .dropdown-wrapper {
   @apply bg-neutral-white border-2 border-gray-100 rounded-lg px-2.5 pt-3 overflow-y-scroll hover:overscroll-contain;

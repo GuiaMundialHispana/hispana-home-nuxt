@@ -8,10 +8,12 @@
       </NuxtLink>
       <nav :class="{'hidden':!showMenu}">
         <ul>
-          <li v-for='item in menu' :key='item.name' class="text-sm text-neutral-black font-normal hover:text-primary-100 mb-4 lg:mb-0 cursor-pointer">
+          <li v-for='item in menu'
+            :key='item.name'
+            class="text-sm text-neutral-black font-normal hover:text-primary-100 mb-4 lg:mb-0 cursor-pointer"
+          >
             <NuxtLink :to='item.route'>{{item.name}}</NuxtLink>
           </li>
-          
           <li class="mb-4 lg:mb-0" v-show="!user.isLoggedIn">
             <AtomsButtons @click="showMenu = false; displayModal = true">
               Iniciar sesión
@@ -28,6 +30,24 @@
             <div class="user-dropdown" v-show="userDropdown">
               <ul>
                 <li>
+                  <NuxtLink to="/profile?tab=anuncio">
+                    <AtomsIcon name="general/border-all" class="mr-2.5" />
+                    Mis anuncios
+                  </NuxtLink>
+                </li>
+                <li>
+                  <NuxtLink to="/profile?tab=favorite">
+                    <AtomsIcon name="general/favorite" class="mr-2.5" />
+                    Mis favoritos
+                  </NuxtLink>
+                </li>
+                <li>
+                  <NuxtLink to="/profile?tab=plan">
+                    <AtomsIcon name="general/user-document" class="mr-2.5" />
+                    Mis planes
+                  </NuxtLink>
+                </li>
+                <!-- <li>
                   <NuxtLink :to="{ path: 'profile', query: { tab: 'anuncio' }}">
                     <AtomsIcon name="general/border-all" class="mr-2.5" />
                     Mis anuncios
@@ -44,7 +64,7 @@
                     <AtomsIcon name="general/user-document" class="mr-2.5" />
                     Mis planes
                   </NuxtLink>
-                </li>
+                </li> -->
                 <li @click="user.logOut(), showMenu = false">
                   <AtomsIcon name="general/logout" class="mr-2.5" />
                   Cerrar sesión
@@ -53,14 +73,15 @@
             </div>
           </li>
           <li v-show="user.isLoggedIn">
-            <AtomsButtons
+            <AtomsLink
+              link-to="/PostProperty"
               icon-name="general/plus"
               icon-position="left"
               :icon-size=14
               btnStyle="outline-primary"
             >
               Publicar
-            </AtomsButtons>
+            </AtomsLink>
           </li>
         </ul>
       </nav>
@@ -127,7 +148,7 @@ nav {
   & > ul { @apply flex lg:items-center xl:gap-x-8 lg:gap-3 lg:flex-row flex-col; }
 
   & .user-wrapper {
-    @apply flex lg:items-center font-semibold text-primary-100 lg:ml-4 md:mr-4 cursor-pointer mb-4 lg:mb-0 lg:flex-row flex-col;
+    @apply flex lg:items-center font-semibold text-primary-100 lg:ml-4 cursor-pointer mb-4 lg:mb-0 lg:flex-row flex-col;
 
     & img { @apply w-8 h-8 rounded-full border-[2px] border-primary-90 object-cover; }
 

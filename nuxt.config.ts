@@ -27,13 +27,11 @@ export default defineNuxtConfig({
       xl: 1280,
       '2xl': 1536,
     },
-
     defaultBreakpoints: {
       desktop: 'lg',
       mobile: 'xs',
       tablet: 'md',
     },
-
     fallbackBreakpoint: 'lg'
   },
   postcss: {

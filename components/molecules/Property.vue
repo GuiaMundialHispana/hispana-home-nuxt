@@ -58,8 +58,8 @@
         />
       </nav>
     </Swiper>
-    <NuxtLink to="/search/propiedad-1">{{property.name }}</NuxtLink>
-    <p class="flex items-start font-normal text-neutral-black my-3">
+    <NuxtLink :to="`/search/${property.id}`" class="overflow-hidden truncate whitespace-nowrap w-11/12">Name {{property.name }}</NuxtLink>
+    <p class="flex items-start font-normal text-neutral-black my-3 overflow-hidden truncate whitespace-nowrap w-11/12">
       <AtomsIcon name="general/share-location" :size=20 class="text-primary-100 mr-2.5 pt-1"/>
       {{ property.address }}
     </p>
@@ -72,7 +72,7 @@
     />
     <!-- Price -->
     <p class="text-sm text-neutral-black font-normal">Desde:</p>
-    <p class="text-primary-100 font-semibold text-xl uppercase">US${{property.price}}</p>
+    <p class="text-primary-100 font-semibold text-xl uppercase">US${{showParsedPrice(property.price)}}</p>
   </article>
 </template>
 
@@ -135,7 +135,20 @@ async function deleteFavorite() {
   }
 }
 </script>
-
+<script>
+  export default{
+  methods: {
+    showParsedPrice(price) {
+      return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
+  },
+  computed: {
+    minuscula() {
+      return this.property.type.toLowerCase()
+    }
+  }
+}
+</script>
 <style lang="postcss" scoped>
 article {
   @apply rounded-2xl bg-neutral-white p-2 w-full lg:max-w-[350px] relative;

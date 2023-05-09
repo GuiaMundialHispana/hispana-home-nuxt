@@ -1,5 +1,5 @@
 <template>
-  <div class="pb-[75px] 2xl:max-w-6xl">
+  <div class="pb-[75px] 2xl:max-w-[1440px] mx-auto">
     <h2 class="text-[28px] leading-[28px] font-semibold mb-12">Calculadora de préstamos</h2>
     <div class="grid lg:grid-cols-2 grid-cols-1">
       <form class="lg:border-r border-[#ECECEC] lg:pr-6">
@@ -7,18 +7,18 @@
           <div class="form-group">
             <label class="mb-2">Monto inicial</label>
             <div class="relative flex">
-              <input type="text" class="form-control" value="USD$64,500.00">
-              <span class="bg-primary-100 text-neutral-white font-semibold text-sm p-2.5 rounded-tr-lg rounded-br-lg">30.00%</span>
+              <input type="number" class="form-control" v-model.lazy="initial">
+              <span class="bg-primary-100 text-neutral-white font-semibold text-sm p-2.5 rounded-tr-lg rounded-br-lg">{{initialPercentage}}%</span>
             </div>
           </div>
           <div class="form-group">
             <label class="mb-2">Cantidad de años</label>
             <div class="relative flex">
               <AtomsIcon name="general/calendar_month" :size=19 class="text-primary-100 absolute left-3 top-2.5" />
-              <select class="form-control">
-                <option value="">10 años</option>
-                <option value="">20 años</option>
-                <option value="">30 años</option>
+              <select class="form-control" v-model="years">
+                <option value="10">10 años</option>
+                <option value="20">20 años</option>
+                <option value="30">30 años</option>
               </select>
               <AtomsIcon name="arrows/arrow-down" :size=16 class="text-primary-100 absolute right-3 top-3" />
             </div>
@@ -28,7 +28,7 @@
           <label class="mb-2">Tasa de interes %</label>
           <div class="relative">
             <AtomsIcon name="general/bank" :size=20 class="text-primary-100 absolute left-3 top-2.5" />
-            <input type="text" class="form-control with-icon rounded-lg w-full pl-12" value="15%">
+            <input type="number" class="form-control with-icon rounded-lg w-full pl-12" v-model.lazy="interest">
           </div>
         </div>
       </form>
@@ -36,30 +36,82 @@
         <div class="flex md:flex-row flex-col gap-6 md:items-center">
           <div class="flex-none">
             <label class="m-0">Monto inicial</label>
-            <p class="text-bx"><b class="text-primary-100">US$64,500.00 |</b> 30.00%</p>
+            <p class="text-bx"><b class="text-primary-100"> US${{ showParsedPrice(initial) }} |</b> {{ initialPercentage }}%</p>
           </div>
           <!--  -->
           <div class="progress">
-            <div class="progress-status" style="width: 70px;"></div>
+            <div class="progress-status" :style="{width: initialPercentage + '%'}"></div>
           </div>
           <!--  -->
           <div class="flex-none">
             <label class="m-0">Monto del préstamo</label>
-            <p class="text-bx"><b class="text-primary-100">US$150,500.00 |</b> 70.00%</p>
+            <p class="text-bx"><b class="text-primary-100"> US${{ showParsedPrice(loanAmount) }} |</b> {{ loanPercentage }}%</p>
           </div>
         </div>
         <hr class="border-[#ECECEC] my-4">
         <div class="flex md:flex-row flex-col md:items-center md:justify-end">
           <div class="md:mb-0 mb-4">
             <label class="m-0">Cuota mensual estimada</label>
-            <p class="text-[28px] text-primary-100 font-semibold md:text-right">US$1,474</p>
+            <p class="text-[28px] text-primary-100 font-semibold md:text-right"> US${{ showParsedPrice(monthlyPayment) }}</p>
           </div>
         </div>
       </div>
     </div>
   </div>
 </template>
-
+<script>
+  export default{
+    data() {
+      return {
+        propertyPrice: 100000,
+        initial: 0,
+        loanAmount: 0,
+        years: 10,
+        interest: 15,
+        monthlyPayment: 0,
+        initialPercentage: 0,
+        loanPercentage: 0,
+      }
+    },
+    methods: {
+      calculateLoan(amount, annualInterest, years){
+        let monthInterest = annualInterest / 12;
+        let allPayments = years * 12;
+        let afterInterestLoanAmount = amount / ((1 - (1 /(1 + monthInterest) ** allPayments)) / monthInterest);
+        let payments = afterInterestLoanAmount / allPayments;
+        this.monthlyPayment = payments.toFixed(2)
+      },
+      getPercentage(initial, price){
+        let initialPercent = (initial / price) * 100;
+        let loanPercent = ((price - initial) / price) * 100;
+        this.loanAmount = price - initial;
+        this.initialPercentage = initialPercent.toFixed(2);
+        this.loanPercentage = loanPercent.toFixed(2);
+      },
+      showParsedPrice(price) {
+        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      },
+    },
+    watch: {
+      initial(){
+        if (this.initial >= this.propertyPrice) {
+          this.initial = this.propertyPrice - (this.propertyPrice * 0.05)
+        };
+        this.getPercentage(this.initial, this.propertyPrice);
+        this.calculateLoan(this.loanAmount, this.interest, this.years);
+      },
+      years(){
+        this.calculateLoan(this.loanAmount, this.interest, this.years);
+      },
+      interest(){
+        if (this.interest <= 0) {
+          this.interest = 1;
+        }
+        this.calculateLoan(this.loanAmount, this.interest, this.years);
+      }
+    }
+}
+</script>
 <style lang="postcss" scoped>
 label {
   @apply text-sm text-neutral-black font-normal block;

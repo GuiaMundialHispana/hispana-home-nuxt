@@ -1,6 +1,6 @@
 <template>
   <section class="max-w-[972px] mx-auto mt-[72px] px-4 mb-24">
-    <div class="flex items-center gap-x-2  mb-3.5">
+    <div class="flex items-center gap-x-2 mb-3.5">
       <AtomsLink
         btn-type="btn-icon"
         iconName="arrows/arrow-left"
@@ -13,14 +13,14 @@
     <div class="form">
       <div class="flex flex-col">
         <h4>Información personal</h4>
-        <div>
+        <div class="flex md:flex-row flex-col">
           <label>
             Nombre:
             <input
               type="text"
               :placeholder="user.userData.name"
               v-model="editUser.editUserData.name"
-              class="mr-4"
+              class="lg:mr-4 mr-0"
             >
           </label>
           <label>
@@ -31,33 +31,32 @@
             >
           </label>
         </div>
-        <div>
+        <div class="flex md:flex-row flex-col">
           <label class="relative">
             Fecha de nacimiento:
             <input
               type="date"
               v-model="editUser.editUserData.birthdate"
-              class="datePicker uppercase text-[#727272] mr-4"
+              class="datePicker uppercase text-[#727272] lg:mr-4 mr-0"
             >
           </label>
           <label>
             País:
-            <select>
-              <option value="Option 1">Option 1</option>
-              <option value="Option 2">Option 2</option>
-              <option value="Option 3">Option 3</option>
-              <option value="Option 4">Option 4</option>
+            <select class="form-control" v-model="editUser.editUserData.country_id">
+              <option v-for="country in countries[0]" :value="country.id" :key="country.id" class="option-label">
+              {{ country.name }}
+              </option>
             </select>
           </label>
         </div>
       </div>
       <h4>Contactos</h4>
-      <div>
+      <div class="flex md:flex-row flex-col">
         <label>
           Teléfono móvil:
           <input
             type="tel"
-            class="mr-4"
+            class="lg:mr-4 mr-0"
             v-model="editUser.editUserData.cellphone"
             :placeholder="user.userData.cellphone"
           >
@@ -76,6 +75,7 @@
           <input
             type="email"
             :placeholder="user.userData.email"
+            v-model="editUser.editUserData.email"
           >
         </label>
       </div>
@@ -129,8 +129,11 @@
           <div class="flex items-center justify-center rounded-full bg-primary-50 w-14 h-14">
             <AtomsIcon name="general/upload" :size=28 class="text-primary-100" />
           </div>
-          <p class="text-[#707070]"><span class="text-primary-100">Click para subir</span> o arrastra y suelta SVG, PNG, <br> JPG or GIF (max. 800px400px)</p>
-          <input type="file" @change="previewFiles"  class="absolute left-0 top-0 scale-[9] cursor-pointer opacity-0">
+          <p class="text-[#707070]">
+            <span class="text-primary-100">Click para subir</span>
+            o arrastra y suelta SVG, PNG, <br> JPG or GIF (max. 800px400px)
+          </p>
+          <input type="file" @change="previewFiles" class="absolute left-0 top-0 scale-[9] cursor-pointer opacity-0">
         </div>
       </div>
       <div class="flex gap-2.5 ml-auto mt-12">
@@ -152,69 +155,6 @@
   </section>
 </template>
 
-<!-- <script setup>
-import { useUserStore } from '~/stores/User';
-import { useUserEditStore } from '~/stores/EditUser';
-import FormData from 'form-data';
-import { watch, ref } from 'vue';
-definePageMeta({
-  middleware: ["logger"]
-});
-
-const user = useUserStore();
-const editUser = useUserEditStore ();
-const showChangePasswd = ref(false);
-let profilePic = ref('');
-let images = ref(null);
-
-watch(profilePic, () => 
-  editUser.editUserData.profile_pic = profilePic,
-  console.log(profilePic)
-)
-
-function previewFiles(event) {
-  images = event.target.files[0]
-  profilePic = URL.createObjectURL(images);
-  editUser.images = images;
-  // console.log(profilePic)
-}
-
-async function updateUser() {
-  const form = new FormData();
-  form.append('user_id', editUser.editUserData.user_id);
-  form.append('email', editUser.editUserData.email)
-  form.append('name', editUser.editUserData.name);
-  form.append('lastname', editUser.editUserData.lastname);
-  form.append('birthdate', editUser.editUserData.birthdate);
-  form.append('country_id', editUser.editUserData.country_id);
-  form.append('cellphone', editUser.editUserData.cellphone);
-  form.append('phone', editUser.editUserData.phone);
-  form.append('profile_pic', editUser.images);
-
-  await useFetch(useRuntimeConfig().API+'users/update?_method=PUT',{
-    method: 'POST',
-    body: form,
-    headers: {
-      'Authorization': 'Bearer ' + editUser.user.token,
-      'Accept': 'application/json',
-    },
-    onResponseError({ request, response, options }) {
-      const res = response._data;
-      Swal.fire({
-        icon: 'error',
-        text: 'Tenemos un error para validar tus datos, por favor intente mas tarde',
-        showConfirmButton: false,
-        timer: 3000
-      });
-    }
-  });
-}
-
-onMounted(()=> {
-  user.getProfile();
-});
-</script> -->
-
 <script>
 import { useUserStore } from '~/stores/User';
 import { useUserEditStore } from '~/stores/EditUser';
@@ -224,14 +164,21 @@ export default {
     return {
       user: useUserStore(),
       editUser:useUserEditStore (),
+      config: useRuntimeConfig(),
       showChangePasswd: false,
       profilePic: '',
       images: null,
+      countries: [],
+      country: [],
+      form: new FormData()
     }
   },
   watch:{
     profilePic() {
       this.editUser.editUserData.profile_pic = this.profilePic;
+    },
+    images() {
+      this.form.append('profile_pic', this.editUser.images);
     }
   },
   methods: {
@@ -240,21 +187,26 @@ export default {
       this.profilePic = URL.createObjectURL(this.images);
       this.editUser.images = this.images;
     },
+    async getCountries() {
+      const { data } = await useFetch('generals/countries', {
+        baseURL: this.config.public.API
+      })
+      const res = data._value.results.data;
+      this.countries.push(res);
+    },
     async updateUser() {
-      const form = new FormData();
-      form.append('user_id', this.editUser.editUserData.user_id);
-      form.append('email', this.editUser.editUserData.email)
-      form.append('name', this.editUser.editUserData.name);
-      form.append('lastname', this.editUser.editUserData.lastname);
-      form.append('birthdate', this.editUser.editUserData.birthdate);
-      form.append('country_id', this.editUser.editUserData.country_id);
-      form.append('cellphone', this.editUser.editUserData.cellphone);
-      form.append('phone', this.editUser.editUserData.phone);
-      form.append('profile_pic', this.editUser.images);
+      this.form.append('user_id', this.editUser.editUserData.user_id);
+      this.form.append('email', this.editUser.editUserData.email)
+      this.form.append('name', this.editUser.editUserData.name);
+      this.form.append('lastname', this.editUser.editUserData.lastname);
+      this.form.append('birthdate', this.editUser.editUserData.birthdate);
+      this.form.append('country_id', this.editUser.editUserData.country_id);
+      this.form.append('cellphone', this.editUser.editUserData.cellphone);
+      this.form.append('phone', this.editUser.editUserData.phone);
 
       await useFetch(useRuntimeConfig().API+'users/update?_method=PUT',{
         method: 'POST',
-        body: form,
+        body: this.form,
         headers: {
           'Authorization': 'Bearer ' + this.editUser.user.token,
           'Accept': 'application/json',
@@ -279,6 +231,7 @@ export default {
   },
   created() {
     this.user.getProfile();
+    this.getCountries();
   }
 }
 </script>
