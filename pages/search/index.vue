@@ -41,7 +41,18 @@
           <MoleculesProperty :is-favorite="false" :property="property" />
         </li>
       </ul>
-      <p v-if="pending">Cargando</p>
+      <div v-if="pending">
+        <h6 class="text-4xl text-blue-100 font-bold mb-4 text-center">No hemos encontramos propiedades <br/>con estos resultados</h6>
+      </div>
+      <div v-if="testProperty[0].length === 0">
+        <figure class="mb-4">
+          <img src="/img/not-found.png" class="object-contain max-w-[308px] mx-auto" />
+        </figure>
+        <h6 class="text-4xl text-blue-100 font-bold mb-4 text-center">No hemos encontramos propiedades <br/>con estos resultados</h6>
+        <div class="flex justify-center mb-4">
+          <AtomsButtons class="mx-auto">Borrar filtros</AtomsButtons>
+        </div>
+      </div>
       <!-- Pagination -->
       <!-- <ul class="flex items-center gap-2 mt-16 justify-center">
         <li>
@@ -79,13 +90,15 @@ let testProperty = reactive([]);
 let showFilters = ref(false)
 const viewport = useViewport();
 
-const { data, pending } = await useFetch('advertisements/search?type=All', {
+const { data, pending } = await useFetch('advertisements/search', {
   method: 'GET',
   baseURL: config.public.API,
-  transform:(_data) => _data.results.data
+  transform:(_data) => _data.results.data,
+  query: route.query
 });
 
 testProperty.push(data.value);
+
 function getFilterResults(e) {
   test = e;
 }

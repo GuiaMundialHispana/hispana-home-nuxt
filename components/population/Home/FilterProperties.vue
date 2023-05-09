@@ -1,6 +1,11 @@
 <template>
   <div class="absolute left-0 bottom-[-6%] text-[#232323] z-10">
-    <MoleculesFilterStatusProperties class="filterStatus-tabs-lg"/>
+    <!-- <MoleculesFilterStatusProperties class="filterStatus-tabs-lg"/> -->
+    <div class="flex items-center overflow-hidden rounded-lg border-2 border-gray-100 bg-neutral-white text-[#232323] shadow-sm w-fit flex-none filterStatus-tabs-lg">
+      <AtomsButtons class="btn" @click="getPath = '/search?type=All', getType = 'All'">Todo</AtomsButtons>
+      <AtomsButtons class="btn" @click="getPath = '/sales?type=Sale',  getType = 'Sale'">Compra</AtomsButtons>
+      <AtomsButtons class="btn" @click="getPath = '/rent?type=Rent', getType = 'Rent'">Rentar</AtomsButtons>
+    </div>
     <div class="filter-home-wrapper" v-if="ready">
       <div class="h-full flex justify-center">
         <button class="filter-btn" @click="toggleList('location')">
@@ -34,10 +39,10 @@
               </label>
             </div>
           </OnClickOutside>
-          <button class="sector-filter-btn" :class="{'active': dropdownLists.sector}" @click="toggleList('sector')">
+          <button v-if="states.length > 0" class="sector-filter-btn" :class="{'active': dropdownLists.sector}" @click="toggleList('sector')">
             Sector <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16 />
           </button>
-          <OnClickOutside @trigger="toggleList('sector')" v-if="dropdownLists.sector" >
+          <OnClickOutside @trigger="toggleList('sector')" v-if="dropdownLists.sector">
             <div class="dropdown-wrapper scrollbar mt-[5px] min-h-max max-h-[273px]">
               <label class="checkbox-labels" :for="sector.name" v-for="sector in states" :key="sector">
                 <input
@@ -52,7 +57,7 @@
               </label>
             </div>
           </OnClickOutside>
-          <button class="sector-filter-btn" :class="{'active': dropdownLists.city}" @click="toggleList('city')">
+          <button v-if="cities.length > 0" class="sector-filter-btn" :class="{'active': dropdownLists.city}" @click="toggleList('city')">
             Ciudad <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16></AtomsIcon>
           </button>
           <OnClickOutside @trigger="toggleList('city')" v-if="dropdownLists.city" >
@@ -179,9 +184,9 @@ export default {
       showBarMaxValue:0,
       countries: null,
       country_id:0,
-      cities :null,
+      cities:[],
       city_id:0,
-      states:null,
+      states:[],
       state_id:0,
       picked:'USD',
       price:'',
@@ -190,7 +195,9 @@ export default {
       parkingLotQuantity:0,
       status:'',
       queryBody: {},
-      ready: false
+      getPath: '/search?type=All',
+      getType: 'All',
+      ready: true
     }
   },
   components: {
@@ -212,65 +219,50 @@ export default {
       } else { this.dropdownLists[list] = true; }
     },
     async getCountries() {
-      const { data: countriesApi } = await useFetch('generals/countries', {
-        method: 'GET',
-        baseURL: this.config.public.API,
-        transform:(_countriesApi) => _countriesApi.results.data
-      });
-      this.countries = countriesApi;
+      const countriesApi =  await $fetch(this.config.public.API+'generals/countries');
+      this.countries = countriesApi.results.data;
     },
     async getStates(country_id) {
-      const { data:statesApi } = await useFetch('generals/states/'+`${country_id}`, {
-        method: 'GET',
-        baseURL: this.config.public.API,
-        transform:(_statesApi) => _statesApi.results.data
-      })
-      this.states = statesApi;
+      const statesApi =  await $fetch(this.config.public.API+'generals/states/'+`${country_id}`);
+      this.states = statesApi.results.data;
     }, 
     async getCities(state_id) {
-      const { data:citiesApi } = await useFetch('generals/cities/'+`${state_id}`, {
-        method: 'GET',
-        baseURL: this.config.public.API,
-        transform:(_citiesApi) => _citiesApi.results.data
-      })
-      this.cities = citiesApi;
+      const citiesApi =  await $fetch(this.config.public.API+'generals/cities/'+`${state_id}`);
+      this.cities = citiesApi.results.data;
     },
     async searchProperties() {
-      const { data } = await useFetch('advertisements/search?type=All', {
-        method: 'GET',
-        baseURL: this.config.public.API,
-        transform:(_data) => _data.results.data,
-        query: this.queryBody
+      useRouter().push({
+        path: this.getPath, 
+        query: this.queryBody 
       })
-      useRouter().push({path: '/search?type=All', query: this.queryBody })
     }
   },
   watch: {
     picked(newPicked) {
       this.queryBody.price_type = newPicked;
-      this.$emit('sendProperties', this.queryBody);
     },
     price(price) {
       this.queryBody.price = price;
-      this.$emit('sendProperties', this.queryBody);
     },
     country_id(country_id) {
       this.getStates(this.country_id);
       this.queryBody.country_id = country_id;
-      this.$emit('sendProperties', this.queryBody);
     },
-    state(state_id) {
+    state_id(state_id) {
       this.getCities(this.state_id);
       this.queryBody.town_id = state_id;
-      this.$emit('sendProperties', this.queryBody);
     },
     city_id(city_id) {
       this.queryBody.city_id = city_id;
-      this.$emit('sendProperties', this.queryBody);
     },
+    getType(route) {
+      console.log(route)
+      this.queryBody.type = route;
+    }
   },
   mounted() {
     this.getCountries();
+    this.queryBody.type = this.getType;
     this.queryBody.price_type = this.picked;
   }
 }
@@ -304,6 +296,15 @@ export default {
 }
 
 /*  */
+
+.filterStatus-tabs-lg {
+  .btn { @apply flex items-center text-neutral-black border-none bg-neutral-white relative before:w-0.5 before:h-3/4 before:bg-primary-100 before:block before:absolute before:left-0 before:top-1/2 before:-translate-y-2/4 hover:bg-primary-90 hover:text-neutral-white hover:before:hidden first:before:hidden rounded-none !important;
+    &.active {
+      @apply bg-primary-100 text-neutral-white before:hidden font-semibold !important;
+      & + button { @apply before:hidden !important }
+    }
+  }
+}
 .price-btn {
   @apply cursor-pointer select-none flex items-center font-normal text-xs;
 
