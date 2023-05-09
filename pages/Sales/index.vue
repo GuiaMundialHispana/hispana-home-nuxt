@@ -90,10 +90,11 @@ let testProperty = reactive([]);
 let showFilters = ref(false)
 const viewport = useViewport();
 
-const { data, pending } = await useFetch('advertisements/search?type=Sale', {
+const { data, pending } = await useFetch('advertisements/search', {
   method: 'GET',
   baseURL: config.public.API,
-  transform:(_data) => _data.results.data
+  transform:(_data) => _data.results.data,
+  query: route.query
 });
 
 testProperty.push(data.value);
