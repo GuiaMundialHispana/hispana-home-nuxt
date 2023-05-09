@@ -1,13 +1,7 @@
 <template>
   <div class="absolute left-0 bottom-[-6%] text-[#232323] z-10">
-    <MoleculesFilterStatusProperties
-      @send-route="getRoute"
-      class="filterStatus-tabs-lg"
-    />
-  </div>
-</template>
-<!-- 
-<div class="filter-home-wrapper">
+    <MoleculesFilterStatusProperties class="filterStatus-tabs-lg"/>
+    <div class="filter-home-wrapper" v-if="ready">
       <div class="h-full flex justify-center">
         <button class="filter-btn" @click="toggleList('location')">
           <div class="icon-container">
@@ -27,7 +21,6 @@
           </button>
           <OnClickOutside @trigger="toggleList('country')" v-if="dropdownLists.country">
             <div class="dropdown-wrapper scrollbar mt-[5px] min-h-max max-h-[273px]">
-              {{ country_id }}
               <label class="checkbox-labels" :for="country.name" v-for="country in countries" :key="country">
                 <input
                   type="radio"
@@ -46,7 +39,6 @@
           </button>
           <OnClickOutside @trigger="toggleList('sector')" v-if="dropdownLists.sector" >
             <div class="dropdown-wrapper scrollbar mt-[5px] min-h-max max-h-[273px]">
-              {{ state_id }}
               <label class="checkbox-labels" :for="sector.name" v-for="sector in states" :key="sector">
                 <input
                   type="radio"
@@ -65,7 +57,6 @@
           </button>
           <OnClickOutside @trigger="toggleList('city')" v-if="dropdownLists.city" >
             <div class="dropdown-wrapper scrollbar mt-[5px] min-h-max max-h-[273px]">
-              {{ city_id }}
               <label class="checkbox-labels" :for="city.name" v-for="city in cities" :key="city">
                 <input
                   type="radio"
@@ -81,7 +72,8 @@
           </OnClickOutside>
         </OnClickOutside>
       </div>
-      <span class="buttons-separation" v-if="categories.length > 0"></span>
+      <!-- Categoria -->
+      <!-- <span class="buttons-separation" v-if="categories.length > 0"></span>
       <div class="flex justify-center" v-if="categories.length > 0">
         <button class="filter-btn" :class="{'active': dropdownLists.propertyType}" @click="toggleList('propertyType')">
           <div class="icon-container">
@@ -107,9 +99,11 @@
                 :id="country.name"
               >
               {{ country.name }}
+            </label>
           </div>
         </OnClickOutside>
-      </div>
+      </div> -->
+      <!-- Precio -->
       <span class="buttons-separation"></span>
       <div class="h-full flex justify-center">
         <button class="filter-btn" :class="{'active': dropdownLists.priceRange}" @click="toggleList('priceRange')">
@@ -155,30 +149,48 @@
       <button class="filter-btn rounded-btn" @click="searchProperties()">
         <AtomsIcon class="text-neutral-white" name="general/search" :size=22 />
       </button>
-    </div> -->
+    </div>
+  </div>
+</template>
 
-<!-- <script setup>
+<script setup>
   import { OnClickOutside } from '@vueuse/components';
 </script>
+
 <script>
-import MultiRangeSlider from "multi-range-slider-vue";
-export default{
+import  MultiRangeSlider  from "multi-range-slider-vue";
+export default {
   data() {
     return {
+      route: useRoute(),
+      config:useRuntimeConfig(),
       dropdownLists: {
         location: false,
         propertyType: false,
         priceRange: false,
+        country: false,
         city: false,
         municipality: false, 
         sector: false,
       },
-      currencyTab: true,
-      currency: "RD$",
-      barMinValue: 0,
-      barMaxValue: 40000000,
-      showBarMinValue: "0",
-      showBarMaxValue: "40,000,000",
+      barMinValue:0,
+      barMaxValue:1000000,
+      showBarMinValue: 0,
+      showBarMaxValue:0,
+      countries: null,
+      country_id:0,
+      cities :null,
+      city_id:0,
+      states:null,
+      state_id:0,
+      picked:'USD',
+      price:'',
+      bedroomQuantity:0,
+      bathroomQuantity:0,
+      parkingLotQuantity:0,
+      status:'',
+      queryBody: {},
+      ready: false
     }
   },
   components: {
@@ -188,142 +200,83 @@ export default{
     UpdateValues(e) {
       this.barMinValue = e.minValue;
       this.barMaxValue = e.maxValue;
-      this.showBarMinValue = this.barMinValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      this.showBarMaxValue = this.barMaxValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    },
-    changeCurrency(){
-      if(this.currencyTab === true){
-        this.currencyTab = false;
-        this.currency = "USD$"
-      }else{
-        this.currencyTab = true;
-        this.currency = "RD$"
-      }
+      this.showBarMinValue = this.barMinValue.toString();
+      this.showBarMaxValue = this.barMaxValue.toString();
+      this.price = this.showBarMinValue + '-' + this.showBarMaxValue;
     },
     toggleList(list) {
       if (this.dropdownLists[list]) {
         setTimeout(() => {
           this.dropdownLists[list] = false;
         }, 50);
-      }else{
-          this.dropdownLists[list] = true;
-      }
+      } else { this.dropdownLists[list] = true; }
     },
+    async getCountries() {
+      const { data: countriesApi } = await useFetch('generals/countries', {
+        method: 'GET',
+        baseURL: this.config.public.API,
+        transform:(_countriesApi) => _countriesApi.results.data
+      });
+      this.countries = countriesApi;
+    },
+    async getStates(country_id) {
+      const { data:statesApi } = await useFetch('generals/states/'+`${country_id}`, {
+        method: 'GET',
+        baseURL: this.config.public.API,
+        transform:(_statesApi) => _statesApi.results.data
+      })
+      this.states = statesApi;
+    }, 
+    async getCities(state_id) {
+      const { data:citiesApi } = await useFetch('generals/cities/'+`${state_id}`, {
+        method: 'GET',
+        baseURL: this.config.public.API,
+        transform:(_citiesApi) => _citiesApi.results.data
+      })
+      this.cities = citiesApi;
+    },
+    async searchProperties() {
+      const { data } = await useFetch('advertisements/search?type=All', {
+        method: 'GET',
+        baseURL: this.config.public.API,
+        transform:(_data) => _data.results.data,
+        query: this.queryBody
+      })
+      useRouter().push({path: '/search?type=All', query: this.queryBody })
+    }
+  },
+  watch: {
+    picked(newPicked) {
+      this.queryBody.price_type = newPicked;
+      this.$emit('sendProperties', this.queryBody);
+    },
+    price(price) {
+      this.queryBody.price = price;
+      this.$emit('sendProperties', this.queryBody);
+    },
+    country_id(country_id) {
+      this.getStates(this.country_id);
+      this.queryBody.country_id = country_id;
+      this.$emit('sendProperties', this.queryBody);
+    },
+    state(state_id) {
+      this.getCities(this.state_id);
+      this.queryBody.town_id = state_id;
+      this.$emit('sendProperties', this.queryBody);
+    },
+    city_id(city_id) {
+      this.queryBody.city_id = city_id;
+      this.$emit('sendProperties', this.queryBody);
+    },
+  },
+  mounted() {
+    this.getCountries();
+    this.queryBody.price_type = this.picked;
   }
 }
-</script> -->
-
-<script setup>
-import { OnClickOutside } from '@vueuse/components';
-import  MultiRangeSlider  from "multi-range-slider-vue";
-
-MultiRangeSlider;
-const config = useRuntimeConfig();
-let propertyType = ref('/search');
-let dropdownLists = ref({
-  location: false,
-  propertyType: false,
-  priceRange: false,
-  country: false,
-  city: false,
-  municipality: false, 
-  sector: false,
-})
-let barMinValue = ref(0);
-let barMaxValue = ref(40000000);
-let showBarMinValue =  ref(0);
-let showBarMaxValue = ref(0);
-let countries;
-let country_id = ref(63);
-let cities;
-let city_id = ref(0);
-let states;
-let state_id = ref(0);
-let picked = ref('USD');
-let price = ref('');
-const param1 = ref('value1')
-
-function getRoute(e) {
-  propertyType = e;
-  console.log(propertyType)
-}
-
-function UpdateValues(e) {
-  barMinValue = e.minValue;
-  barMaxValue = e.maxValue;
-  showBarMinValue.value = barMinValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  showBarMaxValue.value = barMaxValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  price = showBarMinValue.value+"-"+showBarMaxValue.value;
-  // console.log(showBarMaxValue,showBarMinValue)
-  console.log(price)
-};
-
-console.log(price)
-
-function toggleList(list) {
-  if (this.dropdownLists[list]) {
-    setTimeout(() => {
-      this.dropdownLists[list] = false;
-    }, 50);
-  }else{
-      this.dropdownLists[list] = true;
-  }
-};
-
-async function getCountries() {
-  const { data: countriesApi } = await useFetch('generals/countries', {
-    method: 'GET',
-    baseURL: config.public.API,
-    transform:(_countriesApi) => _countriesApi.results.data
-  });
-  countries = countriesApi;
-  getStates(63);
-  //
-}
-
-async function getStates(country_id) {
-  const { data:statesApi } = await useFetch('generals/states/'+`${country_id}`, {
-    method: 'GET',
-    baseURL: config.public.API,
-    transform:(_statesApi) => _statesApi.results.data
-  })
-  states = statesApi;
-  getCities(1074);
-  //
-};
-
-async function getCities(state_id) {
-  const { data:citiesApi } = await useFetch('generals/cities/'+`${state_id}`, {
-    method: 'GET',
-    baseURL: config.public.API,
-    transform:(_citiesApi) => _citiesApi.results.data
-  })
-  cities = citiesApi;
-  //
-};
-
-const { data:categories, pending, error } = await useFetch('generals/categories', {
-  method: 'GET',
-  baseURL: config.public.API,
-  transform:(_categories) => _categories.results
-})
-
-async function searchProperties() {
-  const { data } = await useFetch('advertisements/search?bedroom=4', {
-    method: 'GET',
-    baseURL: config.public.API,
-  })
-  console.log(data)
-};
-
-// onBeforeMount(()=>{
-//   getCountries();
-// });
-
 </script>
 
 <style lang="postcss" scoped>
-
 .filter-home-wrapper {
   @apply overflow-hidden flex items-center w-fit h-[101px] bg-neutral-white rounded-2xl shadow-xl mt-3;
 }

@@ -1,197 +1,5 @@
-<!-- <template>
-  <div class="flex justify-end 2xl:justify-start">
-    <AtomsButtons
-      v-show="viewport.isLessThan('2xl')"
-      class="mt-5 font-semibold"
-      icon-position="right"
-      btn-style="solid-primary" 
-      icon-name="general/search"
-      btn-size="large"
-      :icon-size=18
-      @click="showFilters = !showFilters"
-      >Filtrar propiedades
-    </AtomsButtons>
-    <OnClickOutside @trigger="showFilters = false" :class="{'hidden': !showFilters, 'flex' : showFilters}" class="filters-overflow">
-      <AtomsButtons 
-        v-show="viewport.isLessThan('2xl')"
-        class="flex-none"
-        btn-style="outline-gray" 
-        btn-type="btn-icon"
-        icon-name="general/close"
-        btn-size="xsmall"
-        :icon-size=20
-        @click="showFilters = false"
-      />
-      <MoleculesFilterStatusProperties class="filterStatus-tabs-sm mx-auto" />
-      <div class="filter-content flex-row relative">
-        <div class="w-full mx-auto sm:w-[230px] 2xl:w-fit">
-          <button class="flex gap-2.5 filter-btn w-full" @click="toggleList('location')" :class="{'active': dropdownLists.location}">
-            <AtomsIcon name="general/sector" class="text-primary-100" :size=20  />
-            <p>Sector</p>
-            <AtomsIcon name="arrows/arrow-down" class="text-primary-100" :size=15 />
-          </button>
-          <OnClickOutside @trigger="toggleList('location')" class="dropdown w-full sm:w-[230px] h-fit" v-if="dropdownLists.location">
-            <button class="filter-btn" :class="{'active': dropdownLists.city}" @click="toggleList('city')">
-              Ciudad <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16></AtomsIcon>
-            </button>
-            <OnClickOutside @trigger="toggleList('city')" v-if="dropdownLists.city">
-              <MoleculesDropDownList class="mt-[5px] h-[273px]"/>
-            </OnClickOutside>
-            <button class="filter-btn" :class="{'active': dropdownLists.municipality}" @click="toggleList('municipality')">
-              Municipio <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16 />
-            </button>
-            <OnClickOutside @trigger="toggleList('municipality')" v-if="dropdownLists.municipality">
-              <MoleculesDropDownList class="mt-[5px] h-[174px]"/>
-            </OnClickOutside>
-            <button class="filter-btn" :class="{'active': dropdownLists.sector}" @click="toggleList('sector')">
-              Sector <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16 />
-            </button>
-            <OnClickOutside @trigger="toggleList('sector')" v-if="dropdownLists.sector">
-              <MoleculesDropDownList v-if="dropdownLists.sector" class="mt-[5px] h-[273px]"/>
-            </OnClickOutside>
-          </OnClickOutside>
-        </div>
-      </div>
-      <div class="filter-content items-center">
-        <button class="flex gap-2.5 filter-btn" @click="toggleList('propertyType')" :class="{'active': dropdownLists.propertyType}">
-          <AtomsIcon name="general/property" class="text-primary-100" :size=20  />
-          <p>Inmueble</p>
-          <AtomsIcon name="arrows/arrow-down" class="text-primary-100" :size=15 />
-        </button>
-        <OnClickOutside @trigger="toggleList('propertyType')" v-if="dropdownLists.propertyType" class="h-[273px] w-full 2xl:w-[205px]">
-          <MoleculesDropDownList :class="importedDropdownLists" />
-        </OnClickOutside>
-      </div>
-      <div class="filter-content">
-        <button class="flex gap-2.5 filter-btn" @click="toggleList('bedroom')" :class="{'active': dropdownLists.bedroom}">
-          <AtomsIcon name="general/bed" class="text-primary-100" :size=20  />
-          <p>Habitaciones</p>
-          <AtomsIcon name="arrows/arrow-down" class="text-primary-100" :size=15 />
-        </button>
-        <OnClickOutside @trigger="toggleList('bedroom')"  v-if="dropdownLists.bedroom"  class="dropdown text-sm leading-[22px] 2xl:absolute top-[95%] mt-[5px] h-fit 2xl:w-[220px] w-full" >
-          <p class="mb-[5px]">Cantidad de habitaciones</p>
-          <div class="flex flex-nowrap">
-            <label class="property-quantity-btn" :class="{'active':(bedroomQuantity == 1)}">
-              <input type="radio" value=1 v-model="bedroomQuantity">1
-            </label>
-            <label class="property-quantity-btn" :class="{'active': (bedroomQuantity == 2)}">
-              <input type="radio" value=2 v-model="bedroomQuantity">2
-            </label>
-            <label class="property-quantity-btn" :class="{'active': (bedroomQuantity == 3)}">
-              <input type="radio" value=3 v-model="bedroomQuantity">3
-            </label>
-            <label class="property-quantity-btn" :class="{'active': (bedroomQuantity == 4)}">
-              <input type="radio" value=4 v-model="bedroomQuantity">4<span class="text-primary-100">+</span>
-            </label>
-          </div>
-        </OnClickOutside>
-      </div>
-      <div class="filter-content">
-        <button class="flex gap-2.5 filter-btn" @click="toggleList('bathroom')" :class="{'active': dropdownLists.bathroom}">
-          <AtomsIcon name="general/bathtub" class="text-primary-100" :size=20  />
-          <p>Baños</p>
-          <AtomsIcon name="arrows/arrow-down" class="text-primary-100" :size=15 />
-        </button>
-        <OnClickOutside @trigger="toggleList('bathroom')" v-if="dropdownLists.bathroom"  class="dropdown text-sm leading-[22px] 2xl:absolute top-[95%] mt-[5px] h-fit w-full 2xl:w-[170px]" >
-          <p class="mb-[5px]">Cantidad de baños</p>
-          <div class="flex flex-nowrap">
-            <label class="property-quantity-btn" :class="{'active':(bathroomQuantity == 1)}">
-              <input type="radio" value=1 v-model="bathroomQuantity">1
-            </label>
-            <label class="property-quantity-btn" :class="{'active': (bathroomQuantity == 2)}">
-              <input type="radio" value=2 v-model="bathroomQuantity">2
-            </label>
-            <label class="property-quantity-btn" :class="{'active': (bathroomQuantity == 3)}">
-              <input type="radio" value=3 v-model="bathroomQuantity">3<span class="text-primary-100">+</span>
-            </label>
-          </div>
-        </OnClickOutside>
-      </div>
-      <div class="filter-content">
-        <button class="flex relative gap-2.5 filter-btn" @click="toggleList('parkingLot')" :class="{'active': dropdownLists.parkingLot}">
-          <AtomsIcon name="general/car" class="text-primary-100" :size=20  />
-          <p>Parqueo</p>
-          <AtomsIcon name="arrows/arrow-down" class="text-primary-100" :size=15 />
-        </button>
-        <OnClickOutside @trigger="toggleList('parkingLot')" v-if="dropdownLists.parkingLot" class="dropdown text-sm leading-[22px] 2xl:absolute top-[95%] mt-[5px] h-fit w-full 2xl:w-[190px]" >
-          <p class="mb-[5px]">Cantidad de parqueos</p>
-          <div class="flex">
-            <label class="property-quantity-btn" :class="{'active':(parkingLotQuantity == 1)}">
-              <input type="radio" value=1 v-model="parkingLotQuantity">1
-            </label>
-            <label class="property-quantity-btn" :class="{'active': (parkingLotQuantity == 2)}">
-              <input type="radio" value=2 v-model="parkingLotQuantity">2
-            </label>
-            <label class="property-quantity-btn" :class="{'active': (parkingLotQuantity == 3)}">
-              <input type="radio" value=3 v-model="parkingLotQuantity">3<span class="text-primary-100">+</span>
-            </label>
-          </div>
-        </OnClickOutside>
-      </div>
-      <div class="filter-content">
-        <button class="flex gap-2.5 filter-btn" @click="toggleList('priceRange')" :class="{'active': dropdownLists.priceRange}">
-          <AtomsIcon name="general/price" class="text-primary-100" :size=20  />
-          <p>Rango de precio</p>
-          <AtomsIcon name="arrows/arrow-down" class="text-primary-100" :size=15 />
-        </button>
-        <OnClickOutside @trigger="toggleList('priceRange')" v-if="dropdownLists.priceRange" class="dropdown 2xl:w-[238px] w-full h-fit">
-          <div class="flex justify-between">
-            <label class="text-sm leading-[22px]" for="price">Precio</label>
-            <div class="flex items-center">
-              <button class="price-btn border-l rounded-l-sm" :class="{'active': currencyTab}" @click="changeCurrency">RD</button>
-              <button class="price-btn border-r rounded-r-sm" :class="{'active': !currencyTab}" @click="changeCurrency">USD</button>
-            </div>
-          </div>
-          <div>
-            <MultiRangeSlider class="mx-auto mt-[14px] md:w-[200px] w-[300px]"
-              baseClassName="multi-range-slider-bar-only"
-              :min="0"
-              :max="55000000"
-              :step="500000"
-              :ruler="false"
-              :label="false"
-              :minValue="barMinValue"
-              :maxValue="barMaxValue"
-              @input="UpdateValues"
-            />
-          </div>
-          <div class="flex flex-col item-center justify-center mt-2.5">
-            <p class="mx-auto text-sm font-medium">Desde {{currency}}{{ showBarMinValue }}</p>
-            <p class="mx-auto text-sm font-medium">Hasta {{currency}}{{ showBarMaxValue }} +</p>
-          </div>
-        </OnClickOutside>
-      </div>
-      <div class="filter-content" :class="{'modal-open': dropdownLists.status}">
-        <button class="flex gap-2.5 filter-btn" @click="toggleList('status')" :class="{'active': dropdownLists.status}">
-          <AtomsIcon name="general/status" class="text-primary-100" :size=20  />
-          <p>Estado</p>
-          <AtomsIcon name="arrows/arrow-down" class="text-primary-100" :size=15 />
-        </button>
-        <OnClickOutside @trigger="toggleList('status')" v-if="dropdownLists.status">
-          <MoleculesDropDownList class="h-[174px] 2xl:w-[168px]" :class="importedDropdownLists" />
-        </OnClickOutside>
-      </div>
-      <div class="filter-content">
-        <button class="flex gap-2.5 filter-btn" @click="toggleList('other')" :class="{'active': dropdownLists.other}">
-          <AtomsIcon name="general/tune" class="text-primary-100" :size=20  />
-          <p>Otros</p>
-          <AtomsIcon name="arrows/arrow-down" class="text-primary-100" :size=15 />
-        </button>
-        <OnClickOutside @trigger="toggleList('other')" v-if="dropdownLists.other">
-          <MoleculesDropDownList class="h-fit 2xl:w-[205px]" :class="importedDropdownLists"/>
-        </OnClickOutside>
-      </div>
-      <button class="flex bg-primary-100 w-full mx-auto sm:w-[230px] p-2 h-12 2xl:w-10 2xl:h-10 rounded-full items-center justify-center hover:bg-primary-90 border-primary-100 border flex-none text-neutral-white">
-        <p class="2xl:hidden mr-3 font-semibold">Buscar propiedades</p>
-        <AtomsIcon name="general/search" :size=17  />
-      </button>
-    </OnClickOutside>
-  </div>
-</template> -->
-
 <template>
   <div class="flex flex-wrap gap-2 xl:flex-row flex-col">
-    <!-- <MoleculesFilterStatusProperties class="filterStatus-tabs-sm mx-auto" /> -->
     <!-- Direccion -->
     <div class="filter-content flex-row relative">
       <button class="flex gap-2.5 filter-btn w-full" @click="toggleList('location')" :class="{'active': dropdownLists.location}">
@@ -497,43 +305,41 @@ export default {
     },
     bedroomQuantity(bedroomQuantity) {
       this.queryBody.bedroom = bedroomQuantity;
-      // this.queryBody.type = this.route.query.type;
       this.$emit('sendProperties', this.queryBody);
     },
     bathroomQuantity(bathroomQuantity) {
       this.queryBody.bedroom = bathroomQuantity;
-      // this.queryBody.type = this.route.query.type;
-       this.$emit('sendProperties', this.queryBody);
+      this.$emit('sendProperties', this.queryBody);
     },
     parkingLotQuantity(parkingLotQuantity) {
       this.queryBody.parking = parkingLotQuantity;
-       this.$emit('sendProperties', this.queryBody);
+      this.$emit('sendProperties', this.queryBody);
     },
     status(status) {
       this.queryBody.status = status;
-       this.$emit('sendProperties', this.queryBody);
+      this.$emit('sendProperties', this.queryBody);
     },
     country_id(country_id) {
       this.getStates(this.country_id);
       this.queryBody.country_id = country_id;
       this.$emit('sendProperties', this.queryBody);
     },
-    state(state) {
+    state(state_id) {
       this.getCities(this.state_id);
       this.queryBody.town_id = state_id;
       this.$emit('sendProperties', this.queryBody);
     },
     city_id(city_id) {
       this.queryBody.city_id = city_id;
-       this.$emit('sendProperties', this.queryBody);
+      this.$emit('sendProperties', this.queryBody);
     },
     picked(picked) {
       this.queryBody.price_type = picked;
-       this.$emit('sendProperties', this.queryBody);
+      this.$emit('sendProperties', this.queryBody);
     },
     price(price) {
       this.queryBody.price = price;
-       this.$emit('sendProperties', this.queryBody);
+      this.$emit('sendProperties', this.queryBody);
     }
   },
   mounted() {
