@@ -355,7 +355,8 @@ export default {
       previewImages: [],
       lat: null,
       long: null,
-      address:''
+      address:'',
+      errorList: []
     }
   },
   methods: {
@@ -396,11 +397,6 @@ export default {
       this.lat = lant;
       this.long = long;
       this.address = location;
-      // console.log(this.address)
-      // console.log(this.lat)
-      // console.log(this.long)
-      // console.log(this.address)
-
     },
     async getPlans() {
       const { data }  = await useFetch(useRuntimeConfig().API+'generals/plans');
@@ -452,6 +448,7 @@ export default {
       form.append('latitude', this.lat);
       form.append('longitude', this.long);
       form.append('property_status', this.property_status);
+      form.append('features', this.ameniti);
       form.append('image', this.$refs.file.files[0]);
       
       for (var i = 0; i < this.$refs.file.files.length; i++ ) {
@@ -472,7 +469,7 @@ export default {
             Swal.fire({
               icon: 'error',
               html:
-              `<ul><li>${res[i][0]}</li><ul>`,
+              `<ul><li>${res[i]}</li><ul>`,
             });
           }
         },
@@ -491,27 +488,18 @@ export default {
       });
     },
     async getCountries() {
-      const { data } = await useFetch('generals/countries', {
-        baseURL: this.config.public.API
-      })
-      const res = data._value.results.data;
-      this.countries.push(res);
+      const countriesApi = await $fetch(this.config.public.API+'generals/countries');
+      this.countries.push(countriesApi.results.data);
     },
     async getStates(country_id) {
-      const { data } = await useFetch('generals/states/'+`${country_id}`, {
-        baseURL: this.config.public.API,
-      })
-      const res = data._value.results.data;
+      const statesApi = await $fetch(this.config.public.API+'generals/states/'+`${country_id}`);
       this.sectors.splice(0,1);
-      this.sectors.push(res);
+      this.sectors.push(statesApi.results.data);
     },
     async getCities(sector_id) {
-      const { data } = await useFetch('generals/cities/'+`${sector_id}`, {
-        baseURL: this.config.public.API,
-      })
-      const res = data._value.results.data;
+      const citiesApi = await $fetch(this.config.public.API+'generals/cities/'+`${sector_id}`);
       this.cities.splice(0,1);
-      this.cities.push(res)
+      this.cities.push(citiesApi.results.data)
     },
   },
   computed: {

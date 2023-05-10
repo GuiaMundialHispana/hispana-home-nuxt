@@ -1,8 +1,10 @@
 <template>
-	<PopulationHomeHero />
-	<PopulationHomeVipProperties />
-	<PopulationHomeSilverProperties />
-	<PopulationHomeExclusiveProperties />
-	<PopulationHomeBenefits />
-	<OrganismExploreProperties />
+	<div>
+		<PopulationHomeHero />
+		<PopulationHomeVipProperties />
+		<PopulationHomeSilverProperties />
+		<PopulationHomeExclusiveProperties />
+		<PopulationHomeBenefits />
+		<OrganismExploreProperties />
+	</div>
 </template>

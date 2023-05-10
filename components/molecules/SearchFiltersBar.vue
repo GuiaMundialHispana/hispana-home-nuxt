@@ -27,7 +27,7 @@
           </div>
         </OnClickOutside>
         <!--  -->
-        <button class="sector-filter-btn" :class="{'active': dropdownLists.sector}" @click="toggleList('sector')">
+        <button v-if="states.length > 0" class="sector-filter-btn" :class="{'active': dropdownLists.sector}" @click="toggleList('sector')">
           Sector <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16 />
         </button>
         <OnClickOutside @trigger="toggleList('sector')" v-if="dropdownLists.sector">
@@ -46,7 +46,7 @@
           </div>
         </OnClickOutside>
         <!--  -->
-        <button class="sector-filter-btn" :class="{'active': dropdownLists.city}" @click="toggleList('city')">
+        <button v-if="cities.length > 0" class="sector-filter-btn" :class="{'active': dropdownLists.city}" @click="toggleList('city')">
           Ciudad <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16></AtomsIcon>
         </button>
         <OnClickOutside @trigger="toggleList('city')" v-if="dropdownLists.city">
@@ -84,7 +84,7 @@
         <p>Habitaciones</p>
         <AtomsIcon name="arrows/arrow-down" class="text-primary-100" :size=15 />
       </button>
-      <OnClickOutside @trigger="toggleList('bedroom')"  v-if="dropdownLists.bedroom"  class="dropdown text-sm leading-[22px] 2xl:absolute top-[95%] mt-[5px] h-fit 2xl:w-[220px] w-full" >
+      <OnClickOutside @trigger="toggleList('bedroom')" v-if="dropdownLists.bedroom" class="dropdown text-sm leading-[22px] 2xl:absolute top-[95%] mt-[5px] h-fit 2xl:w-[220px] w-full" >
         <p class="mb-[5px]">Cantidad de habitaciones</p>
         <div class="flex flex-nowrap">
           <label class="property-quantity-btn" :class="{'active':(bedroomQuantity == 1)}">
@@ -182,7 +182,6 @@
         </p>
       </OnClickOutside>
     </div>
-    <!-- PropertyStatus (recuerda que la primera letra se debe enviar en mayuscula) -->
     <div class="filter-content" :class="{'modal-open': dropdownLists.status}">
       <button class="flex gap-2.5 filter-btn" @click="toggleList('status')" :class="{'active': dropdownLists.status}">
         <AtomsIcon name="general/status" class="text-primary-100" :size=20  />
@@ -202,6 +201,10 @@
         </div>
       </OnClickOutside>
     </div>
+    <button @click="clearFilter();" v-if="filter" class="flex items-center">
+      <p class="xl:hidden mr-3 font-semibold">Borrar filtros</p>
+      <AtomsIcon name="general/close" :size=17  />
+    </button>
     <!-- Featured -->
     <!-- <div class="filter-content" v-if="features.length > 0">
       <button class="flex gap-2.5 filter-btn" @click="toggleList('other')" :class="{'active': dropdownLists.other}">
@@ -235,6 +238,7 @@ export default {
         city: false,
         municipality: false, 
         sector: false,
+        status: false
       },
       barMinValue:0,
       barMaxValue:1000000,
@@ -242,9 +246,9 @@ export default {
       showBarMaxValue:0,
       countries: null,
       country_id:0,
-      cities :null,
+      cities:[],
       city_id:0,
-      states:null,
+      states:[],
       state_id:0,
       picked:'USD',
       price:'',
@@ -252,7 +256,8 @@ export default {
       bathroomQuantity:0,
       parkingLotQuantity:0,
       status:'',
-      queryBody: {}
+      queryBody: {},
+      filter:true
     }
   },
   components: {
@@ -274,28 +279,38 @@ export default {
       } else { this.dropdownLists[list] = true; }
     },
     async getCountries() {
-      const { data: countriesApi } = await useFetch('generals/countries', {
-        method: 'GET',
-        baseURL: this.config.public.API,
-        transform:(_countriesApi) => _countriesApi.results.data
-      });
-      this.countries = countriesApi;
+      const countriesApi = await $fetch(this.config.public.API+'generals/countries');
+      this.countries = countriesApi.results.data;
     },
     async getStates(country_id) {
-      const { data:statesApi } = await useFetch('generals/states/'+`${country_id}`, {
-        method: 'GET',
-        baseURL: this.config.public.API,
-        transform:(_statesApi) => _statesApi.results.data
-      })
-      this.states = statesApi;
+      const statesApi = await $fetch(this.config.public.API+'generals/states/'+`${country_id}`);
+      this.states = statesApi.results.data;
     }, 
     async getCities(state_id) {
-      const { data:citiesApi } = await useFetch('generals/cities/'+`${state_id}`, {
-        method: 'GET',
-        baseURL: this.config.public.API,
-        transform:(_citiesApi) => _citiesApi.results.data
-      })
-      this.cities = citiesApi;
+      const citiesApi = await $fetch(this.config.public.API+'generals/cities/'+`${state_id}`);
+      this.cities = citiesApi.results.data;
+    },
+    clearFilter() {
+      // this.price = '';
+      // this.bedroomQuantity = 0;
+      // this.bathroomQuantity = null;
+      // this.parkingLotQuantity = null;
+      // this.country_id = null;
+      // this.state_id = null;
+      // this.city_id = null;
+      // this.picked = null;
+      // this.status = null;
+      delete this.queryBody.bedroom;
+      delete this.queryBody.bathroom;
+      delete this.queryBody.parking;
+      delete this.queryBody.property_status;
+      delete this.queryBody.country_id;
+      delete this.queryBody.town_id;
+      delete this.queryBody.city_id;
+      delete this.queryBody.picked;
+      delete this.queryBody.price;
+      this.$emit('sendProperties', this.queryBody);
+
     }
   },
   watch: {
@@ -308,7 +323,7 @@ export default {
       this.$emit('sendProperties', this.queryBody);
     },
     bathroomQuantity(bathroomQuantity) {
-      this.queryBody.bedroom = bathroomQuantity;
+      this.queryBody.bathroom = bathroomQuantity;
       this.$emit('sendProperties', this.queryBody);
     },
     parkingLotQuantity(parkingLotQuantity) {
@@ -316,7 +331,7 @@ export default {
       this.$emit('sendProperties', this.queryBody);
     },
     status(status) {
-      this.queryBody.status = status;
+      this.queryBody.property_status = status;
       this.$emit('sendProperties', this.queryBody);
     },
     country_id(country_id) {
@@ -324,7 +339,7 @@ export default {
       this.queryBody.country_id = country_id;
       this.$emit('sendProperties', this.queryBody);
     },
-    state(state_id) {
+    state_id(state_id) {
       this.getCities(this.state_id);
       this.queryBody.town_id = state_id;
       this.$emit('sendProperties', this.queryBody);
@@ -350,7 +365,6 @@ export default {
 </script>
 
 <style lang="postcss" scoped>
-
 .property-quantity-btn {
   @apply m-0 w-full h-10 flex items-center justify-center border-gray-300 border-r border-t border-b first:border-l first:rounded-tl-sm first:rounded-bl-sm last:rounded-tr-sm last:rounded-br-sm hover:bg-primary-50 checked:bg-primary-50;
   &.active {
@@ -400,9 +414,9 @@ export default {
   @apply flex flex-col relative xl:w-fit;
 }
 
-.search-button {
+/* .search-button {
   @apply flex bg-primary-100 w-full mx-auto sm:w-[230px] p-2 h-12 2xl:w-10 2xl:h-10 rounded-full items-center justify-center hover:bg-primary-90 border-primary-100 border flex-none text-neutral-white;
-}
+} */
 
 .sector-filter-btn{
   @apply flex justify-between items-center w-full border-2 rounded-lg border-gray-100 mt-2.5 font-normal text-sm leading-[22px] h-10 px-2.5 first:mt-0 hover:bg-primary-50 hover:border-primary-100;
@@ -412,6 +426,6 @@ export default {
 }
 
 .dropdown{
-  @apply bg-neutral-white border-2 border-gray-100 rounded-lg p-2.5 shadow-md  2xl:absolute right-full 2xl:left-0 2xl:top-[95%] mt-[5px] mr-1.5 2xl:mr-0 z-10;
+  @apply bg-neutral-white border-2 border-gray-100 rounded-lg p-2.5 shadow-md xl:absolute min-w-[230px] right-full xl:left-0 xl:top-[95%] mt-[5px] mr-1.5 2xl:mr-0 z-10;
 }
 </style>

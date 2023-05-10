@@ -37,7 +37,7 @@
       }">
       <SwiperSlide>
         <figure class="h-52">
-          <img :src="property.image" :alt="property.name" class="object-cover h-full w-full">
+          <img :src="`https://walrus-app-e2bxo.ondigitalocean.app/${property.image}`" :alt="property.name" class="object-cover h-full w-full">
         </figure>
       </SwiperSlide>
       <AtomsPropertyPlans class="absolute bottom-0 right-0 z-10" />
