@@ -67,16 +67,21 @@
       </OnClickOutside>
     </div>
     <!-- Tipo de inmueble -->
-    <!-- <div class="filter-content items-center" v-if="categories.length > 0">
+    <div class="filter-content items-center">
       <button class="flex gap-2.5 filter-btn" @click="toggleList('propertyType')" :class="{'active': dropdownLists.propertyType}">
         <AtomsIcon name="general/property" class="text-primary-100" :size=20  />
         <p>Inmueble</p>
         <AtomsIcon name="arrows/arrow-down" class="text-primary-100" :size=15 />
       </button>
-      <OnClickOutside @trigger="toggleList('propertyType')" v-if="dropdownLists.propertyType" class="h-[273px] w-full 2xl:w-[205px]">
-        <MoleculesDropDownList :class="importedDropdownLists" />
+      <OnClickOutside @trigger="toggleList('propertyType')" v-if="dropdownLists.propertyType" class="dropdown w-full sm:w-[230px] h-fit">
+        <div class="dropdown-wrapper scrollbar border-none min-h-max max-h-[273px]">
+          <label class="checkbox-labels" :for="category.name" v-for="category in categories" :key="category">
+            <input type="radio" class="checkbox" :value="category.id" :id="category.name" v-model="selectedCategories">
+            {{category.name}}
+          </label>
+        </div>
       </OnClickOutside>
-    </div> -->
+    </div>
     <!-- Habitaciones -->
     <div class="filter-content">
       <button class="flex gap-2.5 filter-btn" @click="toggleList('bedroom')" :class="{'active': dropdownLists.bedroom}">
@@ -216,7 +221,6 @@
             {{feature.name}}
           </label>
         </div>
-        {{ seletedFeatured }}
       </OnClickOutside>
     </div>
     <button @click="clearFilter();" v-if="filter" class="flex items-center">
@@ -257,7 +261,6 @@ export default {
       cities:[],
       city_id:0,
       states:[],
-      features: [],
       state_id:0,
       picked:'USD',
       price:'',
@@ -267,7 +270,10 @@ export default {
       status:'',
       queryBody: {},
       filter:true,
-      seletedFeatured: []
+      features: [],
+      seletedFeatured: [],
+      categories: [],
+      selectedCategories: []
     }
   },
   components: {
@@ -295,7 +301,11 @@ export default {
     async getFeatures() {
       const featuresApi = await $fetch(this.config.public.API+'generals/features');
       this.features = featuresApi.results;
-      console.log(this.features)
+    },
+    async getCategories() {
+      const categoriesApi = await $fetch(this.config.public.API+'generals/categories');
+      this.categories = categoriesApi.results;
+
     },
     async getStates(country_id) {
       const statesApi = await $fetch(this.config.public.API+'generals/states/'+`${country_id}`);
@@ -324,8 +334,8 @@ export default {
       delete this.queryBody.city_id;
       delete this.queryBody.picked;
       delete this.queryBody.price;
+      delete this.queryBody.feature_ids;
       this.$emit('sendProperties', this.queryBody);
-
     }
   },
   watch: {
@@ -374,11 +384,16 @@ export default {
     seletedFeatured(newItemSelected) {
       this.queryBody.feature_ids = newItemSelected;
       this.$emit('sendProperties', this.queryBody);
+    },
+    selectedCategories(newItemSelected) {
+      this.queryBody.property_category_id = newItemSelected;
+      this.$emit('sendProperties', this.queryBody);
     }
   },
   mounted() {
     this.getCountries();
     this.getFeatures();
+    this.getCategories();
     this.queryBody.price_type = this.picked;
   }
 }
