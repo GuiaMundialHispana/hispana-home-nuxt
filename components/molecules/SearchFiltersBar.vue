@@ -303,7 +303,7 @@ export default {
       this.$emit('sendProperties', this.queryBody);
     },
     status(status) {
-      this.queryBody.status = status;
+      this.queryBody.property_status = status;
       this.$emit('sendProperties', this.queryBody);
     },
     country_id(country_id) {
