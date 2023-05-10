@@ -30,7 +30,7 @@ export default {
 </script>
 
 <style lang="postcss" scoped>
-.btn { @apply flex items-center text-neutral-black border-none bg-neutral-white relative before:w-0.5 before:h-3/4 before:bg-primary-100 before:block before:absolute before:left-0 before:top-1/2 before:-translate-y-2/4 hover:bg-primary-90 hover:text-neutral-white hover:before:hidden first:before:hidden rounded-none !important;
+.btn { @apply flex justify-center items-center text-neutral-black border-none bg-neutral-white relative before:w-0.5 before:h-3/4 before:bg-primary-100 before:block before:absolute before:left-0 before:top-1/2 before:-translate-y-2/4 hover:bg-primary-90 hover:text-neutral-white hover:before:hidden first:before:hidden rounded-none !important;
   &.active {
     @apply bg-primary-100 text-neutral-white before:hidden font-semibold !important;
     & + button { @apply before:hidden !important }

@@ -96,7 +96,6 @@ const { data, pending } = await useFetch('advertisements/search', {
   transform:(_data) => _data.results.data,
   query: route.query
 });
-
 testProperty.push(data.value);
 
 function getFilterResults(e) {
@@ -112,7 +111,6 @@ async function searchProperties() {
   })
   testProperty.splice(0,1);
   testProperty.push(data.value);
-  console.log(testProperty);
 };
 </script>
 
