@@ -1,9 +1,7 @@
 <template>
   <div class="plan-wrapper">
-    <!-- <span class="user-quantity" v-if="">1</span> -->
-    <span class="plan-category" :class="[renderPlanText]">
-      {{ plan.name }}
-    </span>
+    <span class="user-quantity">1</span>
+    <span class="plan-category" :class="[renderPlanText]">{{ plan.name }}</span>
     <ul class="plan-benefits">
       <li>
         <AtomsIcon name="general/check" :size=16 class="text-[#FFAE10] mr-2" />
@@ -26,29 +24,44 @@
         Exclusividad en página de inicio
       </li>
     </ul>
-    <AtomsButtons :isDisabled="disabledPayment" @click="payment()" v-if="$route.path != '/profile' && plan.price != 0" btn-style="outline-gray" class="w-full my-4">
-      Seleccionar
-    </AtomsButtons>
-    <AtomsButtons @click="freePlan()" v-if="$route.path != '/profile' && plan.price === 0" class="w-full my-2">
-      Seleccionar plan basico
-    </AtomsButtons>
-    <div class="action-buttons" v-if="$route.path != '/profile' && plan.price != 0">
-      <div class="cantidad">
+    <div class="action-buttons">
+      <div class="plan-quantity">
         <button @click="planQuantity--">-</button>
         <input type="number" :value="planQuantity">
         <button @click="planQuantity++">+</button>
       </div>
       <!--  -->
-      <AtomsButtons btn-size="xsmall" class="flex-none">
+      <AtomsButtons btn-size="xsmall" class="w-full">
         <span class="total-plans">{{planQuantity}}</span>
         RD$ {{ updatePrice  }}
       </AtomsButtons>
     </div>
+    <AtomsLink link-to="/payment" btn-style="outline-gray" class="my-4 w-full">
+      Comprar
+    </AtomsLink>
+    <!-- v-if="$route.path != '/profile' && plan.price != 0" -->
+    <!-- <AtomsButtons
+      :isDisabled="disabledPayment"
+      @click="payment()"
+      btn-style="outline-gray" 
+      class="w-full my-4"
+    >
+      Seleccionar
+    </AtomsButtons> -->
+    <!-- v-if="$route.path != '/profile' && plan.price === 0" -->
+    <!-- <AtomsButtons
+      @click="freePlan()" 
+      class="w-full my-2"
+    >
+      Seleccionar plan basico
+    </AtomsButtons> -->
+    <!-- v-if="$route.path != '/profile' && plan.price != 0" -->
     <p class="price"
       v-if="$route.path === '/profile'">
       <span class="text-base">
       RD$ </span>{{ plan.price  }}
     </p>
+    <!-- v-if="plan.price === 0" -->
     <p v-if="plan.price === 0" class="text-primary-100 text-3xl text-center font-semibold">
       Gratis
     </p>
@@ -61,7 +74,7 @@ export default {
     plan: {
       type: Object,
       default: () => {}
-    },
+    }
   },
   data() {
     return {
@@ -122,10 +135,12 @@ export default {
   }
 }
 </script>
+<!-- @click="payment()" -->
 
 <style lang="postcss" scoped>
+/* max-w-[345px] */
 .plan-wrapper {
-  @apply border border-gray-10 rounded-lg p-6 max-w-[345px] relative;
+  @apply border border-gray-10 rounded-lg p-6 relative;
 
   & .plan-category {
     @apply w-full rounded-lg text-neutral-white flex items-center h-10 font-semibold justify-center bg-primary-100;
@@ -139,7 +154,7 @@ export default {
   }
 
   & .plan-benefits {
-    @apply border-t border-gray-10 mt-4 pt-4;
+    @apply border-t border-gray-10 mt-4 pt-4 w-64 mx-auto;
     & li { @apply flex items-center text-sm text-neutral-black font-normal mb-6; }
     & li:last-child { @apply mb-0; }
   }
@@ -147,23 +162,23 @@ export default {
   & .price { @apply text-neutral-black text-3xl font-semibold text-center mb-4; }
 
   & .action-buttons {
-    @apply flex items-center gap-1.5 md:flex-row flex-col flex-wrap justify-center;
+    @apply flex items-center gap-1.5 md:flex-row flex-col justify-center mt-4;
 
-    & .cantidad {
-      @apply md:w-20 w-full h-8 border border-[#ADADAD] rounded-lg flex items-center justify-between px-3 py-1;
+    & .plan-quantity {
+      @apply max-w-[118px] w-full h-8 bg-neutral-white border border-[#ADADAD] rounded-lg flex items-center justify-between px-3 py-1;
 
       & input { @apply w-4 h-full text-neutral-black text-center font-semibold; }
 
       & button {
         @apply text-lg flex-grow;
-        &:disabled {
-          @apply text-gray-300 cursor-not-allowed;
-        }
+        &:disabled { @apply text-gray-300 cursor-not-allowed; }
       }
     }
   }
 
-  & .user-quantity { @apply w-9 h-9 rounded-full flex items-center justify-center absolute -top-7 -right-4 bg-primary-90 text-base text-neutral-white; }
+  & .user-quantity {
+    @apply w-9 h-9 rounded-full flex items-center justify-center absolute -top-4 -right-4 bg-primary-90 text-base text-neutral-white;
+  }
 }
 
 .total-plans {

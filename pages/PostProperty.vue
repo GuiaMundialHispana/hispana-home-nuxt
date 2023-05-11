@@ -562,14 +562,17 @@ export default {
     }
   }
 }
+
 .active {
   & p{ @apply text-neutral-black !important; }
   & span{ @apply text-neutral-white bg-primary-100 border-none !important; }
 }
+
 .last-step {
   & p{ @apply hidden lg:block text-neutral-black !important; }
   & span{ @apply text-primary-100 border-primary-100 !important; }
 };
+
 .progress{
   @apply border-primary-100 !important;
 }

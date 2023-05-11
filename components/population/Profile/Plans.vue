@@ -8,7 +8,7 @@
       <p class="text-sm text-neutral-black text-center">¡No dejes pasar esta oportunidad de mostrar tu propiedad al mundo!</p>
     </div>
     <div v-if="isPlan">
-      <h3 class="font-semibold text-sm text-black md:text-[28px] md:leading-[42px] mb-5">Mis planes disponibles</h3>
+      <h3>Mis planes disponibles</h3>
       <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         <li v-for="plan in plans" :key="plan" class=" border border-gray-10 rounded-lg p-6">
           <span class="plan-category"
@@ -27,6 +27,16 @@
         </li>
       </ul>
     </div>
+    <!-- Nuestros planes -->
+    <button @click="getPlans()">click</button>
+    <div class="mt-12">
+      <h3>Nuestros planes</h3>
+      <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <li v-for="plan in generalPlans" :key="plan">
+          <MoleculesPlanCard @pay="planInformation" :plan="plan" />
+        </li>
+      </ul>
+    </div>
   </section>
 </template>
 
@@ -37,23 +47,33 @@ export default {
   data() {
     return {
       user:useUserStore(),
+      config: useRuntimeConfig(),
       isPlan: false,
       plans: [],
+      generalPlans: null
     }
   },
   methods: {
-    async getPlans() {
-      const {data} = await useFetch(useRuntimeConfig().API+'user-plans',{
+    async getUserPlans() {
+      const {data} = await useFetch('user-plans',{
         method: 'GET',
         headers: {
           'Authorization': 'Bearer ' + this.user.token,
         },
+        baseURL: this.config.public.API
       });
       this.plans = data._value.results;
       this.plans.length > 0 ? this.isPlan = true : this.isPlan = false;
+    },
+    async getPlans() {
+      const plansApi = await $fetch(this.config.public.API+'generals/plans');
+      this.generalPlans = plansApi.results;
+      console.log(this.generalPlans)
+      // this.features = plansApi.results;
     }
   },
   created() {
+    this.getUserPlans();
     this.getPlans();
   }
 }
@@ -70,5 +90,9 @@ export default {
   }
   &.silver { background: linear-gradient(104.59deg, #D9D9D9 8.17%, #ADADAD 51.17%, #FFFFFF 120.16%); }
   &.exclusive { background: linear-gradient(100.63deg, #000000 -6.24%, #2F1C1B 45.46%, #A89494 95.05%); }
+}
+
+h3 {
+  @apply font-semibold text-sm text-neutral-black md:text-[28px] md:leading-[42px] mb-5;
 }
 </style>
