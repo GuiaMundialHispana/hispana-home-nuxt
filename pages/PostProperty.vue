@@ -60,74 +60,36 @@
           <h4 class="font-semibold text-[28px] leading-[42px] mt-11 mb-7 text-center">
             ¿Cuál es tu tipo de<span class="text-primary-100">inmueble?</span>
           </h4>
-          <label v-for="(category) in categories" :key="category" class="option" :class="[{checked: categorySelected === category}]">
-            <input type="radio" :value="category" v-model="categorySelected">
-            {{ category }}
+          <label
+            v-for="(category) in categories"
+            :key="category"
+            class="option"
+            :class="[{checked: categorySelected === category}]"
+          >
+            <input
+              type="radio"
+              :value="category.id"
+              v-model="categorySelected"
+            >
+            {{ category.name }}
           </label>
         </div>
       </div>
       <div class="step-3" v-if="step === 3">
-        <div v-if="!showPaymentProcess">
-          <h4 class="font-semibold text-[28px] leading-[42px] mt-11 mb-14 text-center">
-            Planes disponibles para esta publicación.
-          </h4>
-          <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 px-16">
-            <li v-for="plan in plans" :key="plan">
-              <MoleculesPlanCard @pay="planInformation" :plan="plan" />
-            </li>
-          </ul>
-        </div>
-        <!-- Process payment -->
-        <div v-if="showPaymentProcess">
-          <div class="grid lg:grid-cols-2 lg:px-0 px-8 gap-x-16">
-            <div class="w-full lg:px-8 lg:py-16">
-              <h4 class="font-bold text-[28px] leading-[42px] mb-14">Información de pago</h4>
-              <ul class="payment-plan-resume">
-                <li class="plan-price-card">
-                  <div class="plan-name-card" :class="[renderPlanText]">
-                    <p>{{ planSelected.name }}</p>
-                  </div>
-                  <div class="plan-information">
-                    <p class="capitalize">Plan {{ planSelected.name }}</p>
-                    <select>
-                      <option value="1">Cantidad: 1</option>
-                      <option value="1">Cantidad: 2</option>
-                      <option value="1">Cantidad: 3</option>
-                      <option value="1">Cantidad: 4</option>
-                      <option value="1">Cantidad: 5</option>
-                    </select>
-                  </div>
-                  <h6 class="plan-price">
-                    RD$ {{ planSelected.planPrice }}
-                  </h6>
-                </li>
-              </ul>
-              <p class="text-sm block text-right mt-8">Pago total</p>
-              <p class="font-bold text-neutral-black text-[28px] leading-[42px] text-right">
-                RD$ {{ planSelected.planPrice }}
-              </p>
-            </div>
-            <!--  -->
-            <div class="bg-[#F8F8F8] w-full lg:py-16 lg:px-8">
-              <div class="form-group">
-                <label>Correo</label>
-                <input type="email">
-              </div>
-              <div class="form-group card-information">
-                <label>Información de la tarjeta</label>
-                <input type="text" class="border-b-0" placeholder="1234 4567 1234 4567">
-                <div class="flex items-center">
-                  <input type="text" placeholder="MM/YY7">
-                  <input type="text" placeholder="CVC">
-                </div>
-              </div>
-              <div class="form-group">
-                <label>Nombre de la tarjeta</label>
-                <input type="text">
-              </div>
-              <AtomsButtons class="w-full" @click="processPayment()">Pagar</AtomsButtons>
-            </div>
-          </div>
+        <h4 class="font-semibold text-[28px] leading-[42px] mt-11 mb-14 text-center">
+          Planes disponibles para esta publicación.
+        </h4>
+        <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 px-16">
+          <li v-for="plan in plans" :key="plan">
+            <MoleculesPlanCard
+              @pay="planInformation"
+              :plan="plan.plan"
+              :user-quantity="plan.quantity"
+            />
+          </li>
+        </ul>
+        <div class="flex justify-center">
+          <AtomsLink link-to="/" class="mx-auto my-6">Adquirir mas planes</AtomsLink>
         </div>
       </div>
       <div class="step-4" v-if="step === 4">
@@ -227,9 +189,18 @@
           </div>
           <div class="col-span-3">
             <label for="amenities" class="mb-2">Otras amenidades</label>
-            <select class="form-control select-multiple col-span-3 sm:mb-2 mb-5" v-model="ameniti" multiple id="amenities">
-              <option v-for="(item) in amenities" :value="item" :key="item" class="option-label">
-              {{ item }}
+            <select
+              id="amenities"
+              class="form-control select-multiple col-span-3 sm:mb-2 mb-5"
+              v-model="feature"
+              multiple>
+              <option
+                v-for="item in features"
+                :value="item.id"
+                :key="item"
+                class="option-label"
+              >
+                {{ item.name }}
               </option>
             </select>
           </div>
@@ -255,23 +226,42 @@
             Sube buenas fotos de tu 
             <span class="text-primary-100">inmueble</span>
           </h4>
-          <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3">
-            <div class="upload-button" v-if="previewImages.length <= 10">
-              <div class="flex items-center justify-center rounded-full bg-primary-50 w-14 h-14">
+          <div class="flex mx-auto w-fit gap-4 mb-5">
+            <p v-if="totalImgs > planSelected.quantity" class="warning-message">
+              <AtomsIcon name="general/warning" :size=24 /> Solo puede cargar {{ planSelected.quantity }} fotos 
+            </p>
+            <p v-if="!fileFormat" class="warning-message">
+              <AtomsIcon name="general/warning" :size=24 /> Formato incorrecto
+            </p>
+          </div>
+          <div class="upload-photos-container">
+            <div class="upload-button" v-if="previewImages.length <= planSelected.quantity">
+              <div>
                 <AtomsIcon name="general/upload" :size=28 class="text-primary-100" />
               </div>
-              <p class="text-[#707070]"><span class="text-primary-100">Click para subir</span> o arrastra y suelta SVG, PNG, <br> JPG or GIF (max. 800px400px)</p>
-              <input type="file" @change="previewFiles" ref="file" multiple="multiple" class="absolute left-0 top-0 scale-[9] cursor-pointer opacity-0">
+              <p class="text-[#707070]"><span class="text-primary-100">Click para subir</span> o arrastra y suelta SVG, PNG, <br> JPG (max. 800px400px)</p>
+              <input
+                type="file"
+                @change="previewFiles"
+                ref="file"
+                multiple="multiple"
+                class="absolute left-0 top-0 scale-[9] cursor-pointer opacity-0"
+              >
             </div>
             <figure v-for="(img, index) in previewImages" :key="index">
               <img :src="img" class="w-full h-full object-cover">
-              <AtomsButtons  class="absolute top-2 right-2" icon-name="general/trash-can" btn-type="btn-icon" @click="previewImages.splice(index, 1)"/>
-              <p :class="[{cover: index === 0}]">
-                Portada
-              </p>
+              <AtomsButtons
+                class="absolute top-2 right-2"
+                icon-name="general/trash-can"
+                btn-type="btn-icon"
+                @click="previewImages.splice(index, 1), savedImages.splice(index, 1)"
+              />
+              <p :class="[{cover: index === 0}]">Portada</p>
             </figure>
           </div>
-          <p class="text-center mt-16 mb-8"> {{ previewImages.length }}/10 Fotos</p>
+          <p class="text-center mt-16 mb-8">
+            {{ previewImages.length }}/{{planSelected.quantity}} Fotos
+          </p>
         </div>
       </div>
       <div class="step-6" v-if="step === 6">
@@ -324,8 +314,8 @@ export default {
       config: useRuntimeConfig(),
       step: 1,
       optionSelected: "",
-      categorySelected: 'Casa',
-      categories: ["Casa", "Apatamento", "Villa", "Bohio", "Tiendita de acampar", "Penthouse", "Mansión", "Vecindad", "Casa rodante"],
+      categorySelected: 0,
+      categories: [],
       plans: [],
       planSelected: {},
       showPaymentProcess: false,
@@ -341,8 +331,8 @@ export default {
       description: '',
       property_status: '',
       propertyStatus: ['New', 'Used'],
-      ameniti: [],
-      amenities: ['Piscina','Terraza comun','Terraza exclusiva','Gimnasio','Cisterna','Estudio','Gazebo','Escaleras','Ascensor','Family Room'],
+      feature: [],
+      features:[],
       countries: [],
       country: [],
       sectors: [],
@@ -351,45 +341,45 @@ export default {
       city: [],
       municipalities: [],
       propertyData: {},
-      images: null,
+      allowedFileTypes : ['image/jpeg', 'image/png', 'image/gif', 'image/svg', 'image/svg+xml'],
+      totalImgs: 0,
+      savedImages: [],
       previewImages: [],
+      fileFormat: true,
       lat: null,
       long: null,
       address:'',
-      errorList: []
+      errorList: [],
+      planSelected: {
+        id: 4,
+        quantity: 4
+      }
     }
   },
   methods: {
-    planInformation(planId, quantity, planName, price) {
+    planInformation(planId,quantity) {
       this.planSelected = {
         id: planId,
-        planQuantity: quantity,
-        name: planName,
-        planPrice: price
+        quantity: quantity
       }
-
-      if(this.planSelected.planPrice > 0) {
-        this.showPaymentProcess = true;
-      } 
-      else {
-        const form = new FormData();
-        form.append('plan_id', this.planSelected.id);
-        form.append('quantity', this.planSelected.planQuantity)
-        useFetch(useRuntimeConfig().API+'user-plans',{
-          method: 'POST',
-          headers: {
-            'Authorization': 'Bearer ' + this.user.token
-          },
-          body: form,
-        });
-        this.step++;
-      }
+      this.step++;
     },
     previewFiles(event) {
-      this.images = event.target.files;
-      for (var i = 0; i < this.images.length; i++ ){
-        let file = this.images[i];
-        this.previewImages.push(URL.createObjectURL(file));
+      let images = null;
+      images = event.target.files;
+      this.totalImgs = this.previewImages.length + images.length;
+      if (this.totalImgs <= this.planSelected.quantity) {
+        for (let i = 0; i < images.length; i++) {
+          if (this.allowedFileTypes.indexOf(images[i].type) !== -1) {
+            let file = images[i];
+            this.savedImages.push(images[i]);
+            console.log(this.savedImages)
+            this.previewImages.push(URL.createObjectURL(file));
+            this.fileFormat = true;
+          } else {
+            this.fileFormat = false;
+          }
+        }
       }
     },
     getAddress(lant, long, location) {
@@ -398,34 +388,37 @@ export default {
       this.long = long;
       this.address = location;
     },
-    async getPlans() {
-      const { data }  = await useFetch(useRuntimeConfig().API+'generals/plans');
+    async getUserPlans() {
+      const {data} = await useFetch('user-plans',{
+        method: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + this.user.token,
+        },
+        baseURL: this.config.public.API
+      });
       this.plans = data._value.results;
     },
-    async processPayment() {
-      const form = new FormData();
-      form.append('plan_id', this.planSelected.id);
-      form.append('quantity', this.planSelected.planQuantity)
-      const { data }  = await useFetch(useRuntimeConfig().API+'user-plans',{
-        method: 'POST',
-        headers: {
-          'Authorization': 'Bearer ' + this.user.token
-        },
-        body: form,
-      });
-
-      try {
-        const res = data.value.results;
-        this.$swal.fire({
-          icon: 'success',
-          text: 'Su pago ha sido realizado con exito'
-        })
-      } catch (error) {
-        this.$swal.fire({
-          icon: 'error',
-          text: 'En estos momentos estamos presentando un error, intente mas tarde'
-        })
-      }
+    async getCountries() {
+      const countriesApi = await $fetch(this.config.public.API+'generals/countries');
+      this.countries.push(countriesApi.results.data);
+    },
+    async getStates(country_id) {
+      const statesApi = await $fetch(this.config.public.API+'generals/states/'+`${country_id}`);
+      this.sectors.splice(0,1);
+      this.sectors.push(statesApi.results.data);
+    },
+    async getCities(sector_id) {
+      const citiesApi = await $fetch(this.config.public.API+'generals/cities/'+`${sector_id}`);
+      this.cities.splice(0,1);
+      this.cities.push(citiesApi.results.data)
+    },
+    async getFeatures() {
+      const featuresApi = await $fetch(this.config.public.API+'generals/features');
+      this.features = featuresApi.results;
+    },
+    async getCategories() {
+      const categoriesApi = await $fetch(this.config.public.API+'generals/categories');
+      this.categories = categoriesApi.results;
     },
     async createAdvertisement() {
       const form = new FormData();
@@ -436,7 +429,7 @@ export default {
       form.append('address', this.address);
       form.append('description',this.description);
       form.append('type', this.optionSelected);
-      form.append('property_category', 2);
+      form.append('property_category', this.categorySelected);
       form.append('town_id', this.sector);
       form.append('city_id', this.city);
       form.append('country_id', this.country);
@@ -448,13 +441,15 @@ export default {
       form.append('latitude', this.lat);
       form.append('longitude', this.long);
       form.append('property_status', this.property_status);
-      form.append('features', this.ameniti);
-      form.append('image', this.$refs.file.files[0]);
+      form.append('image', this.savedImages[0]);
+
+      this.feature.forEach((element, index) => {
+        form.append(`features[${index}]`, element);
+      });
       
-      for (var i = 0; i < this.$refs.file.files.length; i++ ) {
-        let file = this.$refs.file.files[i];
-        form.append('images[' + i + ']', file);
-      }
+      this.savedImages.forEach((element,index)=>{
+        form.append('images[' + index + ']',element);
+      });
       
       const{ data, pending, error, refresh  } = await useFetch(useRuntimeConfig().API+'advertisements',{
         method: 'POST',
@@ -486,20 +481,6 @@ export default {
           }
         }    
       });
-    },
-    async getCountries() {
-      const countriesApi = await $fetch(this.config.public.API+'generals/countries');
-      this.countries.push(countriesApi.results.data);
-    },
-    async getStates(country_id) {
-      const statesApi = await $fetch(this.config.public.API+'generals/states/'+`${country_id}`);
-      this.sectors.splice(0,1);
-      this.sectors.push(statesApi.results.data);
-    },
-    async getCities(sector_id) {
-      const citiesApi = await $fetch(this.config.public.API+'generals/cities/'+`${sector_id}`);
-      this.cities.splice(0,1);
-      this.cities.push(citiesApi.results.data)
     },
   },
   computed: {
@@ -543,8 +524,10 @@ export default {
   },
   mounted() {
     this.user.getProfile();
-    this.getPlans();
+    this.getUserPlans();
     this.getCountries();
+    this.getFeatures();
+    this.getCategories();
   }
 }
 </script>
@@ -672,6 +655,7 @@ export default {
 
   & .upload-button {
     @apply sm:col-span-2 flex flex-col relative items-center justify-center border border-gray-300 rounded-md w-full h-[165px] overflow-hidden text-center px-2;
+    & > div { @apply flex items-center justify-center rounded-full bg-primary-50 w-14 h-14;}
   }
 
   & figure {
@@ -680,5 +664,9 @@ export default {
   & .cover{
     @apply absolute bottom-0 bg-primary-100 w-full h-[35px] z-20 flex items-center justify-center text-neutral-white text-base
   }
+
+  .upload-photos-container { @apply grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3; }
+
+  .warning-message { @apply flex gap-2 items-center justify-center w-fit py-1 px-2 bg-primary-100 text-neutral-white font-semibold rounded-lg; }
 }
 </style>

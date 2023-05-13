@@ -22,13 +22,12 @@
             {{ plan.plan.name }}
           </span>
           <div class="bg-primary-100 text-neutral-white text-center w-full text-sm rounded-lg mt-4 py-1" v-if="plan.quantity > 0">
-            Cantidad disponible: {{ plan.quantity }}
+            Cantidad disponible: <b>{{ plan.quantity }}</b>
           </div>
         </li>
       </ul>
     </div>
     <!-- Nuestros planes -->
-    <button @click="getPlans()">click</button>
     <div class="mt-12">
       <h3>Nuestros planes</h3>
       <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
@@ -51,11 +50,6 @@ export default {
       isPlan: false,
       plans: [],
       generalPlans: null,
-      userPlanQuatityVip: null,
-      userPlanQuatitySilver: null,
-      userPlanQuatityExclusive: null,
-      userPlanQuatityBasic: null,
-      pruebaNumero: 0
     }
   },
   methods: {
@@ -69,58 +63,19 @@ export default {
       });
       this.plans = data._value.results;
       this.plans.length > 0 ? this.isPlan = true : this.isPlan = false;
-      // for(let i = 0; i < this.plans.length; i++) {
-      //   let userPlan;
-      //   userPlan = this.plans[i];
-      //   if(userPlan.plan.id === 2) {
-      //     this.userPlanQuatityExclusive = userPlan.quantity
-      //   } else if(userPlan.plan.id === 1) {
-      //     this.userPlanQuatityVip = userPlan.quantity;
-      //   } else if(userPlan.plan.id === 3) {
-      //     this.userPlanQuatitySilver = userPlan.quantity;
-      //   } else if(userPlan.plan.id === 4) {
-      //     this.userPlanQuatityBasic = userPlan.quantity;
-      //   }
-      // }
     },
     async getPlans() {
       console.log(this.userPlanQuatityExclusive)
       const plansApi = await $fetch(this.config.public.API+'generals/plans');
       this.generalPlans = plansApi.results;
-      // for(let i = 0; i < this.generalPlans.length; i++) {
-      //   let userPlan;
-      //   userPlan = this.generalPlans[i];
-      //   if(userPlan.id === 2) {
-      //     this.pruebaNumero = this.userPlanQuatityExclusive;
-      //   } else if(userPlan.id === 1) {
-      //     this.pruebaNumero = this.userPlanQuatityVip;
-      //   } else if(userPlan.id === 3) {
-      //     this.pruebaNumero = this.userPlanQuatitySilver;
-      //   } else if(userPlan.id === 4) {
-      //     this.pruebaNumero =  this.userPlanQuatityBasic
-      //   }
-      // }
     }
   },
   created() {
     this.getUserPlans();
-    // setTimeout(() => {
-    //   this.getPlans();
-    // },4000);
+    this.getPlans();
   }
 }
 </script>
-
-<!-- // if(userPlan.id === 2) {
-  //   this.pruebaNumero = this.userPlanQuatityExclusive;
-  // } else if(userPlan.id === 1) {
-  //   this.pruebaNumero = this.userPlanQuatityVip;
-  // } else if(userPlan.id === 3) {
-  //   this.pruebaNumero = this.userPlanQuatitySilver;
-  // } else if(userPlan.id === 4) {
-  //   this.pruebaNumero =  this.userPlanQuatityBasic
-  // } -->
-
 <style lang="postcss" scoped>
 .plan-category {
   @apply w-full rounded-lg text-neutral-white flex items-center h-10 font-semibold justify-center bg-primary-100;

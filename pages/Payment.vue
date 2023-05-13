@@ -13,12 +13,8 @@
             </div>
             <div class="plan-information">
               <p class="capitalize">Plan {{ plan.name }}</p>
-              <select>
-                <option value="1">Cantidad: 1</option>
-                <option value="1">Cantidad: 2</option>
-                <option value="1">Cantidad: 3</option>
-                <option value="1">Cantidad: 4</option>
-                <option value="1">Cantidad: 5</option>
+              <select readonly="readonly">
+                <option :value="parseInt($route.query.quantity)">Cantidad: {{$route.query.quantity}}</option>
               </select>
             </div>
             <h6 class="plan-price">
@@ -26,13 +22,13 @@
             </h6>
           </li>
         </ul>
-        <p class="total-price max-w-max md:ml-auto mr-auto">
+        <p class="total-price max-w-max md:w-full md:ml-auto md:mr-0 mr-auto">
           <span class="text-sm font-normal block text-left mt-8">Pago total</span>
-          RD$ 100000
+          RD$ {{ test($route.query.newPrice) }}
         </p>
       </div>
       <!--  -->
-      <form class="payment-wrapper">
+      <div class="payment-wrapper">
         <div class="form-group">
           <label>Correo</label>
           <input type="email">
@@ -49,27 +45,62 @@
           <label>Nombre de la tarjeta</label>
           <input type="text">
         </div>
-        <AtomsButtons class="w-full">Pagar</AtomsButtons>
-      </form>
+        <AtomsButtons @click="processPayment()" class="w-full">Pagar</AtomsButtons>
+      </div>
     </div>
   </section>
 </template>
 
 <script>
+import { useUserStore } from '~/stores/User';
 export default {
   data() {
     return {
-      plan: {}
+      plan: {},
+      config: useRuntimeConfig(),
+      user: useUserStore(),
+      route: useRoute()
     }
   },
   methods: {
     decodeInnerObject() {
-      const decodedValue = decodeURIComponent(this.$route.query.plans);
+      const decodedValue = decodeURIComponent(this.route.query.plans);
       const innerObject = JSON.parse(decodedValue);
-      this.plan = innerObject;
+      return this.plan = innerObject;
+    },
+    async processPayment() {
+      const form = new FormData();
+      form.append('plan_id', this.plan.id);
+      form.append('quantity', this.route.query.quantity)
+      const { data }  = await useFetch('user-plans',{
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + this.user.token
+        },
+        baseURL: this.config.public.API,
+        body: form,
+      });
+
+      try {
+        const res = data.value.results;
+        this.$swal.fire({
+          icon: 'success',
+          text: 'Su pago ha sido realizado con exito',
+          timer: 2000
+        })
+        useRouter().push('/profile?tab=plan')
+      } catch (error) {
+        this.$swal.fire({
+          icon: 'error',
+          text: 'En estos momentos estamos presentando un error, intente mas tarde'
+        })
+      }
+    },
+    test(price) {
+      return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
   },
-  created() {
+  mounted() {
     this.decodeInnerObject();
   }
 }

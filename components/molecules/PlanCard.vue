@@ -1,6 +1,6 @@
 <template>
   <div class="plan-wrapper">
-    <span class="user-quantity">{{ userQuantity }}</span>
+    <span class="user-quantity" v-if="plan.id != 4 && $route.path === '/postProperty'">{{ userQuantity }}</span>
     <span class="plan-category" :class="[renderPlanText]">{{ plan.name }}</span>
     <ul class="plan-benefits">
       <li>
@@ -24,7 +24,7 @@
         Exclusividad en página de inicio
       </li>
     </ul>
-    <div class="action-buttons">
+    <div class="action-buttons" v-if="plan.id != 4 && $route.path === '/profile' || $route.path === '/plans'">
       <div class="plan-quantity">
         <button @click="planQuantity--">-</button>
         <input type="number" :value="planQuantity">
@@ -36,39 +36,32 @@
         RD$ {{ updatePrice  }}
       </AtomsButtons>
     </div>
-    <AtomsButtons @click="payment()" btn-style="outline-gray" class="my-4 w-full">
+    <AtomsButtons
+      v-if="plan.id != 4 && $route.path === '/profile' || $route.path === '/plans'"
+      @click="payment()"
+      btn-style="outline-gray"
+      class="my-4 w-full">
       Comprar
     </AtomsButtons>
-    <!-- v-if="$route.path != '/profile' && plan.price != 0" -->
-    <!-- <AtomsButtons
-      :isDisabled="disabledPayment"
-      @click="payment()"
-      btn-style="outline-gray" 
-      class="w-full my-4"
+    <AtomsButtons
+      v-if="$route.path === '/postProperty'"
+      btn-style="outline-gray"
+      class="my-4 w-full"
+      @click="$emit('pay', plan.id, plan.pictures)"
     >
-      Seleccionar
-    </AtomsButtons> -->
-    <!-- v-if="$route.path != '/profile' && plan.price === 0" -->
-    <!-- <AtomsButtons
-      @click="freePlan()" 
-      class="w-full my-2"
-    >
-      Seleccionar plan basico
-    </AtomsButtons> -->
-    <!-- v-if="$route.path != '/profile' && plan.price != 0" -->
-    <p class="price"
-      v-if="$route.path === '/profile'">
-      <span class="text-base">
-      RD$ </span>{{ plan.price  }}
+     Seleccionar
+    </AtomsButtons>
+    <p class="price" v-if="plan.id != 4  && $route.path != '/postProperty'">
+      <span class="text-base"> RD$ </span>{{ plan.price  }}
     </p>
-    <!-- v-if="plan.price === 0" -->
-    <p v-if="plan.price === 0" class="text-primary-100 text-3xl text-center font-semibold">
+    <p v-if="plan.id === 4" class="free-price mt-4">
       Gratis
     </p>
   </div>
 </template>
 
 <script>
+import { useUserStore } from '~/stores/User';
 export default {
   props: {
     plan: {
@@ -81,7 +74,8 @@ export default {
   },
   data() {
     return {
-      planQuantity: 0,
+      user: useUserStore(),
+      planQuantity: 1,
       priceUpdated: 0
     }
   },
@@ -102,62 +96,42 @@ export default {
     },
     disabledPayment() {
      if(this.planQuantity <= 0) { return true } else { false}
-    }
+    },
   },
   methods: {
     payment() {
-      let teta =  {
-        plans: encodeURIComponent(JSON.stringify(this.plan)),
-        newPrice: this.updatePrice
-      }
-      this.$swal.fire({
-        title: '¿Deseas pagar este plan?',
-        showDenyButton: false,
-        showCancelButton: true,
-        confirmButtonText: 'Pagar plan',
-        denyButtonText: 'Seleccionar otro plan',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          useRouter().push({
-            path: '/payment',
-            query: teta
-          })
+      if(this.user.isLoggedIn) {
+        let teta =  {
+          plans: encodeURIComponent(JSON.stringify(this.plan)),
+          newPrice: this.updatePrice,
+          quantity: this.planQuantity
         }
-      })
-    },
-    freePlan() {
-      this.$emit(
-        'pay', 
-        this.plan.id,
-        this.planQuantity = 0,
-        this.plan.name,
-        this.updatePrice = 0
-      )
+        this.$swal.fire({
+          title: '¿Deseas pagar este plan?',
+          showDenyButton: false,
+          showCancelButton: true,
+          confirmButtonText: 'Pagar plan',
+          denyButtonText: 'Seleccionar otro plan',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            useRouter().push({
+              path: '/payment',
+              query: teta
+            })
+          }
+        })
+      } else {
+        this.$swal.fire({
+          icon: 'error',
+          text: 'Debes iniciar sesion',
+          showConfirmButton: false,
+          timer: 2000
+        });
+      }
     }
   }
 }
 </script>
-<!-- payment() {
-  this.$swal.fire({
-    title: 'Que deseas hacer?',
-    showDenyButton: false,
-    showCancelButton: true,
-    confirmButtonText: 'Pagar plan',
-    denyButtonText: 'Seleccionar otro plan',
-  }).then((result) => {
-    if (result.isConfirmed) {
-    this.$emit(
-      'pay', 
-      this.plan.id,
-      this.planQuantity,
-      this.plan.name,
-      this.updatePrice
-    )
-    } else if (result.isDenied) {
-      this.planQuantity = 0;
-    }
-  })
-}, -->
 
 <style lang="postcss" scoped>
 /* max-w-[345px] */
@@ -182,7 +156,7 @@ export default {
   }
 
   & .price { @apply text-neutral-black text-3xl font-semibold text-center mb-4; }
-
+  & .free-price { @apply  text-primary-100 text-3xl text-center font-semibold; }
   & .action-buttons {
     @apply flex items-center gap-1.5 md:flex-row flex-col justify-center mt-4;
 

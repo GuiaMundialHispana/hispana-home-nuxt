@@ -305,7 +305,6 @@ export default {
     async getCategories() {
       const categoriesApi = await $fetch(this.config.public.API+'generals/categories');
       this.categories = categoriesApi.results;
-
     },
     async getStates(country_id) {
       const statesApi = await $fetch(this.config.public.API+'generals/states/'+`${country_id}`);
