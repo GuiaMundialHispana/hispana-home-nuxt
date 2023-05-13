@@ -144,7 +144,7 @@
           <label class="w-full sm:mb-2 mb-5">
             País
             <select class="form-control col-span-3" v-model="country">
-              <option v-for="country in countries[0]" :value="country.id" :key="country.id" class="option-label">
+              <option v-for="country in countries" :value="country.id" :key="country.id" class="option-label">
               {{ country.name }}
               </option>
             </select>
@@ -400,7 +400,12 @@ export default {
     },
     async getCountries() {
       const countriesApi = await $fetch(this.config.public.API+'generals/countries');
-      this.countries.push(countriesApi.results.data);
+      countriesApi.results.data.forEach(element => {
+        if(element.id === 63 || element.id === 236) {
+          this.countries.push(element)
+          console.log(this.countries)
+        }
+      });
     },
     async getStates(country_id) {
       const statesApi = await $fetch(this.config.public.API+'generals/states/'+`${country_id}`);

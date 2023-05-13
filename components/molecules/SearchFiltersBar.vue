@@ -7,7 +7,7 @@
         <p>Ubicacion</p>
         <AtomsIcon name="arrows/arrow-down" class="text-primary-100" :size=15 />
       </button>
-      <OnClickOutside @trigger="toggleList('location')" class="dropdown w-full sm:w-[230px] h-fit" v-if="dropdownLists.location">
+      <OnClickOutside @trigger="toggleList('location')" class="dropdown w-full sm:w-[240px] h-fit z-20" v-if="dropdownLists.location">
         <button class="sector-filter-btn" :class="{'active': dropdownLists.country}" @click="toggleList('country')">
           Pais <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16></AtomsIcon>
         </button>
@@ -256,7 +256,7 @@ export default {
       barMaxValue:1000000,
       showBarMinValue: 0,
       showBarMaxValue:0,
-      countries: null,
+      countries: [],
       country_id:0,
       cities:[],
       city_id:0,
@@ -296,7 +296,11 @@ export default {
     },
     async getCountries() {
       const countriesApi = await $fetch(this.config.public.API+'generals/countries');
-      this.countries = countriesApi.results.data;
+      countriesApi.results.data.forEach(element => {
+        if(element.id === 63 || element.id === 236) {
+          this.countries.push(element)
+        }
+      });
     },
     async getFeatures() {
       const featuresApi = await $fetch(this.config.public.API+'generals/features');

@@ -134,7 +134,7 @@ async function searchProperties() {
 }
 
 .filters-overflow {
-  @apply w-full sm:w-fit h-full xl:mt-12 2xl:h-fit top-0 absolute xl:relative xl:flex flex-col 2xl:flex-row gap-4 2xl:gap-1.5 md:items-end bg-neutral-white z-[80] xl:z-0 right-0 2xl:mr-0 mt-0 px-4 md:px-6 md:py-12 xl:p-0 py-4 xl:py-0;
+  @apply w-full sm:w-fit h-full xl:mt-12 2xl:h-fit top-0 absolute xl:relative xl:flex flex-col 2xl:flex-row gap-4 2xl:gap-1.5 md:items-end bg-neutral-white z-[80] xl:z-10 right-0 2xl:mr-0 mt-0 px-4 md:px-6 md:py-12 xl:p-0 py-4 xl:py-0;
   @media (max-width:992px) {
     @apply overflow-y-auto overflow-hidden border-l-2 border-l-gray-300;
   }
