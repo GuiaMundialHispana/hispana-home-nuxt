@@ -50,7 +50,12 @@ export default {
       config: useRuntimeConfig(),
       isPlan: false,
       plans: [],
-      generalPlans: null
+      generalPlans: null,
+      userPlanQuatityVip: null,
+      userPlanQuatitySilver: null,
+      userPlanQuatityExclusive: null,
+      userPlanQuatityBasic: null,
+      pruebaNumero: 0
     }
   },
   methods: {
@@ -64,21 +69,57 @@ export default {
       });
       this.plans = data._value.results;
       this.plans.length > 0 ? this.isPlan = true : this.isPlan = false;
+      // for(let i = 0; i < this.plans.length; i++) {
+      //   let userPlan;
+      //   userPlan = this.plans[i];
+      //   if(userPlan.plan.id === 2) {
+      //     this.userPlanQuatityExclusive = userPlan.quantity
+      //   } else if(userPlan.plan.id === 1) {
+      //     this.userPlanQuatityVip = userPlan.quantity;
+      //   } else if(userPlan.plan.id === 3) {
+      //     this.userPlanQuatitySilver = userPlan.quantity;
+      //   } else if(userPlan.plan.id === 4) {
+      //     this.userPlanQuatityBasic = userPlan.quantity;
+      //   }
+      // }
     },
     async getPlans() {
+      console.log(this.userPlanQuatityExclusive)
       const plansApi = await $fetch(this.config.public.API+'generals/plans');
       this.generalPlans = plansApi.results;
-      console.log(this.generalPlans)
-      // this.features = plansApi.results;
+      // for(let i = 0; i < this.generalPlans.length; i++) {
+      //   let userPlan;
+      //   userPlan = this.generalPlans[i];
+      //   if(userPlan.id === 2) {
+      //     this.pruebaNumero = this.userPlanQuatityExclusive;
+      //   } else if(userPlan.id === 1) {
+      //     this.pruebaNumero = this.userPlanQuatityVip;
+      //   } else if(userPlan.id === 3) {
+      //     this.pruebaNumero = this.userPlanQuatitySilver;
+      //   } else if(userPlan.id === 4) {
+      //     this.pruebaNumero =  this.userPlanQuatityBasic
+      //   }
+      // }
     }
   },
   created() {
     this.getUserPlans();
-    this.getPlans();
+    // setTimeout(() => {
+    //   this.getPlans();
+    // },4000);
   }
 }
 </script>
 
+<!-- // if(userPlan.id === 2) {
+  //   this.pruebaNumero = this.userPlanQuatityExclusive;
+  // } else if(userPlan.id === 1) {
+  //   this.pruebaNumero = this.userPlanQuatityVip;
+  // } else if(userPlan.id === 3) {
+  //   this.pruebaNumero = this.userPlanQuatitySilver;
+  // } else if(userPlan.id === 4) {
+  //   this.pruebaNumero =  this.userPlanQuatityBasic
+  // } -->
 
 <style lang="postcss" scoped>
 .plan-category {

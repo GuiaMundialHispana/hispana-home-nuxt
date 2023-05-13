@@ -1,15 +1,18 @@
 <template>
-  <section class="min-h-screen bg-blue-100">
-    <div class="grid lg:grid-cols-2 bg-neutral-black h-full">
+  <section class="min-h-screen">
+    <div class="grid lg:grid-cols-2 h-full">
       <div class="w-full lg:px-8 px-4 lg:py-16 py-8">
-        <h4>Información de pago</h4>
+        <h4 class="flex items-center">
+          <AtomsButtons @click="useRouter().back()" btn-type="btn-icon" class="mr-2" iconName="arrows/arrow-left"></AtomsButtons>
+          Información de pago
+        </h4>
         <ul class="payment-plan-resume">
           <li class="plan-price-card">
             <div class="plan-name-card vip">
-              <p>Nombre del plan</p>
+              <p>{{plan.name}}</p>
             </div>
             <div class="plan-information">
-              <p class="capitalize">Plan nombre</p>
+              <p class="capitalize">Plan {{ plan.name }}</p>
               <select>
                 <option value="1">Cantidad: 1</option>
                 <option value="1">Cantidad: 2</option>
@@ -19,7 +22,7 @@
               </select>
             </div>
             <h6 class="plan-price">
-              RD$ 100000
+              RD$ {{ plan.price }}
             </h6>
           </li>
         </ul>
@@ -51,6 +54,26 @@
     </div>
   </section>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      plan: {}
+    }
+  },
+  methods: {
+    decodeInnerObject() {
+      const decodedValue = decodeURIComponent(this.$route.query.plans);
+      const innerObject = JSON.parse(decodedValue);
+      this.plan = innerObject;
+    }
+  },
+  created() {
+    this.decodeInnerObject();
+  }
+}
+</script>
 
 <style lang="postcss" scoped>
 h4 {

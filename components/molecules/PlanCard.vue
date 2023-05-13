@@ -1,6 +1,6 @@
 <template>
   <div class="plan-wrapper">
-    <span class="user-quantity">1</span>
+    <span class="user-quantity">{{ userQuantity }}</span>
     <span class="plan-category" :class="[renderPlanText]">{{ plan.name }}</span>
     <ul class="plan-benefits">
       <li>
@@ -36,9 +36,9 @@
         RD$ {{ updatePrice  }}
       </AtomsButtons>
     </div>
-    <AtomsLink link-to="/payment" btn-style="outline-gray" class="my-4 w-full">
+    <AtomsButtons @click="payment()" btn-style="outline-gray" class="my-4 w-full">
       Comprar
-    </AtomsLink>
+    </AtomsButtons>
     <!-- v-if="$route.path != '/profile' && plan.price != 0" -->
     <!-- <AtomsButtons
       :isDisabled="disabledPayment"
@@ -74,6 +74,9 @@ export default {
     plan: {
       type: Object,
       default: () => {}
+    },
+    userQuantity: {
+      type: Number
     }
   },
   data() {
@@ -103,23 +106,22 @@ export default {
   },
   methods: {
     payment() {
+      let teta =  {
+        plans: encodeURIComponent(JSON.stringify(this.plan)),
+        newPrice: this.updatePrice
+      }
       this.$swal.fire({
-        title: 'Que deseas hacer?',
+        title: '¿Deseas pagar este plan?',
         showDenyButton: false,
         showCancelButton: true,
         confirmButtonText: 'Pagar plan',
         denyButtonText: 'Seleccionar otro plan',
       }).then((result) => {
         if (result.isConfirmed) {
-        this.$emit(
-          'pay', 
-          this.plan.id,
-          this.planQuantity,
-          this.plan.name,
-          this.updatePrice
-        )
-        } else if (result.isDenied) {
-          this.planQuantity = 0;
+          useRouter().push({
+            path: '/payment',
+            query: teta
+          })
         }
       })
     },
@@ -135,7 +137,27 @@ export default {
   }
 }
 </script>
-<!-- @click="payment()" -->
+<!-- payment() {
+  this.$swal.fire({
+    title: 'Que deseas hacer?',
+    showDenyButton: false,
+    showCancelButton: true,
+    confirmButtonText: 'Pagar plan',
+    denyButtonText: 'Seleccionar otro plan',
+  }).then((result) => {
+    if (result.isConfirmed) {
+    this.$emit(
+      'pay', 
+      this.plan.id,
+      this.planQuantity,
+      this.plan.name,
+      this.updatePrice
+    )
+    } else if (result.isDenied) {
+      this.planQuantity = 0;
+    }
+  })
+}, -->
 
 <style lang="postcss" scoped>
 /* max-w-[345px] */
@@ -167,7 +189,7 @@ export default {
     & .plan-quantity {
       @apply max-w-[118px] w-full h-8 bg-neutral-white border border-[#ADADAD] rounded-lg flex items-center justify-between px-3 py-1;
 
-      & input { @apply w-4 h-full text-neutral-black text-center font-semibold; }
+      & input { @apply w-5 h-full text-neutral-black text-center font-semibold; }
 
       & button {
         @apply text-lg flex-grow;
