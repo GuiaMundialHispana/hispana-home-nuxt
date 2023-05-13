@@ -27,7 +27,7 @@
     <div class="action-buttons" v-if="plan.id != 4 && $route.path === '/profile' || $route.path === '/plans'">
       <div class="plan-quantity">
         <button @click="planQuantity--">-</button>
-        <input type="number" :value="planQuantity">
+        <input type="number" readonly :value="planQuantity">
         <button @click="planQuantity++">+</button>
       </div>
       <!--  -->
@@ -163,7 +163,7 @@ export default {
     & .plan-quantity {
       @apply max-w-[118px] w-full h-8 bg-neutral-white border border-[#ADADAD] rounded-lg flex items-center justify-between px-3 py-1;
 
-      & input { @apply w-5 h-full text-neutral-black text-center font-semibold; }
+      & input { @apply w-5 h-full focus:outline-none text-neutral-black text-center font-semibold; }
 
       & button {
         @apply text-lg flex-grow;
