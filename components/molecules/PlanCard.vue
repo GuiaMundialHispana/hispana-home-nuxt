@@ -101,7 +101,7 @@ export default {
   methods: {
     payment() {
       if(this.user.isLoggedIn) {
-        let teta =  {
+        let planInformation =  {
           plans: encodeURIComponent(JSON.stringify(this.plan)),
           newPrice: this.updatePrice,
           quantity: this.planQuantity
@@ -116,7 +116,7 @@ export default {
           if (result.isConfirmed) {
             useRouter().push({
               path: '/payment',
-              query: teta
+              query: planInformation
             })
           }
         })
