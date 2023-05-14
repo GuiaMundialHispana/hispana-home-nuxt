@@ -1,6 +1,10 @@
 export default {
   menu: [
     {
+      name: 'Todos',
+      route: '/search?type=All',
+    },
+    {
       name: 'Comprar',
       route: '/sales?type=Sale',
     },
@@ -20,13 +24,13 @@ export default {
       name: 'Contacto',
       route: '/contact'
     },
-    {
-      name: 'Calcula tu préstamo',
-      route: ''
-    },
     // {
-    //   name: 'Planes',
-    //   route: '/postProperty'
+    //   name: 'Calcula tu préstamo',
+    //   route: ''
     // },
+    {
+      name: 'Planes',
+      route: '/plans'
+    },
   ]
 }

@@ -1,311 +1,308 @@
 <template>
-  <nav class="bg-[#F0F0F073] shadow-inner">
-    <div class="steps-wrapper">
-      <div class="active">
-        <span>1</span>
-        <p>Vender o alquilar</p>
+  <section>
+    <nav class="bg-[#F0F0F073] shadow-inner">
+      <div class="steps-wrapper">
+        <div class="active">
+          <span>1</span>
+          <p>Vender o alquilar</p>
+        </div>
+        <hr class="md:hidden border-[#bababa] border w-3" :class="[{progress: step >= 2}]">
+        <div :class="[{active: step >= 2}]">
+          <span>2</span>
+          <p>Categoría</p>
+        </div>
+        <hr class="md:hidden border-[#bababa] border w-3" :class="[{progress: step >= 3}]">
+        <div  :class="[{active: step >= 3}]">
+          <span>3</span>
+          <p>Paquete</p>
+        </div>
+        <hr class="md:hidden border-[#bababa] border w-3" :class="[{progress: step >= 4}]">
+        <div :class="[{active: step >= 4}]">
+          <span>4</span>
+          <p>Detalles</p>
+        </div>
+        <hr class="md:hidden border-[#bababa] border w-3" :class="[{active: step >= 5}]">
+        <div :class="[{active: step >= 5}]">
+          <span>5</span>
+          <p>Fotos</p>
+        </div>
+        <hr class="md:hidden border-[#bababa] border w-3" :class="[{active: step === 6}]">
+        <div class="last-step">
+          <span>&#x2713</span>
+          <p>Finalizado</p>
+          <hr class="hidden lg:block border-primary-100 border w-12 ml-2" :class="[{'w-20': step === 6}]">
+          <img v-if="step < 6" class="hidden lg:block w-[177px]" src="/img/property-post.png" alt="Property">
+        </div>
       </div>
-      <hr class="md:hidden border-[#bababa] border w-3" :class="[{progress: step >= 2}]">
-      <div :class="[{active: step >= 2}]">
-        <span>2</span>
-        <p>Categoría</p>
-      </div>
-      <hr class="md:hidden border-[#bababa] border w-3" :class="[{progress: step >= 3}]">
-      <div  :class="[{active: step >= 3}]">
-        <span>3</span>
-        <p>Paquete</p>
-      </div>
-      <hr class="md:hidden border-[#bababa] border w-3" :class="[{progress: step >= 4}]">
-      <div :class="[{active: step >= 4}]">
-        <span>4</span>
-        <p>Detalles</p>
-      </div>
-      <hr class="md:hidden border-[#bababa] border w-3" :class="[{active: step >= 5}]">
-      <div :class="[{active: step >= 5}]">
-        <span>5</span>
-        <p>Fotos</p>
-      </div>
-      <hr class="md:hidden border-[#bababa] border w-3" :class="[{active: step === 6}]">
-      <div class="last-step">
-        <span>&#x2713</span>
-        <p>Finalizado</p>
-        <hr class="hidden lg:block border-primary-100 border w-12 ml-2" :class="[{'w-20': step === 6}]">
-        <img v-if="step < 6" class="hidden lg:block w-[177px]" src="/img/property-post.png" alt="Property">
-      </div>
-    </div>
-  </nav>
-  <KeepAlive>
-    <div>
-      <div class="step-1" v-if="step === 1">
-        <div class="flex flex-col text-center items-center justify-center">
-          <h4 class="font-semibold text-[28px] leading-[42px] my-20">
-            <span class="text-primary-100">
-              Vamos a comenzar
-            </span>
-            <br>
-            ¿Vas a vender o alquilar?
-          </h4>
-          <div class="flex gap-2.5">
-            <label class="option" :class="[{checked: optionSelected === 'sell'}]">Vender
-              <input type="radio" value="Sell" name="sell" @click="optionSelected = 'sell'">
-            </label>
-            <label class="option" :class="[{checked: optionSelected === 'rent'}]">Alquilar
-              <input type="radio" value="rent" name="rent" @click="optionSelected = 'rent'">
+    </nav>
+    <KeepAlive>
+      <div>
+        <div class="step-1" v-if="step === 1">
+          <div class="flex flex-col text-center items-center justify-center">
+            <h4 class="font-semibold text-[28px] leading-[42px] my-20">
+              <span class="text-primary-100">
+                Vamos a comenzar
+              </span>
+              <br>
+              ¿Vas a vender o alquilar?
+            </h4>
+            <div class="flex gap-2.5">
+              <label class="option" :class="[{checked: optionSelected === 'sell'}]">Vender
+                <input type="radio" value="Sell" name="sell" @click="optionSelected = 'sell'">
+              </label>
+              <label class="option" :class="[{checked: optionSelected === 'rent'}]">Alquilar
+                <input type="radio" value="rent" name="rent" @click="optionSelected = 'rent'">
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="step-2" v-if="step === 2">
+          <div class="wrapper scrollbar">
+            <h4 class="font-semibold text-[28px] leading-[42px] mt-11 mb-7 text-center">
+              ¿Cuál es tu tipo de<span class="text-primary-100">inmueble?</span>
+            </h4>
+            <label
+              v-for="(category) in categories"
+              :key="category"
+              class="option"
+              :class="[{checked: categorySelected === category.id}]"
+            >
+              <input
+                type="radio"
+                :value="category.id"
+                v-model="categorySelected"
+              >
+              {{ category.name }}
             </label>
           </div>
         </div>
-      </div>
-      <div class="step-2" v-if="step === 2">
-        <div class="wrapper scrollbar">
-          <h4 class="font-semibold text-[28px] leading-[42px] mt-11 mb-7 text-center">
-            ¿Cuál es tu tipo de<span class="text-primary-100">inmueble?</span>
-          </h4>
-          <label v-for="(category) in categories" :key="category" class="option" :class="[{checked: categorySelected === category}]">
-            <input type="radio" :value="category" v-model="categorySelected">
-            {{ category }}
-          </label>
-        </div>
-      </div>
-      <div class="step-3" v-if="step === 3">
-        <div v-if="!showPaymentProcess">
+        <div class="step-3" v-if="step === 3">
           <h4 class="font-semibold text-[28px] leading-[42px] mt-11 mb-14 text-center">
             Planes disponibles para esta publicación.
           </h4>
           <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 px-16">
             <li v-for="plan in plans" :key="plan">
-              <MoleculesPlanCard @pay="planInformation" :plan="plan" />
+              <MoleculesPlanCard
+                @pay="planInformation"
+                :plan="plan.plan"
+                :user-quantity="plan.quantity"
+              />
             </li>
           </ul>
-        </div>
-        <!-- Process payment -->
-        <div v-if="showPaymentProcess">
-          <div class="grid lg:grid-cols-2 lg:px-0 px-8 gap-x-16">
-            <div class="w-full lg:px-8 lg:py-16">
-              <h4 class="font-bold text-[28px] leading-[42px] mb-14">Información de pago</h4>
-              <ul class="payment-plan-resume">
-                <li class="plan-price-card">
-                  <div class="plan-name-card" :class="[renderPlanText]">
-                    <p>{{ planSelected.name }}</p>
-                  </div>
-                  <div class="plan-information">
-                    <p class="capitalize">Plan {{ planSelected.name }}</p>
-                    <select>
-                      <option value="1">Cantidad: 1</option>
-                      <option value="1">Cantidad: 2</option>
-                      <option value="1">Cantidad: 3</option>
-                      <option value="1">Cantidad: 4</option>
-                      <option value="1">Cantidad: 5</option>
-                    </select>
-                  </div>
-                  <h6 class="plan-price">
-                    RD$ {{ planSelected.planPrice }}
-                  </h6>
-                </li>
-              </ul>
-              <p class="text-sm block text-right mt-8">Pago total</p>
-              <p class="font-bold text-neutral-black text-[28px] leading-[42px] text-right">
-                RD$ {{ planSelected.planPrice }}
-              </p>
-            </div>
-            <!--  -->
-            <div class="bg-[#F8F8F8] w-full lg:py-16 lg:px-8">
-              <div class="form-group">
-                <label>Correo</label>
-                <input type="email">
-              </div>
-              <div class="form-group card-information">
-                <label>Información de la tarjeta</label>
-                <input type="text" class="border-b-0" placeholder="1234 4567 1234 4567">
-                <div class="flex items-center">
-                  <input type="text" placeholder="MM/YY7">
-                  <input type="text" placeholder="CVC">
-                </div>
-              </div>
-              <div class="form-group">
-                <label>Nombre de la tarjeta</label>
-                <input type="text">
-              </div>
-              <AtomsButtons class="w-full" @click="processPayment()">Pagar</AtomsButtons>
-            </div>
+          <div class="flex justify-center">
+            <AtomsLink link-to="/" class="mx-auto my-6">Adquirir mas planes</AtomsLink>
           </div>
         </div>
-      </div>
-      <div class="step-4" v-if="step === 4">
-        <h4 class="font-semibold text-[28px] leading-[42px] mt-11 mb-7 text-center">
-          Cuéntanos sobre tu <span class="text-primary-100">inmueble</span>
-        </h4>
-        <div class="mx-4 px-4 md:px-8 sm:grid sm:grid-cols-3 sm:mx-auto gap-4 max-w-[995px]">
-          <label class="col-span-3 sm:mb-2 mb-5">
-            Nombre del proyecto
-            <input class="form-control" v-model="name" placeholder="Nombre del proyecto" type="text">
-          </label>
-          <div class="flex col-span-3 sm:mb-2 mb-5">
-            <label class="w-full">
-              Precio
-              <input
-                v-if="currencyTab"
-                class="form-control"
-                v-model="price"
-                placeholder="Precio Dominicano"
-                type="number"
-              >
-              <input
-                v-if="!currencyTab"
-                class="form-control"
-                v-model="price_us"
-                placeholder="Precio en Dolares"
-                type="number"
-              >
+        <div class="step-4" v-if="step === 4">
+          <h4 class="font-semibold text-[28px] leading-[42px] mt-11 mb-7 text-center">
+            Cuéntanos sobre tu <span class="text-primary-100">inmueble</span>
+          </h4>
+          <div class="mx-4 px-4 md:px-8 sm:grid sm:grid-cols-3 sm:mx-auto gap-4 max-w-[995px]">
+            <label class="col-span-3 sm:mb-2 mb-5">
+              Nombre del proyecto
+              <input class="form-control" v-model="name" placeholder="Nombre del proyecto" type="text">
             </label>
-            <div class="flex items-center ml-2.5">
-              <button 
-                class="price-btn border-l rounded-l-md" 
-                :class="{'active': currencyTab}" 
-                @click="currencyTab = true">RD
-              </button>
-              <button 
-                class="price-btn border-r rounded-r-md" 
-                :class="{'active': !currencyTab}" 
-                @click="currencyTab = false">USD
-              </button>
+            <div class="flex col-span-3 sm:mb-2 mb-5">
+              <label class="w-full">
+                Precio
+                <input
+                  v-if="currencyTab"
+                  class="form-control"
+                  v-model="price"
+                  placeholder="Precio Dominicano"
+                  type="number"
+                >
+                <input
+                  v-if="!currencyTab"
+                  class="form-control"
+                  v-model="price_us"
+                  placeholder="Precio en Dolares"
+                  type="number"
+                >
+              </label>
+              <div class="flex items-center ml-2.5">
+                <button 
+                  class="price-btn border-l rounded-l-md" 
+                  :class="{'active': currencyTab}" 
+                  @click="currencyTab = true">RD
+                </button>
+                <button 
+                  class="price-btn border-r rounded-r-md" 
+                  :class="{'active': !currencyTab}" 
+                  @click="currencyTab = false">USD
+                </button>
+              </div>
             </div>
-          </div>
-          <div class="col-span-3">
-            <OrganismMap @send-location="getAddress"/>
-          </div>
-          <div class="col-span-3">
-            <label class="w-full sm:mb-2 mb-5">
-            Direccion
-            <input class="form-control" v-model="address" placeholder="Direccion" type="text">
-          </label>
-          </div>
-          <label class="w-full sm:mb-2 mb-5">
-            País
-            <select class="form-control col-span-3" v-model="country">
-              <option v-for="country in countries[0]" :value="country.id" :key="country.id" class="option-label">
-              {{ country.name }}
-              </option>
-            </select>
-          </label>
-          <label class="w-full sm:mb-2 mb-5" v-if="sectors.length > 0">
-            Sector
-            <select class="form-control col-span-3" v-model="sector">
-              <option v-for="sector in sectors[0]" :value="sector.id" :key="sector.id" class="option-label">
-              {{ sector.name }}
-              </option>
-            </select>
-          </label>
-          <label class="w-full sm:mb-2 mb-5" v-if="cities.length > 0">
-            Ciudad
-            <select class="form-control" v-model="city">
-              <option v-for="item in cities[0]" :value="item.id" :key="item.id" class="option-label">
-              {{ item.name }}
-              </option>
-            </select>
-          </label>
-          <div class="col-span-3 gap-4 sm:grid grid-cols-2">
-            <label class="w-full sm:mb-2 mb-5">
-              Habitaciones
-              <input class="form-control" v-model="bedrooms" placeholder="Cantidad de habitaciones" type="number">
+            <div class="col-span-3">
+              <OrganismMap @send-location="getAddress"/>
+            </div>
+            <div class="col-span-3">
+              <label class="w-full sm:mb-2 mb-5">
+              Direccion
+              <input class="form-control" v-model="address" placeholder="Direccion" type="text">
             </label>
+            </div>
             <label class="w-full sm:mb-2 mb-5">
-              Baños
-              <input class="form-control" v-model="bathrooms" placeholder="Cantidad de baños" type="number">
+              País
+              <select class="form-control col-span-3" v-model="country">
+                <option v-for="country in countries" :value="country.id" :key="country.id" class="option-label">
+                {{ country.name }}
+                </option>
+              </select>
             </label>
-            <label class="w-full sm:mb-2 mb-5">
-              Parqueos
-              <input class="form-control" v-model="parking" placeholder="Cantidad de parqueos" type="number">
+            <label class="w-full sm:mb-2 mb-5" v-if="sectors.length > 0">
+              Sector
+              <select class="form-control col-span-3" v-model="sector">
+                <option v-for="sector in sectors[0]" :value="sector.id" :key="sector.id" class="option-label">
+                {{ sector.name }}
+                </option>
+              </select>
             </label>
-            <div class="mb-5 sm:mb-0">
-              <label for="propertyStatus" class="mb-2">Estado</label>
-              <select class="form-control" v-model="property_status" id="propertyStatus">
-                <option v-for="status in propertyStatus" :key="status" :value="status" class="option-label">
-                  {{ status }}
+            <label class="w-full sm:mb-2 mb-5" v-if="cities.length > 0">
+              Ciudad
+              <select class="form-control" v-model="city">
+                <option v-for="item in cities[0]" :value="item.id" :key="item.id" class="option-label">
+                {{ item.name }}
+                </option>
+              </select>
+            </label>
+            <div class="col-span-3 gap-4 sm:grid grid-cols-2">
+              <label class="w-full sm:mb-2 mb-5">
+                Habitaciones
+                <input class="form-control" v-model="bedrooms" placeholder="Cantidad de habitaciones" type="number">
+              </label>
+              <label class="w-full sm:mb-2 mb-5">
+                Baños
+                <input class="form-control" v-model="bathrooms" placeholder="Cantidad de baños" type="number">
+              </label>
+              <label class="w-full sm:mb-2 mb-5">
+                Parqueos
+                <input class="form-control" v-model="parking" placeholder="Cantidad de parqueos" type="number">
+              </label>
+              <div class="mb-5 sm:mb-0">
+                <label for="propertyStatus" class="mb-2">Estado</label>
+                <select class="form-control" v-model="property_status" id="propertyStatus">
+                  <option v-for="status in propertyStatus" :key="status" :value="status" class="option-label">
+                    {{ status }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="col-span-3">
+              <label for="amenities" class="mb-2">Otras amenidades</label>
+              <select
+                id="amenities"
+                class="form-control select-multiple col-span-3 sm:mb-2 mb-5"
+                v-model="feature"
+                multiple>
+                <option
+                  v-for="item in features"
+                  :value="item.id"
+                  :key="item"
+                  class="option-label"
+                >
+                  {{ item.name }}
                 </option>
               </select>
             </div>
-          </div>
-          <div class="col-span-3">
-            <label for="amenities" class="mb-2">Otras amenidades</label>
-            <select class="form-control select-multiple col-span-3 sm:mb-2 mb-5" v-model="ameniti" multiple id="amenities">
-              <option v-for="(item) in amenities" :value="item" :key="item" class="option-label">
-              {{ item }}
-              </option>
-            </select>
-          </div>
-          <div class="col-span-3 w-full gap-4 sm:flex sm:mb-2 mb-5">
-            <label class="w-full mb-5 sm:mb-0">
-              Superficie de construcción
-              <input class="form-control" v-model="meter" placeholder="Metros²" type="number">
-            </label>
-            <label class="w-full">
-              Superficie de total
-              <input class="form-control" v-model="meter_2" placeholder="Metros²" type="number">
-            </label>
-          </div>
-          <div class="flex flex-col col-span-3">
-            <label>Descripción</label>
-            <textarea type="text" v-model="description" placeholder="Descripcion de la propiedad"></textarea>
-          </div>
-        </div>
-      </div>
-      <div class="step-5" v-if="step === 5">
-        <div class="w-fit mx-auto lg:px-8 px-4">
-          <h4 class="font-semibold text-[28px] leading-[42px] mt-11 mb-7 text-center">
-            Sube buenas fotos de tu 
-            <span class="text-primary-100">inmueble</span>
-          </h4>
-          <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3">
-            <div class="upload-button" v-if="previewImages.length <= 10">
-              <div class="flex items-center justify-center rounded-full bg-primary-50 w-14 h-14">
-                <AtomsIcon name="general/upload" :size=28 class="text-primary-100" />
-              </div>
-              <p class="text-[#707070]"><span class="text-primary-100">Click para subir</span> o arrastra y suelta SVG, PNG, <br> JPG or GIF (max. 800px400px)</p>
-              <input type="file" @change="previewFiles" ref="file" multiple="multiple" class="absolute left-0 top-0 scale-[9] cursor-pointer opacity-0">
+            <div class="col-span-3 w-full gap-4 sm:flex sm:mb-2 mb-5">
+              <label class="w-full mb-5 sm:mb-0">
+                Superficie de construcción
+                <input class="form-control" v-model="meter" placeholder="Metros²" type="number">
+              </label>
+              <label class="w-full">
+                Superficie de total
+                <input class="form-control" v-model="meter_2" placeholder="Metros²" type="number">
+              </label>
             </div>
-            <figure v-for="(img, index) in previewImages" :key="index">
-              <img :src="img" class="w-full h-full object-cover">
-              <AtomsButtons  class="absolute top-2 right-2" icon-name="general/trash-can" btn-type="btn-icon" @click="previewImages.splice(index, 1)"/>
-              <p :class="[{cover: index === 0}]">
-                Portada
-              </p>
-            </figure>
+            <div class="flex flex-col col-span-3">
+              <label>Descripción</label>
+              <textarea type="text" v-model="description" placeholder="Descripcion de la propiedad"></textarea>
+            </div>
           </div>
-          <p class="text-center mt-16 mb-8"> {{ previewImages.length }}/10 Fotos</p>
+        </div>
+        <div class="step-5" v-if="step === 5">
+          <div class="w-fit mx-auto lg:px-8 px-4">
+            <h4 class="font-semibold text-[28px] leading-[42px] mt-11 mb-7 text-center">
+              Sube buenas fotos de tu 
+              <span class="text-primary-100">inmueble</span>
+            </h4>
+            <div class="flex mx-auto w-fit gap-4 mb-5">
+              <p v-if="totalImgs > planSelected.quantity" class="warning-message">
+                <AtomsIcon name="general/warning" :size=24 /> Solo puede cargar {{ planSelected.quantity }} fotos 
+              </p>
+              <p v-if="!fileFormat" class="warning-message">
+                <AtomsIcon name="general/warning" :size=24 /> Formato incorrecto
+              </p>
+            </div>
+            <div class="upload-photos-container">
+              <div class="upload-button" v-if="previewImages.length <= planSelected.quantity">
+                <div>
+                  <AtomsIcon name="general/upload" :size=28 class="text-primary-100" />
+                </div>
+                <p class="text-[#707070]"><span class="text-primary-100">Click para subir</span> o arrastra y suelta SVG, PNG, <br> JPG (max. 800px400px)</p>
+                <input
+                  type="file"
+                  @change="previewFiles"
+                  ref="file"
+                  multiple="multiple"
+                  class="absolute left-0 top-0 scale-[9] cursor-pointer opacity-0"
+                >
+              </div>
+              <figure v-for="(img, index) in previewImages" :key="index">
+                <img :src="img" class="w-full h-full object-cover">
+                <AtomsButtons
+                  class="absolute top-2 right-2"
+                  icon-name="general/trash-can"
+                  btn-type="btn-icon"
+                  @click="previewImages.splice(index, 1), savedImages.splice(index, 1)"
+                />
+                <p :class="[{cover: index === 0}]">Portada</p>
+              </figure>
+            </div>
+            <p class="text-center mt-16 mb-8">
+              {{ previewImages.length }}/{{planSelected.quantity}} Fotos
+            </p>
+          </div>
+        </div>
+        <div class="step-6" v-if="step === 6">
+          <div class="flex flex-col text-center items-center justify-center">
+            <img class="w-[311px] mb-8 mt-11" src="/img/property-post.png" alt="Property">
+            <h4 class="text-4xl leading-[42px] mb-7 font-medium">
+              Anuncio enviado
+              <br>
+              <span class="text-primary-100">
+                con éxito
+              </span>
+            </h4>
+            <p class="text-sm leading-[22px]">Tu anuncio fue enviado con éxito a revisión.</p>
+          </div>
         </div>
       </div>
-      <div class="step-6" v-if="step === 6">
-        <div class="flex flex-col text-center items-center justify-center">
-          <img class="w-[311px] mb-8 mt-11" src="/img/property-post.png" alt="Property">
-          <h4 class="text-4xl leading-[42px] mb-7 font-medium">
-            Anuncio enviado
-            <br>
-            <span class="text-primary-100">
-              con éxito
-            </span>
-          </h4>
-          <p class="text-sm leading-[22px]">Tu anuncio fue enviado con éxito a revisión.</p>
-        </div>
-      </div>
-    </div>
-  </KeepAlive>
-  <nav class="flex gap-2.5 mx-auto w-fit mt-6 mb-11">
-    <AtomsLink v-if="step === 1" link-to="/profile?tab=anuncio">
-      Cancelar
-    </AtomsLink>
-    <AtomsButtons v-if="step >= 2 && step <= 5" @click="step--">
-      Atrás
-    </AtomsButtons>
-    <AtomsButtons v-if="step <= 4" @click="step++">
-      Continuar
-    </AtomsButtons>
-    <AtomsButtons v-if="step === 5" @click="createAdvertisement()">
-      Crear Anuncio
-    </AtomsButtons>
-    <AtomsLink v-if="step >= 6" link-to="/">
-      Volver a inicio
-    </AtomsLink>
-  </nav>
+    </KeepAlive>
+    <nav class="flex gap-2.5 mx-auto w-fit mt-6 mb-11">
+      <AtomsLink v-if="step === 1" link-to="/profile?tab=anuncio">
+        Cancelar
+      </AtomsLink>
+      <AtomsButtons v-if="step >= 2 && step <= 5" @click="step--">
+        Atrás
+      </AtomsButtons>
+      <AtomsButtons v-if="step <= 4" @click="step++">
+        Continuar
+      </AtomsButtons>
+      <AtomsButtons v-if="step === 5" @click="createAdvertisement()">
+        Crear Anuncio
+      </AtomsButtons>
+      <AtomsLink v-if="step >= 6" link-to="/">
+        Volver a inicio
+      </AtomsLink>
+    </nav>
+    <PopulationPostPropertiesModalError
+      v-if="displayModal"
+      :errors="errors"
+      @close="displayModal = false"
+    />
+  </section>
 </template>
 
 <script setup>
@@ -324,10 +321,9 @@ export default {
       config: useRuntimeConfig(),
       step: 1,
       optionSelected: "",
-      categorySelected: 'Casa',
-      categories: ["Casa", "Apatamento", "Villa", "Bohio", "Tiendita de acampar", "Penthouse", "Mansión", "Vecindad", "Casa rodante"],
+      categorySelected: 0,
+      categories: [],
       plans: [],
-      planSelected: {},
       showPaymentProcess: false,
       currencyTab: true,
       name: '',
@@ -341,8 +337,8 @@ export default {
       description: '',
       property_status: '',
       propertyStatus: ['New', 'Used'],
-      ameniti: [],
-      amenities: ['Piscina','Terraza comun','Terraza exclusiva','Gimnasio','Cisterna','Estudio','Gazebo','Escaleras','Ascensor','Family Room'],
+      feature: [],
+      features:[],
       countries: [],
       country: [],
       sectors: [],
@@ -351,81 +347,88 @@ export default {
       city: [],
       municipalities: [],
       propertyData: {},
-      images: null,
+      allowedFileTypes : ['image/jpeg', 'image/png', 'image/gif', 'image/svg', 'image/svg+xml'],
+      totalImgs: 0,
+      savedImages: [],
       previewImages: [],
+      fileFormat: true,
       lat: null,
       long: null,
       address:'',
-      errorList: []
+      errorList: [],
+      planSelected: {
+        id: 4,
+        quantity: 4
+      },
+      errors: [],
+      displayModal: false
     }
   },
   methods: {
-    planInformation(planId, quantity, planName, price) {
+    planInformation(planId,quantity) {
       this.planSelected = {
         id: planId,
-        planQuantity: quantity,
-        name: planName,
-        planPrice: price
+        quantity: quantity
       }
-
-      if(this.planSelected.planPrice > 0) {
-        this.showPaymentProcess = true;
-      } 
-      else {
-        const form = new FormData();
-        form.append('plan_id', this.planSelected.id);
-        form.append('quantity', this.planSelected.planQuantity)
-        useFetch(useRuntimeConfig().API+'user-plans',{
-          method: 'POST',
-          headers: {
-            'Authorization': 'Bearer ' + this.user.token
-          },
-          body: form,
-        });
-        this.step++;
-      }
+      this.step++;
     },
     previewFiles(event) {
-      this.images = event.target.files;
-      for (var i = 0; i < this.images.length; i++ ){
-        let file = this.images[i];
-        this.previewImages.push(URL.createObjectURL(file));
+      let images = null;
+      images = event.target.files;
+      this.totalImgs = this.previewImages.length + images.length;
+      if (this.totalImgs <= this.planSelected.quantity) {
+        for (let i = 0; i < images.length; i++) {
+          if (this.allowedFileTypes.indexOf(images[i].type) !== -1) {
+            let file = images[i];
+            this.savedImages.push(images[i]);
+            this.previewImages.push(URL.createObjectURL(file));
+            this.fileFormat = true;
+          } else {
+            this.fileFormat = false;
+          }
+        }
       }
     },
     getAddress(lant, long, location) {
-      console.log(location)
       this.lat = lant;
       this.long = long;
       this.address = location;
     },
-    async getPlans() {
-      const { data }  = await useFetch(useRuntimeConfig().API+'generals/plans');
+    async getUserPlans() {
+      const {data} = await useFetch('user-plans',{
+        method: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + this.user.token,
+        },
+        baseURL: this.config.public.API
+      });
       this.plans = data._value.results;
     },
-    async processPayment() {
-      const form = new FormData();
-      form.append('plan_id', this.planSelected.id);
-      form.append('quantity', this.planSelected.planQuantity)
-      const { data }  = await useFetch(useRuntimeConfig().API+'user-plans',{
-        method: 'POST',
-        headers: {
-          'Authorization': 'Bearer ' + this.user.token
-        },
-        body: form,
+    async getCountries() {
+      const countriesApi = await $fetch(this.config.public.API+'generals/countries');
+      countriesApi.results.data.forEach(element => {
+        if(element.id === 63 || element.id === 236) {
+          this.countries.push(element)
+        }
       });
-
-      try {
-        const res = data.value.results;
-        this.$swal.fire({
-          icon: 'success',
-          text: 'Su pago ha sido realizado con exito'
-        })
-      } catch (error) {
-        this.$swal.fire({
-          icon: 'error',
-          text: 'En estos momentos estamos presentando un error, intente mas tarde'
-        })
-      }
+    },
+    async getStates(country_id) {
+      const statesApi = await $fetch(this.config.public.API+'generals/states/'+`${country_id}`);
+      this.sectors.splice(0,1);
+      this.sectors.push(statesApi.results.data);
+    },
+    async getCities(sector_id) {
+      const citiesApi = await $fetch(this.config.public.API+'generals/cities/'+`${sector_id}`);
+      this.cities.splice(0,1);
+      this.cities.push(citiesApi.results.data)
+    },
+    async getFeatures() {
+      const featuresApi = await $fetch(this.config.public.API+'generals/features');
+      this.features = featuresApi.results;
+    },
+    async getCategories() {
+      const categoriesApi = await $fetch(this.config.public.API+'generals/categories');
+      this.categories = categoriesApi.results;
     },
     async createAdvertisement() {
       const form = new FormData();
@@ -436,7 +439,7 @@ export default {
       form.append('address', this.address);
       form.append('description',this.description);
       form.append('type', this.optionSelected);
-      form.append('property_category', 2);
+      form.append('property_category', this.categorySelected);
       form.append('town_id', this.sector);
       form.append('city_id', this.city);
       form.append('country_id', this.country);
@@ -448,31 +451,24 @@ export default {
       form.append('latitude', this.lat);
       form.append('longitude', this.long);
       form.append('property_status', this.property_status);
-      form.append('features', this.ameniti);
-      form.append('image', this.$refs.file.files[0]);
+      form.append('image', this.savedImages[0]);
+
+      this.feature.forEach((element, index) => {
+        form.append(`features[${index}]`, element);
+      });
       
-      for (var i = 0; i < this.$refs.file.files.length; i++ ) {
-        let file = this.$refs.file.files[i];
-        form.append('images[' + i + ']', file);
-      }
+      this.savedImages.forEach((element,index)=>{
+        form.append('images[' + index + ']',element);
+      });
       
-      const{ data, pending, error, refresh  } = await useFetch(useRuntimeConfig().API+'advertisements',{
+      const{ data, pending, error, refresh  } = await useFetch('advertisements',{
         method: 'POST',
         headers: {
           'Authorization': 'Bearer ' + this.user.token,
           'Accept': 'application/json',
         },
         body: form,
-        onRequestError({ request, response, options }) {
-          const res = Object.values(response._data.message)
-          for(var i = 0; i < res.length; i++) {
-            Swal.fire({
-              icon: 'error',
-              html:
-              `<ul><li>${res[i]}</li><ul>`,
-            });
-          }
-        },
+        baseURL: this.config.public.API,
         onResponse({ request, response, options }) {
           const res = response._data;
           if(res.code === 200 ) {
@@ -486,20 +482,16 @@ export default {
           }
         }    
       });
-    },
-    async getCountries() {
-      const countriesApi = await $fetch(this.config.public.API+'generals/countries');
-      this.countries.push(countriesApi.results.data);
-    },
-    async getStates(country_id) {
-      const statesApi = await $fetch(this.config.public.API+'generals/states/'+`${country_id}`);
-      this.sectors.splice(0,1);
-      this.sectors.push(statesApi.results.data);
-    },
-    async getCities(sector_id) {
-      const citiesApi = await $fetch(this.config.public.API+'generals/cities/'+`${sector_id}`);
-      this.cities.splice(0,1);
-      this.cities.push(citiesApi.results.data)
+      
+      if(error) {
+        let errors = error.value.data.message;
+        
+        for(let i in errors) {
+          console.log(errors[i])
+          this.displayModal = true;
+          this.errors.push(errors[i][0])
+        }
+      }
     },
   },
   computed: {
@@ -524,6 +516,9 @@ export default {
     price() {
       this.price_us = parseInt(this.price / 54);
     },
+    price_us() {
+      this.price = parseInt(this.price_us * 54)
+    },
     country() {
       this.getStates(this.country)
     },
@@ -539,12 +534,21 @@ export default {
       if(this.long === null || this.long === '' ) {
         this.long = 15.545654654654564
       }
+    },
+    displayModal() {
+      if(this.displayModal) {
+        document.body.classList.add('modal-open')
+      } else {
+        document.body.classList.remove('modal-open')
+      }
     }
   },
   mounted() {
     this.user.getProfile();
-    this.getPlans();
+    this.getUserPlans();
     this.getCountries();
+    this.getFeatures();
+    this.getCategories();
   }
 }
 </script>
@@ -562,14 +566,17 @@ export default {
     }
   }
 }
+
 .active {
   & p{ @apply text-neutral-black !important; }
   & span{ @apply text-neutral-white bg-primary-100 border-none !important; }
 }
+
 .last-step {
   & p{ @apply hidden lg:block text-neutral-black !important; }
   & span{ @apply text-primary-100 border-primary-100 !important; }
 };
+
 .progress{
   @apply border-primary-100 !important;
 }
@@ -669,6 +676,7 @@ export default {
 
   & .upload-button {
     @apply sm:col-span-2 flex flex-col relative items-center justify-center border border-gray-300 rounded-md w-full h-[165px] overflow-hidden text-center px-2;
+    & > div { @apply flex items-center justify-center rounded-full bg-primary-50 w-14 h-14;}
   }
 
   & figure {
@@ -677,5 +685,9 @@ export default {
   & .cover{
     @apply absolute bottom-0 bg-primary-100 w-full h-[35px] z-20 flex items-center justify-center text-neutral-white text-base
   }
+
+  .upload-photos-container { @apply grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3; }
+
+  .warning-message { @apply flex gap-2 items-center justify-center w-fit py-1 px-2 bg-primary-100 text-neutral-white font-semibold rounded-lg; }
 }
 </style>

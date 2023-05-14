@@ -13,7 +13,7 @@
         class="swiper-hero"
       >
         <swiper-slide v-for="image in modalImages" :key="image">
-          <img :src="image.image" class="w-full h-full object-cover rounded-lg">
+          <img :src="`https://walrus-app-e2bxo.ondigitalocean.app/${image.image}`" class="w-full h-full object-cover rounded-lg">
         </swiper-slide>
       </swiper>
     </OnClickOutside>
@@ -27,10 +27,6 @@ export default {
   props: {
     modalImages: {
       type: null
-    }
-  }, methods: {
-    test(){
-      console.log("Click");
     }
   }
 }

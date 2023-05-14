@@ -35,6 +35,7 @@
             <li v-for="item in actives" :key="item">
               <MoleculesProperty
                 :property="item.property"
+                :property-id="item.id"
               />
             </li>
           </ul>
@@ -53,6 +54,7 @@
             <li v-for="item in expired" :key="item">
               <MoleculesProperty
                 :property="item.property"
+                :property-id="item.id"
               />
             </li>
           </ul>
@@ -70,7 +72,7 @@
           <h3 class="font-semibold text-sm text-black text-[28px] leading-[42px] md:mb-12 mb-5">Anuncios en revision</h3>
           <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             <li v-for="item in revision" :key="item">
-              <MoleculesProperty :property="item.property" />
+              <MoleculesProperty :property="item.property" :property-id="item.id" />
             </li>
           </ul>
         </div>
@@ -87,7 +89,7 @@
           <h3 class="font-semibold text-sm text-black text-[28px] leading-[42px] md:mb-12 mb-5">Anuncios rechazados</h3>
           <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             <li v-for="item in rejected" :key="item">
-              <MoleculesProperty :property="item.property" />
+              <MoleculesProperty :property="item.property" :property-id="item.id" />
             </li>
           </ul>
         </div>
@@ -104,7 +106,7 @@
           <h3 class="font-semibold text-sm text-black text-[28px] leading-[42px] md:mb-12 mb-5">Anuncios borrados</h3>
           <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             <li v-for="item in inactive" :key="item">
-              <MoleculesProperty :property="item.property" />
+              <MoleculesProperty :property="item.property" :property-id="item.id" />
             </li>
           </ul>
         </div>
@@ -150,7 +152,6 @@ export default {
   },
   methods: {
     checkAdvertisement(value,index) {
-      console.log(value)
       this.tab = index;
       this.selectedTab = value;
     },
@@ -164,7 +165,6 @@ export default {
       const res = data._value.results;
       for (let i = 0; i < res.length; i++) {
         const objeto = res[i];
-        // console.log(objeto)
         
         // Aplica tu condición aquí
         if (objeto.status === 'active') {
@@ -242,15 +242,12 @@ const { data: properties, pending, error} = await useFetch('advertisements', {
 });
 
 function test() {
-  console.log(properties)
   for (let i = 0; i < properties.length; i++) {
     const objeto = res[i];
-    console.log(objeto)
     
     // Aplica tu condición aquí
     if (objeto.status === 'active') {
       // actives.push(objeto);
-      // console.log(objeto)
     }
     if(objeto.status === 'expired') {
       expired.push(objeto)

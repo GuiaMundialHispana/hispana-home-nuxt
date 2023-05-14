@@ -43,7 +43,6 @@
         if (response.results[0]) {
           map.setZoom(15);
           savedAddress = response.results[0].formatted_address
-          // console.log(savedAddress)
           infowindow.setContent(savedAddress);
           infowindow.open(map, marker);
         } else {
@@ -60,7 +59,6 @@
       document.getElementById('lng').value = lng;
       geocodeLatLng(geocoder, map, infowindow, lat, lng);
       setTimeout(() => {
-        // console.log(savedAddress)
         emit('sendLocation', lat, lng, savedAddress);
       }, 500);
       

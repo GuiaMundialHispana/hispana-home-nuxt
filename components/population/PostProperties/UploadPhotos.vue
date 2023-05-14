@@ -50,7 +50,6 @@ export default{
   watch: {
     previewImages() {
       if(this.previewImages.length > 10) {
-        console.log('no puede subir mas de 10 imaenes')
       }
     }
   },

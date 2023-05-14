@@ -9,12 +9,9 @@
             Precio
             <br>
             <span class="text-primary-100 xl:text-[28px] text-xl xl:leading-[28px] font-semibold mt-2">US${{ showParsedPrice(property.price_us) }}</span>
+            <br />
+            <span class="text-primary-100 xl:text-[28px] text-xl xl:leading-[28px] font-semibold mt-2">RD${{ showParsedPrice(property.price) }}</span>
           </p>
-          <!-- <p class="text-neutral-black text-base font-normal">
-            Hasta
-            <br>
-            <span class="text-primary-100 xl:text-[28px] text-xl xl:leading-[28px] font-semibold mt-2">US$119,192.00</span>
-          </p> -->
           <button class="btn-loan">
             <AtomsIcon class="mr-2.5" name="general/price" :size=18 />
             Calcula tu préstamo
@@ -76,60 +73,41 @@
             <AtomsIcon name="general/mail" :size=18 class="mr-2.5"/>
             Contactar vendedor
           </a>
-          <!-- <AtomsButtons :link-to="`tel:${user.phone}`" class="mx-auto" iconName="social-media/whatsapp" icon-position="left">Contactar vendedor</AtomsButtons> -->
         </div>
         <a :href="`mailto:${user.email}`" class="hover:text-primary-100 flex items-center justify-center mt-4">
           <AtomsIcon name="general/mail" :size=18 class="mr-2.5"/>
           {{ user.email }}
         </a>
-        <a v-if="user.cellphone != ''" href="tel:8091234667" class="hover:text-primary-100 flex items-center justify-center mt-4">
-          <AtomsIcon name="general/phone" :size=18 class="mr-2.5"/>
-          {{  user.cellphone }}
+        <a v-if="user.cellphone != ''" target="_blank" :href="`https://api.whatsapp.com/send?phone=${user.cellphone}`" class="hover:text-primary-100 flex items-center justify-center mt-4">
+          <AtomsIcon name="social-media/whatsapp" :size=18 class="mr-2.5"/>
+          {{ user.cellphone }}
         </a>
       </div>
-      <!-- <div class="lg:col-span-4 md:col-span-8 md:col-start-3 col-span-12 pb-10 border-b border-gray-100 h-max">
-        <figure class="user-image">
-          <img :src="`${user.profile_pic}`" :alt="user.name">
-        </figure>
-        <h6 class="user-name">{{ user.name }} {{ user.lastname }}</h6>
-        <p class="user-position">Vendedor inmobiliario</p>
-        <div class="flex justify-center">
-          <AtomsButtons class="mx-auto" iconName="social-media/whatsapp" icon-position="left">Contactar vendedor</AtomsButtons>
-        </div>
-        <a :href="`mailto:${user.email}`" class="hover:text-primary-100 flex items-center justify-center mt-4">
-          <AtomsIcon name="general/mail" :size=18 class="mr-2.5"/>
-          {{ user.email }}
-        </a>
-        <a v-if="user.cellphone != ''" href="tel:8091234667" class="hover:text-primary-100 flex items-center justify-center mt-4">
-          <AtomsIcon name="general/phone" :size=18 class="mr-2.5"/>
-          {{  user.cellphone }}
-        </a>
-      </div> -->
     </div>
     <!-- Caracteristicas -->
     <div class="pb-[76px] md:pt-16 pt-8 2xl:max-w-[1440px] mx-auto">
       <h2 class="text-[28px] leading-[28px] font-semibold md:mb-12 mb-8">Características</h2>
-      <div class="grid xl:grid-cols-2 grid-cols-1 gap-4 overflow-hidden items-center">
+      <div class="grid lg:grid-cols-2 gap-4 overflow-hidden items-start">
         <ul class="characteristics-table">
-          <li>
+          <li v-if="property.meters">
             <h3>Superficie total</h3>
-            <p>152 m2</p>
+            <p>{{property.meters}} m2</p>
           </li>
-          <li>
+          <li v-if="property.terrace_meters">
             <h3>Superficie Construida</h3>
-            <p>172 m2</p>
+            <p>{{property.terrace_meters}} m2</p>
           </li>
-          <li>
+          <li v-if="property.bedroom">
             <h3>Dormitorios</h3>
-            <p>3</p>
+            <p>{{property.bedroom}}</p>
           </li>
-          <li>
+          <li v-if="property.bathroom">
             <h3>Baños</h3>
-            <p>4</p>
+            <p>{{property.bathroom}}</p>
           </li>
-          <li>
+          <li v-if="property.parking">
             <h3>Parqueo</h3>
-            <p>4</p>
+            <p>{{property.parking}}</p>
           </li>
         </ul>
         <ul class="characteristics-table">
@@ -182,6 +160,12 @@ export default {
       default: () => {}
     }
   },
+  data(){
+    return {
+      features: [],
+      config: useRuntimeConfig()
+    }
+  },
   computed: {
     renderMap() {
       return  `https://maps.google.com/maps?q=${this.property.latitude},${this.property.longitude}&hl=es;z%3D14&amp&output=embed`;
@@ -189,8 +173,17 @@ export default {
   },
   methods: {
     showParsedPrice(price) {
-        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      },
+      return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
+    async getFeatures() {
+      const featuresApi = await $fetch(this.config.public.API+'generals/features');
+      featuresApi.results.forEach(element => {
+        console.log(element)
+      });
+    },
+  },
+  created() {
+    this.getFeatures();
   }
 }
 </script>

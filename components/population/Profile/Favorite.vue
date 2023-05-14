@@ -14,6 +14,7 @@
           <MoleculesProperty 
             :property="item.property" 
             :is-favorite="true"
+            :property-id="item.id"
           />
         </li>
       </ul>

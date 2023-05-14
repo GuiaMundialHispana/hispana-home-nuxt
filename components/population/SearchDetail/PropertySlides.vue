@@ -28,6 +28,10 @@
       @swiper="setThumbsSwiper"
       :spaceBetween="10"
       class="swiper-thumbs"
+      :breakpoints="{
+        320: { direction: 'horizontal' },
+        1280: { direction: 'vertical' },
+      }"
     >
       <swiper-slide v-for="image in images" :key="image">
         <img :src="`https://walrus-app-e2bxo.ondigitalocean.app/${image.image}`" class="w-full h-full object-cover rounded-lg" />
@@ -69,7 +73,7 @@ export default {
 }
 </script>
 
-<style lang="postcss">
+<style lang="postcss" scoped>
 
 .swiper-hero {
   @apply md:h-[560px] h-[360px] flex-grow m-0 !important;
@@ -87,12 +91,12 @@ export default {
 }
 
 .swiper-thumbs {
-  @apply xl:w-52 w-full xl:h-[560px] h-32 xl:overflow-x-hidden xl:flex-none;
+  @apply xl:w-52 w-full xl:h-[560px] h-32;
 
   & .swiper-wrapper {
-    @apply w-52 h-full flex-none xl:flex-col m-0 xl:overflow-y-scroll xl:translate-x-0 xl:overflow-x-hidden !important;
+    @apply w-52 h-full m-0 !important;
 
-    & .swiper-slide { @apply w-full h-32 xl:mx-0 mr-4 mb-4 object-cover !important; }
+    & .swiper-slide { @apply w-52 h-32 xl:mx-0 mr-4 mb-4 object-cover !important; }
   }
 }
 

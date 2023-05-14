@@ -37,8 +37,19 @@
     </div>
     <div class="mt-8 pb-14">
       <ul class="property-list">
-        <li v-for="property in testProperty[0] " :key="property">
-          <MoleculesProperty :is-favorite="false" :property="property" />
+        <li v-for="item in getFavorites" :key="item">
+          <MoleculesProperty
+            :is-favorite="true"
+            :property="item.property"
+            :property-id="item.id"
+          />
+        </li>
+        <li v-for="property in testProperty[0]" :key="property">
+          <MoleculesProperty
+            :is-favorite="false"
+            :property="property.property"
+            :property-id="property.id"
+          />
         </li>
       </ul>
       <div v-if="pending">
@@ -53,43 +64,22 @@
           <AtomsButtons class="mx-auto">Borrar filtros</AtomsButtons>
         </div>
       </div>
-      <!-- Pagination -->
-      <!-- <ul class="flex items-center gap-2 mt-16 justify-center">
-        <li>
-          <AtomsButtons
-            class="navigation-button"
-            btn-style="outline-gray"
-            btn-type="btn-icon"
-            icon-name="arrows/arrow-left"
-            :icon-size=15
-          />
-        </li>
-        <li v-for="page in 5" :key="page" class="navigation-button">
-          {{page}}
-        </li>
-        <li>
-          <AtomsButtons
-            class="navigation-button"
-            btn-style="outline-gray"
-            btn-type="btn-icon"
-            icon-name="arrows/arrow-right"
-            :icon-size=15
-          />
-        </li>
-      </ul> -->
     </div>
   </section>
 </template>
 
 <script setup>
 import { OnClickOutside } from '@vueuse/components';
+import { useUserStore } from '~/stores/User';
+const user = useUserStore();
 const config = useRuntimeConfig();
 const route = useRoute();
+const viewport = useViewport();
+
+//Mostrar propiedades
 let test = ref(null);
 let testProperty = reactive([]);
 let showFilters = ref(false)
-const viewport = useViewport();
-
 const { data, pending } = await useFetch('advertisements/search', {
   method: 'GET',
   baseURL: config.public.API,
@@ -112,6 +102,20 @@ async function searchProperties() {
   testProperty.splice(0,1);
   testProperty.push(data.value);
 };
+
+
+//Mostrar favoritos
+let getFavorites;
+if(user.isLoggedIn) {
+  const {data: item} = await useFetch('users/favorites', {
+    method: 'get',
+    headers: {
+      'Authorization': 'Bearer ' + user.token,
+    },
+    baseURL: config.public.API,
+  });
+  getFavorites = item._value.results;
+}
 </script>
 
 <style lang="postcss" scoped>
@@ -133,7 +137,7 @@ async function searchProperties() {
 }
 
 .filters-overflow {
-  @apply w-full sm:w-fit h-full xl:mt-12 2xl:h-fit top-0 absolute xl:relative xl:flex flex-col 2xl:flex-row gap-4 2xl:gap-1.5 md:items-end bg-neutral-white z-[80] right-0 2xl:mr-0 mt-0 px-4 md:px-6 md:py-12 xl:p-0 py-4 xl:py-0;
+  @apply w-full sm:w-fit h-full xl:mt-12 2xl:h-fit top-0 absolute xl:relative xl:flex flex-col 2xl:flex-row gap-4 2xl:gap-1.5 md:items-end bg-neutral-white right-0 2xl:mr-0 mt-0 px-4 md:px-6 md:py-12 xl:p-0 py-4 xl:py-0 z-[80] xl:z-10;
   @media (max-width:992px) {
     @apply overflow-y-auto overflow-hidden border-l-2 border-l-gray-300;
   }

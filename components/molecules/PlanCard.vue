@@ -1,9 +1,7 @@
 <template>
   <div class="plan-wrapper">
-    <!-- <span class="user-quantity" v-if="">1</span> -->
-    <span class="plan-category" :class="[renderPlanText]">
-      {{ plan.name }}
-    </span>
+    <span class="user-quantity" v-if="plan.id != 4 && $route.path === '/postProperty'">{{ userQuantity }}</span>
+    <span class="plan-category" :class="[renderPlanText]">{{ plan.name }}</span>
     <ul class="plan-benefits">
       <li>
         <AtomsIcon name="general/check" :size=16 class="text-[#FFAE10] mr-2" />
@@ -26,46 +24,58 @@
         Exclusividad en página de inicio
       </li>
     </ul>
-    <AtomsButtons :isDisabled="disabledPayment" @click="payment()" v-if="$route.path != '/profile' && plan.price != 0" btn-style="outline-gray" class="w-full my-4">
-      Seleccionar
-    </AtomsButtons>
-    <AtomsButtons @click="freePlan()" v-if="$route.path != '/profile' && plan.price === 0" class="w-full my-2">
-      Seleccionar plan basico
-    </AtomsButtons>
-    <div class="action-buttons" v-if="$route.path != '/profile' && plan.price != 0">
-      <div class="cantidad">
+    <div class="action-buttons" v-if="plan.id != 4 && $route.path === '/profile' || $route.path === '/plans'">
+      <div class="plan-quantity">
         <button @click="planQuantity--">-</button>
-        <input type="number" :value="planQuantity">
+        <input type="number" readonly :value="planQuantity">
         <button @click="planQuantity++">+</button>
       </div>
       <!--  -->
-      <AtomsButtons btn-size="xsmall" class="flex-none">
+      <AtomsButtons btn-size="xsmall" class="w-full">
         <span class="total-plans">{{planQuantity}}</span>
         RD$ {{ updatePrice  }}
       </AtomsButtons>
     </div>
-    <p class="price"
-      v-if="$route.path === '/profile'">
-      <span class="text-base">
-      RD$ </span>{{ plan.price  }}
+    <AtomsButtons
+      v-if="plan.id != 4 && $route.path === '/profile' || $route.path === '/plans'"
+      @click="payment()"
+      btn-style="outline-gray"
+      class="my-4 w-full">
+      Comprar
+    </AtomsButtons>
+    <AtomsButtons
+      v-if="$route.path === '/postProperty'"
+      btn-style="outline-gray"
+      class="my-4 w-full"
+      @click="$emit('pay', plan.id, plan.pictures)"
+    >
+     Seleccionar
+    </AtomsButtons>
+    <p class="price" v-if="plan.id != 4  && $route.path != '/postProperty'">
+      <span class="text-base"> RD$ </span>{{ plan.price  }}
     </p>
-    <p v-if="plan.price === 0" class="text-primary-100 text-3xl text-center font-semibold">
+    <p v-if="plan.id === 4" class="free-price mt-4">
       Gratis
     </p>
   </div>
 </template>
 
 <script>
+import { useUserStore } from '~/stores/User';
 export default {
   props: {
     plan: {
       type: Object,
       default: () => {}
     },
+    userQuantity: {
+      type: Number
+    }
   },
   data() {
     return {
-      planQuantity: 0,
+      user: useUserStore(),
+      planQuantity: 1,
       priceUpdated: 0
     }
   },
@@ -86,46 +96,47 @@ export default {
     },
     disabledPayment() {
      if(this.planQuantity <= 0) { return true } else { false}
-    }
+    },
   },
   methods: {
     payment() {
-      this.$swal.fire({
-        title: 'Que deseas hacer?',
-        showDenyButton: false,
-        showCancelButton: true,
-        confirmButtonText: 'Pagar plan',
-        denyButtonText: 'Seleccionar otro plan',
-      }).then((result) => {
-        if (result.isConfirmed) {
-        this.$emit(
-          'pay', 
-          this.plan.id,
-          this.planQuantity,
-          this.plan.name,
-          this.updatePrice
-        )
-        } else if (result.isDenied) {
-          this.planQuantity = 0;
+      if(this.user.isLoggedIn) {
+        let planInformation =  {
+          plans: encodeURIComponent(JSON.stringify(this.plan)),
+          newPrice: this.updatePrice,
+          quantity: this.planQuantity
         }
-      })
-    },
-    freePlan() {
-      this.$emit(
-        'pay', 
-        this.plan.id,
-        this.planQuantity = 0,
-        this.plan.name,
-        this.updatePrice = 0
-      )
+        this.$swal.fire({
+          title: '¿Deseas pagar este plan?',
+          showDenyButton: false,
+          showCancelButton: true,
+          confirmButtonText: 'Pagar plan',
+          denyButtonText: 'Seleccionar otro plan',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            useRouter().push({
+              path: '/payment',
+              query: planInformation
+            })
+          }
+        })
+      } else {
+        this.$swal.fire({
+          icon: 'error',
+          text: 'Debes iniciar sesion',
+          showConfirmButton: false,
+          timer: 2000
+        });
+      }
     }
   }
 }
 </script>
 
 <style lang="postcss" scoped>
+/* max-w-[345px] */
 .plan-wrapper {
-  @apply border border-gray-10 rounded-lg p-6 max-w-[345px] relative;
+  @apply border border-gray-10 rounded-lg p-6 relative;
 
   & .plan-category {
     @apply w-full rounded-lg text-neutral-white flex items-center h-10 font-semibold justify-center bg-primary-100;
@@ -139,31 +150,31 @@ export default {
   }
 
   & .plan-benefits {
-    @apply border-t border-gray-10 mt-4 pt-4;
+    @apply border-t border-gray-10 mt-4 pt-4 w-64 mx-auto;
     & li { @apply flex items-center text-sm text-neutral-black font-normal mb-6; }
     & li:last-child { @apply mb-0; }
   }
 
   & .price { @apply text-neutral-black text-3xl font-semibold text-center mb-4; }
-
+  & .free-price { @apply  text-primary-100 text-3xl text-center font-semibold; }
   & .action-buttons {
-    @apply flex items-center gap-1.5 md:flex-row flex-col flex-wrap justify-center;
+    @apply flex items-center gap-1.5 md:flex-row flex-col justify-center mt-4;
 
-    & .cantidad {
-      @apply md:w-20 w-full h-8 border border-[#ADADAD] rounded-lg flex items-center justify-between px-3 py-1;
+    & .plan-quantity {
+      @apply max-w-[118px] w-full h-8 bg-neutral-white border border-[#ADADAD] rounded-lg flex items-center justify-between px-3 py-1;
 
-      & input { @apply w-4 h-full text-neutral-black text-center font-semibold; }
+      & input { @apply w-5 h-full focus:outline-none text-neutral-black text-center font-semibold; }
 
       & button {
         @apply text-lg flex-grow;
-        &:disabled {
-          @apply text-gray-300 cursor-not-allowed;
-        }
+        &:disabled { @apply text-gray-300 cursor-not-allowed; }
       }
     }
   }
 
-  & .user-quantity { @apply w-9 h-9 rounded-full flex items-center justify-center absolute -top-7 -right-4 bg-primary-90 text-base text-neutral-white; }
+  & .user-quantity {
+    @apply w-9 h-9 rounded-full flex items-center justify-center absolute -top-4 -right-4 bg-primary-90 text-base text-neutral-white;
+  }
 }
 
 .total-plans {

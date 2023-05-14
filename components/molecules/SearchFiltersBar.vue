@@ -7,12 +7,12 @@
         <p>Ubicacion</p>
         <AtomsIcon name="arrows/arrow-down" class="text-primary-100" :size=15 />
       </button>
-      <OnClickOutside @trigger="toggleList('location')" class="dropdown w-full sm:w-[230px] h-fit" v-if="dropdownLists.location">
+      <OnClickOutside @trigger="toggleList('location')" class="dropdown w-full sm:w-[240px] h-fit z-20" v-if="dropdownLists.location">
         <button class="sector-filter-btn" :class="{'active': dropdownLists.country}" @click="toggleList('country')">
           Pais <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16></AtomsIcon>
         </button>
         <OnClickOutside @trigger="toggleList('country')" v-if="dropdownLists.country">
-          <div class="dropdown-wrapper scrollbar mt-[5px] min-h-max max-h-[273px]">
+          <div class="dropdown-wrapper scrollbar min-h-max max-h-[273px]">
             <label class="checkbox-labels" :for="country.name" v-for="country in countries" :key="country">
               <input
                 type="radio"
@@ -31,7 +31,7 @@
           Sector <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16 />
         </button>
         <OnClickOutside @trigger="toggleList('sector')" v-if="dropdownLists.sector">
-          <div class="dropdown-wrapper scrollbar mt-[5px] min-h-max max-h-[273px]">
+          <div class="dropdown-wrapper scrollbar min-h-max max-h-[273px]">
             <label class="checkbox-labels" :for="sector.name" v-for="sector in states" :key="sector">
               <input
                 type="radio"
@@ -50,7 +50,7 @@
           Ciudad <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16></AtomsIcon>
         </button>
         <OnClickOutside @trigger="toggleList('city')" v-if="dropdownLists.city">
-          <div class="dropdown-wrapper scrollbar mt-[5px] min-h-max max-h-[273px]">
+          <div class="dropdown-wrapper scrollbar min-h-max max-h-[273px]">
             <label class="checkbox-labels" :for="city.name" v-for="city in cities" :key="city">
               <input
                 type="radio"
@@ -67,16 +67,21 @@
       </OnClickOutside>
     </div>
     <!-- Tipo de inmueble -->
-    <!-- <div class="filter-content items-center" v-if="categories.length > 0">
+    <div class="filter-content items-center">
       <button class="flex gap-2.5 filter-btn" @click="toggleList('propertyType')" :class="{'active': dropdownLists.propertyType}">
         <AtomsIcon name="general/property" class="text-primary-100" :size=20  />
         <p>Inmueble</p>
         <AtomsIcon name="arrows/arrow-down" class="text-primary-100" :size=15 />
       </button>
-      <OnClickOutside @trigger="toggleList('propertyType')" v-if="dropdownLists.propertyType" class="h-[273px] w-full 2xl:w-[205px]">
-        <MoleculesDropDownList :class="importedDropdownLists" />
+      <OnClickOutside @trigger="toggleList('propertyType')" v-if="dropdownLists.propertyType" class="dropdown w-full sm:w-[230px] h-fit">
+        <div class="dropdown-wrapper scrollbar border-none min-h-max max-h-[273px]">
+          <label class="checkbox-labels" :for="category.name" v-for="category in categories" :key="category">
+            <input type="radio" class="checkbox" :value="category.id" :id="category.name" v-model="selectedCategories">
+            {{category.name}}
+          </label>
+        </div>
       </OnClickOutside>
-    </div> -->
+    </div>
     <!-- Habitaciones -->
     <div class="filter-content">
       <button class="flex gap-2.5 filter-btn" @click="toggleList('bedroom')" :class="{'active': dropdownLists.bedroom}">
@@ -182,6 +187,7 @@
         </p>
       </OnClickOutside>
     </div>
+    <!-- status -->
     <div class="filter-content" :class="{'modal-open': dropdownLists.status}">
       <button class="flex gap-2.5 filter-btn" @click="toggleList('status')" :class="{'active': dropdownLists.status}">
         <AtomsIcon name="general/status" class="text-primary-100" :size=20  />
@@ -201,21 +207,26 @@
         </div>
       </OnClickOutside>
     </div>
-    <button @click="clearFilter();" v-if="filter" class="flex items-center">
-      <p class="xl:hidden mr-3 font-semibold">Borrar filtros</p>
-      <AtomsIcon name="general/close" :size=17  />
-    </button>
     <!-- Featured -->
-    <!-- <div class="filter-content" v-if="features.length > 0">
+    <div class="filter-content">
       <button class="flex gap-2.5 filter-btn" @click="toggleList('other')" :class="{'active': dropdownLists.other}">
         <AtomsIcon name="general/tune" class="text-primary-100" :size=20  />
         <p>Otros</p>
         <AtomsIcon name="arrows/arrow-down" class="text-primary-100" :size=15 />
       </button>
-      <OnClickOutside @trigger="toggleList('other')" v-if="dropdownLists.other">
-        <MoleculesDropDownList class="h-fit 2xl:w-[205px]" :class="importedDropdownLists"/>
+      <OnClickOutside @trigger="toggleList('other')" v-if="dropdownLists.other" class="dropdown w-full sm:w-[230px] h-fit">
+        <div class="dropdown-wrapper scrollbar border-none min-h-max max-h-[273px]">
+          <label class="checkbox-labels" :for="feature.name" v-for="feature in features" :key="feature">
+            <input type="checkbox" class="checkbox" :value="feature.id" :id="feature.name" v-model="seletedFeatured">
+            {{feature.name}}
+          </label>
+        </div>
       </OnClickOutside>
-    </div> -->
+    </div>
+    <button @click="clearFilter();" v-if="filter" class="flex items-center">
+      <p class="xl:hidden mr-3 font-semibold">Borrar filtros</p>
+      <AtomsIcon name="general/close" :size=17  />
+    </button>
   </div>
 </template>
 
@@ -238,13 +249,14 @@ export default {
         city: false,
         municipality: false, 
         sector: false,
-        status: false
+        status: false,
+        other: false
       },
       barMinValue:0,
       barMaxValue:1000000,
       showBarMinValue: 0,
       showBarMaxValue:0,
-      countries: null,
+      countries: [],
       country_id:0,
       cities:[],
       city_id:0,
@@ -257,7 +269,11 @@ export default {
       parkingLotQuantity:0,
       status:'',
       queryBody: {},
-      filter:true
+      filter:true,
+      features: [],
+      seletedFeatured: [],
+      categories: [],
+      selectedCategories: []
     }
   },
   components: {
@@ -280,7 +296,19 @@ export default {
     },
     async getCountries() {
       const countriesApi = await $fetch(this.config.public.API+'generals/countries');
-      this.countries = countriesApi.results.data;
+      countriesApi.results.data.forEach(element => {
+        if(element.id === 63 || element.id === 236) {
+          this.countries.push(element)
+        }
+      });
+    },
+    async getFeatures() {
+      const featuresApi = await $fetch(this.config.public.API+'generals/features');
+      this.features = featuresApi.results;
+    },
+    async getCategories() {
+      const categoriesApi = await $fetch(this.config.public.API+'generals/categories');
+      this.categories = categoriesApi.results;
     },
     async getStates(country_id) {
       const statesApi = await $fetch(this.config.public.API+'generals/states/'+`${country_id}`);
@@ -309,8 +337,8 @@ export default {
       delete this.queryBody.city_id;
       delete this.queryBody.picked;
       delete this.queryBody.price;
+      delete this.queryBody.feature_ids;
       this.$emit('sendProperties', this.queryBody);
-
     }
   },
   watch: {
@@ -355,10 +383,20 @@ export default {
     price(price) {
       this.queryBody.price = price;
       this.$emit('sendProperties', this.queryBody);
+    },
+    seletedFeatured(newItemSelected) {
+      this.queryBody.feature_ids = newItemSelected;
+      this.$emit('sendProperties', this.queryBody);
+    },
+    selectedCategories(newItemSelected) {
+      this.queryBody.property_category_id = newItemSelected;
+      this.$emit('sendProperties', this.queryBody);
     }
   },
   mounted() {
     this.getCountries();
+    this.getFeatures();
+    this.getCategories();
     this.queryBody.price_type = this.picked;
   }
 }
