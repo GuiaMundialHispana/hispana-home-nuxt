@@ -38,7 +38,7 @@
     <div class="mt-8 pb-14">
       <ul class="property-list">
         <li v-for="property in testProperty[0]" :key="property">
-          <MoleculesProperty :is-favorite="false" :property="property" />
+          <MoleculesProperty :is-favorite="false" :property="property" :property-id="property.id" />
         </li>
       </ul>
       <div v-if="pending">

@@ -38,11 +38,13 @@
     <div class="mt-8 pb-14">
       <ul class="property-list">
         <li v-for="property in testProperty[0]" :key="property">
-          <MoleculesProperty :is-favorite="false" :property="property" />
+          <MoleculesProperty :is-favorite="false" :property="property" :property-id="property.id" />
         </li>
       </ul>
       <div v-if="pending">
-        <h6 class="text-4xl text-blue-100 font-bold mb-4 text-center">No hemos encontramos propiedades <br/>con estos resultados</h6>
+        <h6 class="text-4xl text-blue-100 font-bold mb-4 text-center">
+          Cargando
+        </h6>
       </div>
       <div v-if="testProperty[0].length === 0">
         <figure class="mb-4">
@@ -53,30 +55,6 @@
           <AtomsButtons class="mx-auto">Borrar filtros</AtomsButtons>
         </div>
       </div>
-      <!-- Pagination -->
-      <!-- <ul class="flex items-center gap-2 mt-16 justify-center">
-        <li>
-          <AtomsButtons
-            class="navigation-button"
-            btn-style="outline-gray"
-            btn-type="btn-icon"
-            icon-name="arrows/arrow-left"
-            :icon-size=15
-          />
-        </li>
-        <li v-for="page in 5" :key="page" class="navigation-button">
-          {{page}}
-        </li>
-        <li>
-          <AtomsButtons
-            class="navigation-button"
-            btn-style="outline-gray"
-            btn-type="btn-icon"
-            icon-name="arrows/arrow-right"
-            :icon-size=15
-          />
-        </li>
-      </ul> -->
     </div>
   </section>
 </template>
@@ -121,7 +99,7 @@ async function searchProperties() {
 }
 
 .property-list {
-  @apply grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5;
+  @apply grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-7;
 }
 
 .search-button {
