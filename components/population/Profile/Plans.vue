@@ -32,7 +32,7 @@
       <h3>Nuestros planes</h3>
       <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         <li v-for="plan in generalPlans" :key="plan">
-          <MoleculesPlanCard @pay="planInformation" :plan="plan" />
+          <MoleculesPlanCard :plan="plan" />
         </li>
       </ul>
     </div>
