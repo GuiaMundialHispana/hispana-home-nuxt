@@ -152,7 +152,6 @@ export default {
   },
   methods: {
     checkAdvertisement(value,index) {
-      console.log(value)
       this.tab = index;
       this.selectedTab = value;
     },
@@ -243,15 +242,12 @@ const { data: properties, pending, error} = await useFetch('advertisements', {
 });
 
 function test() {
-  console.log(properties)
   for (let i = 0; i < properties.length; i++) {
     const objeto = res[i];
-    console.log(objeto)
     
     // Aplica tu condición aquí
     if (objeto.status === 'active') {
       // actives.push(objeto);
-      // console.log(objeto)
     }
     if(objeto.status === 'expired') {
       expired.push(objeto)

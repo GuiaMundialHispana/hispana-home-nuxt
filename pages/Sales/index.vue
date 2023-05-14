@@ -89,7 +89,6 @@ async function searchProperties() {
   })
   testProperty.splice(0,1);
   testProperty.push(data.value);
-  console.log(testProperty);
 };
 </script>
 

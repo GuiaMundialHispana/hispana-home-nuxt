@@ -122,7 +122,6 @@ export default {
           icon: 'error',
           text: 'En estos momentos estamos presentando un error, intente mas tarde'
         })
-        console.log(error)
       }
     }
   },
@@ -183,14 +182,10 @@ plans = data.value.results;
 // Procesamiento de pagos
 function tes(planId, quantity) {
   this.showPaymentProcess = true;
-  console.log(showPaymentProcess)
-  console.log(planId,quantity)
   // addPayment(planId,quantity);
 }
 
 async function addPayment(planId, quantity) {
-  console.log("plan id"+planId);
-  console.log("cantidad"+quantity);
   const { data }  = await useFetch(useRuntimeConfig().API+'user-plans',{
     method: 'POST',
     headers: { 'Authorization': 'Bearer ' + user.token },
@@ -202,7 +197,6 @@ async function addPayment(planId, quantity) {
 
   try {
     const res = data.value.results;
-    console.log(res)
   } catch (error) {
     Swal.fire({
       icon: 'error',
@@ -212,5 +206,4 @@ async function addPayment(planId, quantity) {
 }
 
 
-console.log(user.token)
 </script> -->

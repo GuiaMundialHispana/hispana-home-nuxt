@@ -65,7 +65,6 @@ export default {
       this.plans.length > 0 ? this.isPlan = true : this.isPlan = false;
     },
     async getPlans() {
-      console.log(this.userPlanQuatityExclusive)
       const plansApi = await $fetch(this.config.public.API+'generals/plans');
       this.generalPlans = plansApi.results;
     }

@@ -373,7 +373,6 @@ export default {
           if (this.allowedFileTypes.indexOf(images[i].type) !== -1) {
             let file = images[i];
             this.savedImages.push(images[i]);
-            console.log(this.savedImages)
             this.previewImages.push(URL.createObjectURL(file));
             this.fileFormat = true;
           } else {
@@ -383,7 +382,6 @@ export default {
       }
     },
     getAddress(lant, long, location) {
-      console.log(location)
       this.lat = lant;
       this.long = long;
       this.address = location;
@@ -403,7 +401,6 @@ export default {
       countriesApi.results.data.forEach(element => {
         if(element.id === 63 || element.id === 236) {
           this.countries.push(element)
-          console.log(this.countries)
         }
       });
     },

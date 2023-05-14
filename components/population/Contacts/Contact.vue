@@ -49,7 +49,6 @@ export default{
           icon: 'error',
           text: 'En estos momentos estamos presentando un error, intente mas tarde'
         })
-        console.log(error)
       }
     },
   }

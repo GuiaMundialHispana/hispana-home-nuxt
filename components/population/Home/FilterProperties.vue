@@ -256,7 +256,6 @@ export default {
       this.queryBody.city_id = city_id;
     },
     getType(route) {
-      console.log(route)
       this.queryBody.type = route;
     }
   },
