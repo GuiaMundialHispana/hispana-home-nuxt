@@ -324,7 +324,6 @@ export default {
       categorySelected: 0,
       categories: [],
       plans: [],
-      planSelected: {},
       showPaymentProcess: false,
       currencyTab: true,
       name: '',
