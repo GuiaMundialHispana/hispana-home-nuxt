@@ -26,6 +26,7 @@
     <!-- Thumbs -->
     <swiper
       @swiper="setThumbsSwiper"
+      :direction="vertical"
       :spaceBetween="10"
       class="swiper-thumbs"
     >
@@ -69,7 +70,7 @@ export default {
 }
 </script>
 
-<style lang="postcss">
+<style lang="postcss" scoped>
 
 .swiper-hero {
   @apply md:h-[560px] h-[360px] flex-grow m-0 !important;
@@ -90,7 +91,7 @@ export default {
   @apply xl:w-52 w-full xl:h-[560px] h-32 xl:overflow-x-hidden xl:flex-none;
 
   & .swiper-wrapper {
-    @apply w-52 h-full flex-none xl:flex-col m-0 xl:overflow-y-scroll xl:translate-x-0 xl:overflow-x-hidden !important;
+    /* @apply w-52 h-full flex-none xl:flex-col m-0 xl:overflow-y-scroll xl:translate-x-0 xl:overflow-x-hidden !important; */
 
     & .swiper-slide { @apply w-full h-32 xl:mx-0 mr-4 mb-4 object-cover !important; }
   }
