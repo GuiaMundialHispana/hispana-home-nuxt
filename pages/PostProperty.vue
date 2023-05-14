@@ -517,6 +517,9 @@ export default {
     price() {
       this.price_us = parseInt(this.price / 54);
     },
+    price_us() {
+      this.price = parseInt(this.price_us * 54)
+    },
     country() {
       this.getStates(this.country)
     },
