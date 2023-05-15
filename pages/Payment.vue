@@ -75,7 +75,7 @@ export default {
       const { data }  = await useFetch('user-plans',{
         method: 'POST',
         headers: {
-          'Authorization': 'Bearer ' + this.user.token
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
         baseURL: this.config.public.API,
         body: form,

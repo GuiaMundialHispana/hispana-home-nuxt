@@ -19,7 +19,6 @@ export const useUserEditStore = defineStore('UserEdit', {
         password:  Number,
         password_confirmation: Number,
       },
-      token: '',
       images: null
     }
   }

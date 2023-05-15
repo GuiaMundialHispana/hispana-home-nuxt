@@ -27,25 +27,26 @@
 </template>
 
 <script lang="ts">
+import { useAuthStore } from '~/stores/Auth';
 import { useUserStore } from '~/stores/User';
 
 export default {
   data() {
     return {
       user: useUserStore(),
+      auth: useAuthStore(),
+      config: useRuntimeConfig(),
       name: '',
       lastname: '',
       email: '',
       password: '',
       password_confirmation: '',
-      auth: ''
     }
   },
   methods: {
     async register() {
       this.$emit('close');
-      const {pending, data} = await useFetch(this.$config.public.API+'auth/register',
-        {
+      const {pending, data} = await useFetch('auth/register',{
           method: 'POST',
           body: {
             name: this.name,
@@ -54,22 +55,23 @@ export default {
             password: this.password,
             password_confirmation: this.password_confirmation
           },
+          baseURL: this.$config.public.API
         }
       );
 
       try {
         const res = data.value.results;
-        if(pending) {
-          this.$swal({ icon: 'success', text: 'Estamos comprobando tu informacion'});
-        }
+        if(pending) { this.$swal({ icon: 'success', text: 'Estamos comprobando tu informacion'})};
+        
         this.$swal({
           icon: 'success',
           text: 'Hemos validados tus datos correctamente'
         });
-        this.user.isLoggedIn = true;
-        this.user.token = res.access_token.original.access_token;
-        useRouter().push("/profile");
-        this.user.getProfile();
+
+        localStorage.setItem('token', res.access_token.original.access_token);
+        useRouter().push({path: '/profile?tab=anuncio'});
+        this.auth.isLoggedIn = true;
+
       } catch (error) {
         this.$swal({
           icon: 'error',
@@ -78,9 +80,6 @@ export default {
       }
     }
   },
-  created() {
-    this.auth = useRuntimeConfig();
-  }
 }
 </script>
 

@@ -15,10 +15,10 @@
       <div class="flex flex-wrap gap-2 xl:flex-row flex-col">
         <MoleculesFilterStatusProperties class="filterStatus-tabs-sm" />
         <MoleculesSearchFiltersBar @send-properties="getFilterResults" />
-        <button class="search-button" @click="searchProperties(); showFilters = !showFilters">
+        <!-- <button class="search-button" @click="searchProperties(); showFilters = !showFilters">
           <p class="xl:hidden mr-3 font-semibold">Buscar propiedades</p>
           <AtomsIcon name="general/search" :size=17  />
-        </button>
+        </button> -->
       </div>
     </OnClickOutside>
     <div class="flex items-center justify-between mt-8 2xl:mt-11 text-sm font-normal">
@@ -38,7 +38,7 @@
     <div class="mt-8 pb-14">
       <ul class="property-list">
         <li v-for="property in testProperty[0]" :key="property">
-          <MoleculesProperty :is-favorite="false" :property="property" :property-id="property.id" />
+          <MoleculesProperty :is-favorite="property.property.is_favorite" :property="property" :property-id="property.id" />
         </li>
       </ul>
       <div v-if="pending">
@@ -99,6 +99,7 @@ const { data, pending } = await useFetch('advertisements/search?type=Rent', {
 testProperty.push(data.value);
 function getFilterResults(e) {
   test = e;
+  searchProperties()
 }
 
 async function searchProperties() {
@@ -132,8 +133,8 @@ async function searchProperties() {
 }
 
 .filters-overflow {
-  @apply w-full sm:w-fit h-full xl:mt-12 2xl:h-fit top-0 absolute xl:relative xl:flex flex-col 2xl:flex-row gap-4 2xl:gap-1.5 md:items-end bg-neutral-white z-[80] xl:z-10 right-0 2xl:mr-0 mt-0 px-4 md:px-6 md:py-12 xl:p-0 py-4 xl:py-0;
-  @media (max-width:992px) {
+  @apply w-full sm:w-fit h-screen xl:mt-12 2xl:h-fit top-0 fixed xl:relative xl:flex flex-col 2xl:flex-row gap-4 2xl:gap-1.5 md:items-end bg-neutral-white right-0 2xl:mr-0 mt-0 px-4 md:px-6 md:py-12 xl:p-0 py-4 xl:py-0 z-[80] xl:z-10;
+  @media (max-width:1280px) {
     @apply overflow-y-auto overflow-hidden border-l-2 border-l-gray-300;
   }
 

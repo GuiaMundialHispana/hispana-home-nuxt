@@ -10,7 +10,12 @@
     <div v-if="isPlan">
       <h3>Mis planes disponibles</h3>
       <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        <li v-for="plan in plans" :key="plan" class=" border border-gray-10 rounded-lg p-6">
+        <li class="border border-gray-10 rounded-lg p-6 flex items-center">
+          <span class="plan-category mb-0">
+            BÁSICO
+          </span>
+        </li>
+        <li v-for="plan in plans" :key="plan" class="border border-gray-10 rounded-lg p-6">
           <span class="plan-category"
             :class="{
               'vip': plan.plan.name === 'VIP',
@@ -40,12 +45,10 @@
 </template>
 
 <script>
-import { useUserStore } from '~/stores/User';
 export default {
   name: 'Plans',
   data() {
     return {
-      user:useUserStore(),
       config: useRuntimeConfig(),
       isPlan: false,
       plans: [],
@@ -54,14 +57,16 @@ export default {
   },
   methods: {
     async getUserPlans() {
-      const {data} = await useFetch('user-plans',{
+      const data = await $fetch('user-plans',{
         method: 'GET',
         headers: {
-          'Authorization': 'Bearer ' + this.user.token,
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
         baseURL: this.config.public.API
       });
-      this.plans = data._value.results;
+      this.plans = data.results;
       this.plans.length > 0 ? this.isPlan = true : this.isPlan = false;
     },
     async getPlans() {
@@ -69,12 +74,13 @@ export default {
       this.generalPlans = plansApi.results;
     }
   },
-  created() {
+  beforeMount() {
     this.getUserPlans();
     this.getPlans();
   }
 }
 </script>
+
 <style lang="postcss" scoped>
 .plan-category {
   @apply w-full rounded-lg text-neutral-white flex items-center h-10 font-semibold justify-center bg-primary-100;

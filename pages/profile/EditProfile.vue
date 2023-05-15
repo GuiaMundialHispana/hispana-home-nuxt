@@ -208,8 +208,8 @@ export default {
         method: 'POST',
         body: this.form,
         headers: {
-          'Authorization': 'Bearer ' + this.editUser.user.token,
-          'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Accept': 'application/json'
         }
       });
 
@@ -230,17 +230,12 @@ export default {
     }
   },
   created() {
-    this.user.getProfile();
+    // this.user.getProfile();
     this.getCountries();
   }
 }
 </script>
 
-<script setup>
-definePageMeta({
-  middleware: ["logger"]
-});
-</script>
 
 <style lang="postcss" scoped>
 .form {

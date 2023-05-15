@@ -21,7 +21,7 @@
       </button>
     </nav>
     <OrganismLogin v-if="tab" @close="closeModalOnHeader()" />
-    <OrganismRegister v-if="!tab" @close="closeModalOnHeader()"/>
+    <!-- <OrganismRegister v-if="!tab" @close="closeModalOnHeader()"/> -->
   </div>
 </template>
 

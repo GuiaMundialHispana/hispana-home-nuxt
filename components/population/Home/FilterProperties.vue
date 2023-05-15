@@ -2,11 +2,15 @@
   <div class="absolute left-0 bottom-[-6%] text-[#232323] z-10">
     <!-- <MoleculesFilterStatusProperties class="filterStatus-tabs-lg"/> -->
     <div class="flex items-center overflow-hidden rounded-lg border-2 border-gray-100 bg-neutral-white text-[#232323] shadow-sm w-fit flex-none filterStatus-tabs-lg">
-      <AtomsButtons class="btn" @click="getPath = '/search?type=All', getType = 'All'">Todo</AtomsButtons>
-      <AtomsButtons class="btn" @click="getPath = '/sales?type=Sale',  getType = 'Sale'">Compra</AtomsButtons>
-      <AtomsButtons class="btn" @click="getPath = '/rent?type=Rent', getType = 'Rent'">Rentar</AtomsButtons>
+      <AtomsButtons
+        v-for="(btn,i) in types"
+        @click="sendPath = btn.getPath, sendType = btn.getType, btnSelected = i"
+        :class="{active: i === btnSelected}"
+        :key="btn">
+        {{btn.name}}
+      </AtomsButtons>
     </div>
-    <div class="filter-home-wrapper" v-if="ready">
+    <div class="filter-home-wrapper">
       <div class="h-full flex justify-center">
         <button class="filter-btn" @click="toggleList('location')">
           <div class="icon-container">
@@ -20,12 +24,12 @@
             </p>
           </div>
         </button>
-        <OnClickOutside @trigger="toggleList('location')" class="dropdown w-[230px]" v-if="dropdownLists.location">
+        <OnClickOutside @trigger="toggleList('location')" class="dropdown w-[240px]" v-if="dropdownLists.location">
           <button class="sector-filter-btn" :class="{'active': dropdownLists.country}" @click="toggleList('country')">
             Pais <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16></AtomsIcon>
           </button>
           <OnClickOutside @trigger="toggleList('country')" v-if="dropdownLists.country">
-            <div class="dropdown-wrapper scrollbar mt-[5px] min-h-max max-h-[273px]">
+            <div class="dropdown-wrapper scrollbar mt-[5px] min-h-max max-h-[283px]">
               <label class="checkbox-labels" :for="country.name" v-for="country in countries" :key="country">
                 <input
                   type="radio"
@@ -78,8 +82,8 @@
         </OnClickOutside>
       </div>
       <!-- Categoria -->
-      <!-- <span class="buttons-separation" v-if="categories.length > 0"></span>
-      <div class="flex justify-center" v-if="categories.length > 0">
+      <span class="buttons-separation"></span>
+      <div class="flex justify-center">
         <button class="filter-btn" :class="{'active': dropdownLists.propertyType}" @click="toggleList('propertyType')">
           <div class="icon-container">
             <AtomsIcon class="text-primary-100" name="general/property" :size=20 />
@@ -93,21 +97,20 @@
         </button>
         <OnClickOutside @trigger="toggleList('propertyType')" class="absolute top-[95%] w-[288px] h-[273px]" v-if="dropdownLists.propertyType">
           <div class="dropdown-wrapper scrollbar mt-[5px] min-h-max max-h-[273px]">
-            categorias: {{ categories }}
-            <label class="checkbox-labels" :for="country.name" v-for="country in countries" :key="country">
+            <label class="checkbox-labels" :for="category.name" v-for="category in categories" :key="category">
               <input
                 type="radio"
                 class="checkbox"
-                name="country"
-                v-model="country_id"
-                :value="country.id"
-                :id="country.name"
+                name="category"
+                v-model="category_id"
+                :value="category.id"
+                :id="category.name"
               >
-              {{ country.name }}
+              {{ category.name }}
             </label>
           </div>
         </OnClickOutside>
-      </div> -->
+      </div>
       <!-- Precio -->
       <span class="buttons-separation"></span>
       <div class="h-full flex justify-center">
@@ -167,8 +170,26 @@ import  MultiRangeSlider  from "multi-range-slider-vue";
 export default {
   data() {
     return {
+      btnSelected:0,
       route: useRoute(),
       config:useRuntimeConfig(),
+      types:[
+        {
+          getPath: '/search?type=All',
+          getType: 'All',
+          name: 'Todo'
+        },
+        {
+          getPath: '/sales?type=Sale',
+          getType: 'Sale',
+          name: 'Comprar'
+        },
+        {
+          getPath: '/rent?type=Rent',
+          getType: 'Rent',
+          name: 'Rentar'
+        }
+      ],
       dropdownLists: {
         location: false,
         propertyType: false,
@@ -182,11 +203,13 @@ export default {
       barMaxValue:1000000,
       showBarMinValue: 0,
       showBarMaxValue:0,
-      countries: null,
+      countries: [],
       country_id:0,
       cities:[],
       city_id:0,
       states:[],
+      categories: [],
+      category_id: 0,
       state_id:0,
       picked:'USD',
       price:'',
@@ -195,8 +218,8 @@ export default {
       parkingLotQuantity:0,
       status:'',
       queryBody: {},
-      getPath: '/search?type=All',
-      getType: 'All',
+      sendPath: '/search?type=All',
+      sendType: 'All',
       ready: true
     }
   },
@@ -220,7 +243,11 @@ export default {
     },
     async getCountries() {
       const countriesApi = await $fetch(this.config.public.API+'generals/countries');
-      this.countries = countriesApi.results.data;
+      countriesApi.results.data.forEach(element => {
+        if(element.id === 63 || element.id === 236) {
+          this.countries.push(element)
+        }
+      });
     },
     async getStates(country_id) {
       const statesApi = await $fetch(this.config.public.API+'generals/states/'+`${country_id}`);
@@ -232,10 +259,14 @@ export default {
     },
     async searchProperties() {
       useRouter().push({
-        path: this.getPath, 
+        path: this.sendPath, 
         query: this.queryBody 
       })
-    }
+    },
+    async getCategories() {
+      const categoriesApi = await $fetch(this.config.public.API+'generals/categories');
+      this.categories = categoriesApi.results;
+    },
   },
   watch: {
     picked(newPicked) {
@@ -255,13 +286,17 @@ export default {
     city_id(city_id) {
       this.queryBody.city_id = city_id;
     },
-    getType(route) {
+    sendType(route) {
       this.queryBody.type = route;
+    },
+    category_id(category_id) {
+      this.queryBody.property_category_id = category_id;
     }
   },
   mounted() {
     this.getCountries();
-    this.queryBody.type = this.getType;
+    this.getCategories();
+    this.queryBody.type = this.sendType;
     this.queryBody.price_type = this.picked;
   }
 }

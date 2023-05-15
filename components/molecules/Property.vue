@@ -1,20 +1,12 @@
 <template>
   <article>
-    <!-- Favorite -->
-    <!-- v-if="$route.path === '/profile?tab=favorite'" -->
     <AtomsButtons
       btn-type="btn-icon"
       icon-name="general/favorite"
       class="favorite-button"
       :class="{active: isFavorite}"
-      @click="toggleFavorite();"
+      @click="toggleFavorite()"
     />
-    <!-- <AtomsButtons
-      btn-type="btn-icon"
-      icon-name="general/favorite"
-      class="favorite-button active"
-      @click="deleteFavorite(), $emit('propertyChanged')"
-    /> -->
     <Swiper
       class="relative rounded-lg overflow-hidden"
       :modules="[SwiperAutoplay, SwiperEffectCreative]"
@@ -42,7 +34,7 @@
         </NuxtLink>
       </SwiperSlide>
       <AtomsPropertyPlans class="absolute bottom-0 right-0 z-10" />
-      <nav>
+      <nav v-if="property.images">
         <AtomsButtons
           btn-type="btn-icon"
           btn-size="xsmall"
@@ -88,61 +80,9 @@
   </article>
 </template>
 
-<!-- <script setup>
-import { useUserStore } from '~/stores/User';
-import Swal from 'sweetalert2';
-const user = useUserStore();
-const route = useRoute();
-
-const props = defineProps({
-  property: {
-    type: Object,
-    default: () => {}
-  },
-  isFavorite: {
-    type: Boolean,
-    default: false
-  },
-  propertyId: {
-    type:Number
-  }
-});
-
-
-async function deleteFavorite() {
-  const {data} = await useFetch(useRuntimeConfig().API+'users/favorites',{
-    method: 'delete',
-    headers: {'Authorization': 'Bearer ' + user.token},
-    body: { property_id: props.property.id}
-  });
-  if(data) {
-    Swal.fire({
-      icon: 'success',
-      text: data._value.message,
-      showConfirmButton: true,
-      timer: 2000
-    });
-  }
-}
-
-function toggleFavorite() {
-  if(user.isLoggedIn) {
-    if(props.isFavorite) {
-      deleteFavorite();
-    } else { addFavorite(); }
-  } else {
-    Swal.fire({
-      icon: 'error',
-      text: 'Necesitas iniciar sesion para poder agregar esta propiedad a favoritos',
-      showConfirmButton: true,
-      timer: 2000
-    });
-  }
-}
-</script> -->
-
 <script>
-import { useUserStore } from '~/stores/User';
+import { useAuthStore } from '~/stores/Auth';
+import Swal from 'sweetalert2';
 export default {
   props: {
     property: {
@@ -157,11 +97,11 @@ export default {
       type:Number
     }
   },
-  data(){
+  data() {
     return {
-      user: useUserStore(),
       config: useRuntimeConfig(),
-      route: useRouter()
+      route: useRouter(),
+      auth: useAuthStore()
     }
   },
   methods: {
@@ -171,46 +111,66 @@ export default {
     async addFavorite() {
       const {data} = await useFetch('users/favorites',{
         method: 'post',
-        headers: {'Authorization': 'Bearer ' + this.user.token},
+        headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`},
         body: { property_id: this.property.id},
-        baseURL: this.config.public.API
-      });
+        baseURL: this.config.public.API,
+        onResponse({response}) {
+          if(response._data.code === 400 ) {
+            Swal.fire({
+              icon: 'error',
+              text: response._data.message,
+              showConfirmButton: false,
+              timer: 2000
+            });
+          }
 
-      if(data) {
-        this.$swal.fire({
-          icon: 'success',
-          text: data._value.message,
-          showConfirmButton: false,
-          timer: 2000
-        });
-        this.$router.go();
-      }
+          if(response._data.code === 200) {
+            Swal.fire({
+              icon: 'success',
+              text: response._data.message,
+              showConfirmButton: false,
+              timer: 2000
+            });
+            this.isFavorite = true;
+          }
+        }
+      });
     },
     async deleteFavorite() {
       const {data} = await useFetch('users/favorites',{
         method: 'delete',
-        headers: {'Authorization': 'Bearer ' + this.user.token},
+        headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`},
         body: { property_id: this.property.id},
-        baseURL: this.config.public.API
+        baseURL: this.config.public.API,
+        onResponse({response}) {
+          if(response._data.code === 400 ) {
+            Swal.fire({
+              icon: 'error',
+              text: response._data.message,
+              showConfirmButton: false,
+              timer: 2000
+            });
+          }
+
+          if(response._data.code === 200) {
+            Swal.fire({
+              icon: 'success',
+              text: response._data.message,
+              showConfirmButton: false,
+              timer: 2000
+            });
+          }
+        }
       });
-      if(data) {
-        this.$swal.fire({
-          icon: 'success',
-          text: data._value.message,
-          showConfirmButton: true,
-          timer: 2000
-        });
-        this.$router.go()
-      }
     },
     toggleFavorite() {
-      if(this.user.isLoggedIn) {
+      if(this.auth.isLoggedIn) {
         if(this.isFavorite) {
           this.deleteFavorite();
         } else {
           this.addFavorite();
         }
-    
+
       } else {
         this.$swal.fire({
           icon: 'error',
@@ -220,14 +180,73 @@ export default {
         });
       }
     }
+    //end methods
   },
-  computed: {
-    minuscula() {
-      return this.property.type.toLowerCase()
-    }
+  mounted() {
+    // console.log(this.property)
   }
 }
 </script>
+<!-- 
+async addFavorite() {
+  const {data} = await useFetch('users/favorites',{
+    method: 'post',
+    headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`},
+    body: { property_id: this.property.id},
+    baseURL: this.config.public.API
+  });
+
+  if(data) {
+    this.$swal.fire({
+      icon: 'success',
+      text: data._value.message,
+      showConfirmButton: false,
+      timer: 2000
+    });
+    this.$router.go();
+  }
+},
+async deleteFavorite() {
+  const {data} = await useFetch('users/favorites',{
+    method: 'delete',
+    headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`},
+    body: { property_id: this.property.id},
+    baseURL: this.config.public.API
+  });
+  if(data) {
+    this.$swal.fire({
+      icon: 'success',
+      text: data._value.message,
+      showConfirmButton: true,
+      timer: 2000
+    });
+    this.$router.go()
+  } else {
+    this.$swal.fire({
+      icon: 'error',
+      text: data._value.message,
+      showConfirmButton: true,
+      timer: 2000
+    });
+  }
+},
+toggleFavorite() {
+  if(this.auth.isLoggedIn) {
+    if(this.isFavorite) {
+      this.deleteFavorite();
+    } else {
+      this.addFavorite();
+    }
+
+  } else {
+    this.$swal.fire({
+      icon: 'error',
+      text: 'Necesitas iniciar sesion para poder agregar esta propiedad a favoritos',
+      showConfirmButton: true,
+      timer: 2000
+    });
+  }
+} -->
 
 <style lang="postcss" scoped>
 article {
@@ -236,11 +255,11 @@ article {
   &:hover { box-shadow: 0px 4px 11px rgba(0, 0, 0, 0.07); }
 
   & > button.favorite-button {
-    @apply absolute right-4 top-4 z-10 bg-neutral-white border border-primary-50 hover:bg-primary-90 text-[#ADADAD] hover:text-neutral-white !important;
+    @apply absolute right-4 top-4 z-[5] bg-neutral-white border border-primary-50 hover:bg-primary-90 text-[#ADADAD] hover:text-neutral-white !important;
     &.active { @apply bg-primary-100 text-neutral-white hover:bg-primary-90 !important; }
   }
 
-  & a, & h6 { @apply font-semibold text-neutral-black mt-3 text-base block; }
+  & > a, & h6 { @apply font-semibold text-neutral-black mt-3 text-base block; }
 
   & .property-title {
     @apply overflow-hidden truncate whitespace-nowrap w-11/12;

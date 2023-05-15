@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col w-full  items-center justify-center">
     <div class="relative w-full">
-      <input placeholder="Correo electrónico" type="email" v-model="email" @keyup.enter="login()">
+      <input placeholder="Correo electrónico" type="email" v-model="auth.email" @keyup.enter="auth.login();$emit('close')">
       <AtomsIcon
         name="general/user"
         :size=14
@@ -9,7 +9,7 @@
       />
     </div>
     <div class="relative w-full">
-      <input placeholder="Contraseña" type="password" v-model="password" @keyup.enter="login()">
+      <input placeholder="Contraseña" type="password" v-model="auth.password" @keyup.enter="auth.login();$emit('close')">
       <AtomsIcon
         name="general/lock"
         :size=14
@@ -17,54 +17,20 @@
       />
     </div>
     <NuxtLink to="/forgotPassword" @click="$emit('close')" class="text-primary-100 ml-auto w-max block">Olvidé la contraseña</NuxtLink>
-    <AtomsButtons btn-size="medium" @click="login()">
+    <AtomsButtons btn-size="medium" @click="auth.login(); $emit('close')">
       Entrar
     </AtomsButtons>
   </div>
 </template>
 
 <script lang="ts">
-import { useUserStore } from '~/stores/User';
+import { useAuthStore } from '~/stores/Auth';
 export default {
   data() {
     return {
-      user: useUserStore(),
-      auth: {},
-      email: '',
-      password: '',
+      auth: useAuthStore(),
     }
   },
-  methods: {
-    async login() {
-      const { data, pending }  = await useFetch(this.$config.public.API+'auth/login',{
-        method: 'POST',
-        body: {
-          email: this.email,
-          password: this.password
-        }
-      });
-
-      try {
-        const res = data.value.results;
-        if(pending) { this.$swal.showLoading(); }
-        this.$swal({
-          icon: 'success',
-          text: 'Bienvenido',
-          showConfirmButton: false,
-          timer: 2000
-        });
-        this.user.isLoggedIn = true;
-        this.user.token = res.access_token.original.access_token;
-        useRouter().push("/profile?tab=anuncio");
-        this.$emit('close');
-      } catch (error) {
-        this.$swal({
-          icon: 'error',
-          text: 'Confirma que tus datos esten correctos'
-        });
-      }
-    }
-  }
 }
 </script>
 
