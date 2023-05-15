@@ -223,10 +223,14 @@
         </div>
       </OnClickOutside>
     </div>
-    <button @click="clearFilter();" v-if="filter" class="flex items-center">
+    <button class="search-button" @click="clearFilter();" v-if="filter">
       <p class="xl:hidden mr-3 font-semibold">Borrar filtros</p>
       <AtomsIcon name="general/close" :size=17  />
     </button>
+    <!-- <button @click="clearFilter();" v-if="filter" class="flex items-center">
+      <p class="xl:hidden mr-3 font-semibold">Borrar filtros</p>
+      <AtomsIcon name="general/close" :size=17  />
+    </button> -->
   </div>
 </template>
 
@@ -338,6 +342,7 @@ export default {
       delete this.queryBody.picked;
       delete this.queryBody.price;
       delete this.queryBody.feature_ids;
+      delete this.queryBody.property_category_id;
       this.$emit('sendProperties', this.queryBody);
     }
   },
@@ -452,9 +457,9 @@ export default {
   @apply flex flex-col relative xl:w-fit;
 }
 
-/* .search-button {
-  @apply flex bg-primary-100 w-full mx-auto sm:w-[230px] p-2 h-12 2xl:w-10 2xl:h-10 rounded-full items-center justify-center hover:bg-primary-90 border-primary-100 border flex-none text-neutral-white;
-} */
+.search-button {
+  @apply flex bg-primary-100 w-full sm:w-[230px] p-2 h-12 xl:w-10 xl:h-10 rounded-full items-center justify-center hover:bg-primary-90 border-primary-100 border flex-none text-neutral-white;
+}
 
 .sector-filter-btn{
   @apply flex justify-between items-center w-full border-2 rounded-lg border-gray-100 mt-2.5 font-normal text-sm leading-[22px] h-10 px-2.5 first:mt-0 hover:bg-primary-50 hover:border-primary-100;

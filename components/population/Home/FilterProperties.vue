@@ -20,12 +20,12 @@
             </p>
           </div>
         </button>
-        <OnClickOutside @trigger="toggleList('location')" class="dropdown w-[230px]" v-if="dropdownLists.location">
+        <OnClickOutside @trigger="toggleList('location')" class="dropdown w-[240px]" v-if="dropdownLists.location">
           <button class="sector-filter-btn" :class="{'active': dropdownLists.country}" @click="toggleList('country')">
             Pais <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16></AtomsIcon>
           </button>
           <OnClickOutside @trigger="toggleList('country')" v-if="dropdownLists.country">
-            <div class="dropdown-wrapper scrollbar mt-[5px] min-h-max max-h-[273px]">
+            <div class="dropdown-wrapper scrollbar mt-[5px] min-h-max max-h-[283px]">
               <label class="checkbox-labels" :for="country.name" v-for="country in countries" :key="country">
                 <input
                   type="radio"
@@ -78,8 +78,8 @@
         </OnClickOutside>
       </div>
       <!-- Categoria -->
-      <!-- <span class="buttons-separation" v-if="categories.length > 0"></span>
-      <div class="flex justify-center" v-if="categories.length > 0">
+      <span class="buttons-separation"></span>
+      <div class="flex justify-center">
         <button class="filter-btn" :class="{'active': dropdownLists.propertyType}" @click="toggleList('propertyType')">
           <div class="icon-container">
             <AtomsIcon class="text-primary-100" name="general/property" :size=20 />
@@ -93,21 +93,20 @@
         </button>
         <OnClickOutside @trigger="toggleList('propertyType')" class="absolute top-[95%] w-[288px] h-[273px]" v-if="dropdownLists.propertyType">
           <div class="dropdown-wrapper scrollbar mt-[5px] min-h-max max-h-[273px]">
-            categorias: {{ categories }}
-            <label class="checkbox-labels" :for="country.name" v-for="country in countries" :key="country">
+            <label class="checkbox-labels" :for="category.name" v-for="category in categories" :key="category">
               <input
                 type="radio"
                 class="checkbox"
-                name="country"
-                v-model="country_id"
-                :value="country.id"
-                :id="country.name"
+                name="category"
+                v-model="category_id"
+                :value="category.id"
+                :id="category.name"
               >
-              {{ country.name }}
+              {{ category.name }}
             </label>
           </div>
         </OnClickOutside>
-      </div> -->
+      </div>
       <!-- Precio -->
       <span class="buttons-separation"></span>
       <div class="h-full flex justify-center">
@@ -182,11 +181,13 @@ export default {
       barMaxValue:1000000,
       showBarMinValue: 0,
       showBarMaxValue:0,
-      countries: null,
+      countries: [],
       country_id:0,
       cities:[],
       city_id:0,
       states:[],
+      categories: [],
+      category_id: 0,
       state_id:0,
       picked:'USD',
       price:'',
@@ -220,7 +221,11 @@ export default {
     },
     async getCountries() {
       const countriesApi = await $fetch(this.config.public.API+'generals/countries');
-      this.countries = countriesApi.results.data;
+      countriesApi.results.data.forEach(element => {
+        if(element.id === 63 || element.id === 236) {
+          this.countries.push(element)
+        }
+      });
     },
     async getStates(country_id) {
       const statesApi = await $fetch(this.config.public.API+'generals/states/'+`${country_id}`);
@@ -235,7 +240,11 @@ export default {
         path: this.getPath, 
         query: this.queryBody 
       })
-    }
+    },
+    async getCategories() {
+      const categoriesApi = await $fetch(this.config.public.API+'generals/categories');
+      this.categories = categoriesApi.results;
+    },
   },
   watch: {
     picked(newPicked) {
@@ -257,10 +266,14 @@ export default {
     },
     getType(route) {
       this.queryBody.type = route;
+    },
+    category_id(category_id) {
+      this.queryBody.property_category_id = category_id;
     }
   },
   mounted() {
     this.getCountries();
+    this.getCategories();
     this.queryBody.type = this.getType;
     this.queryBody.price_type = this.picked;
   }
