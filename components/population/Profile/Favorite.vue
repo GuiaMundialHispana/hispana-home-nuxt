@@ -22,22 +22,64 @@
   </section>
 </template>
 
-<script setup>
-import { useUserStore } from '~/stores/User';
-let favorite = ref(false);
-const user = useUserStore();
-let properties = ref([]);
-
-const {data: item} = await useFetch(useRuntimeConfig().API+'users/favorites', {
-  method: 'get',
-  headers: {
-    'Authorization': 'Bearer ' + user.token,
+<script>
+import { useAuthStore } from "~/stores/Auth";
+export default {
+  data() {
+    return {
+      auth: useAuthStore(),
+      config: useRuntimeConfig(),
+      favorite: false,
+      properties: []
+    }
+  },
+  methods: {
+    async getFvorites() {
+      const data = await $fetch('users/favorites',{
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        baseURL: this.config.public.API
+      });
+      this.properties = data.results;
+      this.properties.length > 0 ? this.favorite = true : this.favorite = false;
+    }
+  },
+  beforeMount() {
+    this.getFvorites();
   }
-});
-
-properties = item.value.results;
-properties.length > 0 ? favorite = true : favorite = false;
+}
 </script>
+
+<!-- <script setup>
+import { useAuthStore } from "~/stores/Auth";
+
+let config = useRuntimeConfig();
+let favorite = ref(false);
+let properties = ref([]);
+const auth = useAuthStore();
+
+async function getFvorites() {
+  const item = await $fetch('users/favorites', {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${auth.token}`,
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    baseURL: config.public.API
+  });
+  properties = item.results;
+  properties.length > 0 ? favorite = true : favorite = false;
+}
+
+
+
+getFvorites();
+</script> -->
 
 <style lang="postcss" scoped>
 .btn {

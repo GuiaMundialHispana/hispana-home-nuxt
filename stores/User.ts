@@ -4,7 +4,7 @@ import Swal from 'sweetalert2';
 export const useUserStore = defineStore('user', {
   state: () => {
     return {
-      isLoggedIn: false,
+      config: useRuntimeConfig(),
       userData: {
         id: Number,
         name: '',
@@ -16,7 +16,6 @@ export const useUserStore = defineStore('user', {
         email: '',
         profile_pic: null
       },
-      token: '',
       getEmail: '',
       nextStep: false,
       emailPassword: '',
@@ -27,16 +26,6 @@ export const useUserStore = defineStore('user', {
     }
   },
   actions: {
-    async getProfile(){
-      const { data }  = await useFetch(useRuntimeConfig().API+'auth/profile',{
-        method: 'GET',
-        headers: {
-          'Authorization': 'Bearer ' + this.token
-        },
-      });
-      const res = data.value.results.user;
-      this.userData = res;
-    },
     async getGoogle(){
       const { data,error }  = await useFetch(this.$config.public.API+'auth/social/google',{
         method: 'GET',
@@ -49,16 +38,6 @@ export const useUserStore = defineStore('user', {
       });
       const res = error;
       const res2 = data;
-    },
-    async logOut() {
-      await useFetch(useRuntimeConfig().API+'auth/logout',{
-        method: 'POST',
-        body: {
-          token: this.token
-        }
-      });
-      this.isLoggedIn = false;
-      useRouter().push("/")
     },
     async sendPassWordEmail() {
       const { data, pending } = await useFetch(useRuntimeConfig().API+'auth/forgot-password',{

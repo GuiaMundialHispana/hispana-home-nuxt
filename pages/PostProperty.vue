@@ -90,7 +90,7 @@
             </li>
           </ul>
           <div class="flex justify-center">
-            <AtomsLink link-to="/" class="mx-auto my-6">Adquirir mas planes</AtomsLink>
+            <AtomsLink link-to="/plans" class="mx-auto my-6">Adquirir mas planes</AtomsLink>
           </div>
         </div>
         <div class="step-4" v-if="step === 4">
@@ -305,19 +305,11 @@
   </section>
 </template>
 
-<script setup>
-  definePageMeta({
-    middleware: ["logger"]
-  });
-</script>
-
 <script>
-import { useUserStore } from '~/stores/User';
 import Swal from 'sweetalert2';
 export default {
   data() {
     return {
-      user: useUserStore(),
       config: useRuntimeConfig(),
       step: 1,
       optionSelected: "",
@@ -398,7 +390,7 @@ export default {
       const {data} = await useFetch('user-plans',{
         method: 'GET',
         headers: {
-          'Authorization': 'Bearer ' + this.user.token,
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
         baseURL: this.config.public.API
       });
@@ -464,8 +456,8 @@ export default {
       const{ data, pending, error, refresh  } = await useFetch('advertisements',{
         method: 'POST',
         headers: {
-          'Authorization': 'Bearer ' + this.user.token,
-          'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Accept': 'application/json'
         },
         body: form,
         baseURL: this.config.public.API,
@@ -487,7 +479,6 @@ export default {
         let errors = error.value.data.message;
         
         for(let i in errors) {
-          console.log(errors[i])
           this.displayModal = true;
           this.errors.push(errors[i][0])
         }
@@ -495,17 +486,6 @@ export default {
     },
   },
   computed: {
-    renderPlanText() {
-      if(this.planSelected.name === 'VIP') {
-        return 'vip';
-      } else if (this.planSelected.name === 'SILVER') {
-        return 'silver';
-      } else if (this.planSelected.name === 'EXCLUSIVO') {
-        return 'exclusive';
-      } else if(this.planSelected.name === 'DESTACADOS') {
-        return '';
-      }
-    },
     renderPrice() {
       if(!this.currencyTab) {
         this.price_us = this.price / 54;
@@ -515,9 +495,6 @@ export default {
   watch: {
     price() {
       this.price_us = parseInt(this.price / 54);
-    },
-    price_us() {
-      this.price = parseInt(this.price_us * 54)
     },
     country() {
       this.getStates(this.country)
@@ -535,7 +512,7 @@ export default {
         this.long = 15.545654654654564
       }
     },
-    displayModal() {
+    displayModal: function() {
       if(this.displayModal) {
         document.body.classList.add('modal-open')
       } else {
@@ -543,8 +520,7 @@ export default {
       }
     }
   },
-  mounted() {
-    this.user.getProfile();
+  beforeMount() {
     this.getUserPlans();
     this.getCountries();
     this.getFeatures();
@@ -552,6 +528,19 @@ export default {
   }
 }
 </script>
+
+
+<!-- renderPlanText() {
+  if(this.planSelected.name === 'VIP') {
+    return 'vip';
+  } else if (this.planSelected.name === 'SILVER') {
+    return 'silver';
+  } else if (this.planSelected.name === 'EXCLUSIVO') {
+    return 'exclusive';
+  } else if(this.planSelected.name === 'DESTACADOS') {
+    return '';
+  }
+}, -->
 
 <style lang="postcss" scoped>
 .steps-wrapper {

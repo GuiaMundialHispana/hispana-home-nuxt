@@ -125,6 +125,7 @@
 </template>
 
 <script>
+import { useAuthStore } from '~/stores/Auth';
 import { useUserStore } from '~/stores/User';
 export default {
   name: 'Advertisement',
@@ -142,12 +143,13 @@ export default {
       user:useUserStore(),
       advertisement: false,
       propertys: [],
-      auth: '',
       actives: [],
       expired: [],
       revision: [],
       rejected: [],
-      inactive: []
+      inactive: [],
+      auth: useAuthStore(),
+      config: useRuntimeConfig()
     }
   },
   methods: {
@@ -156,42 +158,44 @@ export default {
       this.selectedTab = value;
     },
     async getAdvertisement() {
-      const {data} = await useFetch(this.$config.public.API+'advertisements',{
-        method: 'get',
+      const data = await $fetch('advertisements',{
+        method: 'GET',
         headers: {
-          'Authorization': 'Bearer ' + this.user.token,
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
+        baseURL: this.config.public.API
       });
-      const res = data._value.results;
-      for (let i = 0; i < res.length; i++) {
-        const objeto = res[i];
-        
-        // Aplica tu condición aquí
-        if (objeto.status === 'active') {
-          this.actives.push(objeto);
-        }
-        if(objeto.status === 'expired') {
-          this.expired.push(objeto)
-        }
-        if(objeto.status === 'revision') {
-          this.revision.push(objeto)
-        }
-        if(objeto.status === 'rejected' || objeto.status === 'rechazado') {
-          this.rejected.push(objeto)
-        }
-
-        if(objeto.status === 'inactive' || objeto.status === 'borrados') {
-          this.inactive.push(objeto)
-        }
-      }
+      const res = data.results;
       
       if(res.length > 0) {
         this.propertys = res;
         this.advertisement = true;
+
+        for (let i = 0; i < res.length; i++) {
+          const objeto = res[i];
+          if (objeto.status === 'active') {
+            this.actives.push(objeto);
+          }
+          if(objeto.status === 'expired') {
+            this.expired.push(objeto)
+          }
+          if(objeto.status === 'revision') {
+            this.revision.push(objeto)
+          }
+          if(objeto.status === 'rejected' || objeto.status === 'rechazado') {
+            this.rejected.push(objeto)
+          }
+
+          if(objeto.status === 'inactive' || objeto.status === 'borrados') {
+            this.inactive.push(objeto)
+          }
+        }
       }
     }
   },
-  created() {
+  beforeMount() {
     this.getAdvertisement();
   }
 }
@@ -212,73 +216,3 @@ export default {
 }
 
 </style>
-
-
-<!-- <template>
-  <section>
-    {{ actives }}
-  </section>
-</template>
-
-
-<script setup>
-import { useUserStore } from '~/stores/User';
-const config = useRuntimeConfig();
-const user = useUserStore();
-let actives = ref([]);
-let expired = [];
-let revision = [];
-let rejected = [];
-let inactive = [];
-
-
-const { data: properties, pending, error} = await useFetch('advertisements', {
-  headers: {
-    'Authorization': 'Bearer ' + user.token,
-  },
-  method: 'GET',
-  baseURL: config.public.API,
-  transform:(_properties) => _properties.results
-});
-
-function test() {
-  for (let i = 0; i < properties.length; i++) {
-    const objeto = res[i];
-    
-    // Aplica tu condición aquí
-    if (objeto.status === 'active') {
-      // actives.push(objeto);
-    }
-    if(objeto.status === 'expired') {
-      expired.push(objeto)
-    }
-    if(objeto.status === 'revision') {
-      revision.push(objeto)
-    }
-    if(objeto.status === 'rejected' || objeto.status === 'rechazado') {
-      rejected.push(objeto)
-    }
-
-    if(objeto.status === 'inactive' || objeto.status === 'borrados') {
-      inactive.push(objeto)
-    }
-  }
-}
-test()
-</script>
-
-<style lang="postcss" scoped>
-.ads {
-  & nav {
-    & .btn {
-      @apply flex-grow justify-between border-2 hover:border-primary-100 text-neutral-black;
-      & span { @apply w-6 h-6 flex items-center justify-center rounded-full font-medium text-sm bg-[#F5F5F5] text-[#ADADAD]; }
-      &.active {
-        @apply bg-primary-100 text-neutral-white border-primary-100 hover:text-neutral-black !important;
-        & span { @apply text-primary-100 bg-primary-50; }
-      }
-    }
-  }
-}
-
-</style> -->

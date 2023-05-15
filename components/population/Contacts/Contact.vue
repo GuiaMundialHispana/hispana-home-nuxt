@@ -6,7 +6,7 @@
     </div>
     <div class="flex flex-col">
       <label for="email">Correo</label>
-      <input class="form-control mt-2" v-model="email" placeholder="Correo" type="email" id="email">
+      <input class="form-control mt-2" v-model="email" placeholder="Correo" required type="email" id="email">
     </div>
     <div class="flex flex-col col-span-2">
       <label for="message">Mensaje</label>
@@ -26,19 +26,21 @@ export default{
       name: '',
       email: '',
       message: '',
+      config: useRuntimeConfig(),
     }
   },
   methods: {
     async sendMessage() {
+      this.isDisabled = false;
       const form = new FormData();
       form.append('name', this.name);
       form.append('email', this.email)
       form.append('description', this.message)
-      const { data }  = await useFetch(useRuntimeConfig().API+'generals/contact',{
+      const data = await $fetch('generals/contact',{
         method: 'POST',
-        body: form
+        body: form,
+        baseURL: this.config.public.API
       });
-
       try {
         this.$swal.fire({
           icon: 'success',
@@ -50,8 +52,8 @@ export default{
           text: 'En estos momentos estamos presentando un error, intente mas tarde'
         })
       }
-    },
-  }
+    }
+  },
 }
 </script>
 <style lang="postcss" scoped>

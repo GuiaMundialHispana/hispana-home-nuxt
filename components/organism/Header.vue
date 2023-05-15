@@ -14,13 +14,13 @@
           >
             <NuxtLink :to='item.route'>{{item.name}}</NuxtLink>
           </li>
-          <li class="mb-4 lg:mb-0" v-show="!user.isLoggedIn">
+          <li class="mb-4 lg:mb-0" v-show="!auth.isLoggedIn">
             <AtomsButtons @click="showMenu = false; displayModal = true">
               Iniciar sesión
             </AtomsButtons>
           </li>
           <!-- User Logged -->
-          <li class="user-wrapper" v-if="user.isLoggedIn" @click="userDropdown = !userDropdown">
+          <li class="user-wrapper" v-if="auth.isLoggedIn" @click="userDropdown = !userDropdown">
             <div class="flex items-center gap-2">
               <img src="/img/user.jpg" />
               {{user.userData.name}} {{user.userData.lastname}}
@@ -47,32 +47,14 @@
                     Mis planes
                   </NuxtLink>
                 </li>
-                <!-- <li>
-                  <NuxtLink :to="{ path: 'profile', query: { tab: 'anuncio' }}">
-                    <AtomsIcon name="general/border-all" class="mr-2.5" />
-                    Mis anuncios
-                  </NuxtLink>
-                </li>
-                <li>
-                  <NuxtLink :to="{ path: 'profile', query: { tab: 'favorite' }}">
-                    <AtomsIcon name="general/favorite" class="mr-2.5" />
-                    Mis favoritos
-                  </NuxtLink>
-                </li>
-                <li>
-                  <NuxtLink :to="{ path: 'profile', query: { tab: 'plan' }}">
-                    <AtomsIcon name="general/user-document" class="mr-2.5" />
-                    Mis planes
-                  </NuxtLink>
-                </li> -->
-                <li @click="user.logOut(), showMenu = false">
+                <li @click="auth.logOut(), showMenu = false">
                   <AtomsIcon name="general/logout" class="mr-2.5" />
                   Cerrar sesión
                 </li>
               </ul>
             </div>
           </li>
-          <li v-show="user.isLoggedIn">
+          <li v-show="auth.isLoggedIn">
             <AtomsLink
               link-to="/PostProperty"
               icon-name="general/plus"
@@ -104,15 +86,17 @@
 
 <script>
 import menu from '~/assets/mocks/Header';
+import { useAuthStore } from '~/stores/Auth';
 import { useUserStore } from '~/stores/User';
 export default {
   name: 'AppHeader',
   data() {
     return {
+      auth: useAuthStore(),
+      user: useUserStore(),
       menu: menu.menu,
       viewport: useViewport(),
       showMenu: false,
-      user: useUserStore(),
       userDropdown: false,
       displayModal: false,
     }

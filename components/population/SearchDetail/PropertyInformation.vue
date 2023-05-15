@@ -88,7 +88,7 @@
     <div class="pb-[76px] md:pt-16 pt-8 2xl:max-w-[1440px] mx-auto">
       <h2 class="text-[28px] leading-[28px] font-semibold md:mb-12 mb-8">Características</h2>
       <div class="grid lg:grid-cols-2 gap-4 overflow-hidden items-start">
-        <ul class="characteristics-table">
+        <!-- <ul class="characteristics-table">
           <li v-if="property.meters">
             <h3>Superficie total</h3>
             <p>{{property.meters}} m2</p>
@@ -109,27 +109,10 @@
             <h3>Parqueo</h3>
             <p>{{property.parking}}</p>
           </li>
-        </ul>
+        </ul> -->
         <ul class="characteristics-table">
-          <li>
-            <h3>Ascensor</h3>
-            <p>152 m2</p>
-          </li>
-          <li>
-            <h3>Gimnasio</h3>
-            <p>172 m2</p>
-          </li>
-          <li>
-            <h3>Cisterna</h3>
-            <p>3</p>
-          </li>
-          <li>
-            <h3>Family Room</h3>
-            <p>4</p>
-          </li>
-          <li>
-            <h3>Lobby</h3>
-            <p>4</p>
+          <li v-for="feat in property.features" :key="feat">
+            <h3>{{feat.name}}</h3>
           </li>
         </ul>
       </div>
@@ -174,16 +157,7 @@ export default {
   methods: {
     showParsedPrice(price) {
       return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    },
-    async getFeatures() {
-      const featuresApi = await $fetch(this.config.public.API+'generals/features');
-      featuresApi.results.forEach(element => {
-        console.log(element)
-      });
-    },
-  },
-  created() {
-    this.getFeatures();
+    }
   }
 }
 </script>
@@ -200,6 +174,20 @@ export default {
 .btn { @apply rounded-lg !important; }
 
 .characteristics-table {
+  @apply rounded-lg border border-[#ADADAD] max-w-sm;
+
+  & li {
+    @apply grid grid-cols-1;
+
+    & h3 { @apply px-7 py-2.5 border-b border-[#ADADAD] font-semibold text-base text-neutral-black; }
+    & p { @apply px-7 py-2.5 border-b border-gray-100 font-normal text-base text-neutral-black; }
+  }
+
+  & li:last-child h3 { @apply border-b-0; }
+  & li:last-child p { @apply border-b-0; }
+}
+
+/* .characteristics-table {
   @apply rounded-lg border border-[#ADADAD];
 
   & li {
@@ -211,7 +199,7 @@ export default {
 
   & li:last-child h3 { @apply border-b-0; }
   & li:last-child p { @apply border-b-0; }
-}
+} */
 
 .btn-loan { 
   @apply md:ml-auto md:w-max w-full border-2 border-gray-100 rounded-lg h-10 flex items-center justify-center text-sm text-neutral-black font-normal px-2.5 hover:text-neutral-white hover:bg-primary-100 hover:font-semibold hover:border-primary-100;

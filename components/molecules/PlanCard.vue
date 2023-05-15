@@ -61,7 +61,8 @@
 </template>
 
 <script>
-import { useUserStore } from '~/stores/User';
+import { useAuthStore } from '~/stores/Auth';
+
 export default {
   props: {
     plan: {
@@ -74,7 +75,7 @@ export default {
   },
   data() {
     return {
-      user: useUserStore(),
+      auth: useAuthStore(),
       planQuantity: 1,
       priceUpdated: 0
     }
@@ -100,7 +101,7 @@ export default {
   },
   methods: {
     payment() {
-      if(this.user.isLoggedIn) {
+      if(this.auth.isLoggedIn) {
         let planInformation =  {
           plans: encodeURIComponent(JSON.stringify(this.plan)),
           newPrice: this.updatePrice,

@@ -38,7 +38,7 @@
       </nav>
       <PopulationProfileAdvertisement v-show="$route.query.tab === 'anuncio'" />
       <PopulationProfileFavorite v-show="$route.query.tab === 'favorite'" />
-      <PopulationProfilePlans v-show="$route.query.tab === 'plan'" />
+      <PopulationProfilePlans v-show="$route.query.tab === 'plan'" /> 
     </div>
   </section>
 </template>
@@ -46,12 +46,6 @@
 <script setup>
 import { useUserStore } from '~/stores/User';
 const user = useUserStore();
-definePageMeta({
-  middleware: ["logger"]
-});
-onBeforeMount(() => {
-  user.getProfile()
-});
 </script>
 
 <style lang="postcss" scoped>

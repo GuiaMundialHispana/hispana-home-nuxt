@@ -22,8 +22,7 @@ export default {
 
 <style lang="postcss" scoped>
 .modal-content {
-  @apply fixed z-[71] w-full overflow-y-scroll h-96 sm:w-[428px] bg-neutral-white top-1/4 left-1/2 -translate-x-2/4 flex flex-col items-center
-  justify-center p-8 shadow-md rounded-lg;
+  @apply fixed z-[71] w-full overflow-y-scroll h-96 sm:w-[428px] bg-neutral-white top-1/4 left-1/2 -translate-x-2/4 flex flex-col items-center p-8 shadow-md rounded-lg;
 }
 
 </style>

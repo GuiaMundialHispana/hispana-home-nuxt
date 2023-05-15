@@ -8,12 +8,12 @@
     <img src="/img/hero.png" alt="Building" class="absolute z-0 top-0 w-full h-full object-cover object-top md:block hidden">
     <PopulationHomeFilterProperties class="hidden lg:block left-1/2 -translate-x-2/4"/>
     <div class="flex justify-center relative z-10 lg:hidden">
-      <AtomsButtons 
-      linkTo="/search" 
-      btn-size="large" 
-      class="my-5 font-semibold">
-      Buscar propiedades
-    </AtomsButtons>
+      <AtomsLink
+        linkTo="/search?type=All" 
+        btn-size="large" 
+        class="my-5 font-semibold">
+        Buscar propiedades
+      </AtomsLink>
     </div>
   </section>
 </template>
