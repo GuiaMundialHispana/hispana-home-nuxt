@@ -2,11 +2,15 @@
   <div class="absolute left-0 bottom-[-6%] text-[#232323] z-10">
     <!-- <MoleculesFilterStatusProperties class="filterStatus-tabs-lg"/> -->
     <div class="flex items-center overflow-hidden rounded-lg border-2 border-gray-100 bg-neutral-white text-[#232323] shadow-sm w-fit flex-none filterStatus-tabs-lg">
-      <AtomsButtons class="btn" @click="getPath = '/search?type=All', getType = 'All'">Todo</AtomsButtons>
-      <AtomsButtons class="btn" @click="getPath = '/sales?type=Sale',  getType = 'Sale'">Compra</AtomsButtons>
-      <AtomsButtons class="btn" @click="getPath = '/rent?type=Rent', getType = 'Rent'">Rentar</AtomsButtons>
+      <AtomsButtons
+        v-for="(btn,i) in types"
+        @click="sendPath = btn.getPath, sendType = btn.getType, btnSelected = i"
+        :class="{active: i === btnSelected}"
+        :key="btn">
+        {{btn.name}}
+      </AtomsButtons>
     </div>
-    <div class="filter-home-wrapper" v-if="ready">
+    <div class="filter-home-wrapper">
       <div class="h-full flex justify-center">
         <button class="filter-btn" @click="toggleList('location')">
           <div class="icon-container">
@@ -166,8 +170,26 @@ import  MultiRangeSlider  from "multi-range-slider-vue";
 export default {
   data() {
     return {
+      btnSelected:0,
       route: useRoute(),
       config:useRuntimeConfig(),
+      types:[
+        {
+          getPath: '/search?type=All',
+          getType: 'All',
+          name: 'Todo'
+        },
+        {
+          getPath: '/sales?type=Sale',
+          getType: 'Sale',
+          name: 'Comprar'
+        },
+        {
+          getPath: '/rent?type=Rent',
+          getType: 'Rent',
+          name: 'Rentar'
+        }
+      ],
       dropdownLists: {
         location: false,
         propertyType: false,
@@ -196,8 +218,8 @@ export default {
       parkingLotQuantity:0,
       status:'',
       queryBody: {},
-      getPath: '/search?type=All',
-      getType: 'All',
+      sendPath: '/search?type=All',
+      sendType: 'All',
       ready: true
     }
   },
@@ -237,7 +259,7 @@ export default {
     },
     async searchProperties() {
       useRouter().push({
-        path: this.getPath, 
+        path: this.sendPath, 
         query: this.queryBody 
       })
     },
@@ -264,7 +286,7 @@ export default {
     city_id(city_id) {
       this.queryBody.city_id = city_id;
     },
-    getType(route) {
+    sendType(route) {
       this.queryBody.type = route;
     },
     category_id(category_id) {
@@ -274,7 +296,7 @@ export default {
   mounted() {
     this.getCountries();
     this.getCategories();
-    this.queryBody.type = this.getType;
+    this.queryBody.type = this.sendType;
     this.queryBody.price_type = this.picked;
   }
 }
