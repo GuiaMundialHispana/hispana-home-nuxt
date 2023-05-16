@@ -20,7 +20,7 @@
       </nav>
       <nav class="flex xl:flex-col md:flex-row flex-col gap-4 xl:justify-start justify-center xl:items-start items-center flex-none xl:col-span-2 col-span-12">
         <h6 class="uppercase text-neutral-white font-medium text-sm xl:block hidden">ACCESOS DIRECTOS</h6>
-        <NuxtLink class="link-to" :to="item.route" v-for="item in directAccess" :key="item">
+        <NuxtLink class="link-to" target="_blank" :to="item.route" v-for="item in directAccess" :key="item">
           {{ item.name }}
         </NuxtLink>
       </nav>

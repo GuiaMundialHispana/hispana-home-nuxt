@@ -14,29 +14,29 @@ export default {
     },
     {
       name: 'Aviso legal',
-      route: '/'
+      route: '/Legal-warning'
     },
     {
       name: 'Politica de privacidad',
-      route: '/'
+      route: '/Privacy-policy'
     }
   ],
   directAccess: [
     {
       name: 'Hispana Auto',
-      route: '/'
+      route: '/Under-construction'
     },
     {
       name: 'Hispana Negocios',
-      route: '/'
+      route: '/Under-construction'
     },
     {
       name: 'Hispana Afiliados',
-      route: '/'
+      route: '/Under-construction'
     },
     {
       name: 'Guía Mundial Hispana',
-      route: '/'
+      route: 'https://world-hispanic-guide.vercel.app/'
     }
   ],
   socialLinks: [
