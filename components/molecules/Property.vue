@@ -4,7 +4,7 @@
       btn-type="btn-icon"
       icon-name="general/favorite"
       class="favorite-button"
-      :class="{active: isFavorite}"
+      :class="{active: property.is_favorite}"
       @click="toggleFavorite()"
     />
     <Swiper

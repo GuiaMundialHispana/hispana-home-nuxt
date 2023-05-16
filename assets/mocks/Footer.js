@@ -4,13 +4,13 @@ export default {
     description: 'Busca, encuentra y compra el inmueble perfecto con Hispana Home, el buscador de inmuebles que te ofrece la mejor selección de propiedades. ¡Empieza tu búsqueda hoy mismo!'
   },
   navigation: [
-    {
-      name: 'Sobre nosotros',
-      route: '/'
-    },
+    // {
+    //   name: 'Sobre nosotros',
+    //   route: '/'
+    // },
     {
       name: 'Contacto',
-      route: '/'
+      route: '/contact'
     },
     {
       name: 'Aviso legal',
