@@ -3,7 +3,8 @@
     <div class="xl:container mx-auto lg:px-16 md:px-8 px-4">
       <div class="profile-wrapper">
         <figure class="profile-image">
-          <img :src="user.userData.profile_pic" :alt="user.userData.name">
+          <img :src="`https://walrus-app-e2bxo.ondigitalocean.app/${user.userData.profile_pic}`" v-if="user.userData.profile_pic != null || ''" :alt="user.userData.name">
+          <img src="/img/user.jpg" v-if="user.userData.profile_pic === null || ''" :alt="user.userData.name">
         </figure>
         <div class="profile-information">
           <h3>
@@ -51,7 +52,7 @@ const user = useUserStore();
 <style lang="postcss" scoped>
 .profile-wrapper {
   @apply flex items-center justify-center gap-5 py-16 border-b border-gray-300 mb-10;
-  & .profile-image img { @apply w-[117px] h-[117px] rounded-full border-4 border-primary-50; }
+  & .profile-image img { @apply w-[117px] h-[117px] rounded-full object-cover object-center border-4 border-primary-50; }
   & h3 { @apply text-[28px] leading-[28px] font-semibold mb-4; }
 }
 

@@ -13,7 +13,7 @@
     <div class="form">
       <div class="flex flex-col">
         <h4>Información personal</h4>
-        <div class="flex md:flex-row flex-col">
+        <div class="flex md:flex-row flex-col gap-2">
           <label>
             Nombre:
             <input
@@ -31,7 +31,7 @@
             >
           </label>
         </div>
-        <div class="flex md:flex-row flex-col">
+        <div class="flex md:flex-row flex-col gap-2">
           <label class="relative">
             Fecha de nacimiento:
             <input
@@ -51,13 +51,13 @@
         </div>
       </div>
       <h4>Contactos</h4>
-      <div class="flex md:flex-row flex-col">
+      <div class="flex md:flex-row flex-col gap-2">
         <label>
           Teléfono móvil:
           <input
             type="tel"
             class="lg:mr-4 mr-0"
-            v-model="editUser.editUserData.cellphone"
+            v-model="editUser.editUserData.phone"
             :placeholder="user.userData.cellphone"
           >
         </label>
@@ -65,7 +65,8 @@
           Teléfono residencial:
           <input
             type="tel"
-            :placeholder="user.userData.phone"
+            :placeholder="user.userData.cellphone"
+            v-model="editUser.editUserData.cellphone"
           >
         </label>
       </div>
@@ -121,7 +122,7 @@
           <div class="flex flex-col items-center">
             <p class="whitespace-nowrap">Actualiza tu foto de perfil</p>
             <figure class="w-[107px] h-[107px] rounded-full border-[5px] border-primary-50 mt-5">
-              <img :src="editUser.editUserData.profile_pic" :alt="user.userData.name" class="rounded-full w-full h-full object-cover">
+              <img :src="`https://walrus-app-e2bxo.ondigitalocean.app/${editUser.editUserData.profile_pic}`" :alt="user.userData.name" class="rounded-full w-full h-full object-cover">
             </figure>
           </div>
         </div>
@@ -158,7 +159,7 @@
 <script>
 import { useUserStore } from '~/stores/User';
 import { useUserEditStore } from '~/stores/EditUser';
-import FormData from 'form-data';
+import Swal from 'sweetalert2';
 export default {
   data() {
     return {
@@ -204,33 +205,47 @@ export default {
       this.form.append('cellphone', this.editUser.editUserData.cellphone);
       this.form.append('phone', this.editUser.editUserData.phone);
 
-      await useFetch(useRuntimeConfig().API+'users/update?_method=PUT',{
+      await useFetch('users/update?_method=PUT',{
         method: 'POST',
         body: this.form,
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Accept': 'application/json'
+        },
+        baseURL: this.config.public.API,
+        onResponse({response}) {
+          if(response.status === 400) {
+            let errors = response._data.message;
+            Swal.fire({
+              icon: 'error',
+              html: '<ul></ul>',
+              didOpen: () => {
+                const b = Swal.getHtmlContainer().querySelector('ul');
+                Object.keys(errors).forEach(clave => {
+                  const li = document.createElement('li');
+                  li.classList.add('text-primary-100', 'text-left', 'text-sm', 'mb-2')
+                  li.textContent = errors[clave];
+                  b.appendChild(li);
+                });
+              },
+            });
+          }
+
+          if(response.status === 200) {
+            Swal.fire({
+              icon: 'success',
+              text: 'Sus datos han sido actualizados',
+              showConfirmButton: false,
+              timer: 2000
+            });
+            // useRouter().go()
+            useRouter().push("/profile?tab=anuncio");
+          }
         }
       });
-
-      try {
-        this.$swal({
-          icon: 'success',
-          text: 'Sus datos han sido actualizados',
-          showConfirmButton: false,
-          timer: 2000
-        });
-        useRouter().push("/profile?tab=anuncio");
-      } catch (error) {
-        this.$swal({
-          icon: 'error',
-          text: 'Confirma que todos los datos esten completos'
-        });
-      }
     }
   },
   created() {
-    // this.user.getProfile();
     this.getCountries();
   }
 }

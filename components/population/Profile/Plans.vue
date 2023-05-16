@@ -3,7 +3,7 @@
     <div>
       <h3>Mis planes disponibles</h3>
       <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        <li v-if="plans.length < 0" class="border border-gray-10 rounded-lg p-6 flex flex-col justify-center items-center">
+        <li v-if="plans.length <= 0" class="border border-gray-10 rounded-lg p-6 flex flex-col justify-center items-center">
           <div class="bg-primary-100 text-neutral-white text-center w-full text-sm rounded-lg py-1">
             Actualmente tienes el <b>plan Basico</b>
           </div>

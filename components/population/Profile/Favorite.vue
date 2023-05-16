@@ -13,7 +13,7 @@
         <li v-for="item in properties" :key="item">
           <MoleculesProperty 
             :property="item.property"
-            :property-id="item.id"
+            :property-id="item.property.advertisements[0].id"
           />
         </li>
       </ul>
@@ -44,6 +44,8 @@ export default {
         baseURL: this.config.public.API
       });
       this.properties = data.results;
+      
+      console.log(this.properties)
       this.properties.length > 0 ? this.favorite = true : this.favorite = false;
     }
   },

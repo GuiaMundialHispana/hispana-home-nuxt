@@ -20,67 +20,80 @@
       <input placeholder="Repite contraseña" type="password" v-model="password_confirmation">
       <AtomsIcon name="general/lock" :size=14 class="absolute text-primary-100 z-50 top-1/4 left-2" />
     </div>
-    <AtomsButtons btn-size="medium"  @click="register()">
+    <AtomsButtons btn-size="medium"  @click="register(),$emit('close')">
       Registrar
     </AtomsButtons>
   </div>
 </template>
 
-<script lang="ts">
+<script setup>
+import Swal from 'sweetalert2';
 import { useAuthStore } from '~/stores/Auth';
-import { useUserStore } from '~/stores/User';
+import { useUserStore  } from '~/stores/User';
+const config = useRuntimeConfig();
+const auth = useAuthStore();
+const user = useUserStore();
+let name = ref('');
+let lastname = ref('');
+let email = ref('');
+let password = ref('');
+let password_confirmation = ref('');
 
-export default {
-  data() {
-    return {
-      user: useUserStore(),
-      auth: useAuthStore(),
-      config: useRuntimeConfig(),
-      name: '',
-      lastname: '',
-      email: '',
-      password: '',
-      password_confirmation: '',
-    }
-  },
-  methods: {
-    async register() {
-      this.$emit('close');
-      const {pending, data} = await useFetch('auth/register',{
-          method: 'POST',
-          body: {
-            name: this.name,
-            lastname: this.lastname,
-            email: this.email,
-            password: this.password,
-            password_confirmation: this.password_confirmation
-          },
-          baseURL: this.$config.public.API
-        }
-      );
-
-      try {
-        const res = data.value.results;
-        if(pending) { this.$swal({ icon: 'success', text: 'Estamos comprobando tu informacion'})};
-        
-        this.$swal({
-          icon: 'success',
-          text: 'Hemos validados tus datos correctamente'
-        });
-
-        localStorage.setItem('token', res.access_token.original.access_token);
-        useRouter().push({path: '/profile?tab=anuncio'});
-        this.auth.isLoggedIn = true;
-
-      } catch (error) {
-        this.$swal({
+async function register() {
+  const {pending, data} = await useFetch('auth/register',{
+    method: 'POST',
+    body: {
+      name: name,
+      lastname: lastname,
+      email: email,
+      password: password,
+      password_confirmation: this.password_confirmation
+    },
+    baseURL: config.public.API,
+    onResponse({response}) {
+      console.log(response._data)
+      if(response.status === 400) {
+        let errors = response._data.message;
+        Swal.fire({
           icon: 'error',
-          text: 'Confirma que tus datos esten correctos'
+          html: '<ul></ul>',
+          didOpen: () => {
+            const b = Swal.getHtmlContainer().querySelector('ul');
+            Object.keys(errors).forEach(clave => {
+              const li = document.createElement('li');
+              li.classList.add('text-primary-100', 'text-left', 'text-sm', 'mb-2')
+              li.textContent = errors[clave];
+              b.appendChild(li);
+            });
+          },
         });
       }
+
+      if(response.status === 200) {
+        Swal.fire({
+          icon: 'success',
+          text: `${response._data.message}`
+        });
+        localStorage.setItem('token', response._data.results.access_token.original.access_token);
+        auth.isLoggedIn = true;
+        let isAuthenticated = window.localStorage.getItem('token');
+        async function getProfile() {
+          const data = await $fetch('auth/profile', {
+            method: 'GET',
+            headers: {
+              'Authorization': 'Bearer ' + isAuthenticated
+            },
+            baseURL: config.public.API
+          });
+          const res = data.results.user;
+          user.userData = res;
+        }
+        getProfile();
+        useRouter().push('/profile?tab=plan');
+      }
     }
-  },
-}
+  });
+};
 </script>
 
 <style lang="postcss" scoped>
