@@ -5,6 +5,6 @@
 		<PopulationHomeSilverProperties />
 		<PopulationHomeExclusiveProperties />
 		<PopulationHomeBenefits />
-		<OrganismExploreProperties />
+		<OrganismExploreProperties :property_id=1 />
 	</div>
 </template>
