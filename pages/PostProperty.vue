@@ -134,7 +134,7 @@
               </div>
             </div>
             <div class="col-span-3">
-              <ClientOnly fallback-tag="span" fallback="Loading comments...">
+              <ClientOnly fallback="Loading comments...">
                 <OrganismMap @send-location="getAddress"/>
               </ClientOnly>
             </div>
@@ -388,14 +388,16 @@ export default {
       this.address = location;
     },
     async getUserPlans() {
-      const {data} = await useFetch('user-plans',{
+      const data = await $fetch('user-plans',{
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
         baseURL: this.config.public.API
       });
-      this.plans = data._value.results;
+      this.plans = data.results;
     },
     async getCountries() {
       const countriesApi = await $fetch(this.config.public.API+'generals/countries');
@@ -669,7 +671,7 @@ export default {
     @apply h-8 w-full border border-[#D9D9D9] text-sm rounded-md px-3 placeholder:text-opacity-25 placeholder:font-normal focus:outline-primary-100;
   }
 
-  .select-multiple { @apply h-40; }
+  & .select-multiple { @apply h-40; }
   & .price-btn {
     @apply border-y border-gray-300 text-primary-100 w-[37px] h-8 text-[12px] mb-0 mt-auto ;
     &.active { @apply bg-primary-100 text-neutral-white border-none; }
@@ -693,8 +695,8 @@ export default {
     @apply absolute bottom-0 bg-primary-100 w-full h-[35px] z-20 flex items-center justify-center text-neutral-white text-base
   }
 
-  .upload-photos-container { @apply grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3; }
+  & .upload-photos-container { @apply grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3; }
 
-  .warning-message { @apply flex gap-2 items-center justify-center w-fit py-1 px-2 bg-primary-100 text-neutral-white font-semibold rounded-lg; }
+  & .warning-message { @apply flex gap-2 items-center justify-center w-fit py-1 px-2 bg-primary-100 text-neutral-white font-semibold rounded-lg; }
 }
 </style>
