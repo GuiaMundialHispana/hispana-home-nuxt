@@ -25,12 +25,12 @@ export const useAuthStore = defineStore('auth', {
 
       try {
         const res = data.value.results;
-        Swal.fire({
-          icon: 'success',
-          text: 'Bienvenido',
-          showConfirmButton: false,
-          timer: 2000
-        });
+        // Swal.fire({
+        //   icon: 'success',
+        //   text: 'Bienvenido',
+        //   showConfirmButton: false,
+        //   timer: 2000
+        // });
 
         useRouter().go()
 

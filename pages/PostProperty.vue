@@ -138,13 +138,14 @@
                 <OrganismMap @send-location="getAddress"/>
               </ClientOnly>
             </div>
-            <div class="col-span-3">
+            <div class="col-span-3 hidden">
               <label class="w-full sm:mb-2 mb-5">
               Direccion
               <input class="form-control" v-model="address" placeholder="Direccion" type="text">
             </label>
             </div>
-            <label class="w-full sm:mb-2 mb-5">
+            <!-- Pais -->
+            <label class="col-span-3 w-full sm:mb-2 mb-5">
               País
               <select class="form-control col-span-3" v-model="country">
                 <option v-for="country in countries" :value="country.id" :key="country.id" class="option-label">
@@ -152,22 +153,24 @@
                 </option>
               </select>
             </label>
-            <label class="w-full sm:mb-2 mb-5" v-if="sectors.length > 0">
-              Sector
-              <select class="form-control col-span-3" v-model="sector">
-                <option v-for="sector in sectors[0]" :value="sector.id" :key="sector.id" class="option-label">
-                {{ sector.name }}
-                </option>
-              </select>
-            </label>
-            <label class="w-full sm:mb-2 mb-5" v-if="cities.length > 0">
-              Ciudad
-              <select class="form-control" v-model="city">
-                <option v-for="item in cities[0]" :value="item.id" :key="item.id" class="option-label">
-                {{ item.name }}
-                </option>
-              </select>
-            </label>
+            <div class="col-span-3 gap-4 sm:grid grid-cols-2">
+              <label class="w-full" v-if="sectors.length > 0">
+                Sector
+                <select class="form-control col-span-3" v-model="sector">
+                  <option v-for="sector in sectors[0]" :value="sector.id" :key="sector.id" class="option-label">
+                  {{ sector.name }}
+                  </option>
+                </select>
+              </label>
+              <label class="w-full" v-if="cities.length > 0">
+                Ciudad
+                <select class="form-control" v-model="city">
+                  <option v-for="item in cities[0]" :value="item.id" :key="item.id" class="option-label">
+                  {{ item.name }}
+                  </option>
+                </select>
+              </label>
+            </div>
             <div class="col-span-3 gap-4 sm:grid grid-cols-2">
               <label class="w-full sm:mb-2 mb-5">
                 Habitaciones
@@ -190,9 +193,23 @@
                 </select>
               </div>
             </div>
+            <!-- features -->
             <div class="col-span-3">
               <label for="amenities" class="mb-2">Otras amenidades</label>
-              <select
+              <div class="dropdown-wrapper scrollbar min-h-max max-h-[273px]">
+                <label class="checkbox-labels" :for="item.name" v-for="item in features" :key="item">
+                  <input
+                    type="checkbox"
+                    class="checkbox"
+                    name="feature"
+                    :value="item.id"
+                    v-model="feature"
+                    :id="item.name"
+                  >
+                  {{ item.name }}
+                </label>
+              </div>
+              <!-- <select
                 id="amenities"
                 class="form-control select-multiple col-span-3 sm:mb-2 mb-5"
                 v-model="feature"
@@ -205,7 +222,7 @@
                 >
                   {{ item.name }}
                 </option>
-              </select>
+              </select> -->
             </div>
             <div class="col-span-3 w-full gap-4 sm:flex sm:mb-2 mb-5">
               <label class="w-full mb-5 sm:mb-0">
@@ -299,11 +316,6 @@
         Volver a inicio
       </AtomsLink>
     </nav>
-    <!-- <PopulationPostPropertiesModalError
-      v-if="displayModal"
-      :errors="errors"
-      @close="displayModal = false"
-    /> -->
   </section>
 </template>
 
@@ -475,7 +487,7 @@ export default {
                 Object.keys(errors).forEach(clave => {
                   const li = document.createElement('li');
                   li.classList.add('text-primary-100', 'text-left', 'text-sm', 'mb-2')
-                  li.textContent = errors[clave];
+                  li.textContent = errors[clave][0];
                   b.appendChild(li);
                 });
               },
@@ -490,19 +502,14 @@ export default {
               showConfirmButton: false,
               timer: 4000
             });
-            useRouter().push("/profile?tab=anuncio");
           }
-        }    
+        } 
       });
-      
-      // if(error) {
-      //   let errors = error.value.data.message;
-        
-      //   for(let i in errors) {
-      //     this.displayModal = true;
-      //     this.errors.push(errors[i][0])
-      //   }
-      // }
+
+      if(data._value.code === 200) {
+        this.step++;
+      }
+
     },
   },
   computed: {
@@ -515,6 +522,9 @@ export default {
   watch: {
     price() {
       this.price_us = parseInt(this.price / 54);
+    },
+    price_us() {
+      this.price = parseInt(this.price_us * 54);
     },
     country() {
       this.getStates(this.country)
@@ -548,19 +558,6 @@ export default {
   }
 }
 </script>
-
-
-<!-- renderPlanText() {
-  if(this.planSelected.name === 'VIP') {
-    return 'vip';
-  } else if (this.planSelected.name === 'SILVER') {
-    return 'silver';
-  } else if (this.planSelected.name === 'EXCLUSIVO') {
-    return 'exclusive';
-  } else if(this.planSelected.name === 'DESTACADOS') {
-    return '';
-  }
-}, -->
 
 <style lang="postcss" scoped>
 .steps-wrapper {
@@ -678,6 +675,10 @@ export default {
   }
   & textarea {
     @apply mt-2 border border-[#D9D9D9] text-sm rounded-md px-3 py-2 placeholder:text-opacity-25 placeholder:font-normal focus:outline-primary-100 h-[130px];
+  }
+
+  .checkbox-labels {
+    @apply flex-row;
   }
 }
 

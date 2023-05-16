@@ -42,19 +42,19 @@ export default {
   socialLinks: [
     {
       icon: 'facebook',
-      route: '/'
+      route: 'https://www.facebook.com/'
     },
     {
       icon: 'instagram',
-      route: '/'
+      route: 'https://www.instagram.com/'
     },
     {
       icon: 'twitter',
-      route: '/'
+      route: 'https://twitter.com/?lang=es'
     },
     {
       icon: 'youtube',
-      route: '/'
+      route: 'https://www.youtube.com/'
     }
   ]
 }

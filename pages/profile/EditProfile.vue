@@ -123,7 +123,8 @@
           <div class="flex flex-col items-center">
             <p class="whitespace-nowrap">Actualiza tu foto de perfil</p>
             <figure class="w-[107px] h-[107px] rounded-full border-[5px] border-primary-50 mt-5">
-              <img :src="`https://walrus-app-e2bxo.ondigitalocean.app/${editUser.editUserData.profile_pic}`" :alt="user.userData.name" class="rounded-full w-full h-full object-cover">
+              <img v-if="isNewImage" :src="editUser.editUserData.profile_pic" :alt="user.userData.name" class="rounded-full w-full h-full object-cover">
+              <img v-if="!isNewImage" :src="`https://walrus-app-e2bxo.ondigitalocean.app/${editUser.editUserData.profile_pic}`" :alt="user.userData.name" class="rounded-full w-full h-full object-cover">
             </figure>
           </div>
         </div>
@@ -174,12 +175,14 @@ export default {
       country: [],
       form: new FormData(),
       password: '',
-      password_confirmation: ''
+      password_confirmation: '',
+      isNewImage: false
     }
   },
   watch:{
     profilePic() {
       this.editUser.editUserData.profile_pic = this.profilePic;
+      this.isNewImage = true;
     },
     images() {
       this.form.append('profile_pic', this.editUser.images);

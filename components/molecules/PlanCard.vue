@@ -44,7 +44,7 @@
       Comprar
     </AtomsButtons>
     <AtomsButtons
-      v-if="$route.path === '/postProperty'"
+      v-if="$route.path === '/PostProperty'"
       btn-style="outline-gray"
       class="my-4 w-full"
       @click="$emit('pay', plan.id, plan.pictures)"

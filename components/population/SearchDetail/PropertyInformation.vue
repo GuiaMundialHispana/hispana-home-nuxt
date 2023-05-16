@@ -9,8 +9,8 @@
             Precio
             <br>
             <span class="text-primary-100 xl:text-[28px] text-xl xl:leading-[28px] font-semibold mt-2">US${{ showParsedPrice(property.price_us) }}</span>
-            <br />
-            <span class="text-primary-100 xl:text-[28px] text-xl xl:leading-[28px] font-semibold mt-2">RD${{ showParsedPrice(property.price) }}</span>
+            <!-- <br /> -->
+            <!-- <span class="text-primary-100 xl:text-[28px] text-xl xl:leading-[28px] font-semibold mt-2">RD${{ showParsedPrice(property.price) }}</span> -->
           </p>
           <a href="#loan" class="btn-loan">
             <AtomsIcon class="mr-2.5" name="general/price" :size=18 />
@@ -125,7 +125,10 @@
     <!-- Location -->
     <div class="2xl:max-w-[1440px] mx-auto">
       <h2 class="text-[28px] leading-[28px] font-semibold mb-7">Ubicación</h2>
-      <iframe class="w-full rounded-lg h-96" :src="renderMap"></iframe>
+      <ClientOnly>
+        <iframe class="w-full rounded-lg h-96" :src="renderMap"></iframe>
+      </ClientOnly>
+      <!-- <iframe class="w-full rounded-lg h-96" :src="renderMap"></iframe> -->
     </div>
   </section>
 </template>
