@@ -17,9 +17,10 @@
       <AtomsButtons class="font-semibold" @click="sendMessage()">Enviar</AtomsButtons>
     </div>
   </div>
-  
-</template> 
+</template>
+
 <script>
+import Swal from 'sweetalert2';
 export default{
   data() {
     return {
@@ -39,19 +40,31 @@ export default{
       const data = await $fetch('generals/contact',{
         method: 'POST',
         body: form,
-        baseURL: this.config.public.API
+        baseURL: this.config.public.API,
+        onResponse({response}) {
+          console.log(response)
+          if(response.status === 500 ) {
+            Swal.fire({
+              icon: 'error',
+              text: 'En estos momentos estamos presentando un error, intente mas tarde'
+            })
+          }
+
+          if(response.status === 400 ) {
+            Swal.fire({
+              icon: 'error',
+              text: 'Verifica que toda la informacion este correctamente'
+            })
+          }
+
+          if(response.status === 200 ) {
+            Swal.fire({
+              icon: 'success',
+              text: 'Su mensaje se ha enviado con exito, estaremos respondiendo lo mas pronto posible'
+            })
+          }
+        }
       });
-      try {
-        this.$swal.fire({
-          icon: 'success',
-          text: 'Su mensaje se ha enviado con exito, estaremos respondiendo lo mas pronto posible'
-        })
-      } catch (error) {
-        this.$swal.fire({
-          icon: 'error',
-          text: 'En estos momentos estamos presentando un error, intente mas tarde'
-        })
-      }
     }
   },
 }
