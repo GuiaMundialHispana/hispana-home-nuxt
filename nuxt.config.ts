@@ -9,7 +9,12 @@ export default defineNuxtConfig({
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' }
       ],
-      script: []
+      script: [
+        {
+          src: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCPPtyX8Gz-9kxyUIEJ_ZgXtUgbaC4avk4',
+          defer: true
+        }
+      ],
     }
   },
   modules: [
