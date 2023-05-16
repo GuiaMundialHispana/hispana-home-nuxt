@@ -25,4 +25,8 @@ const { data: property, pending, error} = await useFetch(`advertisements/${route
   baseURL: config.public.API,
   transform:(_property) => _property.results
 });
+
+definePageMeta({
+  middleware: ["not-found"]
+});
 </script>

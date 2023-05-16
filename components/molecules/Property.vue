@@ -183,70 +183,10 @@ export default {
     //end methods
   },
   mounted() {
-    // console.log(this.property)
+    console.log(this.property)
   }
 }
 </script>
-<!-- 
-async addFavorite() {
-  const {data} = await useFetch('users/favorites',{
-    method: 'post',
-    headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`},
-    body: { property_id: this.property.id},
-    baseURL: this.config.public.API
-  });
-
-  if(data) {
-    this.$swal.fire({
-      icon: 'success',
-      text: data._value.message,
-      showConfirmButton: false,
-      timer: 2000
-    });
-    this.$router.go();
-  }
-},
-async deleteFavorite() {
-  const {data} = await useFetch('users/favorites',{
-    method: 'delete',
-    headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`},
-    body: { property_id: this.property.id},
-    baseURL: this.config.public.API
-  });
-  if(data) {
-    this.$swal.fire({
-      icon: 'success',
-      text: data._value.message,
-      showConfirmButton: true,
-      timer: 2000
-    });
-    this.$router.go()
-  } else {
-    this.$swal.fire({
-      icon: 'error',
-      text: data._value.message,
-      showConfirmButton: true,
-      timer: 2000
-    });
-  }
-},
-toggleFavorite() {
-  if(this.auth.isLoggedIn) {
-    if(this.isFavorite) {
-      this.deleteFavorite();
-    } else {
-      this.addFavorite();
-    }
-
-  } else {
-    this.$swal.fire({
-      icon: 'error',
-      text: 'Necesitas iniciar sesion para poder agregar esta propiedad a favoritos',
-      showConfirmButton: true,
-      timer: 2000
-    });
-  }
-} -->
 
 <style lang="postcss" scoped>
 article {
