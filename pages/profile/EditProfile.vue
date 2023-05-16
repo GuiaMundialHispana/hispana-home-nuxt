@@ -202,10 +202,13 @@ export default {
       this.form.append('email', this.editUser.editUserData.email);
       this.form.append('password', this.password);
       this.form.append('password_confirmation', this.password_confirmation);
-      this.form.append('token', localStorage.getItem('token'));
-      await useFetch('auth/change-password',{
+      await useFetch('users/update?_method=PUT',{
         method: 'POST',
         body: this.form,
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Accept': 'application/json'
+        },
         baseURL: this.config.public.API,
         onResponse({response}) {
           if(response.status === 400) {
@@ -232,6 +235,8 @@ export default {
               showConfirmButton: false,
               timer: 2000
             });
+            // useRouter().go()
+            useRouter().push("/profile?tab=anuncio");
           }
         }
       });
