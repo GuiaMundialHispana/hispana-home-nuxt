@@ -80,12 +80,20 @@
           <h4 class="font-semibold text-[28px] leading-[42px] mt-11 mb-14 text-center">
             Planes disponibles para esta publicación.
           </h4>
-          <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 px-16">
+          <ul v-if="plans.length > 0" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 px-16">
             <li v-for="plan in plans" :key="plan">
               <MoleculesPlanCard
                 @pay="planInformation"
                 :plan="plan.plan"
                 :user-quantity="plan.quantity"
+              />
+            </li>
+          </ul>
+          <ul v-if="plans.length < 0" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 px-16">
+            <li>
+              <MoleculesPlanCard
+                @pay="planInformation"
+                :plan="plans[3].plan"
               />
             </li>
           </ul>
