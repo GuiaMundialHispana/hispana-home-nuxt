@@ -1,5 +1,5 @@
 <template>
-  <section class="md:px-14 px-4 mb-10 flex gap-5 mt-8 xl:flex-row flex-col 2xl:max-w-[1440px] mx-auto">
+  <section class="">
     <swiper
       :style="{
         '--swiper-navigation-color': '#fff',
@@ -75,8 +75,12 @@ export default {
 
 <style lang="postcss" scoped>
 
+section {
+  @apply md:px-14 px-4 mb-10 gap-5 mt-8 2xl:max-w-[1440px] mx-auto grid xl:grid-cols-[auto,205px];
+}
+
 .swiper-hero {
-  @apply md:h-[560px] h-[360px] flex-grow m-0 !important;
+  @apply md:h-[560px] h-[360px] max-w-6xl flex-grow m-0 !important;
 
   & .swiper-wrapper {
     @apply h-full w-full rounded-lg overflow-hidden m-0;
@@ -91,7 +95,7 @@ export default {
 }
 
 .swiper-thumbs {
-  @apply xl:w-52 w-full xl:h-[560px] h-32;
+  @apply xl:w-52 w-full xl:h-[560px] h-32 ;
 
   & .swiper-wrapper {
     @apply w-52 h-full m-0 !important;
