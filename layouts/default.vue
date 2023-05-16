@@ -12,6 +12,7 @@
 <script setup>
 import { useAuthStore } from '~/stores/Auth';
 import { useUserStore  } from '~/stores/User';
+import Swal from 'sweetalert2';
 const isAuthenticated = ref('');
 const auth = useAuthStore();
 const user = useUserStore();
@@ -22,6 +23,12 @@ onMounted(() => {
   isAuthenticated.value = window.localStorage.getItem('token');
   
   if(isAuthenticated.value != null) {
+    Swal.fire({
+      icon: 'success',
+      text: 'Bienvenido',
+      showConfirmButton: false,
+      timer: 3000
+    });
     auth.token = isAuthenticated.value;
     async function getProfile() {
       const data = await $fetch('auth/profile', {
@@ -37,7 +44,6 @@ onMounted(() => {
     getProfile();
     auth.isLoggedIn = true;
   } else {
-    console.log('es null');
     auth.isLoggedIn = false;
   }
   // final del script
