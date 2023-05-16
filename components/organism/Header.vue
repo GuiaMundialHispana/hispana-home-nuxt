@@ -25,7 +25,7 @@
           <!-- User Logged -->
           <li class="user-wrapper" v-if="auth.isLoggedIn" @click="userDropdown = !userDropdown">
             <div class="flex items-center gap-2">
-              <img src="/img/user.jpg" />
+              <img :src="user.userData.profile_pic" />
               {{user.userData.name}} {{user.userData.lastname}}
               <AtomsIcon name="arrows/arrow-down" v-show="!userDropdown" :size=15 class="text-primary-100" />
               <AtomsIcon name="arrows/arrow-down" v-show="userDropdown" :size=15 class="text-primary-100 rotate-180" />
