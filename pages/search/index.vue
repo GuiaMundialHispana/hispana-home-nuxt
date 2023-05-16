@@ -100,21 +100,21 @@ async function searchProperties() {
   testProperty.push(data.value);
 };
 
-let setFavorites;
+// let setFavorites;
 //Mostrar favoritos
-if(auth.isLoggedIn) {
-  const data = await $fetch('users/favorites',{
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${localStorage.getItem('token')}`,
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    },
-    baseURL: config.public.API
-  });
-  //console.log(data.results)
-  setFavorites = data.results;
-}
+// if(auth.isLoggedIn) {
+//   const data = await $fetch('users/favorites',{
+//     method: 'GET',
+//     headers: {
+//       'Authorization': `Bearer ${localStorage.getItem('token')}`,
+//       'Content-Type': 'application/json',
+//       'Accept': 'application/json'
+//     },
+//     baseURL: config.public.API
+//   });
+//   //console.log(data.results)
+//   setFavorites = data.results;
+// }
 </script>
 
 <style lang="postcss" scoped>
@@ -136,9 +136,9 @@ if(auth.isLoggedIn) {
 } */
 
 .filters-overflow {
-  @apply w-full sm:w-fit h-screen xl:mt-12 2xl:h-fit top-0 fixed xl:relative xl:flex flex-col 2xl:flex-row gap-4 2xl:gap-1.5 md:items-end bg-neutral-white right-0 2xl:mr-0 mt-0 px-4 md:px-6 md:py-12 xl:p-0 py-4 xl:py-0 z-[80] xl:z-10;
+  @apply w-full sm:w-fit xl:mt-12 2xl:h-fit top-0 fixed xl:relative xl:flex flex-col 2xl:flex-row gap-4 2xl:gap-1.5 md:items-end bg-neutral-white right-0 2xl:mr-0 mt-0 px-4 md:px-6 md:py-12 xl:p-0 py-4 xl:py-0 z-[80] xl:z-10;
   @media (max-width:1280px) {
-    @apply overflow-y-auto overflow-hidden border-l-2 border-l-gray-300;
+    @apply overflow-y-auto overflow-hidden border-l-2 border-l-gray-300 h-screen;
   }
 
   @media (max-width:720px) {
