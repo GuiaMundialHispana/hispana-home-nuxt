@@ -12,10 +12,10 @@
             <br />
             <span class="text-primary-100 xl:text-[28px] text-xl xl:leading-[28px] font-semibold mt-2">RD${{ showParsedPrice(property.price) }}</span>
           </p>
-          <button class="btn-loan">
+          <a href="#loan" class="btn-loan">
             <AtomsIcon class="mr-2.5" name="general/price" :size=18 />
             Calcula tu préstamo
-          </button>
+          </a>
         </div>
         <!-- Caracteristicas -->
         <div class="md:flex xl:justify-start justify-center grid grid-cols-2 items-center flex-wrap xl:gap-x-16 md:gap-6 gap-2 md:mb-8 mb-2">
@@ -123,7 +123,7 @@
       <p class="text-sm text-neutral-black font-normal">{{ property.description }}</p>
     </div>
     <!-- Location -->
-    <div class="pb-16 2xl:max-w-[1440px] mx-auto">
+    <div class="2xl:max-w-[1440px] mx-auto">
       <h2 class="text-[28px] leading-[28px] font-semibold mb-7">Ubicación</h2>
       <iframe class="w-full rounded-lg h-96" :src="renderMap"></iframe>
     </div>
