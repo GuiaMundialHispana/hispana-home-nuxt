@@ -1,19 +1,12 @@
 <template>
   <section>
-    <div v-if="!isPlan">
-      <figure class="mb-4">
-        <img src="/img/not-found.png" class="object-contain max-w-[308px] mx-auto" />
-      </figure>
-      <h6 class="text-4xl text-blue-100 font-bold mb-8 text-center">Aún no tienes <span class="text-primary-100">planes disponibles.</span></h6>
-      <p class="text-sm text-neutral-black text-center">¡No dejes pasar esta oportunidad de mostrar tu propiedad al mundo!</p>
-    </div>
-    <div v-if="isPlan">
+    <div>
       <h3>Mis planes disponibles</h3>
       <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        <li class="border border-gray-10 rounded-lg p-6 flex items-center">
-          <span class="plan-category mb-0">
-            BÁSICO
-          </span>
+        <li v-if="plans.length < 0" class="border border-gray-10 rounded-lg p-6 flex flex-col justify-center items-center">
+          <div class="bg-primary-100 text-neutral-white text-center w-full text-sm rounded-lg py-1">
+            Actualmente tienes el <b>plan Basico</b>
+          </div>
         </li>
         <li v-for="plan in plans" :key="plan" class="border border-gray-10 rounded-lg p-6">
           <span class="plan-category"
@@ -67,6 +60,7 @@ export default {
         baseURL: this.config.public.API
       });
       this.plans = data.results;
+      this.plans.pop();
       this.plans.length > 0 ? this.isPlan = true : this.isPlan = false;
     },
     async getPlans() {

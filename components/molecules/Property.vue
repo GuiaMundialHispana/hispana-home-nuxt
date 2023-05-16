@@ -183,7 +183,7 @@ export default {
     //end methods
   },
   mounted() {
-    console.log(this.property)
+    // console.log(this.property)
   }
 }
 </script>
