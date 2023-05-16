@@ -83,7 +83,7 @@ export default {
 
 <style lang="postcss" scoped>
 article {
-  @apply rounded-2xl p-2 w-full sm:w-[350px] bg-neutral-white shadow-sm hover:shadow-xl border relative;
+  @apply rounded-2xl p-2 w-full sm:w-[350px] bg-neutral-white shadow-sm border border-gray-10 relative;
 
   & .property-type-component { @apply absolute right-2 z-10 top-2 rounded-tr-lg; }
 

@@ -23,7 +23,12 @@ const config = useRuntimeConfig();
 const { data: property, pending, error} = await useFetch(`advertisements/${route.params.id}`, {
   method: 'GET',
   baseURL: config.public.API,
-  transform:(_property) => _property.results
+  transform:(_property) => _property.results,
+  onResponse({response}){
+    if(response.status === 400) {
+      return navigateTo('/notFound')
+    }
+  }
 });
 
 definePageMeta({

@@ -85,7 +85,7 @@
       </div>
     </div>
     <!-- Caracteristicas -->
-    <div class="pb-[76px] md:pt-16 pt-8 2xl:max-w-[1440px] mx-auto">
+    <div class="pb-[76px] md:pt-16 pt-8 2xl:max-w-[1440px] mx-auto" v-if="property.features.length > 0">
       <h2 class="text-[28px] leading-[28px] font-semibold md:mb-12 mb-8">Características</h2>
       <div class="grid lg:grid-cols-2 gap-4 overflow-hidden items-start">
         <!-- <ul class="characteristics-table">

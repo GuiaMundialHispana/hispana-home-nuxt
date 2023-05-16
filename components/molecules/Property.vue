@@ -27,8 +27,8 @@
         },
       }">
       <SwiperSlide>
-        <NuxtLink :to="`/search/${propertyId}`">
-          <figure class="h-52">
+        <NuxtLink class="bg-gray-10" :to="`/search/${propertyId}`">
+          <figure class="h-52 bg-gray-10">
             <img :src="`https://walrus-app-e2bxo.ondigitalocean.app/${property.image}`" :alt="property.name" class="object-cover h-full w-full">
           </figure>
         </NuxtLink>
