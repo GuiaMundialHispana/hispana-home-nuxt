@@ -101,6 +101,7 @@
             Contraseña nueva:
             <input
               type="password"
+              v-model="password"
             >
           </label>
           <label>
@@ -111,7 +112,7 @@
             >
           </label>
           <div class="flex gap-2.5 mr-auto mt-2">
-            <AtomsButtons btn-size="xsmall" btn-style="solid-primary">
+            <AtomsButtons @click="changesPassword()" btn-size="xsmall" btn-style="solid-primary">
               Guardar
             </AtomsButtons>
           </div>
@@ -171,7 +172,9 @@ export default {
       images: null,
       countries: [],
       country: [],
-      form: new FormData()
+      form: new FormData(),
+      password: '',
+      password_confirmation: ''
     }
   },
   watch:{
@@ -194,6 +197,44 @@ export default {
       })
       const res = data._value.results.data;
       this.countries.push(res);
+    },
+    async changesPassword(){
+      this.form.append('email', this.editUser.editUserData.email);
+      this.form.append('password', this.password);
+      this.form.append('password_confirmation', this.password_confirmation);
+      this.form.append('token', localStorage.getItem('token'));
+      await useFetch('auth/change-password',{
+        method: 'POST',
+        body: this.form,
+        baseURL: this.config.public.API,
+        onResponse({response}) {
+          if(response.status === 400) {
+            let errors = response._data.message;
+            Swal.fire({
+              icon: 'error',
+              html: '<ul></ul>',
+              didOpen: () => {
+                const b = Swal.getHtmlContainer().querySelector('ul');
+                Object.keys(errors).forEach(clave => {
+                  const li = document.createElement('li');
+                  li.classList.add('text-primary-100', 'text-left', 'text-sm', 'mb-2')
+                  li.textContent = errors[clave];
+                  b.appendChild(li);
+                });
+              },
+            });
+          }
+
+          if(response.status === 200) {
+            Swal.fire({
+              icon: 'success',
+              text: 'Sus datos han sido actualizados',
+              showConfirmButton: false,
+              timer: 2000
+            });
+          }
+        }
+      });
     },
     async updateUser() {
       this.form.append('user_id', this.editUser.editUserData.user_id);

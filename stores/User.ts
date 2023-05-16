@@ -67,7 +67,7 @@ export const useUserStore = defineStore('user', {
           email: this.emailPassword,
           password: this.newPassword,
           password_confirmation: this.repeatPassword,
-          token: this.token
+          token: localStorage.getItem('token')
         }
       });
 
