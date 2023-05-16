@@ -7,64 +7,64 @@
 
 <script setup>
   // Initialize and add the map
-  const emit = defineEmits(['sendLocation'])
-  let map;
+const emit = defineEmits(['sendLocation'])
+let map;
 
-  async function initMap() {
-    // The location of hispana as initial point of the map
-    let position = { lat: 18.45230271854065, lng: -69.9435523321845 };
-    const { Map } = await google.maps.importLibrary("maps");
-    // The map, centered at Hispana location
-    map = new Map(document.getElementById("map"), {
-      zoom: 12,
-      center: position,
-      mapId: "DEMO_MAP_ID",
-      streetViewControl: false,
-      mapTypeControl: false,
-    });
+async function initMap() {
+  // The location of hispana as initial point of the map
+  let position = { lat: 18.45230271854065, lng: -69.9435523321845 };
+  const { Map } = await google.maps.importLibrary("maps");
+  // The map, centered at Hispana location
+  map = new Map(document.getElementById("map"), {
+    zoom: 12,
+    center: position,
+    mapId: "DEMO_MAP_ID",
+    streetViewControl: false,
+    mapTypeControl: false,
+  });
 
-    let marker = new google.maps.Marker({
-      position: map.getCenter(),
-      map: map,
-      draggable: true,
-      title: "Mueva el indicador en a la ubicación de la propiedad",
-    });
+  let marker = new google.maps.Marker({
+    position: map.getCenter(),
+    map: map,
+    draggable: true,
+    title: "Mueva el indicador en a la ubicación de la propiedad",
+  });
 
-    const geocoder = new google.maps.Geocoder();
-    const infowindow = new google.maps.InfoWindow();
-    let savedAddress = "Hispana";
-    function geocodeLatLng(geocoder, map, infowindow,lat, lng) {
-      const latlng = {
-        lat, lng
-      };  
-      geocoder
-      .geocode({ location: latlng })
-      .then((response) => {
-        if (response.results[0]) {
-          map.setZoom(15);
-          savedAddress = response.results[0].formatted_address
-          infowindow.setContent(savedAddress);
-          infowindow.open(map, marker);
-        } else {
-          window.alert("No se encontraron resultados");
-        }
-      })
-      .catch((e) => window.alert("Geocoder failed due to: " + e));
-    }
-
-    google.maps.event.addListener(marker, 'dragend', function() {
-      let lat = marker.getPosition().lat();
-      let lng = marker.getPosition().lng();
-      document.getElementById('lat').value = lat;
-      document.getElementById('lng').value = lng;
-      geocodeLatLng(geocoder, map, infowindow, lat, lng);
-      setTimeout(() => {
-        emit('sendLocation', lat, lng, savedAddress);
-      }, 500);
-      
-    });
+  const geocoder = new google.maps.Geocoder();
+  const infowindow = new google.maps.InfoWindow();
+  let savedAddress = "Hispana";
+  function geocodeLatLng(geocoder, map, infowindow,lat, lng) {
+    const latlng = {
+      lat, lng
+    };  
+    geocoder
+    .geocode({ location: latlng })
+    .then((response) => {
+      if (response.results[0]) {
+        map.setZoom(15);
+        savedAddress = response.results[0].formatted_address
+        infowindow.setContent(savedAddress);
+        infowindow.open(map, marker);
+      } else {
+        window.alert("No se encontraron resultados");
+      }
+    })
+    .catch((e) => window.alert("Geocoder failed due to: " + e));
   }
-  initMap();
+
+  google.maps.event.addListener(marker, 'dragend', function() {
+    let lat = marker.getPosition().lat();
+    let lng = marker.getPosition().lng();
+    document.getElementById('lat').value = lat;
+    document.getElementById('lng').value = lng;
+    geocodeLatLng(geocoder, map, infowindow, lat, lng);
+    setTimeout(() => {
+      emit('sendLocation', lat, lng, savedAddress);
+    }, 500);
+    
+  });
+}
+initMap();
 
 </script>
 <!-- emit('sendLocation', lat, lng); -->

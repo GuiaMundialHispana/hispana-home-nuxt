@@ -134,7 +134,9 @@
               </div>
             </div>
             <div class="col-span-3">
-              <OrganismMap @send-location="getAddress"/>
+              <ClientOnly fallback-tag="span" fallback="Loading comments...">
+                <OrganismMap @send-location="getAddress"/>
+              </ClientOnly>
             </div>
             <div class="col-span-3">
               <label class="w-full sm:mb-2 mb-5">
@@ -297,11 +299,11 @@
         Volver a inicio
       </AtomsLink>
     </nav>
-    <PopulationPostPropertiesModalError
+    <!-- <PopulationPostPropertiesModalError
       v-if="displayModal"
       :errors="errors"
       @close="displayModal = false"
-    />
+    /> -->
   </section>
 </template>
 
@@ -352,7 +354,6 @@ export default {
         id: 4,
         quantity: 4
       },
-      errors: [],
       displayModal: false
     }
   },
@@ -462,6 +463,23 @@ export default {
         body: form,
         baseURL: this.config.public.API,
         onResponse({ request, response, options }) {
+          if(response.status === 400) {
+            let errors = response._data.message;
+            Swal.fire({
+              icon: 'error',
+              html: '<ul></ul>',
+              didOpen: () => {
+                const b = Swal.getHtmlContainer().querySelector('ul');
+                Object.keys(errors).forEach(clave => {
+                  const li = document.createElement('li');
+                  li.classList.add('text-primary-100', 'text-left', 'text-sm', 'mb-2')
+                  li.textContent = errors[clave];
+                  b.appendChild(li);
+                });
+              },
+            });
+          }
+
           const res = response._data;
           if(res.code === 200 ) {
             Swal.fire({
@@ -475,14 +493,14 @@ export default {
         }    
       });
       
-      if(error) {
-        let errors = error.value.data.message;
+      // if(error) {
+      //   let errors = error.value.data.message;
         
-        for(let i in errors) {
-          this.displayModal = true;
-          this.errors.push(errors[i][0])
-        }
-      }
+      //   for(let i in errors) {
+      //     this.displayModal = true;
+      //     this.errors.push(errors[i][0])
+      //   }
+      // }
     },
   },
   computed: {
