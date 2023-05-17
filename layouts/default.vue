@@ -23,12 +23,7 @@ onMounted(() => {
   isAuthenticated.value = window.localStorage.getItem('token');
   
   if(isAuthenticated.value != null) {
-    Swal.fire({
-      icon: 'success',
-      text: 'Bienvenido',
-      showConfirmButton: false,
-      timer: 3000
-    });
+    Swal.showLoading()
     auth.token = isAuthenticated.value;
     async function getProfile() {
       const data = await $fetch('auth/profile', {
@@ -40,6 +35,7 @@ onMounted(() => {
       });
       const res = data.results.user;
       user.userData = res;
+      Swal.close();
     }
     getProfile();
     auth.isLoggedIn = true;
