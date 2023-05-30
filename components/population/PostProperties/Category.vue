@@ -1,39 +1,31 @@
+<script setup>
+const config = useRuntimeConfig()
+let categories = ref([]);
+let categorySelected = ref(0);
+const categoriesApi = await $fetch('generals/categories', {
+  baseURL: config.public.API
+});
+categories = categoriesApi.results;
+console.log(categories)
+
+</script>
+
 <template>
+  <h4 class="font-semibold text-[28px] leading-[42px] mt-11 mb-7 text-center">
+    ¿Cuál es tu tipo de <span class="text-primary-100"> inmueble?</span>
+  </h4>
   <div class="wrapper scrollbar">
-    <h4 class="font-semibold text-[28px] leading-[42px] mt-11 mb-7 text-center">
-      ¿Cuál es tu tipo de
-      <span class="text-primary-100">
-        inmueble?
-      </span>
-    </h4>
     <label
-      v-for="(category, index) in categories"
-      :key="category" class="option"
-      :class="[{checked: categorySelected === category}]"
-    >
-      <input
-        type="radio"
-        :value="category"
-        :name="category"
-        v-model="categorySelected"
-        @click="$emit('typeProperty', index);"
-      >
-      {{ category }}
+      v-for="category in categories"
+      :key="category"
+      class="option"
+      :class="[{checked: categorySelected === category.id}]">
+      <input type="radio" :value="category.id" v-model="categorySelected">
+      {{ category.name }}
     </label>
   </div>
 </template>
-<script>
-export default{
-  data() {
-    return {
-      categorySelected: "",
-      categories: [
-        "Casa", "Apatamento", "Villa", "Bohio", "Tiendita de acampar", "Penthouse", "Mansión", "Vecindad", "Casa rodante"
-      ] 
-    }
-  }
-}
-</script>
+
 <style lang="postcss" scoped>
 .wrapper {
   @apply max-w-[971px] h-[490px]  overflow-y-scroll hover:overscroll-contain mx-auto px-5;

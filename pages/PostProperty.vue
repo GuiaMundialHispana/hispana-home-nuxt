@@ -1,6 +1,7 @@
+<!--  Te envio por props cada detalle y es lo que se enviara al final -->
 <template>
   <section>
-    <nav class="bg-[#F0F0F073] shadow-inner">
+    <!-- <nav class="bg-[#F0F0F073] shadow-inner">
       <div class="steps-wrapper">
         <div class="active">
           <span>1</span>
@@ -34,29 +35,13 @@
           <img v-if="step < 6" class="hidden lg:block w-[177px]" src="/img/property-post.png" alt="Property">
         </div>
       </div>
-    </nav>
+    </nav> -->
     <KeepAlive>
       <div>
-        <div class="step-1" v-if="step === 1">
-          <div class="flex flex-col text-center items-center justify-center">
-            <h4 class="font-semibold text-[28px] leading-[42px] my-20">
-              <span class="text-primary-100">
-                Vamos a comenzar
-              </span>
-              <br>
-              ¿Vas a vender o alquilar?
-            </h4>
-            <div class="flex gap-2.5">
-              <label class="option" :class="[{checked: optionSelected === 'sell'}]">Vender
-                <input type="radio" value="Sell" name="sell" @click="optionSelected = 'sell'">
-              </label>
-              <label class="option" :class="[{checked: optionSelected === 'rent'}]">Alquilar
-                <input type="radio" value="rent" name="rent" @click="optionSelected = 'rent'">
-              </label>
-            </div>
-          </div>
-        </div>
-        <div class="step-2" v-if="step === 2">
+        <PopulationPostPropertiesSellOrRent />
+        <PopulationPostPropertiesCategory />
+        <PopulationPostPropertiesPlans />
+        <!-- <div class="step-2" v-if="step === 2">
           <div class="wrapper scrollbar">
             <h4 class="font-semibold text-[28px] leading-[42px] mt-11 mb-7 text-center">
               ¿Cuál es tu tipo de<span class="text-primary-100">inmueble?</span>
@@ -75,8 +60,8 @@
               {{ category.name }}
             </label>
           </div>
-        </div>
-        <div class="step-3" v-if="step === 3">
+        </div> -->
+        <!-- <div class="step-3" v-if="step === 3">
           <h4 class="font-semibold text-[28px] leading-[42px] mt-11 mb-14 text-center">
             Planes disponibles para esta publicación.
           </h4>
@@ -92,8 +77,8 @@
           <div class="flex justify-center">
             <AtomsLink link-to="/plans" class="mx-auto my-6">Adquirir mas planes</AtomsLink>
           </div>
-        </div>
-        <div class="step-4" v-if="step === 4">
+        </div> -->
+        <!-- <div class="step-4" v-if="step === 4">
           <h4 class="font-semibold text-[28px] leading-[42px] mt-11 mb-7 text-center">
             Cuéntanos sobre tu <span class="text-primary-100">inmueble</span>
           </h4>
@@ -220,8 +205,8 @@
               <textarea type="text" v-model="description" placeholder="Descripcion de la propiedad"></textarea>
             </div>
           </div>
-        </div>
-        <div class="step-5" v-if="step === 5">
+        </div> -->
+        <!-- <div class="step-5" v-if="step === 5">
           <div class="w-fit mx-auto lg:px-8 px-4">
             <h4 class="font-semibold text-[28px] leading-[42px] mt-11 mb-7 text-center">
               Sube buenas fotos de tu 
@@ -264,8 +249,8 @@
               {{ previewImages.length }}/{{planSelected.quantity}} Fotos
             </p>
           </div>
-        </div>
-        <div class="step-6" v-if="step === 6">
+        </div> -->
+        <!-- <div class="step-6" v-if="step === 6">
           <div class="flex flex-col text-center items-center justify-center">
             <img class="w-[311px] mb-8 mt-11" src="/img/property-post.png" alt="Property">
             <h4 class="text-4xl leading-[42px] mb-7 font-medium">
@@ -277,10 +262,10 @@
             </h4>
             <p class="text-sm leading-[22px]">Tu anuncio fue enviado con éxito a revisión.</p>
           </div>
-        </div>
+        </div> -->
       </div>
     </KeepAlive>
-    <nav class="flex gap-2.5 mx-auto w-fit mt-6 mb-11">
+    <!-- <nav class="flex gap-2.5 mx-auto w-fit mt-6 mb-11">
       <AtomsLink v-if="step === 1" link-to="/profile?tab=anuncio">
         Cancelar
       </AtomsLink>
@@ -296,22 +281,24 @@
       <AtomsLink v-if="step >= 6" link-to="/">
         Volver a inicio
       </AtomsLink>
-    </nav>
-    <PopulationPostPropertiesModalError
+    </nav> -->
+    <!-- <PopulationPostPropertiesModalError
       v-if="displayModal"
       :errors="errors"
       @close="displayModal = false"
-    />
+    /> -->
   </section>
 </template>
 
-<script>
+<!-- <script>
 import Swal from 'sweetalert2';
+import SellOrRent from '~/components/population/PostProperties/SellOrRent.vue';
 export default {
+  components: { SellOrRent },
   data() {
     return {
       config: useRuntimeConfig(),
-      step: 1,
+      step: 2,
       optionSelected: "",
       categorySelected: 0,
       categories: [],
@@ -527,7 +514,7 @@ export default {
     this.getCategories();
   }
 }
-</script>
+</script> -->
 
 
 <!-- renderPlanText() {
@@ -570,7 +557,7 @@ export default {
   @apply border-primary-100 !important;
 }
 
-.step-1 {
+/* .step-1 {
   & .option {
     @apply sm:w-56 w-36  text-center text-base mb-14 cursor-pointer select-none flex items-center justify-center font-normal leading-[22px] border h-10 border-gray-300 rounded-md hover:bg-primary-100 hover:text-neutral-white hover:border-none;
     &.checked {
@@ -578,7 +565,7 @@ export default {
     }
     & input { @apply appearance-none; }
   }
-}
+} */
 
 .step-2 {
   & .wrapper {

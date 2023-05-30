@@ -1,78 +1,33 @@
 <template>
-  <div v-if="!showPaymentProcess">
-    <h4 class="font-semibold text-[28px] leading-[42px] mt-11 mb-14 text-center">
-      Planes disponibles para esta publicación.
-    </h4>
-    <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 px-16">
-      <li v-for="plan in plans" :key="plan">
-        <MoleculesPlanCard @pay="planInformation" :plan="plan" />
-      </li>
-    </ul>
-  </div>
-  <!-- Process payment -->
-  <div v-if="showPaymentProcess" class="lg:px-16">
-    <div class="grid lg:grid-cols-2 lg:px-0 px-8 gap-x-16">
-      <div class="w-full">
-        <h4 class="font-bold text-[28px] leading-[42px] mb-14">Información de pago</h4>
-        <ul class="payment-plan-resume">
-          <li class="plan-price-card">
-            <div class="plan-name-card" :class="[renderPlanText]">
-              <p>{{ planSelected.name }}</p>
-            </div>
-            <div class="plan-information">
-              <p class="capitalize">Plan {{ planSelected.name }}</p>
-              <select>
-                <option value="1">Cantidad: 1</option>
-                <option value="1">Cantidad: 2</option>
-                <option value="1">Cantidad: 3</option>
-                <option value="1">Cantidad: 4</option>
-                <option value="1">Cantidad: 5</option>
-              </select>
-            </div>
-            <h6 class="plan-price">
-              RD$ {{ planSelected.planPrice }}
-            </h6>
-          </li>
-        </ul>
-        <p class="text-sm block text-right mt-8">Pago total</p>
-        <p class="font-bold text-neutral-black text-[28px] leading-[42px] text-right">
-          RD$ {{ planSelected.planPrice }}
-        </p>
-      </div>
-      <!--  -->
-      <div class="bg-[#F8F8F8] w-full">
-        <div class="form-group">
-          <label>Correo</label>
-          <input type="email">
-        </div>
-        <div class="form-group card-information">
-          <label>Información de la tarjeta</label>
-          <input type="text" class="border-b-0" placeholder="1234 4567 1234 4567">
-          <div class="flex items-center">
-            <input type="text" placeholder="MM/YY7">
-            <input type="text" placeholder="CVC">
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Nombre de la tarjeta</label>
-          <input type="text">
-        </div>
-        <AtomsButtons class="w-full" @click="processPayment()">Pagar</AtomsButtons>
-      </div>
-    </div>
+  <h4 class="font-semibold text-[28px] leading-[42px] mt-11 mb-14 text-center">
+    Planes disponibles para esta publicación.
+  </h4>
+  <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 px-16">
+    <li v-for="plan in plans" :key="plan">
+      <MoleculesPlanCard
+        @pay="planInformation"
+        :plan="plan.plan"
+        :user-quantity="plan.quantity"
+      />
+    </li>
+  </ul>
+  <div class="flex justify-center">
+    <AtomsLink link-to="/plans" class="mx-auto my-6">Adquirir mas planes</AtomsLink>
   </div>
 </template>
 
 <script>
-import { useUserStore } from '~/stores/User';
 export default {
   data() {
     return {
-      user: useUserStore(),
+      config: useRuntimeConfig(),
+      token: '',
       plans: [],
-      planSelected: {},
+      planSelected: {
+        id: 4,
+        quantity: 4
+      },
       plansSelected: [],
-      showPaymentProcess: false,
     }
   },
   computed: {
@@ -89,44 +44,19 @@ export default {
     },
   },
   methods: {
-    planInformation(planId, quantity, planName, price) {
-      this.showPaymentProcess = true;
-      this.planSelected = {
-        id: planId,
-        planQuantity: quantity,
-        name: planName,
-        planPrice: price
-      }
-    },
-    async getPlans() {
-      const { data }  = await useFetch(useRuntimeConfig().API+'generals/plans');
+    async getUserPlans() {
+      const {data} = await useFetch('user-plans',{
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        baseURL: this.config.public.API
+      });
       this.plans = data._value.results;
     },
-    async processPayment() {
-      const form = new FormData();
-      form.append('plan_id', this.planSelected.id);
-      form.append('quantity', this.planSelected.planQuantity)
-      const { data }  = await useFetch(useRuntimeConfig().API+'user-plans',{
-        method: 'POST',
-        headers: {
-          'Authorization': 'Bearer ' + this.user.token
-        },
-        body: form,
-      });
-
-      try {
-        const res = data.value.results;
-        this.$emit('plan', this.planSelected.id);
-      } catch (error) {
-        this.$swal.fire({
-          icon: 'error',
-          text: 'En estos momentos estamos presentando un error, intente mas tarde'
-        })
-      }
-    }
   },
-  mounted() {
-    this.getPlans();
+  beforeMount() {
+    this.getUserPlans();
   }
 }
 </script>
@@ -155,17 +85,16 @@ export default {
   }
 }
 
-.form-group {
+& .form-group {
   @apply mb-4 w-full;
   & label { @apply text-neutral-black text-sm mb-1 block; }
   & input { @apply w-full border border-[#D9D9D9] rounded-sm block px-4 h-8 font-light placeholder:text-[#D9D9D9]; }
 }
 
-.card-information {
+& .card-information {
   & input:first-child { @apply border-t-0 border-r-0; }
   & input:last-child { @apply border-t-0; }
 }
-
 </style>
 
 <!-- <script setup>
