@@ -11,7 +11,7 @@ console.log(categories)
 </script>
 
 <template>
-  <h4 class="font-semibold text-[28px] leading-[42px] mt-11 mb-7 text-center">
+  <h4>
     ¿Cuál es tu tipo de <span class="text-primary-100"> inmueble?</span>
   </h4>
   <div class="wrapper scrollbar">
@@ -27,6 +27,9 @@ console.log(categories)
 </template>
 
 <style lang="postcss" scoped>
+h4 {
+  @apply font-semibold text-[28px] leading-[42px] mt-11 mb-7 text-center;
+}
 .wrapper {
   @apply max-w-[971px] h-[490px]  overflow-y-scroll hover:overscroll-contain mx-auto px-5;
 }

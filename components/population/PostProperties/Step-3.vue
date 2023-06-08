@@ -1,8 +1,53 @@
+<script>
+  export default {
+    data() {
+      return {
+        config: useRuntimeConfig(),
+        token: '',
+        plans: [],
+        planSelected: {
+          id: 4,
+          quantity: 4
+        },
+        plansSelected: [],
+      }
+    },
+    computed: {
+      renderPlanText() {
+        if(this.planSelected.name === 'VIP') {
+          return 'vip';
+        } else if (this.planSelected.name === 'SILVER') {
+          return 'silver';
+        } else if (this.planSelected.name === 'EXCLUSIVO') {
+          return 'exclusive';
+        } else if(this.planSelected.name === 'DESTACADOS') {
+          return '';
+        }
+      },
+    },
+    methods: {
+      async getUserPlans() {
+        const {data} = await useFetch('user-plans',{
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          baseURL: this.config.public.API
+        });
+        this.plans = data._value.results;
+      },
+    },
+    beforeMount() {
+      this.getUserPlans();
+    }
+  }
+</script>
+
 <template>
-  <h4 class="font-semibold text-[28px] leading-[42px] mt-11 mb-14 text-center">
+  <h4>
     Planes disponibles para esta publicación.
   </h4>
-  <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 px-16">
+  <ul class="plans-list">
     <li v-for="plan in plans" :key="plan">
       <MoleculesPlanCard
         @pay="planInformation"
@@ -16,53 +61,11 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      config: useRuntimeConfig(),
-      token: '',
-      plans: [],
-      planSelected: {
-        id: 4,
-        quantity: 4
-      },
-      plansSelected: [],
-    }
-  },
-  computed: {
-    renderPlanText() {
-      if(this.planSelected.name === 'VIP') {
-        return 'vip';
-      } else if (this.planSelected.name === 'SILVER') {
-        return 'silver';
-      } else if (this.planSelected.name === 'EXCLUSIVO') {
-        return 'exclusive';
-      } else if(this.planSelected.name === 'DESTACADOS') {
-        return '';
-      }
-    },
-  },
-  methods: {
-    async getUserPlans() {
-      const {data} = await useFetch('user-plans',{
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        baseURL: this.config.public.API
-      });
-      this.plans = data._value.results;
-    },
-  },
-  beforeMount() {
-    this.getUserPlans();
-  }
-}
-</script>
-
 <style lang="postcss" scoped>
-.payment-plan-resume {
+h4 { @apply font-semibold text-[28px] leading-[42px] mt-11 mb-14 text-center; }
+
+.plans-list { @apply grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 px-16; }
+/* .payment-plan-resume {
   & .plan-price-card {
     @apply py-4 border-b border-[#D9D9D9] w-full flex gap-3 items-center;
 
@@ -94,7 +97,7 @@ export default {
 & .card-information {
   & input:first-child { @apply border-t-0 border-r-0; }
   & input:last-child { @apply border-t-0; }
-}
+} */
 </style>
 
 <!-- <script setup>

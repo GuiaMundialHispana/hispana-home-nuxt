@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-let optionSelected = ref('');
+  let optionSelected = ref('');
 </script>
 
 <template>
