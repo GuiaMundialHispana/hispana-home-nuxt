@@ -44,9 +44,7 @@
 </script>
 
 <template>
-  <h4>
-    Planes disponibles para esta publicación.
-  </h4>
+  <h4> Planes disponibles para esta publicación.</h4>
   <ul class="plans-list">
     <li v-for="plan in plans" :key="plan">
       <MoleculesPlanCard

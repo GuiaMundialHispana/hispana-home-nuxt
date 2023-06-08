@@ -73,7 +73,7 @@ function getAddress(lant:any, long:any, location:any) {
 
 
 <template>
-  <h4 class="font-semibold text-[28px] leading-[42px] mt-11 mb-7 text-center">
+  <h4 class="mt-11 mb-7 text-center">
     Cuéntanos sobre tu <span class="text-primary-100">inmueble</span>
   </h4>
   <div class="mx-4 px-4 md:px-8 sm:grid sm:grid-cols-3 sm:mx-auto gap-4 max-w-[995px]">

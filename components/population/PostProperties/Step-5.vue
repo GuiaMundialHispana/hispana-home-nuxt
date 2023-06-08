@@ -30,7 +30,7 @@ function previewFiles(event:any) {
 
 <template>
   <div class="w-fit mx-auto lg:px-8 px-4">
-    <h4 class="font-semibold text-[28px] leading-[42px] mt-11 mb-7 text-center">
+    <h4 class="mt-11 mb-7 text-center">
       Sube buenas fotos de tu 
       <span class="text-primary-100">inmueble</span>
     </h4>

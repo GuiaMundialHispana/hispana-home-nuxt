@@ -25,10 +25,11 @@ body {
 
 .filterStatus-tabs-lg {
   @apply h-20 font-semibold w-fit !important;
-  & .btn{
+  & .btn {
     @apply h-full px-6 text-xl !important;
   }
 }
+
 .filterStatus-tabs-sm {
   @apply h-10 xl:w-fit w-full !important;
   & .btn{
@@ -80,3 +81,5 @@ input[type=number] {
     }
   }
 }
+
+.control-steps-postProperty { @apply flex justify-center w-full gap-2.5 mt-6 mb-11; }

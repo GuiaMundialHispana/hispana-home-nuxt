@@ -226,10 +226,11 @@ export default {
 <script lang="ts" setup>
 
 const config = useRuntimeConfig();
-let step = ref(0);
+let step = ref(1);
 let errors:any =  [];
 let displayModal:boolean = (false);
 
+let optionSelected = ref('');
 
 // async function createAdvertisement() {
 //   const form = new FormData();
@@ -297,6 +298,9 @@ let displayModal:boolean = (false);
 //     }
 //   }
 // };
+
+
+
 </script>
 
 <template>
@@ -338,26 +342,34 @@ let displayModal:boolean = (false);
     </nav>
     <KeepAlive>
       <div>
-        <PopulationPostPropertiesStep1 />
-        <PopulationPostPropertiesStep2 />
+        <PopulationPostPropertiesStep1
+          @nexts="step = 2"
+          @send-user-do="(type) => optionSelected = type"
+          v-if="step === 1"
+        />
+        <PopulationPostPropertiesStep2 v-if="step === 2" />
+        <!-- <PopulationPostPropertiesStep2 />
         <PopulationPostPropertiesStep3 />
         <PopulationPostPropertiesStep4 />
-        <PopulationPostPropertiesStep5 />
+        <PopulationPostPropertiesStep5 /> -->
       </div>
     </KeepAlive>
-    <nav class="flex gap-2.5 mx-auto w-fit mt-6 mb-11">
-      <AtomsLink v-if="step === 1" link-to="/profile?tab=anuncio">
+    <nav class="control-steps-postProperty">
+      <!-- <AtomsButtons @click="step++">
+        Continuar
+      </AtomsButtons> -->
+      <!-- <AtomsLink v-if="step === 1" btn-style="outline-primary" link-to="/profile?tab=anuncio">
         Cancelar
       </AtomsLink>
       <AtomsButtons v-if="step >= 2 && step <= 5" @click="step--">
         Atrás
-      </AtomsButtons>
-      <AtomsButtons v-if="step <= 4" @click="step++">
+      </AtomsButtons> -->
+      <!-- <AtomsButtons v-if="step <= 4" @click="step++">
         Continuar
       </AtomsButtons>
       <AtomsButtons v-if="step === 5" @click="createAdvertisement()">
         Crear Anuncio
-      </AtomsButtons>
+      </AtomsButtons> -->
       <AtomsLink v-if="step >= 6" link-to="/">
         Volver a inicio
       </AtomsLink>
@@ -392,11 +404,8 @@ let displayModal:boolean = (false);
 .last-step {
   & p{ @apply hidden lg:block text-neutral-black !important; }
   & span{ @apply text-primary-100 border-primary-100 !important; }
-};
-
-.progress{
-  @apply border-primary-100 !important;
 }
+
 
 /* .step-1 {
   & .option {
