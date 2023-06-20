@@ -224,13 +224,17 @@ export default {
 
 
 <script lang="ts" setup>
-
 const config = useRuntimeConfig();
 let step = ref(1);
 let errors:any =  [];
 let displayModal:boolean = (false);
 
 let optionSelected = ref('');
+let categorySelected:Number;
+
+watch(categorySelected,(value) => {
+  console.log(value);
+});
 
 // async function createAdvertisement() {
 //   const form = new FormData();
@@ -341,38 +345,46 @@ let optionSelected = ref('');
       </div>
     </nav>
     <KeepAlive>
-      <div>
-        <PopulationPostPropertiesStep1
-          @nexts="step = 2"
-          @send-user-do="(type) => optionSelected = type"
-          v-if="step === 1"
-        />
-        <PopulationPostPropertiesStep2 v-if="step === 2" />
-        <!-- <PopulationPostPropertiesStep2 />
-        <PopulationPostPropertiesStep3 />
-        <PopulationPostPropertiesStep4 />
-        <PopulationPostPropertiesStep5 /> -->
-      </div>
+      <PopulationPostPropertiesStep1
+        @nexts="step = 2"
+        @send-user-do="(type) => optionSelected = type"
+        v-if="step === 1"
+      />
     </KeepAlive>
+    <KeepAlive>
+      <PopulationPostPropertiesStep2
+        @categoryID="(id) => categorySelected = id"
+        @nexts="step = 3"
+        v-if="step === 2"
+        @back="step--"
+      />
+    </KeepAlive>
+    <KeepAlive>
+      <PopulationPostPropertiesStep3
+        v-if="step === 3"
+        @back="step--"
+      />
+    </KeepAlive>
+    <KeepAlive>
+      <PopulationPostPropertiesStep4
+        v-if="step === 4"
+        @back="step--"
+      />
+    </KeepAlive>
+    <KeepAlive>
+      <PopulationPostPropertiesStep5
+        v-if="step === 5"
+        @back="step--"
+      />
+    </KeepAlive>
+    <PopulationPostPropertiesStep6
+      v-if="step === 6"
+    />
+    <!-- @click="createAdvertisement()" -->
     <nav class="control-steps-postProperty">
-      <!-- <AtomsButtons @click="step++">
-        Continuar
-      </AtomsButtons> -->
-      <!-- <AtomsLink v-if="step === 1" btn-style="outline-primary" link-to="/profile?tab=anuncio">
-        Cancelar
-      </AtomsLink>
-      <AtomsButtons v-if="step >= 2 && step <= 5" @click="step--">
-        Atrás
-      </AtomsButtons> -->
-      <!-- <AtomsButtons v-if="step <= 4" @click="step++">
-        Continuar
-      </AtomsButtons>
-      <AtomsButtons v-if="step === 5" @click="createAdvertisement()">
+      <AtomsButtons v-if="step === 5">
         Crear Anuncio
-      </AtomsButtons> -->
-      <AtomsLink v-if="step >= 6" link-to="/">
-        Volver a inicio
-      </AtomsLink>
+      </AtomsButtons>
     </nav>
     <PopulationPostPropertiesModalError
       v-if="displayModal"

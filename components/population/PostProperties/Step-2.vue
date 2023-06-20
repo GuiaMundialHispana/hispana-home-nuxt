@@ -1,13 +1,16 @@
-<script setup>
+<script lang="ts" setup>
+const emit = defineEmits(['categoryID', 'nexts']);
 const config = useRuntimeConfig()
-let categories = ref([]);
+let categories:any = ref([]);
 let categorySelected = ref(0);
-const categoriesApi = await $fetch('generals/categories', {
+const categoriesApi:any = await $fetch('generals/categories', {
   baseURL: config.public.API
 });
 categories = categoriesApi.results;
-console.log(categories)
 
+watch(categorySelected,(value) => {
+  emit('categoryID', value);
+});
 </script>
 
 <template>
@@ -24,15 +27,24 @@ console.log(categories)
       {{ category.name }}
     </label>
   </div>
+  <nav class="control-steps-postProperty">
+    <AtomsButtons @click="$emit('back')" btn-style="outline-primary">
+      Atras
+    </AtomsButtons>
+    <AtomsButtons @click="$emit('nexts')">
+      Continuar
+    </AtomsButtons>
+  </nav>
 </template>
 
 <style lang="postcss" scoped>
 h4 {
-  @apply mt-11 mb-7 text-center;
+  @apply font-semibold text-[28px] leading-[42px] mt-11 mb-7 text-center;
 }
 .wrapper {
   @apply max-w-[971px] h-[490px]  overflow-y-scroll hover:overscroll-contain mx-auto px-5;
 }
+
 .option {
   @apply cursor-pointer select-none flex items-center font-normal text-base  leading-[22px] border-b h-[70px] border-b-gray-100 hover:bg-primary-50 px-4;
   &.checked {
