@@ -11,7 +11,7 @@
         <AtomsIcon name="general/check" :size=16 class="text-[#FFAE10] mr-2" />
         Duración del anuncio: {{plan.duration }} días
       </li>
-      <li>
+      <!-- <li>
         <AtomsIcon name="general/check" :size=16 class="text-[#FFAE10] mr-2" />
         Opción para subir videos
       </li>
@@ -22,7 +22,7 @@
       <li>
         <AtomsIcon name="general/check" :size=16 class="text-[#FFAE10] mr-2" />
         Exclusividad en página de inicio
-      </li>
+      </li> -->
     </ul>
     <div class="action-buttons" v-if="plan.id != 4 && $route.path === '/profile' || $route.path === '/plans'">
       <div class="plan-quantity">
@@ -46,8 +46,9 @@
     <AtomsButtons
       v-if="$route.path === '/PostProperty'"
       btn-style="outline-gray"
-      class="my-4 w-full"
-      @click="$emit('pay', plan.id, plan.pictures)"
+      class="my-2 w-full"
+      :class="{active: active}"
+      @click="$emit('pay', plan.id, plan.pictures), active = !active"
     >
      Seleccionar
     </AtomsButtons>
@@ -77,7 +78,8 @@ export default {
     return {
       auth: useAuthStore(),
       planQuantity: 1,
-      priceUpdated: 0
+      priceUpdated: 0,
+      active: false
     }
   },
   computed: {

@@ -224,6 +224,7 @@ export default {
 
 
 <script lang="ts" setup>
+import { watch } from 'vue';
 const config = useRuntimeConfig();
 let step = ref(1);
 let errors:any =  [];
@@ -231,10 +232,11 @@ let displayModal:boolean = (false);
 
 let optionSelected = ref('');
 let categorySelected:Number;
+let plan:object = ref({});
 
-watch(categorySelected,(value) => {
-  console.log(value);
-});
+watch(plan,(newx) => {
+  console.log(newx)
+})
 
 // async function createAdvertisement() {
 //   const form = new FormData();
@@ -303,8 +305,6 @@ watch(categorySelected,(value) => {
 //   }
 // };
 
-
-
 </script>
 
 <template>
@@ -354,20 +354,23 @@ watch(categorySelected,(value) => {
     <KeepAlive>
       <PopulationPostPropertiesStep2
         @categoryID="(id) => categorySelected = id"
-        @nexts="step = 3"
         v-if="step === 2"
+        @nexts="step = 3"
         @back="step--"
       />
     </KeepAlive>
     <KeepAlive>
       <PopulationPostPropertiesStep3
+        @plan_selected="(x) => plan = x"
         v-if="step === 3"
+        @nexts="step = 4"
         @back="step--"
       />
     </KeepAlive>
     <KeepAlive>
       <PopulationPostPropertiesStep4
         v-if="step === 4"
+        @nexts="step = 5"
         @back="step--"
       />
     </KeepAlive>

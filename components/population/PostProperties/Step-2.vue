@@ -31,7 +31,7 @@ watch(categorySelected,(value) => {
     <AtomsButtons @click="$emit('back')" btn-style="outline-primary">
       Atras
     </AtomsButtons>
-    <AtomsButtons @click="$emit('nexts')">
+    <AtomsButtons @click="$emit('nexts')" :disabled="categorySelected === 0">
       Continuar
     </AtomsButtons>
   </nav>

@@ -113,7 +113,7 @@ function getAddress(lant:any, long:any, location:any) {
       </div>
     </div>
     <div class="col-span-3">
-      <PopulationPostPropertiesMap  @send-location="getAddress"/>
+      <!-- <PopulationPostPropertiesMap  @send-location="getAddress"/> -->
     </div>
     <div class="col-span-3">
       <label class="w-full sm:mb-2 mb-5">
@@ -199,6 +199,14 @@ function getAddress(lant:any, long:any, location:any) {
       <textarea type="text" v-model="description" placeholder="Descripcion de la propiedad"></textarea>
     </div>
   </div>
+  <nav class="control-steps-postProperty">
+    <AtomsButtons @click="$emit('back')" btn-style="outline-primary">
+      Atras
+    </AtomsButtons>
+    <AtomsButtons @click="$emit('nexts')">
+      Continuar
+    </AtomsButtons>
+  </nav>
 </template>
 
 <style lang="postcss" scoped>
