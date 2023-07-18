@@ -31,9 +31,6 @@ export const useAuthStore = defineStore('auth', {
           showConfirmButton: false,
           timer: 2000
         });
-
-        useRouter().go()
-
         //Save data in localStorage
         localStorage.setItem('token', res.access_token.original.access_token);
       } 
@@ -55,10 +52,7 @@ export const useAuthStore = defineStore('auth', {
       localStorage.removeItem('token')
       useRouter().push("/")
     }
-
-    //end actions
   }
-  // final del export
 })
 
 if (import.meta.hot) {

@@ -26,7 +26,7 @@ let lat = null;
 let long = null;
 let address = '';
 
-const countriesApi:any = await $fetch('generals/countries', {
+const countriesApi:any = await $fetch('/generals/countries', {
   baseURL: config.public.API
 });
 

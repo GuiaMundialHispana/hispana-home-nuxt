@@ -42,19 +42,12 @@ export default {
       type: String,
       default: "btn"
     },
-    linkTo: {
-      type: String,
-      default: ""
-    },
     isDisabled: {
       type: Boolean,
       default: false
     }
   },
   computed: {
-    renderTag() {
-      return this.linkTo ? "a" : "button";
-    },
     setButtonSize() {
       const sizes = [
         "large",

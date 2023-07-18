@@ -25,9 +25,9 @@
           <!-- User Logged -->
           <li class="user-wrapper" v-if="auth.isLoggedIn" @click="userDropdown = !userDropdown">
             <div class="flex items-center gap-2">
-              <img :src="`https://walrus-app-e2bxo.ondigitalocean.app/${user.userData.profile_pic}`" v-if="user.userData.profile_pic != null || ''" :alt="user.userData.name">
+              <img :src="`https://seal-app-4mhut.ondigitalocean.app/api/v1/${user.userData.profile_pic}`" v-if="user.userData.profile_pic != null || ''" :alt="user.userData.name">
               <img src="/img/user.jpg" v-if="user.userData.profile_pic === null || ''" :alt="user.userData.name">
-              {{user.userData.name}} {{user.userData.lastname}}
+              {{ user.userData.name }} {{ user.userData.lastname }}
               <AtomsIcon name="arrows/arrow-down" v-show="!userDropdown" :size=15 class="text-primary-100" />
               <AtomsIcon name="arrows/arrow-down" v-show="userDropdown" :size=15 class="text-primary-100 rotate-180" />
             </div>
@@ -51,7 +51,7 @@
                     Mis planes
                   </NuxtLink>
                 </li>
-                <li @click="auth.logOut(), showMenu = false">
+                <li @click="auth.logOut(), user.$reset(), showMenu = false">
                   <AtomsIcon name="general/logout" class="mr-2.5" />
                   Cerrar sesión
                 </li>
@@ -138,7 +138,7 @@ nav {
   & .user-wrapper {
     @apply flex lg:items-center font-semibold text-primary-100 lg:ml-4 cursor-pointer mb-4 lg:mb-0 lg:flex-row flex-col;
 
-    & img { @apply w-8 h-8 rounded-full border-[2px] border-primary-90 object-cover; }
+    & img { @apply w-8 h-8 rounded-full border-[2px] border-primary-90 object-cover overflow-hidden; }
 
     & .user-dropdown {
       @apply lg:absolute lg:mt-0 mt-4 top-20 lg:w-56 w-full h-auto z-50 bg-neutral-white bottom-0;

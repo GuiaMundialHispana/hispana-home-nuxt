@@ -3,7 +3,7 @@ const emit = defineEmits(['categoryID', 'nexts']);
 const config = useRuntimeConfig()
 let categories:any = ref([]);
 let categorySelected = ref(0);
-const categoriesApi:any = await $fetch('generals/categories', {
+const categoriesApi:any = await $fetch('/generals/categories', {
   baseURL: config.public.API
 });
 categories = categoriesApi.results;

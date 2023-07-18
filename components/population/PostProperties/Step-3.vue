@@ -1,7 +1,9 @@
 <script setup>
 const emit = defineEmits(['plan_selected'])
 let plans = [];
+let next = ref(false);
 const config = useRuntimeConfig();
+
 const {data} = await useFetch('user-plans',{
   method: 'GET',
   headers: {
@@ -9,13 +11,15 @@ const {data} = await useFetch('user-plans',{
   },
   baseURL: config.public.API
 });
-plans = data._value.results;
 
-let next = ref(false);
-function send_plan(plan_id, plan_picture) {
-  emit('plan_selected',  {plan_id, plan_picture});
-  next.value = true;
-}
+console.log(data)
+
+// plans = data._value.results;
+
+// function send_plan(plan_id, plan_picture) {
+//   emit('plan_selected',  {plan_id, plan_picture});
+//   next.value = true;
+// }
 
 // const renderPlanText = computed (()=> {
 //   if(this.planSelected.name === 'VIP') {
@@ -35,6 +39,7 @@ function send_plan(plan_id, plan_picture) {
   <ul class="plans-list">
     <li v-for="plan in plans" :key="plan">
       <MoleculesPlanCard
+        class="h-full"
         @pay="send_plan"
         :plan="plan.plan"
         :user-quantity="plan.quantity"

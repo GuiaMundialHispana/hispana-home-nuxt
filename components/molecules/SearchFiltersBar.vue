@@ -299,7 +299,7 @@ export default {
       } else { this.dropdownLists[list] = true; }
     },
     async getCountries() {
-      const countriesApi = await $fetch(this.config.public.API+'generals/countries');
+      const countriesApi = await $fetch(this.config.public.API+'/generals/countries');
       countriesApi.results.data.forEach(element => {
         if(element.id === 63 || element.id === 236) {
           this.countries.push(element)
@@ -311,7 +311,7 @@ export default {
       this.features = featuresApi.results;
     },
     async getCategories() {
-      const categoriesApi = await $fetch(this.config.public.API+'generals/categories');
+      const categoriesApi = await $fetch(this.config.public.API+'/generals/categories');
       this.categories = categoriesApi.results;
     },
     async getStates(country_id) {

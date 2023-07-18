@@ -251,7 +251,6 @@ export default {
 }
 </script>
 
-
 <style lang="postcss" scoped>
 .form {
   @apply flex flex-col w-full;

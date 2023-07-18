@@ -225,11 +225,15 @@ export default {
 
 <script lang="ts" setup>
 import { watch } from 'vue';
+
+definePageMeta({
+  middleware: 'check-auth'
+});
+
 const config = useRuntimeConfig();
 let step = ref(1);
 let errors:any =  [];
 let displayModal:boolean = (false);
-
 let optionSelected = ref('');
 let categorySelected:Number;
 let plan:object = ref({});
@@ -360,8 +364,7 @@ watch(plan,(newx) => {
       />
     </KeepAlive>
     <KeepAlive>
-      <PopulationPostPropertiesStep3
-        @plan_selected="(x) => plan = x"
+      <PopulationPostPropertiesStep
         v-if="step === 3"
         @nexts="step = 4"
         @back="step--"

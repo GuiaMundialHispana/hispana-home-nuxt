@@ -22,7 +22,7 @@ export const useUserStore = defineStore('user', {
       passwordToken: '',
       newPassword: '',
       repeatPassword: '',
-
+      token: ''
     }
   },
   actions: {
@@ -78,6 +78,22 @@ export const useUserStore = defineStore('user', {
           timer: 3000
         })
         useRouter().push("/");
+      }
+    },
+    async get_user() {
+      const { data } = await useFetch('auth/profile',{
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${this.token}`
+        },
+        baseURL: this.config.public.API
+      });
+      
+      let response = data._value;
+      let user_response = data._value.results.user;
+
+      if(response.code = 200) {
+        this.userData = user_response;
       }
     }
   }
