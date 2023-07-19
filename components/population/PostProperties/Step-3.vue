@@ -1,37 +1,29 @@
 <script setup>
-const emit = defineEmits(['plan_selected'])
+import { useUserStore } from '~/stores/User';
+
+const user_store = useUserStore();
+const emit = defineEmits(['plan_selected']);
 let plans = [];
 let next = ref(false);
 const config = useRuntimeConfig();
 
-const {data} = await useFetch('user-plans',{
+const { data:products } = await useFetch('user-plans',{
   method: 'GET',
   headers: {
-    'Authorization': `Bearer ${localStorage.getItem('token')}`
+    'Authorization': `Bearer ${user_store.token}`
   },
-  baseURL: config.public.API
+  baseURL: config.public.API,
+  transform(products) {
+    plans = products.results;
+    console.log(plans)
+  }
 });
 
-console.log(data)
+function send_plan(i,x) {
+  emit('plan_selected',i,x);
+  next.value = true;
+}
 
-// plans = data._value.results;
-
-// function send_plan(plan_id, plan_picture) {
-//   emit('plan_selected',  {plan_id, plan_picture});
-//   next.value = true;
-// }
-
-// const renderPlanText = computed (()=> {
-//   if(this.planSelected.name === 'VIP') {
-//     return 'vip';
-//   } else if (this.planSelected.name === 'SILVER') {
-//     return 'silver';
-//   } else if (this.planSelected.name === 'EXCLUSIVO') {
-//     return 'exclusive';
-//   } else if(this.planSelected.name === 'DESTACADOS') {
-//     return '';
-//   }
-// });
 </script>
 
 <template>

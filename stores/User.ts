@@ -89,8 +89,8 @@ export const useUserStore = defineStore('user', {
         baseURL: this.config.public.API
       });
       
-      let response = data._value;
-      let user_response = data._value.results.user;
+      let response = data.value;
+      let user_response = data.value.results.user;
 
       if(response.code = 200) {
         this.userData = user_response;

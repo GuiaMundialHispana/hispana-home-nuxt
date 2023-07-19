@@ -1,6 +1,8 @@
 <template>
   <div class="plan-wrapper">
-    <span class="user-quantity" v-if="plan.id != 4 && $route.path === '/PostProperty' && $route.path === '/postProperty'">{{ userQuantity }}</span>
+    <span class="user-quantity" v-if="plan.id != 4 && $route.path === '/PostProperty' || $route.path === '/postProperty'">
+      {{ userQuantity }}
+    </span>
     <span class="plan-category" :class="[renderPlanText]">{{ plan.name }}</span>
     <ul class="plan-benefits">
       <li>
@@ -11,7 +13,7 @@
         <AtomsIcon name="general/check" :size=16 class="text-[#FFAE10] mr-2" />
         Duración del anuncio: {{plan.duration }} días
       </li>
-      <!-- <li>
+      <li>
         <AtomsIcon name="general/check" :size=16 class="text-[#FFAE10] mr-2" />
         Opción para subir videos
       </li>
@@ -22,7 +24,7 @@
       <li>
         <AtomsIcon name="general/check" :size=16 class="text-[#FFAE10] mr-2" />
         Exclusividad en página de inicio
-      </li> -->
+      </li>
     </ul>
     <div class="action-buttons" v-if="plan.id != 4 && $route.path === '/profile' || $route.path === '/plans'">
       <div class="plan-quantity">

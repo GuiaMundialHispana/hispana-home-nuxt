@@ -238,9 +238,13 @@ let optionSelected = ref('');
 let categorySelected:Number;
 let plan:object = ref({});
 
-watch(plan,(newx) => {
-  console.log(newx)
-})
+function teta(x:any,y:any) {
+  plan = {
+    id: x,
+    pictures: y
+  }
+  console.log(plan)
+}
 
 // async function createAdvertisement() {
 //   const form = new FormData();
@@ -364,8 +368,9 @@ watch(plan,(newx) => {
       />
     </KeepAlive>
     <KeepAlive>
-      <PopulationPostPropertiesStep
+      <PopulationPostPropertiesStep3
         v-if="step === 3"
+        @plan_selected="teta"
         @nexts="step = 4"
         @back="step--"
       />

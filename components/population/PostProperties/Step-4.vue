@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 const config = useRuntimeConfig();
-currencyTab: true
 const currencyTab = ref(true);
 const name = ref('');
 const price = ref(Number);
@@ -26,7 +25,7 @@ let lat = null;
 let long = null;
 let address = '';
 
-const countriesApi:any = await $fetch('/generals/countries', {
+const countriesApi:any = await $fetch('generals/countries', {
   baseURL: config.public.API
 });
 
@@ -113,6 +112,9 @@ function getAddress(lant:any, long:any, location:any) {
       </div>
     </div>
     <div class="col-span-3">
+      <ClientOnly>
+        <PopulationPostPropertiesMap @send-location="getAddress"/>
+      </ClientOnly>
       <!-- <PopulationPostPropertiesMap  @send-location="getAddress"/> -->
     </div>
     <div class="col-span-3">
