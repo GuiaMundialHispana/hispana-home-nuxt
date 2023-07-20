@@ -74,29 +74,6 @@ export default {
         }
       }
     },
-    getAddress(lant, long, location) {
-      this.lat = lant;
-      this.long = long;
-      this.address = location;
-    },
-    async getUserPlans() {
-      const {data} = await useFetch('user-plans',{
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        baseURL: this.config.public.API
-      });
-      this.plans = data._value.results;
-    },
-    async getCountries() {
-      const countriesApi = await $fetch(this.config.public.API+'generals/countries');
-      countriesApi.results.data.forEach(element => {
-        if(element.id === 63 || element.id === 236) {
-          this.countries.push(element)
-        }
-      });
-    },
     async getStates(country_id) {
       const statesApi = await $fetch(this.config.public.API+'generals/states/'+`${country_id}`);
       this.sectors.splice(0,1);
@@ -106,10 +83,6 @@ export default {
       const citiesApi = await $fetch(this.config.public.API+'generals/cities/'+`${sector_id}`);
       this.cities.splice(0,1);
       this.cities.push(citiesApi.results.data)
-    },
-    async getFeatures() {
-      const featuresApi = await $fetch(this.config.public.API+'generals/features');
-      this.features = featuresApi.results;
     },
     async getCategories() {
       const categoriesApi = await $fetch(this.config.public.API+'generals/categories');
@@ -178,22 +151,9 @@ export default {
       }
     },
   },
-  computed: {
-    renderPrice() {
-      if(!this.currencyTab) {
-        this.price_us = this.price / 54;
-      }
-    }
-  },
   watch: {
     price() {
       this.price_us = parseInt(this.price / 54);
-    },
-    country() {
-      this.getStates(this.country)
-    },
-    sector() {
-      this.getCities(this.sector)
     },
     lat() {
       if(this.lat === null || this.lat === '' ) {
@@ -243,7 +203,6 @@ function teta(x:any,y:any) {
     id: x,
     pictures: y
   }
-  console.log(plan)
 }
 
 // async function createAdvertisement() {

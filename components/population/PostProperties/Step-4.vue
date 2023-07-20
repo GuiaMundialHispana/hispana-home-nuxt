@@ -1,9 +1,12 @@
 <script lang="ts" setup>
+import {ref, watch} from 'vue';
+
 const config = useRuntimeConfig();
+const emit = defineEmits(['plan_selected']);
 const currencyTab = ref(true);
 const name = ref('');
-const price = ref(Number);
-const price_us = ref(Number);
+let price = ref(Number);
+let price_us = ref(Number);
 const bedrooms = ref(Number);
 const bathrooms = ref(Number);
 const parking = ref(Number);
@@ -15,38 +18,42 @@ const propertyStatus = ['New', 'Used'];
 const feature = [''];
 let features: any[] = [];
 let countries: any[] = [];
-let country = [''];
-let sectors: any[ ]= [];
-let sector = [''];
-let cities: any[] = [];
+let country = ref(0);
+let sectors = reactive([]);
+let sector = ref(0);
+let displaySector = ref(false);
+let cities = reactive([]);
 let city: any[] = [];
+let displayCity = ref(false);
 let categories: any[] = [];
 let lat = null;
 let long = null;
-let address = '';
+let address = ref('');
+let next = ref(false);
 
 const countriesApi:any = await $fetch('generals/countries', {
   baseURL: config.public.API
 });
-
 countriesApi.results.data.forEach(element => {
   if(element.id === 63 || element.id === 236) {
     countries.push(element)
   }
 });
 
-async function getCategories() {
-  const categoriesApi:any = await $fetch('generals/categories', {
-    baseURL: config.public.API
-  });
-  categoriesApi.results = categories;
-};
+const featuresApi:any = await $fetch('generals/features', {
+  baseURL: config.public.API
+});
+features = featuresApi.results;
+
+const categoriesApi:any = await $fetch('generals/categories', {
+  baseURL: config.public.API
+});
+categoriesApi.results = categories;
 
 async function getStates(country_id:number) {
   const statesApi:any = await $fetch(`generals/states/${country_id}`, {
     baseURL: config.public.API
   });
-  sectors.splice(0,1);
   sectors.push(statesApi.results.data);
 };
 
@@ -54,20 +61,34 @@ async function getCities(sector_id:number) {
   const citiesApi:any = await $fetch(`generals/cities/${sector_id}`, {
     baseURL: config.public.API
   });
-  cities.splice(0,1);
   cities.push(citiesApi.results.data)
 };
-
-const featuresApi:any = await $fetch('generals/features', {
-  baseURL: config.public.API
-});
-features = featuresApi.results;
 
 function getAddress(lant:any, long:any, location:any) {
   lat = lant;
   long = long;
   address = location;
 };
+
+//TODO AQUI ENVIALE AL PADRE TODA LA INFORMACION DEL STEP
+function send_property_data() {
+  emit('plan_selected');
+  next.value = true;
+};
+
+watch(country,(country_id) => {
+  getStates(country_id);
+  displaySector.value = true;
+});
+
+watch(sector,(sector_id) => {
+  getCities(sector_id);
+  displayCity.value = true;
+});
+
+watch(price,(new_price) => {
+  price_us = parseInt(new_price / 54);
+});
 </script>
 
 
@@ -76,22 +97,22 @@ function getAddress(lant:any, long:any, location:any) {
     Cuéntanos sobre tu <span class="text-primary-100">inmueble</span>
   </h4>
   <div class="mx-4 px-4 md:px-8 sm:grid sm:grid-cols-3 sm:mx-auto gap-4 max-w-[995px]">
+    <!-- Nombre -->
     <label class="col-span-3 sm:mb-2 mb-5">
       Nombre del proyecto
       <input class="form-control" v-model="name" placeholder="Nombre del proyecto" type="text">
     </label>
+    <!-- Price -->
     <div class="flex col-span-3 sm:mb-2 mb-5">
       <label class="w-full">
         Precio
-        <input
-          v-if="currencyTab"
+        <input v-if="currencyTab"
           class="form-control"
           v-model="price"
           placeholder="Precio Dominicano"
           type="number"
         >
-        <input
-          v-if="!currencyTab"
+        <input v-if="!currencyTab"
           class="form-control"
           v-model="price_us"
           placeholder="Precio en Dolares"
@@ -111,18 +132,20 @@ function getAddress(lant:any, long:any, location:any) {
         </button>
       </div>
     </div>
+    <!-- Map -->
     <div class="col-span-3">
       <ClientOnly>
         <PopulationPostPropertiesMap @send-location="getAddress"/>
       </ClientOnly>
-      <!-- <PopulationPostPropertiesMap  @send-location="getAddress"/> -->
     </div>
+    <!-- Direccion -->
     <div class="col-span-3">
       <label class="w-full sm:mb-2 mb-5">
       Direccion
       <input class="form-control" v-model="address" placeholder="Direccion" type="text">
     </label>
     </div>
+    <!-- Pais -->
     <label class="w-full sm:mb-2 mb-5">
       País
       <select class="form-control col-span-3" v-model="country">
@@ -131,7 +154,8 @@ function getAddress(lant:any, long:any, location:any) {
         </option>
       </select>
     </label>
-    <label class="w-full sm:mb-2 mb-5" v-if="sectors.length > 0">
+    <!-- Sector -->
+    <label class="w-full sm:mb-2 mb-5" v-if="displaySector">
       Sector
       <select class="form-control col-span-3" v-model="sector">
         <option v-for="sector in sectors[0]" :value="sector.id" :key="sector.id" class="option-label">
@@ -139,7 +163,8 @@ function getAddress(lant:any, long:any, location:any) {
         </option>
       </select>
     </label>
-    <label class="w-full sm:mb-2 mb-5" v-if="cities.length > 0">
+    <!-- Ciudad -->
+    <label class="w-full sm:mb-2 mb-5" v-if="displayCity">
       Ciudad
       <select class="form-control" v-model="city">
         <option v-for="item in cities[0]" :value="item.id" :key="item.id" class="option-label">
@@ -147,6 +172,7 @@ function getAddress(lant:any, long:any, location:any) {
         </option>
       </select>
     </label>
+    <!-- Habitaciones, banos, parqueos -->
     <div class="col-span-3 gap-4 sm:grid grid-cols-2">
       <label class="w-full sm:mb-2 mb-5">
         Habitaciones
@@ -169,6 +195,7 @@ function getAddress(lant:any, long:any, location:any) {
         </select>
       </div>
     </div>
+    <!-- Amenidades -->
     <div class="col-span-3">
       <label for="amenities" class="mb-2">Otras amenidades</label>
       <select
@@ -186,6 +213,7 @@ function getAddress(lant:any, long:any, location:any) {
         </option>
       </select>
     </div>
+    <!-- Superficie de construccion y total -->
     <div class="col-span-3 w-full gap-4 sm:flex sm:mb-2 mb-5">
       <label class="w-full mb-5 sm:mb-0">
         Superficie de construcción
@@ -196,6 +224,7 @@ function getAddress(lant:any, long:any, location:any) {
         <input class="form-control" v-model="meter_2" placeholder="Metros²" type="number">
       </label>
     </div>
+    <!-- Descripcion -->
     <div class="flex flex-col col-span-3">
       <label>Descripción</label>
       <textarea type="text" v-model="description" placeholder="Descripcion de la propiedad"></textarea>
@@ -205,13 +234,15 @@ function getAddress(lant:any, long:any, location:any) {
     <AtomsButtons @click="$emit('back')" btn-style="outline-primary">
       Atras
     </AtomsButtons>
-    <AtomsButtons @click="$emit('nexts')">
+    <AtomsButtons @click="$emit('nexts')" :disabled="!next">
       Continuar
     </AtomsButtons>
   </nav>
 </template>
 
 <style lang="postcss" scoped>
+h4 { @apply font-semibold text-[28px] leading-[42px]; }
+
 label {
   @apply flex flex-col font-normal text-sm text-opacity-[0.85] gap-2;
 }
