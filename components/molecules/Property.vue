@@ -28,7 +28,12 @@
         },
       }">
       <SwiperSlide>
-        <NuxtLink class="bg-gray-10" :to="`/search/${propertyId}`">
+        <NuxtLink class="bg-gray-10" :to="{
+          path: `/search/${property.name}`,
+          query: {
+            property_id: propertyId
+          }
+        }">
           <figure class="h-52 bg-gray-10">
             <img :src="`https://seal-app-4mhut.ondigitalocean.app/api/${property.image}`" :alt="property.name" class="object-cover h-full w-full">
           </figure>
@@ -52,7 +57,12 @@
         />
       </nav>
     </Swiper>
-    <NuxtLink :to="`/search/${propertyId}`">
+    <NuxtLink :to="{
+      path: `/search/${property.name}`,
+      query: {
+        property_id: propertyId
+      }
+    }">
       <p class="property-title">{{property.name }}</p>
       <p class="address">
         <AtomsIcon
