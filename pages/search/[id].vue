@@ -20,7 +20,7 @@
 const route = useRoute();
 const config = useRuntimeConfig();
 
-const { data: property, pending, error} = await useFetch(`advertisements/${route.params.id}`, {
+const { data: property, pending, error} = await useLazyFetch(`advertisements/${route.params.id}`, {
   method: 'GET',
   baseURL: config.public.API,
   transform:(_property) => _property.results,
@@ -30,6 +30,7 @@ const { data: property, pending, error} = await useFetch(`advertisements/${route
     }
   }
 });
+
 
 definePageMeta({
   middleware: ["not-found"]

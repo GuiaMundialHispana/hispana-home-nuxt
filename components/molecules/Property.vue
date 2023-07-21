@@ -1,5 +1,6 @@
 <template>
   <article>
+    {{ propertyId }}
     <AtomsButtons
       btn-type="btn-icon"
       icon-name="general/favorite"
@@ -29,7 +30,7 @@
       <SwiperSlide>
         <NuxtLink class="bg-gray-10" :to="`/search/${propertyId}`">
           <figure class="h-52 bg-gray-10">
-            <img :src="`https://seal-app-4mhut.ondigitalocean.app/${property.image}`" :alt="property.name" class="object-cover h-full w-full">
+            <img :src="`https://seal-app-4mhut.ondigitalocean.app/api/${property.image}`" :alt="property.name" class="object-cover h-full w-full">
           </figure>
         </NuxtLink>
       </SwiperSlide>
