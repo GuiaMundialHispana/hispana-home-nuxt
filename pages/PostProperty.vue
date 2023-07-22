@@ -1,276 +1,117 @@
-<!-- <script>
+<script setup>
 import Swal from 'sweetalert2';
-export default {
-  data() {
-    return {
-      config: useRuntimeConfig(),
-      step: 2,
-      optionSelected: "",
-      categorySelected: 0,
-      categories: [],
-      plans: [],
-      showPaymentProcess: false,
-      currencyTab: true,
-      name: '',
-      price: Number,
-      price_us: Number,
-      bedrooms: Number,
-      bathrooms: Number,
-      parking: Number,
-      meter: Number,
-      meter_2: Number,
-      description: '',
-      property_status: '',
-      propertyStatus: ['New', 'Used'],
-      feature: [],
-      features:[],
-      countries: [],
-      country: [],
-      sectors: [],
-      sector: [],
-      cities: [],
-      city: [],
-      municipalities: [],
-      propertyData: {},
-      allowedFileTypes : ['image/jpeg', 'image/png', 'image/gif', 'image/svg', 'image/svg+xml'],
-      totalImgs: 0,
-      savedImages: [],
-      previewImages: [],
-      fileFormat: true,
-      lat: null,
-      long: null,
-      address:'',
-      errorList: [],
-      planSelected: {
-        id: 4,
-        quantity: 4
-      },
-      errors: [],
-      displayModal: false
-    }
-  },
-  methods: {
-    planInformation(planId,quantity) {
-      this.planSelected = {
-        id: planId,
-        quantity: quantity
-      }
-      this.step++;
-    },
-    previewFiles(event) {
-      let images = null;
-      images = event.target.files;
-      this.totalImgs = this.previewImages.length + images.length;
-      if (this.totalImgs <= this.planSelected.quantity) {
-        for (let i = 0; i < images.length; i++) {
-          if (this.allowedFileTypes.indexOf(images[i].type) !== -1) {
-            let file = images[i];
-            this.savedImages.push(images[i]);
-            this.previewImages.push(URL.createObjectURL(file));
-            this.fileFormat = true;
-          } else {
-            this.fileFormat = false;
-          }
-        }
-      }
-    },
-    async getStates(country_id) {
-      const statesApi = await $fetch(this.config.public.API+'generals/states/'+`${country_id}`);
-      this.sectors.splice(0,1);
-      this.sectors.push(statesApi.results.data);
-    },
-    async getCities(sector_id) {
-      const citiesApi = await $fetch(this.config.public.API+'generals/cities/'+`${sector_id}`);
-      this.cities.splice(0,1);
-      this.cities.push(citiesApi.results.data)
-    },
-    async getCategories() {
-      const categoriesApi = await $fetch(this.config.public.API+'generals/categories');
-      this.categories = categoriesApi.results;
-    },
-    async createAdvertisement() {
-      const form = new FormData();
-      form.append('plan_id', this.planSelected.id);
-      form.append('name', this.name);
-      form.append('price', this.price);
-      form.append('price_us', this.price_us);
-      form.append('address', this.address);
-      form.append('description',this.description);
-      form.append('type', this.optionSelected);
-      form.append('property_category', this.categorySelected);
-      form.append('town_id', this.sector);
-      form.append('city_id', this.city);
-      form.append('country_id', this.country);
-      form.append('bedroom', this.bedrooms);
-      form.append('bathroom', this.bathrooms);
-      form.append('parking', this.parking);
-      form.append('meters', this.meter);
-      form.append('solar_meters', this.meter_2);
-      form.append('latitude', this.lat);
-      form.append('longitude', this.long);
-      form.append('property_status', this.property_status);
-      form.append('image', this.savedImages[0]);
+import { useUserStore } from '~/stores/User';
 
-      this.feature.forEach((element, index) => {
-        form.append(`features[${index}]`, element);
-      });
-      
-      this.savedImages.forEach((element,index)=>{
-        form.append('images[' + index + ']',element);
-      });
-      
-      const{ data, pending, error, refresh  } = await useFetch('advertisements',{
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Accept': 'application/json'
-        },
-        body: form,
-        baseURL: this.config.public.API,
-        onResponse({ request, response, options }) {
-          const res = response._data;
-          if(res.code === 200 ) {
-            Swal.fire({
-              icon: 'success',
-              text:  `${res.message}`,
-              showConfirmButton: false,
-              timer: 4000
-            });
-            useRouter().push("/profile?tab=anuncio");
-          }
-        }    
-      });
-      
-      if(error) {
-        let errors = error.value.data.message;
-      
-        for(let i in errors) {
-          this.displayModal = true;
-          this.errors.push(errors[i][0])
-        }
-      }
-    },
-  },
-  watch: {
-    price() {
-      this.price_us = parseInt(this.price / 54);
-    },
-    lat() {
-      if(this.lat === null || this.lat === '' ) {
-        this.lat = 12.545654654654564
-      }
-    },
-    long() {
-      if(this.long === null || this.long === '' ) {
-        this.long = 15.545654654654564
-      }
-    },
-    displayModal: function() {
-      if(this.displayModal) {
-        document.body.classList.add('modal-open')
-      } else {
-        document.body.classList.remove('modal-open')
-      }
-    }
-  },
-  beforeMount() {
-    this.getUserPlans();
-    this.getCountries();
-    this.getFeatures();
-    this.getCategories();
-  }
-}
-</script> -->
-
-
-<script lang="ts" setup>
-import { watch } from 'vue';
-
-definePageMeta({
-  middleware: 'check-auth'
-});
-
+const user_store = useUserStore();
 const config = useRuntimeConfig();
-let step = ref(1);
-let errors:any =  [];
-let displayModal:boolean = (false);
+let step = ref(4);
+let errors = ref(null);
+let displayModal = ref(false);
 let optionSelected = ref('');
-let categorySelected:Number;
-let plan:object = ref({});
+let categorySelected = ref(Number);
+let plan =  {};
+let property_data = {};
+let saved_images = null;
 
-function teta(x:any,y:any) {
+function get_plan(id,pictures) {
   plan = {
-    id: x,
-    pictures: y
+    id: id,
+    pictures: pictures
   }
 }
 
-// async function createAdvertisement() {
-//   const form = new FormData();
-//   form.append('plan_id', planSelected.id);
-//   form.append('name', name);
-//   form.append('price', price);
-//   form.append('price_us', price_us);
-//   form.append('address', address);
-//   form.append('description',description);
-//   form.append('type', optionSelected);
-//   form.append('property_category', categorySelected);
-//   form.append('town_id', sector);
-//   form.append('city_id', city);
-//   form.append('country_id', country);
-//   form.append('bedroom', bedrooms);
-//   form.append('bathroom', bathrooms);
-//   form.append('parking', parking);
-//   form.append('meters', meter);
-//   form.append('solar_meters', meter_2);
-//   form.append('latitude', lat);
-//   form.append('longitude', long);
-//   form.append('property_status', property_status);
-//   form.append('image', savedImages[0]);
+function get_property_data(name, price, price_us, lat, log, address, country, sector, city, bedrooms, bathrooms, parking, property_status, feature, meter, meter_2, description) {
+  property_data = {
+    name: name,
+    price: price,
+    price_us:price_us,
+    lat: lat,
+    log: log,
+    address: address,
+    country: country,
+    sector: sector,
+    city: city,
+    bedrooms: bedrooms,
+    bathrooms: bathrooms,
+    parking: parking,
+    status: property_status,
+    feature: feature,
+    meter: meter,
+    meter_2: meter_2,
+    description: description
+  }
+}
 
-//   feature.forEach((element:any, index:any) => {
-//     form.append(`features[${index}]`, element);
-//   });
-  
-//   savedImages.forEach((element:any, index:any)=>{
-//     form.append('images[' + index + ']',element);
-//   });
-  
-//   const{ data, pending, error, refresh  } = await useFetch('advertisements',{
-//     method: 'POST',
-//     headers: {
-//       'Authorization': `Bearer ${localStorage.getItem('token')}`,
-//       'Accept': 'application/json'
-//     },
-//     body: form,
-//     baseURL: config.public.API,
-//     onResponse({ request, response, options }) {
-//       const res = response._data;
-//       if(res.code === 200 ) {
-//         Swal.fire({
-//           icon: 'success',
-//           text:  `${res.message}`,
-//           showConfirmButton: false,
-//           timer: 4000
-//         });
-//         useRouter().push("/profile?tab=anuncio");
-//       }
+function get_images(images) {
+  saved_images = images;
+}
 
-//       if(res.code === 400) {
-//         console.log(res);
-//       }
-//     }    
-//   });
-  
-//   if(error) {
-//     let errors = error.value.data.message;
-  
-//     for(let i in errors) {
-//       this.displayModal = true;
-//       this.errors.push(errors[i][0])
-//     }
-//   }
-// };
+async function createAdvertisement() {
+  const form = new FormData();
+  form.append('plan_id', plan.id);
+  form.append('type', optionSelected.value);
+  form.append('property_category', categorySelected.value);
+  form.append('name', property_data.name);
+  form.append('price', property_data.price);
+  form.append('price_us', property_data.price_us);
+  form.append('address', property_data.address);
+  form.append('description', property_data.description);
+  form.append('town_id', property_data.sector);
+  form.append('city_id', property_data.city);
+  form.append('country_id', property_data.country);
+  form.append('bedroom', property_data.bedrooms);
+  form.append('bathroom', property_data.bathrooms);
+  form.append('parking', property_data.parking);
+  form.append('meters', property_data.meter);
+  form.append('solar_meters', property_data.meter_2);
+  form.append('latitude', property_data.lat);
+  form.append('longitude', property_data.long);
+  form.append('property_status', property_data.status);
+  property_data.feature.forEach((element, index) => {
+    form.append(`features[${index}]`, element);
+  });
+  form.append('image', saved_images[0]);
+
+  // saved_images.forEach((element, index)=>{
+  //   form.append('images[' + index + ']',element);
+  // });
+
+  await useFetch('advertisements',{
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${user_store.token}`,
+      'Accept': 'application/json'
+    },
+    body: form,
+    baseURL: config.public.API,
+    onResponse({ response }) {
+      const res = response._data;
+      console.log(res)
+      if(res.code === 200 ) {
+        Swal.fire({
+          icon: 'success',
+          text:  `${res.message}`,
+          showConfirmButton: false,
+          timer: 4000
+        });
+        step.value = 6;
+        setTimeout(() => {
+          useRouter().push("/profile?tab=anuncio");
+        }, 3000);
+      }
+
+      if(res.code === 400) {
+        let messages = res.message;
+        // console.log(messages)
+        errors.value = messages
+        console.log(errors.value)
+        for(let i in errors.value[0]) {
+          console.log(errors[i][0])
+        }
+      }
+    }    
+  });
+};
 
 </script>
 
@@ -329,7 +170,7 @@ function teta(x:any,y:any) {
     <KeepAlive>
       <PopulationPostPropertiesStep3
         v-if="step === 3"
-        @plan_selected="teta"
+        @plan_selected="get_plan"
         @nexts="step = 4"
         @back="step--"
       />
@@ -337,6 +178,7 @@ function teta(x:any,y:any) {
     <KeepAlive>
       <PopulationPostPropertiesStep4
         v-if="step === 4"
+        @property_detail="get_property_data"
         @nexts="step = 5"
         @back="step--"
       />
@@ -344,15 +186,13 @@ function teta(x:any,y:any) {
     <KeepAlive>
       <PopulationPostPropertiesStep5
         v-if="step === 5"
+        @images="get_images"
         @back="step--"
       />
     </KeepAlive>
-    <PopulationPostPropertiesStep6
-      v-if="step === 6"
-    />
-    <!-- @click="createAdvertisement()" -->
+    <PopulationPostPropertiesStep6 v-if="step === 6" />
     <nav class="control-steps-postProperty">
-      <AtomsButtons v-if="step === 5">
+      <AtomsButtons v-if="step === 5" @click="createAdvertisement()">
         Crear Anuncio
       </AtomsButtons>
     </nav>
@@ -361,6 +201,7 @@ function teta(x:any,y:any) {
       :errors="errors"
       @close="displayModal = false"
     />
+    {{ errors }}
   </section>
 </template>
 

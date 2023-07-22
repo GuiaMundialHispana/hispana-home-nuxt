@@ -83,22 +83,26 @@ export const useUserStore = defineStore('user', {
     async get_user() {
       const { data } = await useFetch('auth/profile',{
         method: 'GET',
+        baseURL: this.config.public.API,
         headers: {
           'Authorization': `Bearer ${this.token}`
         },
-        baseURL: this.config.public.API
       });
       
-      let response = data.value;
-      let user_response = data.value.results.user;
+      if(data) {
+        console.log(data)
+        // let response = data.value;
+        // console.log(response)
+        // let user_response = data.value.results.user;
 
-      if(response.code = 200) {
-        this.userData = user_response;
+        // if(response.code = 200) {
+        //   this.userData = user_response;
+        // }
       }
     }
   }
 })
 
-if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(useUserStore, import.meta.hot))
-}
+// if (import.meta.hot) {
+//   import.meta.hot.accept(acceptHMRUpdate(useUserStore, import.meta.hot))
+// }

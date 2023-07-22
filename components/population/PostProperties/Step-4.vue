@@ -1,8 +1,7 @@
-<script lang="ts" setup>
+<script setup>
 import {ref, watch} from 'vue';
 
 const config = useRuntimeConfig();
-const emit = defineEmits(['plan_selected']);
 const currencyTab = ref(true);
 const name = ref('');
 let price = ref(Number);
@@ -11,27 +10,26 @@ const bedrooms = ref(Number);
 const bathrooms = ref(Number);
 const parking = ref(Number);
 const meter = ref(Number);
-const meter_2 = Number;
-const description = '';
-const property_status = '';
+const meter_2 = ref(Number);
+const description = ref('');
+const property_status = ref('');
 const propertyStatus = ['New', 'Used'];
 const feature = [''];
-let features: any[] = [];
-let countries: any[] = [];
+let features = [];
+let countries = [];
 let country = ref(0);
 let sectors = reactive([]);
 let sector = ref(0);
 let displaySector = ref(false);
 let cities = reactive([]);
-let city: any[] = [];
+let city = [];
 let displayCity = ref(false);
-let categories: any[] = [];
+let categories = [];
 let lat = null;
-let long = null;
+let log = null;
 let address = ref('');
-let next = ref(false);
 
-const countriesApi:any = await $fetch('generals/countries', {
+let countriesApi = await $fetch('generals/countries', {
   baseURL: config.public.API
 });
 countriesApi.results.data.forEach(element => {
@@ -40,40 +38,34 @@ countriesApi.results.data.forEach(element => {
   }
 });
 
-const featuresApi:any = await $fetch('generals/features', {
+let featuresApi = await $fetch('generals/features', {
   baseURL: config.public.API
 });
 features = featuresApi.results;
 
-const categoriesApi:any = await $fetch('generals/categories', {
+let categoriesApi = await $fetch('generals/categories', {
   baseURL: config.public.API
 });
 categoriesApi.results = categories;
 
-async function getStates(country_id:number) {
-  const statesApi:any = await $fetch(`generals/states/${country_id}`, {
+async function getStates(country_id) {
+  const statesApi = await $fetch(`generals/states/${country_id}`, {
     baseURL: config.public.API
   });
   sectors.push(statesApi.results.data);
 };
 
-async function getCities(sector_id:number) {
-  const citiesApi:any = await $fetch(`generals/cities/${sector_id}`, {
+async function getCities(sector_id) {
+  const citiesApi = await $fetch(`generals/cities/${sector_id}`, {
     baseURL: config.public.API
   });
   cities.push(citiesApi.results.data)
 };
 
-function getAddress(lant:any, long:any, location:any) {
+function getAddress(lant, long, location) {
   lat = lant;
-  long = long;
+  log = long;
   address = location;
-};
-
-//TODO AQUI ENVIALE AL PADRE TODA LA INFORMACION DEL STEP
-function send_property_data() {
-  emit('plan_selected');
-  next.value = true;
 };
 
 watch(country,(country_id) => {
@@ -87,8 +79,9 @@ watch(sector,(sector_id) => {
 });
 
 watch(price,(new_price) => {
-  price_us = parseInt(new_price / 54);
+  price_us.value = parseInt(new_price / 54);
 });
+
 </script>
 
 
@@ -234,7 +227,25 @@ watch(price,(new_price) => {
     <AtomsButtons @click="$emit('back')" btn-style="outline-primary">
       Atras
     </AtomsButtons>
-    <AtomsButtons @click="$emit('nexts')" :disabled="!next">
+    <AtomsButtons @click="$emit(
+      'property_detail',
+      name,
+      price,
+      price_us,
+      lat,
+      log,
+      address,
+      country,
+      sector,
+      city,
+      bedrooms,
+      bathrooms,
+      parking,
+      property_status,
+      feature,
+      meter,
+      meter_2,
+      description), $emit('nexts')">
       Continuar
     </AtomsButtons>
   </nav>

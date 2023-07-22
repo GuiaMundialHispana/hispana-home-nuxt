@@ -1,30 +1,32 @@
-<script lang="ts" setup>
+<script setup>
+const emit = defineEmits(['images'])
 const allowedFileTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/svg', 'image/svg+xml'];
-let totalImgs = ref(0);
-let savedImages:any [] = [];
-let previewImages:any [] = [];
-let fileFormat = ref(true);
+let totalImgs = 0;
+let savedImages= [];
+let previewImages= [];
+let fileFormat = true;
 let planSelected = {
   id: 4,
   quantity: 4
 };
 
-function previewFiles(event:any) {
+function previewFiles(event) {
   let images = null;
   images = event.target.files;
   totalImgs = previewImages.length + images.length;
-  if (totalImgs.value <= planSelected.quantity) {
+  if (totalImgs <= planSelected.quantity) {
     for (let i = 0; i < images.length; i++) {
       if (allowedFileTypes.indexOf(images[i].type) !== -1) {
         let file = images[i];
         savedImages.push(images[i]);
         previewImages.push(URL.createObjectURL(file));
-        fileFormat.value = true;
-      } else {
-        fileFormat.value = false;
-      }
+        fileFormat = true;
+        emit('images', savedImages);
+      } else { fileFormat = false; }
     }
-  }
+  } else {
+    console.log('error')
+  };
 }
 </script>
 
@@ -48,13 +50,7 @@ function previewFiles(event:any) {
           <AtomsIcon name="general/upload" :size=28 class="text-primary-100" />
         </div>
         <p class="text-[#707070]"><span class="text-primary-100">Click para subir</span> o arrastra y suelta SVG, PNG, <br> JPG (max. 800px400px)</p>
-        <input
-          type="file"
-          @change="previewFiles"
-          ref="file"
-          multiple="multiple"
-          class="absolute left-0 top-0 scale-[9] cursor-pointer opacity-0"
-        >
+        <input type="file" @change="previewFiles" ref="file" multiple="multiple" class="absolute left-0 top-0 scale-[9] cursor-pointer opacity-0">
       </div>
       <figure v-for="(img, index) in previewImages" :key="index">
         <img :src="img" class="w-full h-full object-cover">
@@ -67,13 +63,12 @@ function previewFiles(event:any) {
         <p :class="[{cover: index === 0}]">Portada</p>
       </figure>
     </div>
-    <p class="text-center mt-16 mb-8">
-      {{ previewImages.length }}/{{planSelected.quantity}} Fotos
-    </p>
+    <p class="text-center mt-16 mb-8">{{ previewImages.length }}/{{planSelected.quantity}} Fotos</p>
   </div>
 </template>
 
 <style lang="postcss" scoped>
+h4 { @apply font-semibold text-[28px] leading-[42px]; }
 .upload-button {
   @apply sm:col-span-2 flex flex-col relative items-center justify-center border border-gray-300 rounded-md w-full h-[165px] overflow-hidden text-center px-2;
   & > div { @apply flex items-center justify-center rounded-full bg-primary-50 w-14 h-14;}

@@ -9,7 +9,6 @@ export default defineNuxtRouteMiddleware((to, from) => {
     let get_token = window.localStorage.getItem('token');
     if(get_token != null) {
       user_store.token = get_token;
-      use_auth.isLoggedIn = true;
       user_store.get_user();
     }
   }

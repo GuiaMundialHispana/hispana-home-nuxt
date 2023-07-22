@@ -15,7 +15,6 @@ const { data:products } = await useFetch('user-plans',{
   baseURL: config.public.API,
   transform(products) {
     plans = products.results;
-    console.log(plans)
   }
 });
 
