@@ -1,76 +1,40 @@
 <script setup>
 import Swal from 'sweetalert2';
 import { useUserStore } from '~/stores/User';
+import { usePostsStore } from '~/stores/Post';
 
+const use_posts = usePostsStore();
 const user_store = useUserStore();
 const config = useRuntimeConfig();
-let step = ref(4);
+let step = ref(1);
 let errors = ref(null);
 let displayModal = ref(false);
-let optionSelected = ref('');
-let categorySelected = ref(Number);
-let plan =  {};
-let property_data = {};
-let saved_images = null;
-
-function get_plan(id,pictures) {
-  plan = {
-    id: id,
-    pictures: pictures
-  }
-}
-
-function get_property_data(name, price, price_us, lat, log, address, country, sector, city, bedrooms, bathrooms, parking, property_status, feature, meter, meter_2, description) {
-  property_data = {
-    name: name,
-    price: price,
-    price_us:price_us,
-    lat: lat,
-    log: log,
-    address: address,
-    country: country,
-    sector: sector,
-    city: city,
-    bedrooms: bedrooms,
-    bathrooms: bathrooms,
-    parking: parking,
-    status: property_status,
-    feature: feature,
-    meter: meter,
-    meter_2: meter_2,
-    description: description
-  }
-}
-
-function get_images(images) {
-  saved_images = images;
-}
 
 async function createAdvertisement() {
   const form = new FormData();
-  form.append('plan_id', plan.id);
-  form.append('type', optionSelected.value);
-  form.append('property_category', categorySelected.value);
-  form.append('name', property_data.name);
-  form.append('price', property_data.price);
-  form.append('price_us', property_data.price_us);
-  form.append('address', property_data.address);
-  form.append('description', property_data.description);
-  form.append('town_id', property_data.sector);
-  form.append('city_id', property_data.city);
-  form.append('country_id', property_data.country);
-  form.append('bedroom', property_data.bedrooms);
-  form.append('bathroom', property_data.bathrooms);
-  form.append('parking', property_data.parking);
-  form.append('meters', property_data.meter);
-  form.append('solar_meters', property_data.meter_2);
-  form.append('latitude', property_data.lat);
-  form.append('longitude', property_data.long);
-  form.append('property_status', property_data.status);
-  property_data.feature.forEach((element, index) => {
+  form.append('plan_id', use_posts.plan_id);
+  form.append('type', use_posts.option_selected);
+  form.append('property_category', use_posts.category_id);
+  form.append('name', use_posts.name);
+  form.append('price', use_posts.price);
+  form.append('price_us', use_posts.price_us);
+  form.append('address', use_posts.address);
+  form.append('description', use_posts.description);
+  form.append('town_id', use_posts.sector);
+  form.append('city_id', use_posts.city);
+  form.append('country_id', use_posts.country);
+  form.append('bedroom', use_posts.bedrooms);
+  form.append('bathroom', use_posts.bathrooms);
+  form.append('parking', use_posts.parking);
+  form.append('meters', use_posts.meter);
+  form.append('solar_meters', use_posts.meter_2);
+  form.append('latitude', use_posts.lat);
+  form.append('longitude', use_posts.log);
+  form.append('property_status', use_posts.property_status);
+  use_posts.feature.forEach((element, index) => {
     form.append(`features[${index}]`, element);
   });
-  form.append('image', saved_images[0]);
+  form.append('image', use_posts.saved_images[0]);
 
   // saved_images.forEach((element, index)=>{
   //   form.append('images[' + index + ']',element);
@@ -152,55 +116,34 @@ async function createAdvertisement() {
         </div>
       </div>
     </nav>
+    <!-- 1 -->
     <KeepAlive>
-      <PopulationPostPropertiesStep1
-        @nexts="step = 2"
-        @send-user-do="(type) => optionSelected = type"
-        v-if="step === 1"
-      />
+      <PopulationPostPropertiesStep1 v-if="step === 1" @nexts="step = 2" />
     </KeepAlive>
+    <!-- 2 -->
     <KeepAlive>
-      <PopulationPostPropertiesStep2
-        @categoryID="(id) => categorySelected = id"
-        v-if="step === 2"
-        @nexts="step = 3"
-        @back="step--"
-      />
+      <PopulationPostPropertiesStep2 v-if="step === 2" @nexts="step = 3" @back="step--" />
     </KeepAlive>
+    <!-- 3 -->
     <KeepAlive>
-      <PopulationPostPropertiesStep3
-        v-if="step === 3"
-        @plan_selected="get_plan"
-        @nexts="step = 4"
-        @back="step--"
-      />
+      <PopulationPostPropertiesStep3 v-if="step === 3" @nexts="step = 4" @back="step--" />
     </KeepAlive>
+    <!-- 4 -->
     <KeepAlive>
-      <PopulationPostPropertiesStep4
-        v-if="step === 4"
-        @property_detail="get_property_data"
-        @nexts="step = 5"
-        @back="step--"
-      />
+      <PopulationPostPropertiesStep4 v-if="step === 4" @nexts="step = 5" @back="step--" />
     </KeepAlive>
+    <!-- 5 -->
     <KeepAlive>
-      <PopulationPostPropertiesStep5
-        v-if="step === 5"
-        @images="get_images"
-        @back="step--"
-      />
+      <PopulationPostPropertiesStep5 v-if="step === 5" @back="step--" />
     </KeepAlive>
+    <!-- 6 -->
     <PopulationPostPropertiesStep6 v-if="step === 6" />
     <nav class="control-steps-postProperty">
       <AtomsButtons v-if="step === 5" @click="createAdvertisement()">
         Crear Anuncio
       </AtomsButtons>
     </nav>
-    <PopulationPostPropertiesModalError
-      v-if="displayModal"
-      :errors="errors"
-      @close="displayModal = false"
-    />
+    <PopulationPostPropertiesModalError v-if="displayModal" :errors="errors" @close="displayModal = false" />
     {{ errors }}
   </section>
 </template>

@@ -90,14 +90,12 @@ export const useUserStore = defineStore('user', {
       });
       
       if(data) {
-        console.log(data)
-        // let response = data.value;
-        // console.log(response)
-        // let user_response = data.value.results.user;
+        let response = data.value;
+        let user_response = data.value.results.user;
 
-        // if(response.code = 200) {
-        //   this.userData = user_response;
-        // }
+        if(response.code = 200) {
+          this.userData = user_response;
+        }
       }
     }
   }

@@ -1,25 +1,25 @@
 <script setup>
 import { useUserStore } from '~/stores/User';
+import { usePostsStore } from '~/stores/Post';
 
 const user_store = useUserStore();
-const emit = defineEmits(['plan_selected']);
-let plans = [];
+const use_posts = usePostsStore();
+
+// let plans = [];
 let next = ref(false);
 const config = useRuntimeConfig();
 
-const { data:products } = await useFetch('user-plans',{
+const { data:plans,pending } = await useLazyFetch('user-plans',{
   method: 'GET',
   headers: {
     'Authorization': `Bearer ${user_store.token}`
   },
-  baseURL: config.public.API,
-  transform(products) {
-    plans = products.results;
-  }
+  baseURL: config.public.API
 });
 
-function send_plan(i,x) {
-  emit('plan_selected',i,x);
+function send_plan(id,pictures) {
+  use_posts.plan_id = id;
+  use_posts.plan_pictures = pictures;
   next.value = true;
 }
 
@@ -27,8 +27,10 @@ function send_plan(i,x) {
 
 <template>
   <h4> Planes disponibles para esta publicación.</h4>
-  <ul class="plans-list">
-    <li v-for="plan in plans" :key="plan">
+  {{ pending }}
+  <ul v-if="plans" class="plans-list">
+    <li v-for="plan in plans.results" :key="plan">
+      <!-- {{ plan }} -->
       <MoleculesPlanCard
         class="h-full"
         @pay="send_plan"

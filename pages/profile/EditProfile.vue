@@ -122,7 +122,7 @@
           <div class="flex flex-col items-center">
             <p class="whitespace-nowrap">Actualiza tu foto de perfil</p>
             <figure class="w-[107px] h-[107px] rounded-full border-[5px] border-primary-50 mt-5">
-              <img :src="`https://walrus-app-e2bxo.ondigitalocean.app/${editUser.editUserData.profile_pic}`" :alt="user.userData.name" class="rounded-full w-full h-full object-cover">
+              <img :src="`https://seal-app-4mhut.ondigitalocean.app/api/v1/${editUser.editUserData.profile_pic}`" :alt="user.userData.name" class="rounded-full w-full h-full object-cover">
             </figure>
           </div>
         </div>

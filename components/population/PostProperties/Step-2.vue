@@ -1,25 +1,29 @@
 <script lang="ts" setup>
-const emit = defineEmits(['categoryID', 'nexts']);
-const config = useRuntimeConfig()
-let categories:any = ref([]);
+import { usePostsStore } from '~/stores/Post';
+
+
+const use_posts = usePostsStore();
+const config = useRuntimeConfig();
 let categorySelected = ref(0);
-const categoriesApi:any = await $fetch('/generals/categories', {
+
+const { data, pending } = useLazyFetch('generals/categories', {
   baseURL: config.public.API
-});
-categories = categoriesApi.results;
+})
 
 watch(categorySelected,(value) => {
-  emit('categoryID', value);
+  use_posts.category_id = value;
 });
+
 </script>
 
 <template>
   <h4>
     ¿Cuál es tu tipo de <span class="text-primary-100"> inmueble?</span>
   </h4>
-  <div class="wrapper scrollbar">
+  {{ pending }}
+  <div v-if="data" class="wrapper scrollbar">
     <label
-      v-for="category in categories"
+      v-for="category in data.results"
       :key="category"
       class="option"
       :class="[{checked: categorySelected === category.id}]">

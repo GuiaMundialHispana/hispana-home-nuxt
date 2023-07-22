@@ -1,5 +1,9 @@
 <script setup>
-const emit = defineEmits(['images'])
+import { usePostsStore } from '~/stores/Post';
+
+const use_posts = usePostsStore();
+
+
 const allowedFileTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/svg', 'image/svg+xml'];
 let totalImgs = 0;
 let savedImages= [];
@@ -21,7 +25,7 @@ function previewFiles(event) {
         savedImages.push(images[i]);
         previewImages.push(URL.createObjectURL(file));
         fileFormat = true;
-        emit('images', savedImages);
+        use_posts.saved_images = savedImages;
       } else { fileFormat = false; }
     }
   } else {
@@ -65,6 +69,11 @@ function previewFiles(event) {
     </div>
     <p class="text-center mt-16 mb-8">{{ previewImages.length }}/{{planSelected.quantity}} Fotos</p>
   </div>
+  <nav class="control-steps-postProperty">
+    <AtomsButtons @click="$emit('back')" btn-style="outline-primary">
+      Atras
+    </AtomsButtons>
+  </nav>
 </template>
 
 <style lang="postcss" scoped>

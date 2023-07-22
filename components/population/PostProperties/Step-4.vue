@@ -1,6 +1,8 @@
 <script setup>
 import {ref, watch} from 'vue';
+import { usePostsStore } from '~/stores/Post';
 
+const use_posts = usePostsStore();
 const config = useRuntimeConfig();
 const currencyTab = ref(true);
 const name = ref('');
@@ -22,7 +24,7 @@ let sectors = reactive([]);
 let sector = ref(0);
 let displaySector = ref(false);
 let cities = reactive([]);
-let city = [];
+let city = ref([]);
 let displayCity = ref(false);
 let categories = [];
 let lat = null;
@@ -65,7 +67,7 @@ async function getCities(sector_id) {
 function getAddress(lant, long, location) {
   lat = lant;
   log = long;
-  address = location;
+  address.value = location;
 };
 
 watch(country,(country_id) => {
@@ -79,8 +81,28 @@ watch(sector,(sector_id) => {
 });
 
 watch(price,(new_price) => {
-  price_us.value = parseInt(new_price / 54);
+  price_us.value = parseInt(new_price / 58);
 });
+
+function save_data() {
+  use_posts.name = name.value;
+  use_posts.price = price.value;
+  use_posts.price_us = price_us.value;
+  use_posts.lat = lat;
+  use_posts.log = log;
+  use_posts.address = address.value;
+  use_posts.country = country.value;
+  use_posts.sector = sector.value;;
+  use_posts.city = city.value;
+  use_posts.bedrooms = bedrooms.value;;
+  use_posts.bathrooms = bathrooms.value;;
+  use_posts.parking = parking.value;
+  use_posts.property_status = property_status.value;;
+  use_posts.feature = feature.value;
+  use_posts.meter = meter.value;
+  use_posts.meter_2 = meter_2.value;
+  use_posts.description = description.value;
+}
 
 </script>
 
@@ -227,25 +249,7 @@ watch(price,(new_price) => {
     <AtomsButtons @click="$emit('back')" btn-style="outline-primary">
       Atras
     </AtomsButtons>
-    <AtomsButtons @click="$emit(
-      'property_detail',
-      name,
-      price,
-      price_us,
-      lat,
-      log,
-      address,
-      country,
-      sector,
-      city,
-      bedrooms,
-      bathrooms,
-      parking,
-      property_status,
-      feature,
-      meter,
-      meter_2,
-      description), $emit('nexts')">
+    <AtomsButtons @click="$emit('nexts'), save_data()">
       Continuar
     </AtomsButtons>
   </nav>

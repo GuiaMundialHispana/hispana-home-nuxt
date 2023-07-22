@@ -1,11 +1,6 @@
 <script lang="ts" setup>
-import { watch } from 'vue';
-const emit = defineEmits(['send-user-do', 'nexts']);
-let optionSelected = ref('');
-// <!-- TODO cambiar ese nombre del emit -->
-watch(optionSelected,(value) => {
-  emit('send-user-do', value);
-});
+import { usePostsStore } from '~/stores/Post';
+const use_posts = usePostsStore();
 </script>
 
 <template>
@@ -16,22 +11,22 @@ watch(optionSelected,(value) => {
       ¿Vas a vender o alquilar?
     </h4>
     <div class="flex gap-2.5">
-      <label class="option" :class="[{checked: optionSelected === 'sell'}]">
+      <label class="option" :class="[{checked: use_posts.option_selected === 'sell'}]">
         Vender
         <input
           type="radio"
           value="Sell"
           name="sell"
-          @click="optionSelected = 'sell'"
+          @click="use_posts.option_selected = 'sell'"
         >
       </label>
-      <label class="option" :class="[{checked: optionSelected === 'rent'}]">
+      <label class="option" :class="[{checked: use_posts.option_selected === 'rent'}]">
         Alquilar
         <input
           type="radio"
           value="rent"
           name="rent"
-          @click="optionSelected = 'rent'"
+          @click="use_posts.option_selected = 'rent'"
           >
       </label>
     </div>
@@ -40,7 +35,7 @@ watch(optionSelected,(value) => {
     <AtomsLink btn-style="outline-primary" link-to="/profile?tab=anuncio">
       Cancelar
     </AtomsLink>
-    <AtomsButtons :disabled="optionSelected === ''" @click="$emit('nexts')">
+    <AtomsButtons :disabled="use_posts.option_selected === ''" @click="$emit('nexts')">
       Continuar
     </AtomsButtons>
   </nav>
