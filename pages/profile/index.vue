@@ -49,7 +49,6 @@
   // definePageMeta({
   //   middleware: 'check-auth'
   // });
-  
   const user = useUserStore();
 </script>
 

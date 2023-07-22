@@ -35,7 +35,7 @@
           }
         }">
           <figure class="h-52 bg-gray-10">
-            <img :src="`https://seal-app-4mhut.ondigitalocean.app/api/${property.image}`" :alt="property.name" class="object-cover h-full w-full">
+            <img :src="`https://seal-app-4mhut.ondigitalocean.app/${property.image}`" :alt="property.name" class="object-cover h-full w-full">
           </figure>
         </NuxtLink>
       </SwiperSlide>
@@ -94,6 +94,8 @@
 <script>
 import { useAuthStore } from '~/stores/Auth';
 import Swal from 'sweetalert2';
+import { useUserStore } from '~/stores/User';
+
 export default {
   props: {
     property: {
@@ -112,7 +114,8 @@ export default {
     return {
       config: useRuntimeConfig(),
       route: useRouter(),
-      auth: useAuthStore()
+      auth: useAuthStore(),
+      user_store: useUserStore()
     }
   },
   methods: {
@@ -143,6 +146,7 @@ export default {
               timer: 2000
             });
             this.isFavorite = true;
+            this.user_store.get_user();
           }
         }
       });

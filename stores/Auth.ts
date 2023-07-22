@@ -32,6 +32,7 @@ export const useAuthStore = defineStore('auth', {
           timer: 2000
         });
         //Save data in localStorage
+        navigateTo('/profile?tab=anuncio')
         localStorage.setItem('token', res.access_token.original.access_token);
       } 
       catch (error) {
