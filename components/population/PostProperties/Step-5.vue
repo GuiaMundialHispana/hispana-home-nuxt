@@ -2,31 +2,31 @@
 import { usePostsStore } from '~/stores/Post';
 
 const use_posts = usePostsStore();
-
-
-const allowedFileTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/svg', 'image/svg+xml'];
-let totalImgs = 0;
-let savedImages= [];
-let previewImages= [];
-let fileFormat = true;
+const allowedFileTypes = ref(['image/jpeg', 'image/png', 'image/gif', 'image/svg', 'image/svg+xml']);
+let totalImgs = ref(0);
+let savedImages= ref([]);
+let previewImages = ref([]);
+let fileFormat = ref(true);
 let planSelected = {
-  id: 4,
-  quantity: 4
+  id: use_posts.plan_id,
+  quantity: use_posts.plan_pictures
 };
 
 function previewFiles(event) {
   let images = null;
   images = event.target.files;
-  totalImgs = previewImages.length + images.length;
-  if (totalImgs <= planSelected.quantity) {
+  totalImgs.value = previewImages.value.length + images.length;
+  if (totalImgs.value <= planSelected.quantity) {
+    console.log('pasee el ig')
     for (let i = 0; i < images.length; i++) {
-      if (allowedFileTypes.indexOf(images[i].type) !== -1) {
+      if (allowedFileTypes.value.indexOf(images[i].type) !== -1) {
         let file = images[i];
-        savedImages.push(images[i]);
-        previewImages.push(URL.createObjectURL(file));
-        fileFormat = true;
-        use_posts.saved_images = savedImages;
-      } else { fileFormat = false; }
+        savedImages.value.push(images[i]);
+        console.log(savedImages.value)
+        previewImages.value.push(URL.createObjectURL(file));
+        fileFormat.value = true;
+        use_posts.saved_images = savedImages.value;
+      } else { fileFormat.value = false; }
     }
   } else {
     console.log('error')

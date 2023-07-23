@@ -6,7 +6,7 @@ import { usePostsStore } from '~/stores/Post';
 const use_posts = usePostsStore();
 const user_store = useUserStore();
 const config = useRuntimeConfig();
-let step = ref(1);
+let step = ref(4);
 let errors = ref(null);
 let displayModal = ref(false);
 
@@ -36,9 +36,9 @@ async function createAdvertisement() {
   });
   form.append('image', use_posts.saved_images[0]);
 
-  // saved_images.forEach((element, index)=>{
-  //   form.append('images[' + index + ']',element);
-  // });
+  use_posts.saved_images.forEach((element, index)=>{
+    form.append('images[' + index + ']',element);
+  });
 
   await useFetch('advertisements',{
     method: 'POST',
