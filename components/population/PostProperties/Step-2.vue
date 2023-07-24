@@ -20,8 +20,33 @@ watch(categorySelected,(value) => {
   <h4>
     ¿Cuál es tu tipo de <span class="text-primary-100"> inmueble?</span>
   </h4>
-  {{ pending }}
-  <div v-if="data" class="wrapper scrollbar">
+  <div class="wrapper" v-if="pending">
+    <div class="w-96 h-5 skeleton rounded-lg mb-4"></div>
+    <hr class="border-b border-neutral-10 mb-4 block">
+    <div class="w-40 h-5 skeleton rounded-lg mb-4"></div>
+    <hr class="border-b border-neutral-10 mb-4 block">
+    <div class="w-96 h-5 skeleton rounded-lg mb-4"></div>
+    <hr class="border-b border-neutral-10 mb-4 block">
+    <div class="w-40 h-5 skeleton rounded-lg mb-4"></div>
+    <hr class="border-b border-neutral-10 mb-4 block">
+    <div class="w-96 h-5 skeleton rounded-lg mb-4"></div>
+    <hr class="border-b border-neutral-10 mb-4 block">
+    <div class="w-40 h-5 skeleton rounded-lg mb-4"></div>
+    <hr class="border-b border-neutral-10 mb-4 block">
+    <div class="w-96 h-5 skeleton rounded-lg mb-4"></div>
+    <hr class="border-b border-neutral-10 mb-4 block">
+    <div class="w-40 h-5 skeleton rounded-lg mb-4"></div>
+    <hr class="border-b border-neutral-10 mb-4 block">
+    <div class="w-96 h-5 skeleton rounded-lg mb-4"></div>
+    <hr class="border-b border-neutral-10 mb-4 block">
+    <div class="w-40 h-5 skeleton rounded-lg mb-4"></div>
+    <hr class="border-b border-neutral-10 mb-4 block">
+    <div class="w-96 h-5 skeleton rounded-lg mb-4"></div>
+    <hr class="border-b border-neutral-10 mb-4 block">
+    <div class="w-40 h-5 skeleton rounded-lg mb-4"></div>
+    <hr class="border-b border-neutral-10 mb-4 block">
+  </div>
+  <div v-if="data && !pending" class="wrapper scrollbar">
     <label
       v-for="category in data.results"
       :key="category"

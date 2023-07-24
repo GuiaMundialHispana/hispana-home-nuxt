@@ -205,7 +205,7 @@ export default {
 
 <style lang="postcss" scoped>
 article {
-  @apply rounded-2xl bg-neutral-white p-2 w-full  relative;
+  @apply rounded-2xl bg-neutral-white p-2 w-full relative;
 
   &:hover { box-shadow: 0px 4px 11px rgba(0, 0, 0, 0.07); }
 
