@@ -137,7 +137,10 @@ h4 {
         @apply text-neutral-black;
       }
       &.silver { background: linear-gradient(104.59deg, #D9D9D9 8.17%, #ADADAD 51.17%, #FFFFFF 120.16%); }
-      &.exclusive { background: linear-gradient(100.63deg, #000000 -6.24%, #2F1C1B 45.46%, #A89494 95.05%); }
+      &.exclusive { 
+        background: linear-gradient(100.63deg, #000000 -6.24%, #2F1C1B 45.46%, #A89494 95.05%);
+        color: white;
+      }
     }
 
     & .plan-information {
