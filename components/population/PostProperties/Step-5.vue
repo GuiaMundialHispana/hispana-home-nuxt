@@ -32,6 +32,13 @@ function previewFiles(event) {
     console.log('error')
   };
 }
+function setFirtsImg(array, index) {
+  if (index > 0 && index < array.length) {
+    const imgToMove = array[index];
+    array.splice(index, 1);
+    array.unshift(imgToMove);
+  }
+}
 </script>
 
 <template>
@@ -63,6 +70,14 @@ function previewFiles(event) {
           icon-name="general/trash-can"
           btn-type="btn-icon"
           @click="previewImages.splice(index, 1), savedImages.splice(index, 1)"
+        />
+        <AtomsButtons
+          :class="[{absolute: index > 0}]"
+          class="top-2 left-2 hidden"
+          icon-name="general/star"
+          btn-type="btn-icon"
+          :iconSize=20
+          @click="setFirtsImg(previewImages, index), setFirtsImg(savedImages, index)" 
         />
         <p :class="[{cover: index === 0}]">Portada</p>
       </figure>
