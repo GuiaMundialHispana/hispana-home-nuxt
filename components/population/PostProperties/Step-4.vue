@@ -157,7 +157,7 @@ function save_data() {
     <div class="col-span-3">
       <label class="w-full sm:mb-2 mb-5">
       Direccion
-      <input class="form-control" v-model="address" placeholder="Direccion" type="text">
+      <input class="form-control" readonly v-model="address" placeholder="Direccion" type="text">
     </label>
     </div>
     <!-- Pais -->
