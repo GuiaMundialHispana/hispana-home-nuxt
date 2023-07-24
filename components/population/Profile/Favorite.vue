@@ -1,16 +1,33 @@
 <template>
   <section>
-    <div v-if="!favorite">
+    <div v-if="pending" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div class="skeleton">
+        <div class="skeleton-image"></div>
+        <div class="skeleton-date"></div>
+        <div class="skeleton-body"></div>
+      </div>
+      <div class="skeleton">
+        <div class="skeleton-image"></div>
+        <div class="skeleton-date"></div>
+        <div class="skeleton-body"></div>
+      </div>
+      <div class="skeleton">
+        <div class="skeleton-image"></div>
+        <div class="skeleton-date"></div>
+        <div class="skeleton-body"></div>
+      </div>
+    </div>
+    <div v-if="data && data.results.length < 1">
       <figure class="mb-4">
         <img src="/img/not-found.png" class="object-contain max-w-[308px] mx-auto" />
       </figure>
       <h6 class="text-4xl text-blue-100 font-bold mb-8 text-center">Aún no tienes <span class="text-primary-100">publicaciones favoritas.</span></h6>
       <p class="text-sm text-neutral-black text-center">¡No dejes pasar esta oportunidad de mostrar tu propiedad al mundo!</p>
     </div>
-    <div v-if="favorite">
+    <div v-if="data && data.results.length > 0">
       <h3 class="font-semibold text-sm text-black md:text-[28px] md:leading-[42px] mb-5">Mis Favoritos</h3>
       <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        <li v-for="item in properties" :key="item">
+        <li v-for="item in data.results" :key="item">
           <MoleculesProperty
             :is-favorite="true"
             :property="item.property"
@@ -22,66 +39,24 @@
   </section>
 </template>
 
-<script>
-import { useAuthStore } from "~/stores/Auth";
-export default {
-  data() {
-    return {
-      auth: useAuthStore(),
-      config: useRuntimeConfig(),
-      favorite: false,
-      properties: []
-    }
-  },
-  methods: {
-    async getFvorites() {
-      const data = await $fetch('users/favorites',{
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        baseURL: this.config.public.API
-      });
-      this.properties = data.results;
-      
-      console.log(this.properties)
-      this.properties.length > 0 ? this.favorite = true : this.favorite = false;
-    }
-  },
-  beforeMount() {
-    this.getFvorites();
-  }
-}
-</script>
-
-<!-- <script setup>
-import { useAuthStore } from "~/stores/Auth";
-
+<script setup>
+import { useUserStore } from '~/stores/User';
 let config = useRuntimeConfig();
-let favorite = ref(false);
-let properties = ref([]);
-const auth = useAuthStore();
 
-async function getFvorites() {
-  const item = await $fetch('users/favorites', {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${auth.token}`,
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    },
-    baseURL: config.public.API
-  });
-  properties = item.results;
-  properties.length > 0 ? favorite = true : favorite = false;
-}
+const user_store = useUserStore();
 
-
-
-getFvorites();
-</script> -->
+const {data,pending} = useLazyFetch('users/favorites', {
+  method: 'GET',
+  headers: {
+    'Authorization': `Bearer ${user_store.token}`,
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  },
+  baseURL: config.public.API
+});
+// properties = data.results;
+// properties.length > 0 ? favorite = true : favorite = false;
+</script>
 
 <style lang="postcss" scoped>
 .btn {
@@ -91,5 +66,12 @@ getFvorites();
     @apply bg-neutral-transparent hover:text-neutral-black !important;
     & span { @apply text-primary-100 bg-primary-50; }
   }
+}
+
+.skeleton {
+  @apply border border-neutral-10 rounded-lg p-3;
+  & .skeleton-image { @apply w-full md:h-72 h-[230px] bg-neutral-10 mb-3; }
+  & .skeleton-date { @apply w-32 h-4 bg-neutral-10 mb-2; }
+  & .skeleton-body { @apply w-4/5 h-4 bg-neutral-10; }
 }
 </style>

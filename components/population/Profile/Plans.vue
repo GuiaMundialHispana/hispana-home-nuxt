@@ -2,13 +2,13 @@
   <section>
     <div>
       <h3>Mis planes disponibles</h3>
-      <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        <li v-if="plans.length <= 0" class="border border-gray-10 rounded-lg p-6 flex flex-col justify-center items-center">
+      <ul v-if="plans && !pending" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <li v-if="plans.results.length <= 0" class="border border-gray-10 rounded-lg p-6 flex flex-col justify-center items-center">
           <div class="bg-primary-100 text-neutral-white text-center w-full text-sm rounded-lg py-1">
             Actualmente tienes el <b>plan Basico</b>
           </div>
         </li>
-        <li v-for="plan in plans" :key="plan" class="border border-gray-10 rounded-lg p-6">
+        <li v-for="plan in plans.results" :key="plan" class="border border-gray-10 rounded-lg p-6">
           <span class="plan-category"
             :class="{
               'vip': plan.plan.name === 'VIP',
@@ -24,55 +24,107 @@
           </div>
         </li>
       </ul>
+      <div v-if="pending1" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <div class="border border-gray-10 rounded-lg p-6 relative">
+          <div class="w-full h-10 skeleton rounded-lg mb-4"></div>
+          <hr class="border-neutral-10 my-4">
+          <div class="w-full h-5 skeleton rounded-lg"></div>
+        </div>
+        <div class="border border-gray-10 rounded-lg p-6 relative">
+          <div class="w-full h-10 skeleton rounded-lg mb-4"></div>
+          <hr class="border-neutral-10 my-4">
+          <div class="w-full h-5 skeleton rounded-lg"></div>
+        </div>
+        <div class="border border-gray-10 rounded-lg p-6 relative">
+          <div class="w-full h-10 skeleton rounded-lg mb-4"></div>
+          <hr class="border-neutral-10 my-4">
+          <div class="w-full h-5 skeleton rounded-lg"></div>
+        </div>
+        <div class="border border-gray-10 rounded-lg p-6 relative">
+          <div class="w-full h-10 skeleton rounded-lg mb-4"></div>
+          <hr class="border-neutral-10 my-4">
+          <div class="w-full h-5 skeleton rounded-lg"></div>
+        </div>
+      </div>
     </div>
     <!-- Nuestros planes -->
     <div class="mt-12">
       <h3>Nuestros planes</h3>
-      <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        <li v-for="plan in generalPlans" :key="plan">
+      <ul v-if="generalPlans && !pending1" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <li v-for="plan in generalPlans.results" :key="plan">
           <MoleculesPlanCard :plan="plan" />
         </li>
       </ul>
+      <div v-if="pending1" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <div class="border border-gray-10 rounded-lg p-6 relative">
+          <div class="w-full h-10 skeleton rounded-lg mb-4"></div>
+          <hr class="border-neutral-10 my-4">
+          <div class="w-56 h-5 skeleton rounded-lg mb-4"></div>
+          <div class="w-40 h-5 skeleton rounded-lg mb-4"></div>
+          <div class="w-56 h-5 skeleton rounded-lg mb-4"></div>
+          <div class="w-56 h-5 skeleton rounded-lg mb-4"></div>
+          <div class="w-40 h-5 skeleton rounded-lg mb-4"></div>
+          <div class="w-full h-8 skeleton rounded-lg mb-4"></div>
+          <div class="w-full h-8 skeleton rounded-lg mb-4"></div>
+        </div>
+        <div class="border border-gray-10 rounded-lg p-6 relative">
+          <div class="w-full h-10 skeleton rounded-lg mb-4"></div>
+          <hr class="border-neutral-10 my-4">
+          <div class="w-56 h-5 skeleton rounded-lg mb-4"></div>
+          <div class="w-40 h-5 skeleton rounded-lg mb-4"></div>
+          <div class="w-56 h-5 skeleton rounded-lg mb-4"></div>
+          <div class="w-56 h-5 skeleton rounded-lg mb-4"></div>
+          <div class="w-40 h-5 skeleton rounded-lg mb-4"></div>
+          <div class="w-full h-8 skeleton rounded-lg mb-4"></div>
+          <div class="w-full h-8 skeleton rounded-lg mb-4"></div>
+        </div>
+        <div class="border border-gray-10 rounded-lg p-6 relative">
+          <div class="w-full h-10 skeleton rounded-lg mb-4"></div>
+          <hr class="border-neutral-10 my-4">
+          <div class="w-56 h-5 skeleton rounded-lg mb-4"></div>
+          <div class="w-40 h-5 skeleton rounded-lg mb-4"></div>
+          <div class="w-56 h-5 skeleton rounded-lg mb-4"></div>
+          <div class="w-56 h-5 skeleton rounded-lg mb-4"></div>
+          <div class="w-40 h-5 skeleton rounded-lg mb-4"></div>
+          <div class="w-full h-8 skeleton rounded-lg mb-4"></div>
+          <div class="w-full h-8 skeleton rounded-lg mb-4"></div>
+        </div>
+        <div class="border border-gray-10 rounded-lg p-6 relative">
+          <div class="w-full h-10 skeleton rounded-lg mb-4"></div>
+          <hr class="border-neutral-10 my-4">
+          <div class="w-56 h-5 skeleton rounded-lg mb-4"></div>
+          <div class="w-40 h-5 skeleton rounded-lg mb-4"></div>
+          <div class="w-56 h-5 skeleton rounded-lg mb-4"></div>
+          <div class="w-56 h-5 skeleton rounded-lg mb-4"></div>
+          <div class="w-40 h-5 skeleton rounded-lg mb-4"></div>
+          <div class="w-full h-8 skeleton rounded-lg mb-4"></div>
+          <div class="w-full h-8 skeleton rounded-lg mb-4"></div>
+        </div>
+      </div>
     </div>
   </section>
 </template>
 
-<script>
-export default {
-  name: 'Plans',
-  data() {
-    return {
-      config: useRuntimeConfig(),
-      isPlan: false,
-      plans: [],
-      generalPlans: null,
-    }
+<script setup>
+import { useUserStore } from '~/stores/User';
+
+const config = useRuntimeConfig();
+const user_store = useUserStore();
+
+const { data:generalPlans, pending1 } = useLazyFetch('generals/plans',{
+  method: 'GET',
+  baseURL: config.public.API
+});
+
+const { data:plans, pending } = useLazyFetch('user-plans',{
+  method: 'GET',
+  headers: {
+    'Authorization': `Bearer ${user_store.token}`,
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
   },
-  methods: {
-    async getUserPlans() {
-      const data = await $fetch('user-plans',{
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        baseURL: this.config.public.API
-      });
-      this.plans = data.results;
-      this.plans.pop();
-      this.plans.length > 0 ? this.isPlan = true : this.isPlan = false;
-    },
-    async getPlans() {
-      const plansApi = await $fetch(this.config.public.API+'generals/plans');
-      this.generalPlans = plansApi.results;
-    }
-  },
-  beforeMount() {
-    this.getUserPlans();
-    this.getPlans();
-  }
-}
+  baseURL: config.public.API
+});
 </script>
 
 <style lang="postcss" scoped>
