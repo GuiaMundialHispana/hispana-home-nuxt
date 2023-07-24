@@ -47,7 +47,7 @@ async function register() {
       lastname: lastname,
       email: email,
       password: password,
-      password_confirmation: this.password_confirmation
+      password_confirmation: password_confirmation
     },
     baseURL: config.public.API,
     onResponse({response}) {

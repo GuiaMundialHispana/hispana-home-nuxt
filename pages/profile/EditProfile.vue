@@ -101,6 +101,7 @@
             Contraseña nueva:
             <input
               type="password"
+              v-model="password"
             >
           </label>
           <label>
@@ -111,7 +112,7 @@
             >
           </label>
           <div class="flex gap-2.5 mr-auto mt-2">
-            <AtomsButtons btn-size="xsmall" btn-style="solid-primary">
+            <AtomsButtons @click="changesPassword()" btn-size="xsmall" btn-style="solid-primary">
               Guardar
             </AtomsButtons>
           </div>
@@ -171,12 +172,16 @@ export default {
       images: null,
       countries: [],
       country: [],
-      form: new FormData()
+      form: new FormData(),
+      password: '',
+      password_confirmation: '',
+      isNewImage: false
     }
   },
   watch:{
     profilePic() {
       this.editUser.editUserData.profile_pic = this.profilePic;
+      this.isNewImage = true;
     },
     images() {
       this.form.append('profile_pic', this.editUser.images);
@@ -194,6 +199,49 @@ export default {
       })
       const res = data._value.results.data;
       this.countries.push(res);
+    },
+    async changesPassword(){
+      this.form.append('email', this.editUser.editUserData.email);
+      this.form.append('password', this.password);
+      this.form.append('password_confirmation', this.password_confirmation);
+      await useFetch('users/update?_method=PUT',{
+        method: 'POST',
+        body: this.form,
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Accept': 'application/json'
+        },
+        baseURL: this.config.public.API,
+        onResponse({response}) {
+          if(response.status === 400) {
+            let errors = response._data.message;
+            Swal.fire({
+              icon: 'error',
+              html: '<ul></ul>',
+              didOpen: () => {
+                const b = Swal.getHtmlContainer().querySelector('ul');
+                Object.keys(errors).forEach(clave => {
+                  const li = document.createElement('li');
+                  li.classList.add('text-primary-100', 'text-left', 'text-sm', 'mb-2')
+                  li.textContent = errors[clave];
+                  b.appendChild(li);
+                });
+              },
+            });
+          }
+
+          if(response.status === 200) {
+            Swal.fire({
+              icon: 'success',
+              text: 'Sus datos han sido actualizados',
+              showConfirmButton: false,
+              timer: 2000
+            });
+            // useRouter().go()
+            useRouter().push("/profile?tab=anuncio");
+          }
+        }
+      });
     },
     async updateUser() {
       this.form.append('user_id', this.editUser.editUserData.user_id);

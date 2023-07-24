@@ -1,5 +1,5 @@
 <template>
-  <section class="pt-4 lg:px-16 md:px-6 px-4 mx-auto max-w-[97rem] pb-8">
+  <section v-if="properties" class="pt-4 lg:px-16 md:px-6 px-4 mx-auto max-w-[97rem] pb-8">
     <div class="flex flex-col md:flex-row justify-between border-b border-[#F5F5F5] py-2">
       <h2 class="text-2xl text md:text-[28px] leading-[28px] font-medium text-center md:text-left">
         Descubre que más tenemos <span class="text-primary-100">para ti</span>
@@ -29,37 +29,22 @@
         prevEl: '.prev'
       }">
       <swiper-slide v-for="property in properties" :key="property">
-        <MoleculesProperty :is-favorite="false" :property="property" />
+        <MoleculesProperty :is-favorite="false" :property="property.property" :property-id="property.id" />
       </swiper-slide>
     </Swiper>
   </section>
 </template>
 
-<script>
-export default {
-  name: 'Explore Properties',
-  data() {
-    return {
-      properties: [],
-      config: useRuntimeConfig()
-    }
-  },
-  methods: {
-    async getProperties() {
-      const { data } = await useFetch('properties', {
-        method: 'GET',
-        baseURL: this.config.public.API
-      });
-      const res = data._value.results.data;
-      for(const item in res) {
-        this.properties.push(res[item])
-      }
-    }
-  },
-  created() {
-    this.getProperties();
-  }
-}
+<script setup>
+const props = defineProps(['property_id'])
+const config = useRuntimeConfig();
+
+const {data:properties} = await useFetch(`advertisements/related/${props.property_id}`, {
+  method: 'GET',
+  baseURL: config.public.API,
+  transform:(_property) => _property.results
+});
+console.log(properties)
 </script>
 
 <style lang="postcss" scoped>

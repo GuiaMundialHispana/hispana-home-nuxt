@@ -84,9 +84,9 @@
       <p class="price">
         US${{showParsedPrice(property.price_us)}}
       </p>
-      <p class="price">
+      <!-- <p class="price">
         RD${{showParsedPrice(property.price)}}
-      </p>
+      </p> -->
     </NuxtLink>
   </article>
 </template>
