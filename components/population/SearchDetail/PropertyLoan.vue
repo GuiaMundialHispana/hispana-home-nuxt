@@ -1,6 +1,8 @@
 <template>
   <div class="pb-[75px] 2xl:max-w-[1440px] mx-auto pt-16" id="loan">
     <h2 class="text-[28px] leading-[28px] font-semibold mb-12">Calculadora de préstamos</h2>
+    {{ property.price_us }}
+    {{ loanAmount }}
     <div class="grid lg:grid-cols-2 grid-cols-1">
       <form class="lg:border-r border-[#ECECEC] lg:pr-6">
         <div class="grid xl:grid-cols-2 lg:grid-cols-1 md:grid-cols-2 gap-2 mb-2">
@@ -63,7 +65,6 @@
   export default{
     data() {
       return {
-        propertyPrice: 100000,
         initial: 0,
         loanAmount: 0,
         years: 10,
@@ -73,43 +74,76 @@
         loanPercentage: 0,
       }
     },
+    props: {
+      property: {
+        type: Object,
+        default: () => {}
+      }
+    },
     methods: {
-      calculateLoan(amount, annualInterest, years){
-        let monthInterest = annualInterest / 12;
-        let allPayments = years * 12;
-        let afterInterestLoanAmount = amount / ((1 - (1 /(1 + monthInterest) ** allPayments)) / monthInterest);
-        let payments = afterInterestLoanAmount / allPayments;
-        this.monthlyPayment = payments.toFixed(2)
+      // Nuevo calculo
+      calculateEstimatedQuota(interest, initial, years) {
+        const month = years * 12;
+        const monthlyRate = interest / 100 / 12;
+        const quote = (initial * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -month));
+        // return quote;
+        this.monthlyPayment = quote.toFixed(2)
       },
+      //-------------
+      // calculateLoan(amount, annualInterest, years){
+      //   let monthInterest = annualInterest / 12;
+      //   let allPayments = years * 12;
+      //   let afterInterestLoanAmount = amount / ((1 - (1 /(1 + monthInterest) ** allPayments)) / monthInterest);
+      //   let payments = afterInterestLoanAmount / allPayments;
+      //   this.monthlyPayment = payments.toFixed(2)
+      // },
       getPercentage(initial, price){
         let initialPercent = (initial / price) * 100;
         let loanPercent = ((price - initial) / price) * 100;
-        this.loanAmount = price - initial;
+        this.loanAmount = (price - initial).toFixed(2);
         this.initialPercentage = initialPercent.toFixed(2);
         this.loanPercentage = loanPercent.toFixed(2);
       },
       showParsedPrice(price) {
         return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       },
+      
     },
     watch: {
       initial(){
-        if (this.initial >= this.propertyPrice) {
-          this.initial = this.propertyPrice - (this.propertyPrice * 0.05)
+        if (this.initial >= this.property.price_us) {
+          this.initial = this.property.price_us - (this.property.price_us * 0.05)
         };
-        this.getPercentage(this.initial, this.propertyPrice);
-        this.calculateLoan(this.loanAmount, this.interest, this.years);
+        this.getPercentage(this.initial, this.property.price_us);
+        this.calculateEstimatedQuota(this.interest, this.initial, this.years)
       },
       years(){
-        this.calculateLoan(this.loanAmount, this.interest, this.years);
+        this.calculateEstimatedQuota(this.interest, this.initial, this.years)
       },
       interest(){
         if (this.interest <= 0) {
           this.interest = 1;
         }
-        this.calculateLoan(this.loanAmount, this.interest, this.years);
-      }
-    }
+        this.calculateEstimatedQuota(this.interest, this.initial, this.years)
+      },
+      // initial(){
+      //   if (this.initial >= this.property.price_us) {
+      //     this.initial = this.property.price_us - (this.property.price_us * 0.05)
+      //   };
+      //   this.getPercentage(this.initial, this.property.price_us);
+      //   this.calculateLoan(this.loanAmount, this.interest, this.years);
+      // },
+      // years(){
+      //   this.calculateLoan(this.loanAmount, this.interest, this.years);
+      // },
+      // interest(){
+      //   if (this.interest <= 0) {
+      //     this.interest = 1;
+      //   }
+      //   this.calculateLoan(this.loanAmount, this.interest, this.years);
+      // }
+    },
+    
 }
 </script>
 <style lang="postcss" scoped>

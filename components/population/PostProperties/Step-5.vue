@@ -81,15 +81,6 @@ function setFirtsImg(array, index) {
           :iconSize=20
           @click="setFirtsImg(previewImages, index), setFirtsImg(savedImages, index)" 
         />
-
-        <!-- <span hidden class="bg-primary-100 rounded-full" 
-        :class="[{flex: index === 0}]">
-          <AtomsIcon 
-            class="top-2 left-2 absolute text-neutral-white"
-            name="general/star"
-            :size=20
-          />
-        </span> -->
         <p :class="[{cover: index === 0}]">Portada</p>
       </figure>
     </div>
