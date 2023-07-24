@@ -27,8 +27,53 @@ function send_plan(id,pictures) {
 
 <template>
   <h4> Planes disponibles para esta publicación.</h4>
-  {{ pending }}
-  <ul v-if="plans" class="plans-list">
+  <div v-if="pending" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 px-16">
+    <div class="border border-gray-10 rounded-lg p-6 relative">
+      <div class="w-full h-10 skeleton rounded-lg mb-4"></div>
+      <hr class="border-neutral-10 my-4">
+      <div class="w-56 h-5 skeleton rounded-lg mb-4"></div>
+      <div class="w-40 h-5 skeleton rounded-lg mb-4"></div>
+      <div class="w-56 h-5 skeleton rounded-lg mb-4"></div>
+      <div class="w-56 h-5 skeleton rounded-lg mb-4"></div>
+      <div class="w-40 h-5 skeleton rounded-lg mb-4"></div>
+      <div class="w-full h-8 skeleton rounded-lg mb-4"></div>
+      <div class="w-full h-8 skeleton rounded-lg mb-4"></div>
+    </div>
+    <div class="border border-gray-10 rounded-lg p-6 relative">
+      <div class="w-full h-10 skeleton rounded-lg mb-4"></div>
+      <hr class="border-neutral-10 my-4">
+      <div class="w-56 h-5 skeleton rounded-lg mb-4"></div>
+      <div class="w-40 h-5 skeleton rounded-lg mb-4"></div>
+      <div class="w-56 h-5 skeleton rounded-lg mb-4"></div>
+      <div class="w-56 h-5 skeleton rounded-lg mb-4"></div>
+      <div class="w-40 h-5 skeleton rounded-lg mb-4"></div>
+      <div class="w-full h-8 skeleton rounded-lg mb-4"></div>
+      <div class="w-full h-8 skeleton rounded-lg mb-4"></div>
+    </div>
+    <div class="border border-gray-10 rounded-lg p-6 relative">
+      <div class="w-full h-10 skeleton rounded-lg mb-4"></div>
+      <hr class="border-neutral-10 my-4">
+      <div class="w-56 h-5 skeleton rounded-lg mb-4"></div>
+      <div class="w-40 h-5 skeleton rounded-lg mb-4"></div>
+      <div class="w-56 h-5 skeleton rounded-lg mb-4"></div>
+      <div class="w-56 h-5 skeleton rounded-lg mb-4"></div>
+      <div class="w-40 h-5 skeleton rounded-lg mb-4"></div>
+      <div class="w-full h-8 skeleton rounded-lg mb-4"></div>
+      <div class="w-full h-8 skeleton rounded-lg mb-4"></div>
+    </div>
+    <div class="border border-gray-10 rounded-lg p-6 relative">
+      <div class="w-full h-10 skeleton rounded-lg mb-4"></div>
+      <hr class="border-neutral-10 my-4">
+      <div class="w-56 h-5 skeleton rounded-lg mb-4"></div>
+      <div class="w-40 h-5 skeleton rounded-lg mb-4"></div>
+      <div class="w-56 h-5 skeleton rounded-lg mb-4"></div>
+      <div class="w-56 h-5 skeleton rounded-lg mb-4"></div>
+      <div class="w-40 h-5 skeleton rounded-lg mb-4"></div>
+      <div class="w-full h-8 skeleton rounded-lg mb-4"></div>
+      <div class="w-full h-8 skeleton rounded-lg mb-4"></div>
+    </div>
+  </div>
+  <ul v-if="plans && !pending" class="plans-list">
     <li v-for="plan in plans.results" :key="plan">
       <!-- {{ plan }} -->
       <MoleculesPlanCard

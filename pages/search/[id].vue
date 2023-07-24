@@ -8,7 +8,7 @@
       :property="property.property"
       :user="property.user"
     />
-    <PopulationSearchDetailPropertyLoan class="md:px-14 px-4" />
+    <PopulationSearchDetailPropertyLoan :property="property.property" class="md:px-14 px-4" />
     <OrganismExploreProperties :property_id='property.plan_id' />
   </div>
   <div class="p-16" v-if="pending">

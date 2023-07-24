@@ -32,6 +32,13 @@ function previewFiles(event) {
     console.log('error')
   };
 }
+function setFirtsImg(array, index) {
+  if (index > 0 && index < array.length) {
+    const imgToMove = array[index];
+    array.splice(index, 1);
+    array.unshift(imgToMove);
+  }
+}
 </script>
 
 <template>
@@ -59,10 +66,20 @@ function previewFiles(event) {
       <figure v-for="(img, index) in previewImages" :key="index">
         <img :src="img" class="w-full h-full object-cover">
         <AtomsButtons
+          :class="[{cover: index === 0}]"
           class="absolute top-2 right-2"
           icon-name="general/trash-can"
           btn-type="btn-icon"
           @click="previewImages.splice(index, 1), savedImages.splice(index, 1)"
+        />
+        <AtomsButtons
+          :class="[{active: index === 0}]"
+          class="top-2 left-2 absolute bg-neutral-white"
+          btn-style="outline-primary"
+          icon-name="general/star"
+          btn-type="btn-icon"
+          :iconSize=20
+          @click="setFirtsImg(previewImages, index), setFirtsImg(savedImages, index)" 
         />
         <p :class="[{cover: index === 0}]">Portada</p>
       </figure>
