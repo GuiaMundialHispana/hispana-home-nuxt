@@ -46,9 +46,9 @@
 
 <script setup>
   import { useUserStore } from '~/stores/User';
-  // definePageMeta({
-  //   middleware: 'check-auth'
-  // });
+  definePageMeta({
+    middleware: 'check-auth'
+  });
   const user = useUserStore();
 </script>
 
