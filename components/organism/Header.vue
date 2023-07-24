@@ -12,7 +12,7 @@
             :key='item.name'
             class="text-sm text-neutral-black font-normal hover:text-primary-100 mb-4 lg:mb-0 cursor-pointer"
           >
-            <NuxtLink :to='item.route'>{{item.name}}</NuxtLink>
+            <NuxtLink :to='item.route'  @click="showMenu = false">{{item.name}}</NuxtLink>
           </li>
           <li class="text-sm text-neutral-black font-normal hover:text-primary-100 mb-4 lg:mb-0 cursor-pointer" v-show="auth.isLoggedIn">
             <NuxtLink to="/PostProperty">Vender</NuxtLink>
