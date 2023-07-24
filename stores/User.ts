@@ -22,7 +22,7 @@ export const useUserStore = defineStore('user', {
       passwordToken: '',
       newPassword: '',
       repeatPassword: '',
-
+      token: ''
     }
   },
   actions: {
@@ -79,10 +79,29 @@ export const useUserStore = defineStore('user', {
         })
         useRouter().push("/");
       }
+    },
+    async get_user() {
+      const { data } = await useFetch('auth/profile',{
+        method: 'GET',
+        baseURL: this.config.public.API,
+        headers: {
+          'Authorization': `Bearer ${this.token}`
+        },
+      });
+      
+      if(data) {
+        let response = data.value;
+        let user_response = data.value.results.user;
+        console.log(data)
+
+        if(response.code = 200) {
+          this.userData = user_response;
+        }
+      }
     }
   }
 })
 
-if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(useUserStore, import.meta.hot))
-}
+// if (import.meta.hot) {
+//   import.meta.hot.accept(acceptHMRUpdate(useUserStore, import.meta.hot))
+// }

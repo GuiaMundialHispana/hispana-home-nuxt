@@ -1,5 +1,5 @@
 <template>
-  <section class="min-h-screen">
+  <section>
     <div class="grid lg:grid-cols-2 h-full">
       <div class="w-full lg:px-8 px-4 lg:py-16 py-8">
         <h4 class="flex items-center">
@@ -8,7 +8,7 @@
         </h4>
         <ul class="payment-plan-resume">
           <li class="plan-price-card">
-            <div class="plan-name-card vip">
+            <div class="plan-name-card" :class="[renderPlanText]">
               <p>{{plan.name}}</p>
             </div>
             <div class="plan-information">
@@ -31,7 +31,8 @@
       <div class="payment-wrapper">
         <div class="form-group">
           <label>Correo</label>
-          <input type="email">
+          <input v-if="user.token" type="email" :value="user.userData.email">
+          <input v-else type="email">
         </div>
         <div class="form-group card-information">
           <label>Información de la tarjeta</label>
@@ -100,6 +101,19 @@ export default {
       return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
   },
+  computed: {
+    renderPlanText() {
+      if(this.plan.name === 'VIP') {
+        return 'vip';
+      } else if (this.plan.name === 'SILVER') {
+        return 'silver';
+      } else if (this.plan.name === 'EXCLUSIVO') {
+        return 'exclusive';
+      } else if(this.plan.name === 'DESTACADOS') {
+        return '';
+      }
+    },
+  },
   mounted() {
     this.decodeInnerObject();
   }
@@ -152,6 +166,6 @@ h4 {
 }
 
 .payment-wrapper {
-  @apply bg-[#F8F8F8] w-full lg:py-40 py-8 lg:px-8 px-4;
+  @apply bg-[#F8F8F8] w-full h-full lg:py-40 py-8 lg:px-8 px-4;
 }
 </style>

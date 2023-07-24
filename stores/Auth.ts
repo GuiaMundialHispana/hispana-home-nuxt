@@ -25,16 +25,14 @@ export const useAuthStore = defineStore('auth', {
 
       try {
         const res = data.value.results;
-        // Swal.fire({
-        //   icon: 'success',
-        //   text: 'Bienvenido',
-        //   showConfirmButton: false,
-        //   timer: 2000
-        // });
-
-        useRouter().go()
-
+        Swal.fire({
+          icon: 'success',
+          text: 'Bienvenido',
+          showConfirmButton: false,
+          timer: 2000
+        });
         //Save data in localStorage
+        navigateTo('/profile?tab=anuncio')
         localStorage.setItem('token', res.access_token.original.access_token);
       } 
       catch (error) {
@@ -55,10 +53,7 @@ export const useAuthStore = defineStore('auth', {
       localStorage.removeItem('token')
       useRouter().push("/")
     }
-
-    //end actions
   }
-  // final del export
 })
 
 if (import.meta.hot) {

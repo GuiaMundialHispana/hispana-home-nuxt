@@ -1,6 +1,8 @@
 <template>
   <div class="plan-wrapper">
-    <span class="user-quantity" v-if="plan.id != 4 && $route.path === '/PostProperty'">{{ userQuantity }}</span>
+    <span class="user-quantity" v-if="plan.id != 4 && $route.path === '/PostProperty' || $route.path === '/postProperty'">
+      {{ userQuantity }}
+    </span>
     <span class="plan-category" :class="[renderPlanText]">{{ plan.name }}</span>
     <ul class="plan-benefits">
       <li>
@@ -32,26 +34,24 @@
       </div>
       <!--  -->
       <AtomsButtons btn-size="xsmall" class="w-full">
-        <span class="total-plans">{{planQuantity}}</span>
-        RD$ {{ updatePrice  }}
+        <span class="total-plans">{{ planQuantity }}</span> RD$ {{ updatePrice  }}
       </AtomsButtons>
     </div>
-    <AtomsButtons
-      v-if="plan.id != 4 && $route.path === '/profile' || $route.path === '/plans'"
+    <AtomsButtons v-if="plan.id != 4 || userQuantity != 0"
       @click="payment()"
       btn-style="outline-gray"
       class="my-4 w-full">
       Comprar
     </AtomsButtons>
-    <AtomsButtons
-      v-if="$route.path === '/PostProperty'"
+    <AtomsButtons v-if="$route.path === '/PostProperty' || $route.path === '/postProperty'"
       btn-style="outline-gray"
-      class="my-4 w-full"
-      @click="$emit('pay', plan.id, plan.pictures)"
+      class="my-2 w-full"
+      :class="{active: active}"
+      @click="$emit('pay', plan.id, plan.pictures), active = !active"
     >
-     Seleccionar
+      Seleccionar
     </AtomsButtons>
-    <p class="price" v-if="plan.id != 4  && $route.path != '/PostProperty'">
+    <p class="price" v-if="plan.id != 4  && $route.path != '/PostProperty' && $route.path != 'postProperty'">
       <span class="text-base"> RD$ </span>{{ plan.price  }}
     </p>
     <p v-if="plan.id === 4" class="free-price mt-4">
@@ -77,7 +77,8 @@ export default {
     return {
       auth: useAuthStore(),
       planQuantity: 1,
-      priceUpdated: 0
+      priceUpdated: 0,
+      active: false
     }
   },
   computed: {

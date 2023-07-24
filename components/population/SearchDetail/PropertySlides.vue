@@ -1,5 +1,5 @@
 <template>
-  <section class="">
+  <section>
     <swiper
       :style="{
         '--swiper-navigation-color': '#fff',
@@ -18,7 +18,7 @@
           <div class="overlay">
             <AtomsIcon name="general/zoom" :size=35 class="text-neutral-white" />
           </div>
-          <img :src="`https://walrus-app-e2bxo.ondigitalocean.app/${image.image}`" class="w-full h-full object-cover rounded-lg" />
+          <img :src="`https://seal-app-4mhut.ondigitalocean.app/api/${image.image}`" class="w-full h-full object-cover rounded-lg" />
         </swiper-slide>
         <atoms-property-plans :plan-type="renderPlanText" plan-position="top" />
     </swiper>
@@ -34,7 +34,7 @@
       }"
     >
       <swiper-slide v-for="image in images" :key="image">
-        <img :src="`https://walrus-app-e2bxo.ondigitalocean.app/${image.image}`" class="w-full h-full object-cover rounded-lg" />
+        <img :src="`https://seal-app-4mhut.ondigitalocean.app/api/${image.image}`" class="w-full h-full object-cover rounded-lg" />
       </swiper-slide>
     </swiper>
     <!-- Zoom image -->

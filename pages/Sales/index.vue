@@ -15,16 +15,12 @@
       <div class="flex flex-wrap gap-2 xl:flex-row flex-col">
         <MoleculesFilterStatusProperties class="filterStatus-tabs-sm" />
         <MoleculesSearchFiltersBar @send-properties="getFilterResults" />
-        <!-- <button class="search-button" @click="searchProperties(); showFilters = !showFilters">
-          <p class="xl:hidden mr-3 font-semibold">Buscar propiedades</p>
-          <AtomsIcon name="general/search" :size=17  />
-        </button> -->
       </div>
     </OnClickOutside>
     <div class="flex items-center justify-between mt-8 2xl:mt-11 text-sm font-normal">
       <p class="text-neutral-black">
         <span class="text-primary-100 font-semibold">
-          {{ testProperty[0].length }} resultados
+          {{ properties.length }} resultados
         </span> encontrados
       </p>
       <!-- <div>
@@ -37,8 +33,12 @@
     </div>
     <div class="mt-8 pb-14">
       <ul class="property-list">
-        <li v-for="property in testProperty[0]" :key="property">
-          <MoleculesProperty :is-favorite="property.property.is_favorite" :property="property" :property-id="property.id" />
+        <li v-for="property in properties" :key="property">
+          <MoleculesProperty
+            :is-favorite="property.property.is_favorite"
+            :property="property.property"
+            :property-id="property.id"
+          />
         </li>
       </ul>
       <div v-if="pending">
@@ -46,7 +46,7 @@
           Cargando
         </h6>
       </div>
-      <div v-if="testProperty[0].length === 0">
+      <div v-if="properties.length === 0 && !pending">
         <figure class="mb-4">
           <img src="/img/not-found.png" class="object-contain max-w-[308px] mx-auto" />
         </figure>
@@ -61,35 +61,44 @@
 
 <script setup>
 import { OnClickOutside } from '@vueuse/components';
+
 const config = useRuntimeConfig();
 const route = useRoute();
 let test = ref(null);
-let testProperty = reactive([]);
-let showFilters = ref(false)
+let properties = reactive([]);
+let showFilters = ref(false);
 const viewport = useViewport();
 
-const { data, pending } = await useFetch('advertisements/search', {
+const { data, pending } = await useLazyFetch('advertisements/search', {
   method: 'GET',
   baseURL: config.public.API,
-  transform:(_data) => _data.results.data,
+  transform:(data) => {
+    let response = data.results.data;
+    response.forEach(element => {
+      properties.push(element)
+    });
+  },
   query: route.query
 });
 
-testProperty.push(data.value);
 function getFilterResults(e) {
   test = e;
-  searchProperties()
+  searchProperties();
 }
 
 async function searchProperties() {
   const { data } = await useFetch('advertisements/search?type=Sale', {
     method: 'GET',
     baseURL: config.public.API,
-    transform:(_data) => _data.results.data,
+    transform:(data) => {
+      properties.splice(0,properties.length);
+      let response = data.results.data;
+      response.forEach(element => {
+        properties.push(element)
+      });
+    },
     query: test
   })
-  testProperty.splice(0,1);
-  testProperty.push(data.value);
 };
 </script>
 

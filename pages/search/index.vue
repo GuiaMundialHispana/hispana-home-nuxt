@@ -15,17 +15,14 @@
       <div class="flex flex-wrap gap-2 xl:flex-row flex-col">
         <MoleculesFilterStatusProperties class="filterStatus-tabs-sm" />
         <MoleculesSearchFiltersBar @send-properties="getFilterResults" />
-        <!-- <button class="search-button" @click="searchProperties(); showFilters = !showFilters">
-          <p class="xl:hidden mr-3 font-semibold">Buscar propiedades</p>
-          <AtomsIcon name="general/search" :size=17  />
-        </button> -->
       </div>
     </OnClickOutside>
     <div class="flex items-center justify-between mt-8 2xl:mt-11 text-sm font-normal">
       <p class="text-neutral-black">
         <span class="text-primary-100 font-semibold">
-          {{ testProperty[0].length }} resultados
-        </span> encontrados
+          {{ properties.length }} resultados
+        </span>
+        encontrados
       </p>
       <!-- <div>
         <label for="filter" class="text-black mr-2">Ordena por:</label>
@@ -37,7 +34,7 @@
     </div>
     <div class="mt-8 pb-14">
       <ul class="property-list">
-        <li v-for="property in testProperty[0]" :key="property">
+        <li v-for="property in properties" :key="property">
           <MoleculesProperty
             :is-favorite="property.property.is_favorite"
             :property="property.property"
@@ -46,9 +43,11 @@
         </li>
       </ul>
       <div v-if="pending">
-        <h6 class="text-4xl text-blue-100 font-bold mb-4 text-center">No hemos encontramos propiedades <br/>con estos resultados</h6>
+        <h6 class="text-4xl text-blue-100 font-bold mb-4 text-center">
+          Cargando
+        </h6>
       </div>
-      <div v-if="testProperty[0].length === 0">
+      <div v-if="properties.length === 0 && !pending">
         <figure class="mb-4">
           <img src="/img/not-found.png" class="object-contain max-w-[308px] mx-auto" />
         </figure>
@@ -63,26 +62,26 @@
 
 <script setup>
 import { OnClickOutside } from '@vueuse/components';
-import { useAuthStore } from '~/stores/Auth';
-import { useUserStore } from '~/stores/User';
-const user = useUserStore();
 const config = useRuntimeConfig();
 const route = useRoute();
 const viewport = useViewport();
 
 //Mostrar propiedades
 let test = ref(null);
-let testProperty = reactive([]);
+let properties = reactive([]);
 let showFilters = ref(false);
-const auth = useAuthStore();
 
-const { data, pending } = await useFetch('advertisements/search', {
+const { data, pending } = await useLazyFetch('advertisements/search', {
   method: 'GET',
   baseURL: config.public.API,
-  transform:(_data) => _data.results.data,
+  transform:(data) => {
+    let response = data.results.data;
+    response.forEach(element => {
+      properties.push(element)
+    });
+  },
   query: route.query
 });
-testProperty.push(data.value);
 
 function getFilterResults(e) {
   test = e;
@@ -93,28 +92,17 @@ async function searchProperties() {
   const { data } = await useFetch('advertisements/search?type=All', {
     method: 'GET',
     baseURL: config.public.API,
-    transform:(_data) => _data.results.data,
+    transform:(data) => {
+      properties.splice(0,properties.length);
+      let response = data.results.data;
+      response.forEach(element => {
+        properties.push(element)
+      });
+    },
     query: test
-  })
-  testProperty.splice(0,1);
-  testProperty.push(data.value);
+  });
 };
 
-// let setFavorites;
-//Mostrar favoritos
-// if(auth.isLoggedIn) {
-//   const data = await $fetch('users/favorites',{
-//     method: 'GET',
-//     headers: {
-//       'Authorization': `Bearer ${localStorage.getItem('token')}`,
-//       'Content-Type': 'application/json',
-//       'Accept': 'application/json'
-//     },
-//     baseURL: config.public.API
-//   });
-//   //console.log(data.results)
-//   setFavorites = data.results;
-// }
 </script>
 
 <style lang="postcss" scoped>
