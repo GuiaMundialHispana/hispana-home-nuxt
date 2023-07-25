@@ -1,8 +1,6 @@
 <template>
   <div class="pb-[75px] 2xl:max-w-[1440px] mx-auto pt-16" id="loan">
     <h2 class="text-[28px] leading-[28px] font-semibold mb-12">Calculadora de préstamos</h2>
-    <p>Precio de la propiedad:  {{ property.price_us }}</p>
-    <p>Prestamo:  {{ loanAmount }}</p>
     <div class="grid lg:grid-cols-2 grid-cols-1">
       <form class="lg:border-r border-[#ECECEC] lg:pr-6">
         <div class="grid xl:grid-cols-2 lg:grid-cols-1 md:grid-cols-2 gap-2 mb-2">
