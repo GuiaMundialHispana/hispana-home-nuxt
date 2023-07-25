@@ -16,11 +16,11 @@ export const useAuthStore = defineStore('auth', {
     async login() {
       const { data}  = await useFetch('auth/login',{
         method: 'POST',
+        baseURL: this.config.public.API,
         body: {
           email: this.email,
           password: this.password
         },
-        baseURL: this.config.public.API
       });
 
       try {

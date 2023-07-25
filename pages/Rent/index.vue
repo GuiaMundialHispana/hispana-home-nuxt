@@ -41,10 +41,37 @@
           />
         </li>
       </ul>
-      <div v-if="pending">
-        <h6 class="text-4xl text-blue-100 font-bold mb-4 text-center">
-          Cargando
-        </h6>
+      <div v-if="pending" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div class="skeleton">
+          <div class="skeleton-image"></div>
+          <div class="skeleton-date"></div>
+          <div class="skeleton-body"></div>
+        </div>
+        <div class="skeleton">
+          <div class="skeleton-image"></div>
+          <div class="skeleton-date"></div>
+          <div class="skeleton-body"></div>
+        </div>
+        <div class="skeleton">
+          <div class="skeleton-image"></div>
+          <div class="skeleton-date"></div>
+          <div class="skeleton-body"></div>
+        </div>
+        <div class="skeleton">
+          <div class="skeleton-image"></div>
+          <div class="skeleton-date"></div>
+          <div class="skeleton-body"></div>
+        </div>
+        <div class="skeleton">
+          <div class="skeleton-image"></div>
+          <div class="skeleton-date"></div>
+          <div class="skeleton-body"></div>
+        </div>
+        <div class="skeleton">
+          <div class="skeleton-image"></div>
+          <div class="skeleton-date"></div>
+          <div class="skeleton-body"></div>
+        </div>
       </div>
       <div v-if="properties.length === 0 && !pending">
         <figure class="mb-4">
@@ -151,5 +178,12 @@ async function searchProperties() {
   @media (max-width:720px) {
     @apply border-l-0;
   }
+}
+
+.skeleton {
+  @apply border border-neutral-10 rounded-lg p-3;
+  & .skeleton-image { @apply w-full md:h-72 h-[230px] bg-neutral-10 mb-3; }
+  & .skeleton-date { @apply w-32 h-4 bg-neutral-10 mb-2; }
+  & .skeleton-body { @apply w-4/5 h-4 bg-neutral-10; }
 }
 </style>
