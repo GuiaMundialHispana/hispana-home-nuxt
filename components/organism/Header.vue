@@ -51,7 +51,7 @@
                     Mis planes
                   </NuxtLink>
                 </li>
-                <li @click="auth.logOut(), user.$reset(), showMenu = false">
+                <li @click="auth.logOut(), showMenu = false">
                   <AtomsIcon name="general/logout" class="mr-2.5" />
                   Cerrar sesión
                 </li>

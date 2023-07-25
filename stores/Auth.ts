@@ -14,6 +14,7 @@ export const useAuthStore = defineStore('auth', {
   },
   actions: {
     async login() {
+      Swal.showLoading()
       const { data}  = await useFetch('auth/login',{
         method: 'POST',
         baseURL: this.config.public.API,
@@ -24,6 +25,7 @@ export const useAuthStore = defineStore('auth', {
       });
 
       try {
+        Swal.hideLoading();
         const res = data.value.results;
         Swal.fire({
           icon: 'success',
@@ -36,6 +38,7 @@ export const useAuthStore = defineStore('auth', {
         localStorage.setItem('token', res.access_token.original.access_token);
       } 
       catch (error) {
+        Swal.hideLoading();
         Swal.fire({
           icon: 'error',
           text: 'Confirma que tus datos esten correctos'

@@ -11,6 +11,7 @@ let errors = ref(null);
 let displayModal = ref(false);
 
 async function createAdvertisement() {
+  Swal.showLoading();
   const form = new FormData();
   form.append('plan_id', use_posts.plan_id);
   form.append('type', use_posts.option_selected);
@@ -49,6 +50,7 @@ async function createAdvertisement() {
     body: form,
     baseURL: config.public.API,
     onResponse({ response }) {
+      Swal.hideLoading();
       const res = response._data;
       console.log(res)
       if(res.code === 200 ) {
@@ -65,13 +67,20 @@ async function createAdvertisement() {
       }
 
       if(res.code === 400) {
-        let messages = res.message;
-        // console.log(messages)
-        errors.value = messages
-        console.log(errors.value)
-        for(let i in errors.value[0]) {
-          console.log(errors[i][0])
-        }
+        let errors = response._data.message;
+        Swal.fire({
+          icon: 'error',
+          html: '<ul></ul>',
+          didOpen: () => {
+            const b = Swal.getHtmlContainer().querySelector('ul');
+            Object.keys(errors).forEach(clave => {
+              const li = document.createElement('li');
+              li.classList.add('text-primary-100', 'text-left', 'text-sm', 'mb-2')
+              li.textContent = errors[clave];
+              b.appendChild(li);
+            });
+          },
+        });
       }
     }    
   });
@@ -143,8 +152,6 @@ async function createAdvertisement() {
         Crear Anuncio
       </AtomsButtons>
     </nav>
-    <PopulationPostPropertiesModalError v-if="displayModal" :errors="errors" @close="displayModal = false" />
-    {{ errors }}
   </section>
 </template>
 
@@ -171,119 +178,4 @@ async function createAdvertisement() {
   & p{ @apply hidden lg:block text-neutral-black !important; }
   & span{ @apply text-primary-100 border-primary-100 !important; }
 }
-
-
-/* .step-1 {
-  & .option {
-    @apply sm:w-56 w-36  text-center text-base mb-14 cursor-pointer select-none flex items-center justify-center font-normal leading-[22px] border h-10 border-gray-300 rounded-md hover:bg-primary-100 hover:text-neutral-white hover:border-none;
-    &.checked {
-      @apply bg-primary-100 text-neutral-white font-semibold text-lg hover:bg-primary-90 !important;
-    }
-    & input { @apply appearance-none; }
-  }
-} */
-
-/* .step-2 {
-  & .wrapper {
-    @apply max-w-[971px] h-[490px]  overflow-y-scroll hover:overscroll-contain mx-auto px-5;
-  }
-  & .option {
-    @apply cursor-pointer select-none flex items-center font-normal text-base  leading-[22px] border-b h-[70px] border-b-gray-100 hover:bg-primary-50 px-4;
-    &.checked {
-      @apply bg-primary-100 text-neutral-white font-semibold text-lg;
-    }
-    & input { @apply appearance-none; }
-  }
-
-  & .scrollbar {
-    &::-webkit-scrollbar {
-      @apply lg:w-[68px] w-[28px];
-    }
-
-    &::-webkit-scrollbar-track {
-      @apply bg-neutral-white rounded-full;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      @apply lg:border-[30px] border-[10px] border-solid border-neutral-white rounded-full bg-[#C1C1C1];
-    }
-  }
-}
-
-.step-3 {
-  & .payment-plan-resume {
-    & .plan-price-card {
-      @apply py-4 border-b border-[#D9D9D9] w-full flex gap-3 items-center;
-
-      & .plan-name-card {
-        @apply rounded-lg w-[100px] h-[70px] flex items-center justify-center font-medium;
-        &.vip {
-          background: linear-gradient(99.8deg, #FFAE10 -9.48%, #FFB800 45.36%, #FFD058 96.88%);
-          @apply text-neutral-black;
-        }
-        &.silver { background: linear-gradient(104.59deg, #D9D9D9 8.17%, #ADADAD 51.17%, #FFFFFF 120.16%); }
-        &.exclusive { background: linear-gradient(100.63deg, #000000 -6.24%, #2F1C1B 45.46%, #A89494 95.05%); }
-      }
-
-      & .plan-information {
-        & p { @apply text-neutral-black text-sm font-medium mb-3; }
-        & select { @apply bg-[#FFE9E9] text-primary-100 px-1.5 text-sm font-normal rounded-lg min-w-[123px] focus:outline-none h-10; }
-      }
-
-      & .plan-price { @apply ml-auto text-sm text-neutral-black font-medium; }
-    }
-  }
-
-  & .form-group {
-    @apply mb-4 w-full;
-    & label { @apply text-neutral-black text-sm mb-1 block; }
-    & input { @apply w-full border border-[#D9D9D9] rounded-sm block px-4 h-8 font-light placeholder:text-[#D9D9D9]; }
-  }
-
-  & .card-information {
-    & input:first-child { @apply border-t-0 border-r-0; }
-    & input:last-child { @apply border-t-0; }
-  }
-}
-
-.step-4 {
-  & label {
-    @apply flex flex-col font-normal text-sm text-opacity-[0.85] gap-2;
-  }
-  & .form-control {
-    @apply h-8 w-full border border-[#D9D9D9] text-sm rounded-md px-3 placeholder:text-opacity-25 placeholder:font-normal focus:outline-primary-100;
-  }
-
-  & .select-multiple { @apply h-40; }
-  & .price-btn {
-    @apply border-y border-gray-300 text-primary-100 w-[37px] h-8 text-[12px] mb-0 mt-auto ;
-    &.active { @apply bg-primary-100 text-neutral-white border-none; }
-  }
-  & textarea {
-    @apply mt-2 border border-[#D9D9D9] text-sm rounded-md px-3 py-2 placeholder:text-opacity-25 placeholder:font-normal focus:outline-primary-100 h-[130px];
-  }
-
-  .checkbox-labels {
-    @apply flex-row;
-  }
-}
-
-.step-5 {
-
-  & .upload-button {
-    @apply sm:col-span-2 flex flex-col relative items-center justify-center border border-gray-300 rounded-md w-full h-[165px] overflow-hidden text-center px-2;
-    & > div { @apply flex items-center justify-center rounded-full bg-primary-50 w-14 h-14;}
-  }
-
-  & figure {
-    @apply relative rounded-md bg-primary-50 sm:w-[230px] h-40 overflow-hidden;
-  }
-  & .cover{
-    @apply absolute bottom-0 bg-primary-100 w-full h-[35px] z-20 flex items-center justify-center text-neutral-white text-base
-  }
-
-  & .upload-photos-container { @apply grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3; }
-
-  .warning-message { @apply flex gap-2 items-center justify-center w-fit py-1 px-2 bg-primary-100 text-neutral-white font-semibold rounded-lg; }
-} */
 </style>
