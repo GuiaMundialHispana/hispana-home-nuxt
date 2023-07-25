@@ -32,7 +32,7 @@
       </div> -->
     </div>
     <div class="mt-8 pb-14">
-      <ul class="property-list">
+      <ul v-if="!pending" class="property-list">
         <li v-for="property in properties" :key="property">
           <MoleculesProperty
             :is-favorite="property.property.is_favorite"
@@ -132,6 +132,7 @@ const { data, pending } = await useLazyFetch('advertisements/search?type=Rent', 
 
 function getFilterResults(e) {
   test = e;
+  pending.value = true;
   searchProperties()
 }
 
@@ -140,6 +141,7 @@ async function searchProperties() {
     method: 'GET',
     baseURL: config.public.API,
     transform:(data) => {
+      pending.value = false;
       properties.splice(0,properties.length);
       let response = data.results.data;
       response.forEach(element => {
