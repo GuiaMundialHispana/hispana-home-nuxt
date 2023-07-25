@@ -1,8 +1,8 @@
 <template>
   <div class="pb-[75px] 2xl:max-w-[1440px] mx-auto pt-16" id="loan">
     <h2 class="text-[28px] leading-[28px] font-semibold mb-12">Calculadora de préstamos</h2>
-    {{ property.price_us }}
-    {{ loanAmount }}
+    <p>Precio de la propiedad:  {{ property.price_us }}</p>
+    <p>Prestamo:  {{ loanAmount }}</p>
     <div class="grid lg:grid-cols-2 grid-cols-1">
       <form class="lg:border-r border-[#ECECEC] lg:pr-6">
         <div class="grid xl:grid-cols-2 lg:grid-cols-1 md:grid-cols-2 gap-2 mb-2">
@@ -81,22 +81,13 @@
       }
     },
     methods: {
-      // Nuevo calculo
-      calculateEstimatedQuota(interest, initial, years) {
+      calculateEstimatedQuota(interest, initial, years, total) {
+        const amount = total - initial;
         const month = years * 12;
         const monthlyRate = interest / 100 / 12;
-        const quote = (initial * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -month));
-        // return quote;
+        const quote = (amount * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -month));
         this.monthlyPayment = quote.toFixed(2)
       },
-      //-------------
-      // calculateLoan(amount, annualInterest, years){
-      //   let monthInterest = annualInterest / 12;
-      //   let allPayments = years * 12;
-      //   let afterInterestLoanAmount = amount / ((1 - (1 /(1 + monthInterest) ** allPayments)) / monthInterest);
-      //   let payments = afterInterestLoanAmount / allPayments;
-      //   this.monthlyPayment = payments.toFixed(2)
-      // },
       getPercentage(initial, price){
         let initialPercent = (initial / price) * 100;
         let loanPercent = ((price - initial) / price) * 100;
@@ -115,33 +106,17 @@
           this.initial = this.property.price_us - (this.property.price_us * 0.05)
         };
         this.getPercentage(this.initial, this.property.price_us);
-        this.calculateEstimatedQuota(this.interest, this.initial, this.years)
+        this.calculateEstimatedQuota(this.interest, this.initial, this.years,this.property.price_us )
       },
       years(){
-        this.calculateEstimatedQuota(this.interest, this.initial, this.years)
+        this.calculateEstimatedQuota(this.interest, this.initial, this.years,this.property.price_us )
       },
       interest(){
         if (this.interest <= 0) {
           this.interest = 1;
         }
-        this.calculateEstimatedQuota(this.interest, this.initial, this.years)
+        this.calculateEstimatedQuota(this.interest, this.initial, this.years,this.property.price_us )
       },
-      // initial(){
-      //   if (this.initial >= this.property.price_us) {
-      //     this.initial = this.property.price_us - (this.property.price_us * 0.05)
-      //   };
-      //   this.getPercentage(this.initial, this.property.price_us);
-      //   this.calculateLoan(this.loanAmount, this.interest, this.years);
-      // },
-      // years(){
-      //   this.calculateLoan(this.loanAmount, this.interest, this.years);
-      // },
-      // interest(){
-      //   if (this.interest <= 0) {
-      //     this.interest = 1;
-      //   }
-      //   this.calculateLoan(this.loanAmount, this.interest, this.years);
-      // }
     },
     
 }
