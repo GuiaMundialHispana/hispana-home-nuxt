@@ -1,14 +1,14 @@
 <template>
   <footer class="w-full bg-primary-100 py-16">
     <div class="lg:px-16 px-4 grid md:grid-cols-12 grid-cols-1 xl:gap-x-16 md:gap-x-10 gap-y-6 items-start 2xl:max-w-screen-2xl 2xl:mx-auto">
-      <div class="xl:col-span-5 lg:col-span-3 col-span-12">
+      <div class="xl:col-span-5 lg:col-span-12 col-span-12">
         <figure class="mb-6">
           <NuxtLink to="/">
-            <img src="/img/logo-footer.png" class="w-64 lg:mx-0 mx-auto" alt="Guia Mundial Hispana" />
+            <img src="/img/logo-footer.png" class="w-64 xl:mx-0 mx-auto" alt="Guia Mundial Hispana" />
           </NuxtLink>
         </figure>
         <div>
-          <p class="text-neutral-white text-sm font-normal lg:text-left text-center">
+          <p class="text-neutral-white text-sm font-normal xl:text-left text-center">
             {{ description.description }}
           </p>
         </div>

@@ -38,7 +38,7 @@
           <MoleculesProperty
             :is-favorite="property.property.is_favorite"
             :property="property.property"
-            :property-id="property.id"
+            :property-id="property.advertisement_id"
           />
         </li>
       </ul>
@@ -82,6 +82,8 @@ const { data, pending } = await useLazyFetch('advertisements/search', {
   },
   query: route.query
 });
+
+console.log(properties)
 
 function getFilterResults(e) {
   test = e;

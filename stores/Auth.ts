@@ -50,7 +50,8 @@ export const useAuthStore = defineStore('auth', {
         }
       });
       this.isLoggedIn = false;
-      localStorage.removeItem('token')
+      localStorage.removeItem('token');
+      
       useRouter().push("/")
     }
   }

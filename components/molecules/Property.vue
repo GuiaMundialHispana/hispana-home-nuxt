@@ -1,6 +1,5 @@
 <template>
   <article>
-    {{ propertyId }}
     <AtomsButtons
       btn-type="btn-icon"
       icon-name="general/favorite"

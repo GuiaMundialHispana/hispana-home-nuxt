@@ -62,7 +62,7 @@
         </ul>
       </div>
       <!-- User information -->
-      <div class="lg:col-span-4 md:col-span-8 md:col-start-3 col-span-12 pb-10 border-b border-gray-100 h-max">
+      <div class="lg:col-span-4 md:col-span-8 md:col-start-3 col-span-12 pb-4 border-b border-gray-100 h-max">
         <figure class="user-image">
           <img :src="`${user.profile_pic}`" :alt="user.name">
         </figure>
@@ -78,7 +78,7 @@
           <AtomsIcon name="general/mail" :size=18 class="mr-2.5"/>
           {{ user.email }}
         </a>
-        <a v-if="user.cellphone != ''" target="_blank" :href="`https://api.whatsapp.com/send?phone=${user.cellphone}`" class="hover:text-primary-100 flex items-center justify-center mt-4">
+        <a v-if="user.cellphone != '' && user.cellphone != null" target="_blank" :href="`https://api.whatsapp.com/send?phone=${user.cellphone}`" class="hover:text-primary-100 flex items-center justify-center mt-4">
           <AtomsIcon name="social-media/whatsapp" :size=18 class="mr-2.5"/>
           {{ user.cellphone }}
         </a>
