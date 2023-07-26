@@ -92,7 +92,6 @@ export const useUserStore = defineStore('user', {
       if(data) {
         let response = data.value;
         let user_response = data.value.results.user;
-        console.log(data)
 
         if(response.code = 200) {
           this.userData = user_response;

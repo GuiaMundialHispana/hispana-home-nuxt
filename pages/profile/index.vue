@@ -2,15 +2,18 @@
   <section class="pb-32">
     <div class="xl:container mx-auto lg:px-16 md:px-8 px-4">
       <div class="profile-wrapper">
-        <figure class="profile-image">
+        <figure class="profile-image" v-if="user.userData.name != null || user.userData.name !== ''">
           <img :src="`https://seal-app-4mhut.ondigitalocean.app/${user.userData.profile_pic}`" v-if="user.userData.profile_pic != null || ''" :alt="user.userData.name">
-          <img src="/img/user.jpg" v-if="user.userData.profile_pic === null || ''" :alt="user.userData.name">
+        </figure>
+        <figure class="profile-image" v-if="user.userData.name === null || user.userData.name === ''">
+          <div class="skeleton w-[117px] h-[117px] rounded-full"></div>
         </figure>
         <div class="profile-information">
-          <h3>
+          <h3 v-if="user.userData.name != null || user.userData.name !== ''">
             <span class="text-primary-100">Hola,</span><br class="md:block hidden">
             {{user.userData.name}} {{user.userData.lastname}}
           </h3>
+          <div v-if="user.userData.name === null || user.userData.name === ''" class="w-40 h-5 skeleton rounded-lg mb-4"></div>
           <AtomsLink btn-style="outline-primary" link-to="/profile/editProfile">Editar perfil</AtomsLink>
         </div>
       </div>
