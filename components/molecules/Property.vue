@@ -6,6 +6,7 @@
       class="favorite-button"
       :class="{active: property.is_favorite}"
       @click="toggleFavorite()"
+      v-if="$route.fullPath != '/profile?tab=anuncio'"
     />
     <Swiper
       class="relative rounded-lg overflow-hidden"
