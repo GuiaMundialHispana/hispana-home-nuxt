@@ -18,10 +18,10 @@
             Nombre:
             <input
               type="text"
-              :placeholder="user.userData.name"
               v-model="editUser.editUserData.name"
               class="lg:mr-4 mr-0"
             >
+            <!-- :placeholder="user.userData.name" -->
           </label>
           <label>
             Apellido:
@@ -58,16 +58,16 @@
             type="tel"
             class="lg:mr-4 mr-0"
             v-model="editUser.editUserData.phone"
-            :placeholder="user.userData.cellphone"
           >
+          <!-- :placeholder="user.userData.cellphone" -->
         </label>
         <label>
           Teléfono residencial:
           <input
             type="tel"
-            :placeholder="user.userData.cellphone"
             v-model="editUser.editUserData.cellphone"
           >
+          <!-- v-model="editUser.editUserData.cellphone" -->
         </label>
       </div>
       <div>
@@ -75,9 +75,9 @@
           Correo electrónico:
           <input
             type="email"
-            :placeholder="user.userData.email"
             v-model="editUser.editUserData.email"
           >
+          <!-- :placeholder="user.userData.email" -->
         </label>
       </div>
       <div class="flex flex-col mt-8">
@@ -123,7 +123,7 @@
           <div class="flex flex-col items-center">
             <p class="whitespace-nowrap">Actualiza tu foto de perfil</p>
             <figure class="w-[107px] h-[107px] rounded-full border-[5px] border-primary-50 mt-5">
-              <img :src="`https://seal-app-4mhut.ondigitalocean.app/api/v1/${editUser.editUserData.profile_pic}`" :alt="user.userData.name" class="rounded-full w-full h-full object-cover">
+              <img :src="`https://seal-app-4mhut.ondigitalocean.app/${editUser.editUserData.profile_pic}`" :alt="editUser.editUserData.name" class="rounded-full w-full h-full object-cover">
             </figure>
           </div>
         </div>
@@ -158,13 +158,11 @@
 </template>
 
 <script>
-import { useUserStore } from '~/stores/User';
 import { useUserEditStore } from '~/stores/EditUser';
 import Swal from 'sweetalert2';
 export default {
   data() {
     return {
-      user: useUserStore(),
       editUser:useUserEditStore (),
       config: useRuntimeConfig(),
       showChangePasswd: false,
@@ -201,6 +199,7 @@ export default {
       this.countries.push(res);
     },
     async changesPassword(){
+      Swal.showLoading();
       this.form.append('email', this.editUser.editUserData.email);
       this.form.append('password', this.password);
       this.form.append('password_confirmation', this.password_confirmation);
@@ -213,6 +212,7 @@ export default {
         },
         baseURL: this.config.public.API,
         onResponse({response}) {
+          Swal.hideLoading();
           if(response.status === 400) {
             let errors = response._data.message;
             Swal.fire({
@@ -244,6 +244,7 @@ export default {
       });
     },
     async updateUser() {
+      Swal.showLoading();
       this.form.append('user_id', this.editUser.editUserData.user_id);
       this.form.append('email', this.editUser.editUserData.email)
       this.form.append('name', this.editUser.editUserData.name);
@@ -262,6 +263,7 @@ export default {
         },
         baseURL: this.config.public.API,
         onResponse({response}) {
+          Swal.hideLoading();
           if(response.status === 400) {
             let errors = response._data.message;
             Swal.fire({

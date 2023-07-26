@@ -30,7 +30,7 @@
       </nav>
       <div v-if="tab === 0">
         <div v-if="actives.length > 0">
-          <h3 class="font-semibold text-sm text-black text-[28px] leading-[42px] md:mb-12 mb-5">Anuncios Activos</h3>
+          <h3>Anuncios Activos</h3>
           <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             <li v-for="item in actives" :key="item">
               <MoleculesProperty
@@ -49,7 +49,7 @@
       </div>
       <div v-if="tab === 1">
         <div v-if="expired.length > 0">
-          <h3 class="font-semibold text-sm text-black text-[28px] leading-[42px] md:mb-12 mb-5">Anuncios Expirados</h3>
+          <h3>Anuncios Expirados</h3>
           <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             <li v-for="item in expired" :key="item">
               <MoleculesProperty
@@ -69,7 +69,7 @@
       <!--  -->
       <div v-if="tab === 2">
         <div v-if="revision.length > 0">
-          <h3 class="font-semibold text-sm text-black text-[28px] leading-[42px] md:mb-12 mb-5">Anuncios en revision</h3>
+          <h3>Anuncios en revision</h3>
           <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             <li v-for="item in revision" :key="item">
               <MoleculesProperty :property="item.property" :property-id="item.id" />
@@ -86,7 +86,7 @@
       <!--  -->
       <div v-if="tab === 3">
         <div v-if="rejected.length > 0">
-          <h3 class="font-semibold text-sm text-black text-[28px] leading-[42px] md:mb-12 mb-5">Anuncios rechazados</h3>
+          <h3>Anuncios rechazados</h3>
           <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             <li v-for="item in rejected" :key="item">
               <MoleculesProperty :property="item.property" :property-id="item.id" />
@@ -103,7 +103,7 @@
       <!--  -->
       <div v-if="tab === 4">
         <div v-if="inactive.length > 0">
-          <h3 class="font-semibold text-sm text-black text-[28px] leading-[42px] md:mb-12 mb-5">Anuncios borrados</h3>
+          <h3>Anuncios borrados</h3>
           <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             <li v-for="item in inactive" :key="item">
               <MoleculesProperty :property="item.property" :property-id="item.id" />
@@ -125,7 +125,6 @@
 </template>
 
 <script>
-import { useAuthStore } from '~/stores/Auth';
 import { useUserStore } from '~/stores/User';
 export default {
   name: 'Advertisement',
@@ -148,7 +147,6 @@ export default {
       revision: [],
       rejected: [],
       inactive: [],
-      auth: useAuthStore(),
       config: useRuntimeConfig()
     }
   },
@@ -202,6 +200,11 @@ export default {
 </script>
 
 <style lang="postcss" scoped>
+
+h3 {
+  @apply font-medium text-sm text-neutral-black text-[28px] leading-[42px] mb-8 uppercase pb-4 border-b border-[#F5F5F5];
+}
+
 .ads {
   & nav {
     & .btn {

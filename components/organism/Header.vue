@@ -25,7 +25,7 @@
           <!-- User Logged -->
           <li class="user-wrapper" v-if="auth.isLoggedIn" @click="userDropdown = !userDropdown">
             <div class="flex items-center gap-2">
-              <img :src="`https://seal-app-4mhut.ondigitalocean.app/api/v1/${user.userData.profile_pic}`" v-if="user.userData.profile_pic != null || ''" :alt="user.userData.name">
+              <img :src="`https://seal-app-4mhut.ondigitalocean.app/${user.userData.profile_pic}`" v-if="user.userData.profile_pic != null || ''" :alt="user.userData.name">
               <img src="/img/user.jpg" v-if="user.userData.profile_pic === null || ''" :alt="user.userData.name">
               {{ user.userData.name }} {{ user.userData.lastname }}
               <AtomsIcon name="arrows/arrow-down" v-show="!userDropdown" :size=15 class="text-primary-100" />
