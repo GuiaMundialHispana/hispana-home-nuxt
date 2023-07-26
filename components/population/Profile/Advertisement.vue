@@ -55,6 +55,8 @@
               <MoleculesProperty
                 :property="item.property"
                 :property-id="item.id"
+                status-message="Anuncio expirado"
+                status-background="bg-primary-90 border-2 border-primary-100 text-neutral-white"
               />
             </li>
           </ul>
@@ -72,7 +74,10 @@
           <h3>Anuncios en revision</h3>
           <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             <li v-for="item in revision" :key="item">
-              <MoleculesProperty :property="item.property" :property-id="item.id" />
+              <MoleculesProperty
+                :property="item.property"
+                :property-id="item.id"
+                />
             </li>
           </ul>
         </div>
@@ -89,7 +94,12 @@
           <h3>Anuncios rechazados</h3>
           <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             <li v-for="item in rejected" :key="item">
-              <MoleculesProperty :property="item.property" :property-id="item.id" />
+              <MoleculesProperty
+                :property="item.property"
+                :property-id="item.id"
+                status-message="Anuncio Rechazado"
+                status-background="bg-primary-100"
+                />
             </li>
           </ul>
         </div>
@@ -106,7 +116,12 @@
           <h3>Anuncios borrados</h3>
           <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             <li v-for="item in inactive" :key="item">
-              <MoleculesProperty :property="item.property" :property-id="item.id" />
+              <MoleculesProperty
+                :property="item.property"
+                :property-id="item.id"
+                status-message="Anuncio Borrado"
+                status-background="bg-neutral-white text-neutral-black font-semibold"
+              />
             </li>
           </ul>
         </div>

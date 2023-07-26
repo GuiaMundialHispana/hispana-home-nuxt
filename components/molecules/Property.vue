@@ -34,6 +34,11 @@
           }
         }">
           <figure class="h-52 bg-gray-10">
+            <div class="advertisements" v-if="
+              $route.path === '/profile' && statusMessage !== ''"
+            >
+              <p :class="statusBackground">{{ statusMessage }}</p>
+            </div>
             <img :src="`https://seal-app-4mhut.ondigitalocean.app/${property.image}`" :alt="property.name" class="object-cover h-full w-full">
           </figure>
         </NuxtLink>
@@ -107,6 +112,14 @@ export default {
     },
     propertyId: {
       type:Number
+    },
+    statusMessage: {
+      type: String,
+      default: ''
+    },
+    statusBackground: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -114,7 +127,8 @@ export default {
       config: useRuntimeConfig(),
       route: useRouter(),
       auth: useAuthStore(),
-      user_store: useUserStore()
+      user_store: useUserStore(),
+      test: 4
     }
   },
   methods: {
@@ -229,5 +243,12 @@ article {
   & nav { @apply hidden absolute top-1/2 z-10 w-full justify-between px-4; 
   & button { @apply bg-neutral-white hover:bg-primary-100 border-none !important; }
   }
+  .advertisements{
+    @apply absolute z-20 text-neutral-white top-0 bottom-0 left-0 right-0 flex items-center justify-center bg-opacity-40 bg-neutral-white;
+    & p {
+      @apply py-1.5 px-[15px] rounded-lg text-base w-fit text-center min-w-[209px];
+    }
+  }
 }
+
 </style>
