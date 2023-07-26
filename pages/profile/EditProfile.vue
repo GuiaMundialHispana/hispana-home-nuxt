@@ -95,6 +95,7 @@
             <input
               type="password"
               placeholder="******"
+              v-model="current_password"
             >
           </label>
           <label>
@@ -173,6 +174,7 @@ export default {
       form: new FormData(),
       password: '',
       password_confirmation: '',
+      current_password: '',
       isNewImage: false
     }
   },
@@ -201,6 +203,7 @@ export default {
     async changesPassword(){
       Swal.showLoading();
       this.form.append('email', this.editUser.editUserData.email);
+      this.form.append('current_password', this.current_password);
       this.form.append('password', this.password);
       this.form.append('password_confirmation', this.password_confirmation);
       await useFetch('users/update?_method=PUT',{
