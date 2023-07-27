@@ -44,19 +44,19 @@
             <div class="user-dropdown" v-show="userDropdown">
               <ul>
                 <li>
-                  <NuxtLink to="/profile?tab=anuncio">
+                  <NuxtLink to="/profile?tab=anuncio" @click="showMenu = false">
                     <AtomsIcon name="general/border-all" class="mr-2.5" />
                     Mis anuncios
                   </NuxtLink>
                 </li>
                 <li>
-                  <NuxtLink to="/profile?tab=favorite">
+                  <NuxtLink to="/profile?tab=favorite" @click="showMenu = false">
                     <AtomsIcon name="general/favorite" class="mr-2.5" />
                     Mis favoritos
                   </NuxtLink>
                 </li>
                 <li>
-                  <NuxtLink to="/profile?tab=plan">
+                  <NuxtLink to="/profile?tab=plan" @click="showMenu = false">
                     <AtomsIcon name="general/user-document" class="mr-2.5" />
                     Mis planes
                   </NuxtLink>
@@ -70,6 +70,7 @@
           </li>
           <li v-show="auth.isLoggedIn">
             <AtomsLink
+              @click="showMenu = false"
               link-to="/PostProperty"
               icon-name="general/plus"
               icon-position="left"
