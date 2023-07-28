@@ -52,7 +52,7 @@
   //         }
   //       })
   //       .catch((e) => window.alert("Geocoder failed due to: " + e));
-  //   }
+  //   };
 
   //   // Dragend event listener for the marker
   //   google.maps.event.addListener(marker, 'dragend', function() {
@@ -88,12 +88,12 @@
   //     // If geolocation is not available, is going to use default location (Hispana)
   //     map.setCenter(new google.maps.LatLng(position.lat, position.lng));
   //     marker.setPosition(new google.maps.LatLng(position.lat, position.lng));
-  //   }
+  //   };
   // }
   // initMap();
 </script>
 
-<!-- <script>
+<script>
   // The Google Maps JavaScript API import
   (g => {
     var h, a, k, p = "The Google Maps JavaScript API",
@@ -119,4 +119,4 @@
       }));
     d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n))
   })({ key: "AIzaSyCPPtyX8Gz-9kxyUIEJ_ZgXtUgbaC4avk4", v: "beta" });
-</script> -->
+</script>
