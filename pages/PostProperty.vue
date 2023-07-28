@@ -144,12 +144,12 @@ async function createAdvertisement() {
       <PopulationPostPropertiesStep5 v-if="step === 5" @back="step--" />
     </KeepAlive>
     <!-- 6 -->
-    <!-- <PopulationPostPropertiesStep6 v-if="step === 6" /> -->
-    <!-- <nav class="control-steps-postProperty">
+    <PopulationPostPropertiesStep6 v-if="step === 6" />
+    <nav class="control-steps-postProperty">
       <AtomsButtons v-if="step === 5" @click="createAdvertisement()">
         Crear Anuncio
       </AtomsButtons>
-    </nav> -->
+    </nav>
   </section>
 </template>
 
