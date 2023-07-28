@@ -140,9 +140,9 @@ async function createAdvertisement() {
       <PopulationPostPropertiesStep4 v-if="step === 4" @nexts="step = 5" @back="step--" />
     </KeepAlive> -->
     <!-- 5 -->
-    <!-- <KeepAlive>
+    <KeepAlive>
       <PopulationPostPropertiesStep5 v-if="step === 5" @back="step--" />
-    </KeepAlive> -->
+    </KeepAlive>
     <!-- 6 -->
     <!-- <PopulationPostPropertiesStep6 v-if="step === 6" /> -->
     <!-- <nav class="control-steps-postProperty">
