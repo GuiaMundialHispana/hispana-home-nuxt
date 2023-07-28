@@ -5,8 +5,8 @@
         Propiedades silver
       </h2>
       <nav class="hidden md:flex gap-4">
-        <AtomsButtons class="prev" btn-type="btn-icon" btn-style="outline-gray" icon-name="arrows/arrow-left" btn-size="xsmall" :icon-size=15 />
-        <AtomsButtons class="next" btn-type="btn-icon" btn-style="outline-gray" icon-name="arrows/arrow-right" btn-size="xsmall" :icon-size=15 />
+        <AtomsButtons class="prevSilver" btn-type="btn-icon" btn-style="outline-gray" icon-name="arrows/arrow-left" btn-size="xsmall" :icon-size=15 />
+        <AtomsButtons class="nextSilver" btn-type="btn-icon" btn-style="outline-gray" icon-name="arrows/arrow-right" btn-size="xsmall" :icon-size=15 />
       </nav>
     </div>
     <Swiper
@@ -22,8 +22,8 @@
         disableOnInteraction: true
       }"
       :navigation="{
-        nextEl: '.next',
-        prevEl: '.prev'
+        nextEl: '.nextSilver',
+        prevEl: '.prevSilver'
       }"
     >
       <swiper-slide v-for="plan in property" :key="plan">
@@ -43,8 +43,8 @@
         disableOnInteraction: true
       }"
       :navigation="{
-        nextEl: '.next',
-        prevEl: '.prev'
+        nextEl: '.nextSilver',
+        prevEl: '.prevSilver'
       }"
     >
       <swiper-slide v-for="index in 5" :key="index">
