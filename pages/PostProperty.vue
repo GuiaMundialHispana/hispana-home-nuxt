@@ -7,8 +7,6 @@ const use_posts = usePostsStore();
 const user_store = useUserStore();
 const config = useRuntimeConfig();
 let step = ref(1);
-let errors = ref(null);
-let displayModal = ref(false);
 
 async function createAdvertisement() {
   Swal.showLoading();

@@ -61,7 +61,7 @@ async function getCities(sector_id) {
   const citiesApi = await $fetch(`generals/cities/${sector_id}`, {
     baseURL: config.public.API
   });
-  cities.push(citiesApi.results.data)
+  cities.push(citiesApi.results.data);
 };
 
 function getAddress(lant, long, location) {
@@ -102,7 +102,7 @@ function save_data() {
   use_posts.meter = meter.value;
   use_posts.meter_2 = meter_2.value;
   use_posts.description = description.value;
-}
+};
 
 </script>
 
