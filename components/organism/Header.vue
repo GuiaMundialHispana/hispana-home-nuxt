@@ -7,7 +7,7 @@
         </figure>
       </NuxtLink>
       <nav :class="{'hidden':!showMenu}">
-        <span class="w-full flex justify-end">
+        <span class="w-full flex justify-end" v-if="showMenu === true">
           <AtomsButtons 
           @click="showMenu = false"
           btn-type="btn-icon" 
@@ -142,7 +142,7 @@ header {
 }
 
 nav {
-  @apply lg:block lg:static absolute top-0 right-0 h-screen lg:w-max w-full md:max-w-sm lg:max-w-none max-w-full lg:p-0 p-6 z-[80] bg-neutral-white;
+  @apply lg:block lg:static absolute top-0 right-0 h-screen lg:h-full lg:w-max w-full md:max-w-sm lg:max-w-none max-w-full lg:p-0 p-6 z-[80] bg-neutral-white;
 
   & > ul { @apply flex lg:items-center xl:gap-x-8 lg:gap-3 lg:flex-row flex-col; }
 
