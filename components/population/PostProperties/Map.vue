@@ -67,28 +67,28 @@
     });
 
     // Get the user's location and set it as the initial position of the marker
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        function (userPosition) {
-          let userLatLng = new google.maps.LatLng(
-            userPosition.coords.latitude,
-            userPosition.coords.longitude
-          );
-          map.setCenter(userLatLng);
-          marker.setPosition(userLatLng);
-        },
-        function (error) {
-          console.error("Error al obtener la ubicación del usuario:", error);
-          // If geolocation is not available, is going to use default location (Hispana)
-          map.setCenter(new google.maps.LatLng(position.lat, position.lng));
-          marker.setPosition(new google.maps.LatLng(position.lat, position.lng));
-        }
-      );
-    } else {
-      // If geolocation is not available, is going to use default location (Hispana)
-      map.setCenter(new google.maps.LatLng(position.lat, position.lng));
-      marker.setPosition(new google.maps.LatLng(position.lat, position.lng));
-    }
+    // if ("geolocation" in navigator) {
+    //   navigator.geolocation.getCurrentPosition(
+    //     function (userPosition) {
+    //       let userLatLng = new google.maps.LatLng(
+    //         userPosition.coords.latitude,
+    //         userPosition.coords.longitude
+    //       );
+    //       map.setCenter(userLatLng);
+    //       marker.setPosition(userLatLng);
+    //     },
+    //     function (error) {
+    //       console.error("Error al obtener la ubicación del usuario:", error);
+    //       // If geolocation is not available, is going to use default location (Hispana)
+    //       map.setCenter(new google.maps.LatLng(position.lat, position.lng));
+    //       marker.setPosition(new google.maps.LatLng(position.lat, position.lng));
+    //     }
+    //   );
+    // } else {
+    //   // If geolocation is not available, is going to use default location (Hispana)
+    //   map.setCenter(new google.maps.LatLng(position.lat, position.lng));
+    //   marker.setPosition(new google.maps.LatLng(position.lat, position.lng));
+    // }
   };
   initMap();
 </script>
