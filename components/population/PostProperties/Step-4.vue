@@ -149,9 +149,9 @@ function save_data() {
     </div>
     <!-- Map -->
     <div class="col-span-3">
-      <ClientOnly>
+      <!-- <ClientOnly>
         <PopulationPostPropertiesMap @send-location="getAddress"/>
-      </ClientOnly>
+      </ClientOnly> -->
     </div>
     <!-- Direccion -->
     <div class="col-span-3">
