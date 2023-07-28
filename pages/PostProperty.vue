@@ -116,7 +116,7 @@ async function createAdvertisement() {
         </div>
         <hr class="md:hidden border-[#bababa] border w-3" :class="[{active: step === 6}]">
         <div class="last-step">
-          <span>&#x2713</span>
+          <!-- <span>&#x2713</span> -->
           <p>Finalizado</p>
           <hr class="hidden lg:block border-primary-100 border w-12 ml-2" :class="[{'w-20': step === 6}]">
           <img v-if="step < 6" class="hidden lg:block w-[177px]" src="/img/property-post.png" alt="Property">
@@ -128,28 +128,28 @@ async function createAdvertisement() {
       <PopulationPostPropertiesStep1 v-if="step === 1" @nexts="step = 2" />
     </KeepAlive>
     <!-- 2 -->
-    <KeepAlive>
+    <!-- <KeepAlive>
       <PopulationPostPropertiesStep2 v-if="step === 2" @nexts="step = 3" @back="step--" />
-    </KeepAlive>
+    </KeepAlive> -->
     <!-- 3 -->
-    <KeepAlive>
+    <!-- <KeepAlive>
       <PopulationPostPropertiesStep3 v-if="step === 3" @nexts="step = 4" @back="step--" />
-    </KeepAlive>
+    </KeepAlive> -->
     <!-- 4 -->
-    <KeepAlive>
+    <!-- <KeepAlive>
       <PopulationPostPropertiesStep4 v-if="step === 4" @nexts="step = 5" @back="step--" />
-    </KeepAlive>
+    </KeepAlive> -->
     <!-- 5 -->
-    <KeepAlive>
+    <!-- <KeepAlive>
       <PopulationPostPropertiesStep5 v-if="step === 5" @back="step--" />
-    </KeepAlive>
+    </KeepAlive> -->
     <!-- 6 -->
-    <PopulationPostPropertiesStep6 v-if="step === 6" />
-    <nav class="control-steps-postProperty">
+    <!-- <PopulationPostPropertiesStep6 v-if="step === 6" /> -->
+    <!-- <nav class="control-steps-postProperty">
       <AtomsButtons v-if="step === 5" @click="createAdvertisement()">
         Crear Anuncio
       </AtomsButtons>
-    </nav>
+    </nav> -->
   </section>
 </template>
 
