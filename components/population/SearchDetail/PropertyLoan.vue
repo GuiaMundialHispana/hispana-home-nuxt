@@ -8,7 +8,7 @@
             <label class="mb-2">Monto inicial</label>
             <div class="relative flex">
               <input type="number" class="form-control" v-model.lazy="initial">
-              <span class="bg-primary-100 text-neutral-white font-semibold text-sm p-2.5 rounded-tr-lg rounded-br-lg">{{initialPercentage}}%</span>
+              <span class="absolute right-0 bg-primary-100 text-neutral-white font-semibold text-sm p-2.5 rounded-tr-lg rounded-br-lg">{{initialPercentage}}%</span>
             </div>
           </div>
           <div class="form-group">
