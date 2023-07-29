@@ -26,6 +26,7 @@
       }"
     >
       <swiper-slide v-for="plan in property" :key="plan">
+        {{ plan.name }}
         <MoleculesFeaturedProperties :property-id="plan.id" plantype="vip" :property="plan.property" />
       </swiper-slide>
     </Swiper>

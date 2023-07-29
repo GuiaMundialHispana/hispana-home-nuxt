@@ -36,12 +36,16 @@
         />
       </nav>
       <swiper-slide v-for="image in property.images" :key="image">
-        <NuxtLink :to="`/search/${propertyId}`" class="h-[305px] relative flex justify-center pb-2 bg-gray-10 rounded-lg">
-          {{ image.image }}
+        <NuxtLink :to="{
+          path: `/search/${property.name}`,
+          query: {
+            property_id: propertyId
+          }
+        }" class="h-[305px] relative flex justify-center pb-2 bg-gray-10 rounded-lg">
           <img
             :src="`https://seal-app-4mhut.ondigitalocean.app/${image.image}`"
             :alt="property.name"
-            class="object-cover h-full w-full absolute top-0 left-0"
+            class="object-cover h-full w-full absolute top-0 left-0 rounded-lg"
           >
           <p class="property-name">{{ property.name }}</p>
         </NuxtLink>
