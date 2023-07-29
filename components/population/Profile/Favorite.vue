@@ -17,7 +17,7 @@
         <div class="skeleton-body"></div>
       </div>
     </div>
-    <div v-if="data && data.results.length < 1">
+    <div v-if="data && data.results.length < 1 || data === null">
       <figure class="mb-4">
         <img src="/img/not-found.png" class="object-contain max-w-[308px] mx-auto" />
       </figure>
@@ -54,6 +54,7 @@ const {data,pending} = useLazyFetch('users/favorites', {
   },
   baseURL: config.public.API
 });
+console.log(data)
 // properties = data.results;
 // properties.length > 0 ? favorite = true : favorite = false;
 </script>
