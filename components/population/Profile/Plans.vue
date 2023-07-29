@@ -1,53 +1,6 @@
 <template>
   <section>
-    <div>
-      <h3>Mis planes disponibles</h3>
-      <ul v-if="plans && !pending" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        <li v-if="plans.results.length <= 0" class="border border-gray-10 rounded-lg p-6 flex flex-col justify-center items-center">
-          <div class="bg-primary-100 text-neutral-white text-center w-full text-sm rounded-lg py-1">
-            Actualmente tienes el <b>plan Basico</b>
-          </div>
-        </li>
-        <li v-for="plan in plans.results" :key="plan" class="border border-gray-10 rounded-lg p-6">
-          <span class="plan-category"
-            :class="{
-              'vip': plan.plan.name === 'VIP',
-              'exclusive': plan.plan.name === 'EXCLUSIVO',
-              'silver': plan.plan.name === 'SILVER',
-              '': plan.plan.name === 'DESTACADOS'
-            }"
-          >
-            {{ plan.plan.name }}
-          </span>
-          <div class="bg-primary-100 text-neutral-white text-center w-full text-sm rounded-lg mt-4 py-1" v-if="plan.quantity > 0">
-            Cantidad disponible: <b>{{ plan.quantity }}</b>
-          </div>
-        </li>
-      </ul>
-      <div v-if="pending1" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        <div class="border border-gray-10 rounded-lg p-6 relative">
-          <div class="w-full h-10 skeleton rounded-lg mb-4"></div>
-          <hr class="border-neutral-10 my-4">
-          <div class="w-full h-5 skeleton rounded-lg"></div>
-        </div>
-        <div class="border border-gray-10 rounded-lg p-6 relative">
-          <div class="w-full h-10 skeleton rounded-lg mb-4"></div>
-          <hr class="border-neutral-10 my-4">
-          <div class="w-full h-5 skeleton rounded-lg"></div>
-        </div>
-        <div class="border border-gray-10 rounded-lg p-6 relative">
-          <div class="w-full h-10 skeleton rounded-lg mb-4"></div>
-          <hr class="border-neutral-10 my-4">
-          <div class="w-full h-5 skeleton rounded-lg"></div>
-        </div>
-        <div class="border border-gray-10 rounded-lg p-6 relative">
-          <div class="w-full h-10 skeleton rounded-lg mb-4"></div>
-          <hr class="border-neutral-10 my-4">
-          <div class="w-full h-5 skeleton rounded-lg"></div>
-        </div>
-      </div>
-    </div>
-    <!-- Nuestros planes -->
+    <PopulationProfileUserPlans />
     <div class="mt-12">
       <h3>Nuestros planes</h3>
       <ul v-if="generalPlans && !pending1" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
@@ -113,16 +66,6 @@ const user_store = useUserStore();
 
 const { data:generalPlans, pending1 } = useLazyFetch('generals/plans',{
   method: 'GET',
-  baseURL: config.public.API
-});
-
-const { data:plans, pending } = useLazyFetch('user-plans',{
-  method: 'GET',
-  headers: {
-    'Authorization': `Bearer ${user_store.token}`,
-    'Content-Type': 'application/json',
-    'Accept': 'application/json'
-  },
   baseURL: config.public.API
 });
 </script>

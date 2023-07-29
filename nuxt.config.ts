@@ -3,6 +3,9 @@ export default defineNuxtConfig({
   css: [
     '@/assets/css/main.css',
   ],
+  routeRules:{
+    '/profile': { ssr: false },
+  },
   app: {
     head: {
       title: 'Hispana Home',
