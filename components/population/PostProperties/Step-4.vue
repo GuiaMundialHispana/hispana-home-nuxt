@@ -73,11 +73,14 @@ function getAddress(lant, long, location) {
 
 watch(country,(country_id) => {
   getStates(country_id);
+  sectors = reactive([]);
+  cities = reactive([]);
   displaySector.value = true;
 });
 
 watch(sector,(sector_id) => {
   getCities(sector_id);
+  cities = reactive([]);
   displayCity.value = true;
 });
 
