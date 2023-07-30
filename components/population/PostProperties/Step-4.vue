@@ -15,7 +15,16 @@ const meter = ref(Number);
 const meter_2 = ref(Number);
 const description = ref('');
 const property_status = ref('');
-const propertyStatus = ['New', 'Used'];
+const propertyStatus = [
+  {
+    name: 'Nuevo',
+    value: 'New'
+  },
+  {
+    name: 'Usado',
+    value: 'Used'
+  },
+];
 const feature = ref(['']);
 let features = [];
 let countries = [];
@@ -208,8 +217,8 @@ function save_data() {
       <div class="mb-5 sm:mb-0">
         <label for="propertyStatus" class="mb-2">Estado</label>
         <select class="form-control" v-model="property_status" id="propertyStatus">
-          <option v-for="status in propertyStatus" :key="status" :value="status" class="option-label">
-            {{ status }}
+          <option v-for="status in propertyStatus" :key="status" :value="status.value" class="option-label">
+            {{ status.name }}
           </option>
         </select>
       </div>
