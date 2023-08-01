@@ -5,7 +5,7 @@ const use_posts = usePostsStore();
 const allowedFileTypes = ref(['image/jpeg', 'image/png', 'image/gif', 'image/svg', 'image/svg+xml']);
 let totalImgs = ref(0);
 let savedImages= ref([]);
-let previewImages = ref([]);
+let previewImages = use_posts.saved_images;
 let fileFormat = ref(true);
 let planSelected = {
   id: use_posts.plan_id,
@@ -64,7 +64,7 @@ function setFirtsImg(array, index) {
         <input type="file" @change="previewFiles" ref="file" multiple="multiple" class="absolute left-0 top-0 scale-[9] cursor-pointer opacity-0">
       </div>
       <figure v-for="(img, index) in previewImages" :key="index">
-        <img :src="img" class="w-full h-full object-cover">
+        <img :src="`https://seal-app-4mhut.ondigitalocean.app/${img.image}`" class="w-full h-full object-cover">
         <AtomsButtons
           :class="[{cover: index === 0}]"
           class="absolute top-2 right-2"

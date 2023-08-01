@@ -1,14 +1,47 @@
 <script setup>
 import Swal from 'sweetalert2';
 import { useUserStore } from '~/stores/User';
-// import { usePostsStore } from '~/stores/Post';
+import { usePostsStore } from '~/stores/Post';
 
-// const use_posts = usePostsStore();
+const use_posts = usePostsStore();
 const user_store = useUserStore();
 const config = useRuntimeConfig();
-let step = ref(1);
+let step = ref(4);
 
 //Obtener anuncio
+const { data: property, pending, error} = await useLazyFetch(`advertisements/${useRoute().query.property_id}`, {
+  method: 'GET',
+  baseURL: config.public.API,
+  transform:(_property) => _property.results,
+  onResponse({response}){
+    if(response.status === 400) {
+      return navigateTo('/notFound')
+    }
+  }
+});
+const property_object = property._value;
+use_posts.option_selected = property_object.property.type.toLowerCase();
+use_posts.plan_id = property_object.plan_id;
+use_posts.category_id = property_object.property.property_category_id;
+use_posts.name = property_object.property.name;
+use_posts.price = property_object.property.price;
+use_posts.price_us = property_object.property.price_us;
+use_posts.address = property_object.property.address;
+use_posts.country = property_object.property.country_id;
+use_posts.sector = property_object.property.town_id;
+use_posts.city = property_object.property.city_id;
+use_posts.bedrooms = property_object.property.bedroom;
+use_posts.bathrooms = property_object.property.bathroom;
+use_posts.parking = property_object.property.parking;
+use_posts.property_status = property_object.property.property_status;
+use_posts.feature = property_object.property.feature_ids;
+use_posts.meter = property_object.property.meters;
+use_posts.meter_2 = property_object.property.solar_meters;
+use_posts.description = property_object.property.description;
+use_posts.saved_images = property_object.property.images;
+use_posts.lat = property_object.property.latitude;
+use_posts.log = property_object.property.longitude;
+
 
 async function createAdvertisement() {
   Swal.showLoading();
@@ -118,7 +151,7 @@ async function createAdvertisement() {
         </div>
         <hr class="md:hidden border-[#bababa] border w-3" :class="[{active: step === 6}]">
         <div class="last-step">
-          <!-- <span>&#x2713</span> -->
+          <span>6</span>
           <p>Finalizado</p>
           <hr class="hidden lg:block border-primary-100 border w-12 ml-2" :class="[{'w-20': step === 6}]">
           <img v-if="step < 6" class="hidden lg:block w-[177px]" src="/img/property-post.png" alt="Property">
@@ -130,9 +163,9 @@ async function createAdvertisement() {
       <PopulationEditPropertiesStep1 v-if="step === 1" @nexts="step = 2" />
     </KeepAlive>
     <!-- 2 -->
-    <!-- <KeepAlive>
+    <KeepAlive>
       <PopulationEditPropertiesStep2 v-if="step === 2" @nexts="step = 3" @back="step--" />
-    </KeepAlive> -->
+    </KeepAlive>
     <!-- 3 -->
     <!-- <KeepAlive>
       <PopulationEditPropertiesStep3 v-if="step === 3" @nexts="step = 4" @back="step--" />
@@ -142,9 +175,9 @@ async function createAdvertisement() {
       <PopulationEditPropertiesStep4 v-if="step === 4" @nexts="step = 5" @back="step--" />
     </KeepAlive> -->
     <!-- 5 -->
-    <!-- <KeepAlive>
+    <KeepAlive>
       <PopulationEditPropertiesStep5 v-if="step === 5" @back="step--" />
-    </KeepAlive> -->
+    </KeepAlive>
     <!-- 6 -->
     <!-- <PopulationEditPropertiesStep6 v-if="step === 6" /> -->
     <nav class="control-steps-postProperty">

@@ -6,6 +6,7 @@
 
 <script setup>
   // Initialize and add the map
+  const props = defineProps(['lat', 'long'])
   const emit = defineEmits(['sendLocation']);
   let map;
   let marker;

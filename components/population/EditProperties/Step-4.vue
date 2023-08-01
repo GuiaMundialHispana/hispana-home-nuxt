@@ -5,16 +5,16 @@ import { usePostsStore } from '~/stores/Post';
 const use_posts = usePostsStore();
 const config = useRuntimeConfig();
 const currencyTab = ref(true);
-const name = ref('');
-let price = ref(Number);
-let price_us = ref(Number);
-const bedrooms = ref(Number);
-const bathrooms = ref(Number);
-const parking = ref(Number);
-const meter = ref(Number);
-const meter_2 = ref(Number);
-const description = ref('');
-const property_status = ref('');
+const name = use_posts.name;
+let price = use_posts.price;
+let price_us = use_posts.price_us;
+const bedrooms = use_posts.bedrooms;
+const bathrooms = use_posts.bathrooms;
+const parking = use_posts.parking;
+const meter = use_posts.meter;
+const meter_2 = use_posts.meter_2;
+const description = use_posts.description;
+const property_status = use_posts.property_status;
 const propertyStatus = [
   {
     name: 'Nuevo',
@@ -28,17 +28,17 @@ const propertyStatus = [
 const feature = ref(['']);
 let features = [];
 let countries = [];
-let country = ref(0);
+let country = use_posts.country;
 let sectors = reactive([]);
-let sector = ref(0);
-let displaySector = ref(false);
+let sector = use_posts.sector;
+let displaySector = ref(true);
 let cities = reactive([]);
-let city = ref([]);
-let displayCity = ref(false);
+let city = use_posts.city;
+let displayCity = ref(true);
 let categories = [];
-let lat = null;
-let log = null;
-let address = ref('');
+let lat = use_posts.lat;
+let log = use_posts.log;
+let address = use_posts.address;
 
 let countriesApi = await $fetch('generals/countries', {
   baseURL: config.public.API

@@ -10,6 +10,7 @@ const { data, pending } = useLazyFetch('generals/categories', {
   baseURL: config.public.API
 });
 
+categorySelected.value = use_posts.category_id;
 watch(categorySelected,(value) => {
   use_posts.category_id = value;
 });

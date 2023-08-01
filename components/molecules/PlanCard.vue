@@ -1,6 +1,6 @@
 <template>
   <div class="plan-wrapper">
-    <span class="user-quantity" v-if="plan.id != 4 && $route.path === '/PostProperty' || $route.path === '/postProperty'">
+    <span class="user-quantity" v-if="plan.id != 4 && $route.path === '/PostProperty' || $route.path === '/postProperty' || $route.path === '/edit-property'">
       {{ userQuantity }}
     </span>
     <span class="plan-category" :class="[renderPlanText]">{{ plan.name }}</span>
@@ -45,7 +45,7 @@
         Comprar
       </AtomsButtons>
     </div>
-    <AtomsButtons v-if="$route.path === '/PostProperty' || $route.path === '/postProperty'"
+    <AtomsButtons v-if="$route.path === '/PostProperty' || $route.path === '/postProperty'  || $route.path === '/edit-property'"
       btn-style="outline-gray"
       class="my-2 w-full"
       :class="{active: active}"
@@ -53,7 +53,7 @@
     >
       Seleccionar
     </AtomsButtons>
-    <p class="price" v-if="plan.id != 4  && $route.path != '/PostProperty' && $route.path != 'postProperty'">
+    <p class="price" v-if="plan.id != 4  && $route.path != '/PostProperty' && $route.path != 'postProperty' && $route.path != '/edit-property'">
       <span class="text-base"> RD$ </span>{{ plan.price  }}
     </p>
     <p v-if="plan.id === 4" class="free-price mt-4">
