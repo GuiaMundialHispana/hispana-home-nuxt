@@ -5,14 +5,6 @@
 </template>
 
 <script setup>
-  useHead({
-    script: [
-      {
-        src: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCPPtyX8Gz-9kxyUIEJ_ZgXtUgbaC4avk4',
-        defer: true
-      }
-    ]
-  })
   // Initialize and add the map
   const emit = defineEmits(['sendLocation']);
   let map;

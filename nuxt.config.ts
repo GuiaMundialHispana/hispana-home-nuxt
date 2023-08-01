@@ -13,7 +13,13 @@ export default defineNuxtConfig({
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' }
       ],
-    }
+      script: [
+        {
+          src: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyD4T85-FkXl586zyEpYLy32ipUyGAvLSAs',
+          defer: true
+        }
+      ]
+    },
   },
   modules: [
     'nuxt-icons',
