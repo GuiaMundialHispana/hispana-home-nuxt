@@ -5,18 +5,13 @@ export default defineNuxtConfig({
   ],
   routeRules:{
     '/profile': { ssr: false },
+    '/PostProperty': { ssr: false },
   },
   app: {
     head: {
       title: 'Hispana Home',
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' }
-      ],
-      script: [
-        {
-          src: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCPPtyX8Gz-9kxyUIEJ_ZgXtUgbaC4avk4',
-          defer: true
-        }
       ],
     }
   },
