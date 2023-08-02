@@ -5,16 +5,8 @@ import { usePostsStore } from '~/stores/Post';
 const use_posts = usePostsStore();
 const config = useRuntimeConfig();
 const currencyTab = ref(true);
-const name = use_posts.name;
-let price = use_posts.price;
-let price_us = use_posts.price_us;
-const bedrooms = use_posts.bedrooms;
-const bathrooms = use_posts.bathrooms;
-const parking = use_posts.parking;
-const meter = use_posts.meter;
-const meter_2 = use_posts.meter_2;
-const description = use_posts.description;
-const property_status = use_posts.property_status;
+let price = ref(Number);
+let price_us = ref(Number);
 const propertyStatus = [
   {
     name: 'Nuevo',
@@ -28,17 +20,17 @@ const propertyStatus = [
 const feature = ref(['']);
 let features = [];
 let countries = [];
-let country = use_posts.country;
+let country = ref(props.countryId);
 let sectors = reactive([]);
-let sector = use_posts.sector;
+let sector = ref(props.sectorId);
 let displaySector = ref(true);
 let cities = reactive([]);
-let city = use_posts.city;
+let city = ref([]);
 let displayCity = ref(true);
 let categories = [];
-let lat = use_posts.lat;
-let log = use_posts.log;
-let address = use_posts.address;
+let lat = null;
+let log = null;
+let address = ref('');
 
 let countriesApi = await $fetch('generals/countries', {
   baseURL: config.public.API
@@ -80,43 +72,40 @@ function getAddress(lant, long, location) {
   console.log(lat, log, address.value)
 };
 
+const props = defineProps({
+  countryId: {
+    type: Number
+  },
+  sectorId: {
+    type: Number
+  },
+  cityId: {
+    type: Number
+  }
+});
+getStates(props.countryId);
+getCities(props.sectorId);
+
 watch(country,(country_id) => {
   getStates(country_id);
+  use_posts.country = country_id;
   sectors = reactive([]);
   cities = reactive([]);
-  displaySector.value = true;
 });
 
 watch(sector,(sector_id) => {
   getCities(sector_id);
+  use_posts.sector = sector_id;
   cities = reactive([]);
-  displayCity.value = true;
+});
+
+watch(city,(city_id) => {
+  use_posts.city = city_id;
 });
 
 watch(price,(new_price) => {
   price_us.value = parseInt(new_price / 58);
 });
-
-function save_data() {
-  use_posts.name = name.value;
-  use_posts.price = price.value;
-  use_posts.price_us = price_us.value;
-  use_posts.lat = lat;
-  use_posts.log = log;
-  use_posts.address = address.value;
-  use_posts.country = country.value;
-  use_posts.sector = sector.value;;
-  use_posts.city = city.value;
-  use_posts.bedrooms = bedrooms.value;;
-  use_posts.bathrooms = bathrooms.value;;
-  use_posts.parking = parking.value;
-  use_posts.property_status = property_status.value;;
-  use_posts.feature = feature.value;
-  use_posts.meter = meter.value;
-  use_posts.meter_2 = meter_2.value;
-  use_posts.description = description.value;
-};
-
 </script>
 
 
@@ -128,7 +117,7 @@ function save_data() {
     <!-- Nombre -->
     <label class="col-span-3 sm:mb-2 mb-5">
       Nombre del proyecto
-      <input class="form-control" v-model="name" placeholder="Nombre del proyecto" type="text">
+      <input class="form-control" v-model="use_posts.name" placeholder="Nombre del proyecto" type="text">
     </label>
     <!-- Price -->
     <div class="flex col-span-3 sm:mb-2 mb-5">
@@ -136,13 +125,13 @@ function save_data() {
         Precio
         <input v-if="currencyTab"
           class="form-control"
-          v-model="price"
+          v-model="use_posts.price"
           placeholder="Precio Dominicano"
           type="number"
         >
         <input v-if="!currencyTab"
           class="form-control"
-          v-model="price_us"
+          v-model="use_posts.price_us"
           placeholder="Precio en Dolares"
           type="number"
         >
@@ -170,7 +159,7 @@ function save_data() {
     <div class="col-span-3">
       <label class="w-full sm:mb-2 mb-5">
       Direccion
-      <input class="form-control" readonly v-model="address" placeholder="Direccion" type="text">
+      <input class="form-control" readonly v-model="use_posts.address" placeholder="Direccion" type="text">
     </label>
     </div>
     <!-- Pais -->
@@ -204,19 +193,19 @@ function save_data() {
     <div class="col-span-3 gap-4 sm:grid grid-cols-2">
       <label class="w-full sm:mb-2 mb-5">
         Habitaciones
-        <input class="form-control" v-model="bedrooms" placeholder="Cantidad de habitaciones" type="number">
+        <input class="form-control" v-model="use_posts.bedrooms" placeholder="Cantidad de habitaciones" type="number">
       </label>
       <label class="w-full sm:mb-2 mb-5">
         Baños
-        <input class="form-control" v-model="bathrooms" placeholder="Cantidad de baños" type="number">
+        <input class="form-control" v-model="use_posts.bathrooms" placeholder="Cantidad de baños" type="number">
       </label>
       <label class="w-full sm:mb-2 mb-5">
         Parqueos
-        <input class="form-control" v-model="parking" placeholder="Cantidad de parqueos" type="number">
+        <input class="form-control" v-model="use_posts.parking" placeholder="Cantidad de parqueos" type="number">
       </label>
       <div class="mb-5 sm:mb-0">
         <label for="propertyStatus" class="mb-2">Estado</label>
-        <select class="form-control" v-model="property_status" id="propertyStatus">
+        <select class="form-control" v-model="use_posts.property_status" id="propertyStatus">
           <option v-for="status in propertyStatus" :key="status" :value="status.value" class="option-label">
             {{ status.name }}
           </option>
@@ -229,7 +218,7 @@ function save_data() {
       <select
         id="amenities"
         class="form-control select-multiple col-span-3 sm:mb-2 mb-5"
-        v-model="feature"
+        v-model="use_posts.feature"
         multiple>
         <option
           v-for="item in features"
@@ -245,17 +234,17 @@ function save_data() {
     <div class="col-span-3 w-full gap-4 sm:flex sm:mb-2 mb-5">
       <label class="w-full mb-5 sm:mb-0">
         Superficie de construcción
-        <input class="form-control" v-model="meter" placeholder="Metros²" type="number">
+        <input class="form-control" v-model="use_posts.meter" placeholder="Metros²" type="number">
       </label>
       <label class="w-full">
         Superficie de total
-        <input class="form-control" v-model="meter_2" placeholder="Metros²" type="number">
+        <input class="form-control" v-model="use_posts.meter_2" placeholder="Metros²" type="number">
       </label>
     </div>
     <!-- Descripcion -->
     <div class="flex flex-col col-span-3">
       <label>Descripción</label>
-      <textarea type="text" v-model="description" placeholder="Descripcion de la propiedad"></textarea>
+      <textarea type="text" v-model="use_posts.description" placeholder="Descripcion de la propiedad"></textarea>
     </div>
   </div>
   <nav class="control-steps-postProperty">
