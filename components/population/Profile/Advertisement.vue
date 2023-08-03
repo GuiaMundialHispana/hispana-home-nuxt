@@ -44,11 +44,11 @@
                 :property-id="item.id"
               />
               <div class="status-dropdown" v-if="show_drop === item.id">
-                <div class="flex items-center gap-3" @click="api_status = 'inactive', changeStatus(item.id)">
+                <div class="flex items-center gap-3 cursor-pointer" @click="api_status = 'inactive', changeStatus(item.id)">
                   <input type="radio" name="status">
                   Inactivar
                 </div>
-                <div class="flex items-center gap-3" @click="api_status = 'trashed', changeStatus(item.id)">
+                <div class="flex items-center gap-3 cursor-pointer" @click="api_status = 'trashed', changeStatus(item.id)">
                   <input type="radio" name="status">
                   Borrar
                 </div>
@@ -144,7 +144,7 @@
                 :property-id="item.id"
               />
               <div class="status-dropdown" v-if="show_drop === item.id">
-                <div class="flex items-center gap-3" @click="api_status = 'trashed', changeStatus(item.id)">
+                <div class="flex items-center gap-3 cursor-pointer" @click="api_status = 'trashed', changeStatus(item.id)">
                   <input type="radio" name="status">
                   Borrar
                 </div>
@@ -178,7 +178,7 @@
                 status-background="bg-neutral-white text-neutral-black font-semibold"
               />
               <div class="status-dropdown" v-if="show_drop === item.id">
-                <div class="flex items-center gap-3" @click="api_status = 'inactive', changeStatus(item.id)">
+                <div class="flex items-center gap-3 cursor-pointer" @click="api_status = 'inactive', changeStatus(item.id)">
                   <input type="radio" name="status">
                   Inactivar
                 </div>
@@ -202,6 +202,8 @@
 
 <script>
 import { useUserStore } from '~/stores/User';
+import Swal from 'sweetalert2';
+
 export default {
   name: 'Advertisement',
   data() {
@@ -312,9 +314,35 @@ export default {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
-        baseURL: this.config.public.API
+        baseURL: this.config.public.API,
+        onResponse({response}) {
+          if(response.status === 200 ) {
+            Swal.fire({
+              icon: 'success',
+              text: 'Hemos actualizado el estado del anuncio',
+              showConfirmButton: false,
+              timer: 2000
+            });
+          } else {
+            Swal.fire({
+              icon: 'error',
+              text: 'En estos momentos tenemos un error',
+              showConfirmButton: false,
+              timer: 2000
+            });
+          }
+        }
       });
-      console.log(data)
+      if(data) {
+        this.show_drop = false;
+        this.trashed = [];
+        this.actives = [];
+        this.expired = [];
+        this.revision = [];
+        this.rejected = [];
+        this.inactive = [];
+        this.getAdvertisement();
+      }
     }
   },
   beforeMount() {

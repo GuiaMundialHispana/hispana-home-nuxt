@@ -62,7 +62,7 @@
         />
       </nav>
     </Swiper>
-    <NuxtLink :to="`/edit-property?${propertyId}`">Editar {{propertyId}}</NuxtLink>
+    <!-- <NuxtLink :to="`/edit-property?${propertyId}`">Editar {{propertyId}}</NuxtLink> -->
     <NuxtLink :to="{
       path: `/search/${property.name}`,
       query: {
