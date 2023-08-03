@@ -8,6 +8,7 @@ const currencyTab = ref(true);
 const name = ref('');
 let price = ref(Number);
 let price_us = ref(Number);
+let price_temp = ref(Number);
 const bedrooms = ref(Number);
 const bathrooms = ref(Number);
 const parking = ref(Number);
@@ -16,7 +17,8 @@ const meter_2 = ref(Number);
 const description = ref('');
 const property_status = ref('');
 const propertyStatus = ['New', 'Used'];
-const feature = ref(['']);
+const feature = ref([]);
+
 let features = [];
 let countries = [];
 let country = ref(0);
@@ -30,6 +32,8 @@ let categories = [];
 let lat = null;
 let log = null;
 let address = ref('');
+let pricePlaceholder = ref('pesos dominicanos');
+let priceInput = ref('');
 
 let countriesApi = await $fetch('generals/countries', {
   baseURL: config.public.API
@@ -70,6 +74,33 @@ function getAddress(lant, long, location) {
   address.value = location;
 };
 
+function currencyFormat() {
+  let valor = priceInput.value.replace(/[^\d.]/g, '');
+  let numero = parseFloat(valor);
+  if (!isNaN(numero)) {
+    priceInput.value = numero.toLocaleString('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    });
+    price_temp.value = numero;
+  }
+}
+function validateInput(event) {
+  const inputValue = event.target.value;
+  const regex = /^[0-9.]*$/;
+  if (inputValue === '' || event.inputType === 'deleteContentBackward') {
+    priceInput.value = inputValue;
+    return;
+  }
+  if (!regex.test(inputValue)) {
+    priceInput.value = inputValue.replace(/[^\d.]/g, '');
+  };
+  return {
+    priceInput,
+    validateInput,
+  };
+}
+
 watch(country,(country_id) => {
   getStates(country_id);
   displaySector.value = true;
@@ -80,8 +111,29 @@ watch(sector,(sector_id) => {
   displayCity.value = true;
 });
 
-watch(price,(new_price) => {
-  price_us.value = parseInt(new_price / 58);
+watch(currencyTab,(new_value) => {
+  priceInput.value = '';
+  price_temp.value = 0;
+  price.value = 0;
+  price_us.value = 0;
+  if (new_value === true) {
+    pricePlaceholder = "pesos dominicanos DOP";
+    
+  } else{
+    pricePlaceholder = "dólares USD";
+  }
+  
+});
+
+watch(price_temp,(new_price) => {
+  if (currencyTab.value === true) {
+    price.value = new_price
+    price_us.value = (new_price / 58).toFixed(2);
+
+  } else {
+    price_us.value = new_price;
+    price.value = (new_price * 58);
+  }
 });
 
 function save_data() {
@@ -103,9 +155,7 @@ function save_data() {
   use_posts.meter_2 = meter_2.value;
   use_posts.description = description.value;
 }
-
 </script>
-
 
 <template>
   <h4 class="mt-11 mb-7 text-center">
@@ -121,17 +171,12 @@ function save_data() {
     <div class="flex col-span-3 sm:mb-2 mb-5">
       <label class="w-full">
         Precio
-        <input v-if="currencyTab"
+        <input
           class="form-control"
-          v-model="price"
-          placeholder="Precio Dominicano"
-          type="number"
-        >
-        <input v-if="!currencyTab"
-          class="form-control"
-          v-model="price_us"
-          placeholder="Precio en Dolares"
-          type="number"
+          v-model="priceInput" 
+          @blur="currencyFormat"
+          @input="validateInput"
+          :placeholder="`Precio en `+ pricePlaceholder"
         >
       </label>
       <div class="flex items-center ml-2.5">
@@ -213,7 +258,7 @@ function save_data() {
     <!-- Amenidades -->
     <div class="col-span-3">
       <label for="amenities" class="mb-2">Otras amenidades</label>
-      <select
+      <!-- <select
         id="amenities"
         class="form-control select-multiple col-span-3 sm:mb-2 mb-5"
         v-model="feature"
@@ -226,7 +271,26 @@ function save_data() {
         >
           {{ item.name }}
         </option>
-      </select>
+      </select> -->
+      <div class="amenities-wrapper scrollbar">
+        <label 
+          v-for="item in features"
+          :value="item.id"
+          :key="item" 
+          id="amenities" 
+          class="checkbox-labels">
+          <input 
+            type="checkbox"
+            class="checkbox"
+            v-model="feature"
+            :value="item.id"
+          >
+          {{ item.name }}
+        </label>
+      </div>
+      {{ typeof(feature.value) }}
+      
+      <button @click="test">klk</button>
     </div>
     <!-- Superficie de construccion y total -->
     <div class="col-span-3 w-full gap-4 sm:flex sm:mb-2 mb-5">
@@ -273,5 +337,37 @@ label {
 
 textarea {
   @apply mt-2 border border-[#D9D9D9] text-sm rounded-md px-3 py-2 placeholder:text-opacity-25 placeholder:font-normal focus:outline-primary-100 h-[130px];
+}
+.amenities-wrapper {
+  @apply bg-neutral-white border border-gray-100 rounded-lg px-2.5 pt-3 overflow-y-scroll hover:overscroll-contain h-56  ;
+}
+
+.checkbox-labels {
+  @apply cursor-pointer select-none flex flex-row items-center font-normal text-sm leading-[22px] mb-3;
+
+  & .checkbox {
+    @apply relative appearance-none flex-none w-4 h-4 border border-gray-300 rounded-sm mr-2 cursor-pointer hover:bg-primary-90 hover:border-none checked:bg-primary-100 checked:hover:bg-gray-300 checked:border-none
+    after:w-full
+    after:h-full
+    after:absolute
+    after:bg-no-repeat
+    after:bg-center
+    after:bg-[length:10px]
+    after:bg-[url('~/assets/icons/general/check.svg')];
+  }
+}
+
+.scrollbar {
+  &::-webkit-scrollbar {
+    @apply w-7;
+  }
+
+  &::-webkit-scrollbar-track {
+    @apply bg-neutral-white rounded-full;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    @apply border-[10px] border-solid border-neutral-white rounded-full bg-[#C1C1C1];
+  }
 }
 </style>
