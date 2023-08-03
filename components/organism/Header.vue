@@ -7,6 +7,16 @@
         </figure>
       </NuxtLink>
       <nav :class="{'hidden':!showMenu}">
+        <span class="w-full flex justify-end" v-if="showMenu === true">
+          <AtomsButtons 
+          @click="showMenu = false"
+          btn-type="btn-icon" 
+          btn-style="outline-primary" 
+          icon-name="general/close" 
+          btn-size="xsmall" 
+          :icon-size=16 
+        />
+        </span>
         <ul>
           <li v-for='item in menu'
             :key='item.name'
@@ -34,19 +44,19 @@
             <div class="user-dropdown" v-show="userDropdown">
               <ul>
                 <li>
-                  <NuxtLink to="/profile?tab=anuncio">
+                  <NuxtLink to="/profile?tab=anuncio" @click="showMenu = false">
                     <AtomsIcon name="general/border-all" class="mr-2.5" />
                     Mis anuncios
                   </NuxtLink>
                 </li>
                 <li>
-                  <NuxtLink to="/profile?tab=favorite">
+                  <NuxtLink to="/profile?tab=favorite" @click="showMenu = false">
                     <AtomsIcon name="general/favorite" class="mr-2.5" />
                     Mis favoritos
                   </NuxtLink>
                 </li>
                 <li>
-                  <NuxtLink to="/profile?tab=plan">
+                  <NuxtLink to="/profile?tab=plan" @click="showMenu = false">
                     <AtomsIcon name="general/user-document" class="mr-2.5" />
                     Mis planes
                   </NuxtLink>
@@ -60,6 +70,7 @@
           </li>
           <li v-show="auth.isLoggedIn">
             <AtomsLink
+              @click="showMenu = false"
               link-to="/PostProperty"
               icon-name="general/plus"
               icon-position="left"
@@ -127,11 +138,11 @@ export default {
 <style lang="postcss" scoped>
 
 header {
-  @apply w-full lg:h-[102px] h-16 flex items-center py-2 absolute top-0 lg:z-[60] z-[71] bg-neutral-white border-b border-gray-300;
+  @apply w-full lg:h-[102px] h-16 flex items-center py-2 absolute top-0 lg:z-[60] bg-neutral-white border-b border-gray-300;
 }
 
 nav {
-  @apply lg:block lg:static absolute lg:top-0 top-16 right-0 lg:h-full h-screen lg:w-max w-full md:max-w-sm lg:max-w-none max-w-full lg:p-0 p-6 z-[60] bg-neutral-white;
+  @apply lg:block lg:static absolute top-0 right-0 h-screen lg:h-full lg:w-max w-full md:max-w-sm lg:max-w-none max-w-full lg:p-0 p-6 z-[80] bg-neutral-white;
 
   & > ul { @apply flex lg:items-center xl:gap-x-8 lg:gap-3 lg:flex-row flex-col; }
 
