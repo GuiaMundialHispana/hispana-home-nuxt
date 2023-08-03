@@ -62,6 +62,7 @@
         />
       </nav>
     </Swiper>
+    <NuxtLink :to="`/edit-property?${propertyId}`">Editar {{propertyId}}</NuxtLink>
     <NuxtLink :to="{
       path: `/search/${property.name}`,
       query: {
@@ -86,9 +87,7 @@
       />
       <!-- Price -->
       <p class="price-title">Desde:</p>
-      <p class="price">
-        US${{showParsedPrice(property.price_us)}}
-      </p>
+      <p class="price">US${{showParsedPrice(property.price_us)}}</p>
       <!-- <p class="price">
         RD${{showParsedPrice(property.price)}}
       </p> -->

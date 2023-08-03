@@ -5,11 +5,12 @@
         Propiedades silver
       </h2>
       <nav class="hidden md:flex gap-4">
-        <AtomsButtons class="prev" btn-type="btn-icon" btn-style="outline-gray" icon-name="arrows/arrow-left" btn-size="xsmall" :icon-size=15 />
-        <AtomsButtons class="next" btn-type="btn-icon" btn-style="outline-gray" icon-name="arrows/arrow-right" btn-size="xsmall" :icon-size=15 />
+        <AtomsButtons class="prevSilver" btn-type="btn-icon" btn-style="outline-gray" icon-name="arrows/arrow-left" btn-size="xsmall" :icon-size=15 />
+        <AtomsButtons class="nextSilver" btn-type="btn-icon" btn-style="outline-gray" icon-name="arrows/arrow-right" btn-size="xsmall" :icon-size=15 />
       </nav>
     </div>
     <Swiper
+      v-if="property"
       :modules="[SwiperFreeMode, SwiperNavigation, SwiperAutoplay]"
       :effect="'fade'"
       :lazy="true"
@@ -21,16 +22,40 @@
         disableOnInteraction: true
       }"
       :navigation="{
-        nextEl: '.next',
-        prevEl: '.prev'
+        nextEl: '.nextSilver',
+        prevEl: '.prevSilver'
       }"
     >
       <swiper-slide v-for="plan in property" :key="plan">
         <MoleculesFeaturedProperties :property-id="plan.id" plantype="silver" :property="plan.property" />
       </swiper-slide>
     </Swiper>
+    <Swiper
+      v-if="pending"
+      :modules="[SwiperFreeMode, SwiperNavigation, SwiperAutoplay]"
+      :effect="'fade'"
+      :lazy="true"
+      :space-between="32"
+      slides-per-view="auto"
+      :loop="true"
+      :autoplay="{
+        delay: 4000,
+        disableOnInteraction: true
+      }"
+      :navigation="{
+        nextEl: '.nextSilver',
+        prevEl: '.prevSilver'
+      }"
+    >
+      <swiper-slide v-for="index in 5" :key="index">
+        <div class="skeleton">
+          <div class="skeleton-image"></div>
+          <div class="skeleton-date"></div>
+          <div class="skeleton-body"></div>
+        </div>
+      </swiper-slide>
+    </Swiper>
   </section>
-  <!-- TODO Skeleton -->
   <div v-if="pending">
     <OrganismSkeleton class="w-12 h-8"></OrganismSkeleton>
   </div>
@@ -49,4 +74,10 @@ const { data: property, pending, error} = await useFetch('advertisements/home?pl
 <style lang="postcss" scoped>
 section { @apply pt-6 md:pt-14 lg:px-16 md:px-6 px-4 mx-auto max-w-[97rem]; }
 .swiper-slide { @apply md:w-max; }
+.skeleton {
+  @apply border border-neutral-10 rounded-lg p-3 w-[350px];
+  & .skeleton-image { @apply w-full md:h-72 h-[230px] bg-neutral-10 mb-3; }
+  & .skeleton-date { @apply w-32 h-4 bg-neutral-10 mb-2; }
+  & .skeleton-body { @apply w-4/5 h-4 bg-neutral-10; }
+}
 </style>

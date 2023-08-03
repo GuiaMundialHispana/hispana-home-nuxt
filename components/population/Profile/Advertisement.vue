@@ -25,18 +25,34 @@
           class="md:w-full md:max-w-[230px]"
           @click="checkAdvertisement(item,index)"
         >
-          Anuncios {{item}}
+          Anuncios {{item.name}} <span>{{item.size}}</span>
         </AtomsButtons>
       </nav>
       <div v-if="tab === 0">
         <div v-if="actives.length > 0">
           <h3>Anuncios Activos</h3>
           <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            <li v-for="item in actives" :key="item">
+            <li v-for="item in actives" :key="item" class="relative">
+              <AtomsButtons
+                btn-type="btn-icon"
+                icon-name="general/tune"
+                class="status-button"
+                @click="show_drop = item.id"
+              />
               <MoleculesProperty
                 :property="item.property"
                 :property-id="item.id"
               />
+              <div class="status-dropdown" v-if="show_drop === item.id">
+                <div class="flex items-center gap-3" @click="api_status = 'inactive', changeStatus(item.id)">
+                  <input type="radio" name="status">
+                  Inactivar
+                </div>
+                <div class="flex items-center gap-3" @click="api_status = 'trashed', changeStatus(item.id)">
+                  <input type="radio" name="status">
+                  Borrar
+                </div>
+              </div>
             </li>
           </ul>
         </div>
@@ -47,6 +63,7 @@
           <h6 class="text-xl text-blue-100 font-bold mb-4 text-center">No tienes anuncios activos</h6>
         </div>
       </div>
+      <!-- Expirados -->
       <div v-if="tab === 1">
         <div v-if="expired.length > 0">
           <h3>Anuncios Expirados</h3>
@@ -68,7 +85,7 @@
           <h6 class="text-xl text-blue-100 font-bold mb-4 text-center">No tienes anuncios expirados</h6>
         </div>
       </div>
-      <!--  -->
+      <!-- Revision -->
       <div v-if="tab === 2">
         <div v-if="revision.length > 0">
           <h3>Anuncios en revision</h3>
@@ -77,7 +94,7 @@
               <MoleculesProperty
                 :property="item.property"
                 :property-id="item.id"
-                />
+              />
             </li>
           </ul>
         </div>
@@ -88,7 +105,7 @@
           <h6 class="text-xl text-blue-100 font-bold mb-4 text-center">No tienes anuncios en revision</h6>
         </div>
       </div>
-      <!--  -->
+      <!-- Rechazados -->
       <div v-if="tab === 3">
         <div v-if="rejected.length > 0">
           <h3>Anuncios rechazados</h3>
@@ -110,22 +127,66 @@
           <h6 class="text-xl text-blue-100 font-bold mb-4 text-center">No tienes anuncios rechazados</h6>
         </div>
       </div>
-      <!--  -->
+      <!-- Inactivos -->
       <div v-if="tab === 4">
+        <div v-if="inactive.length > 0">
+          <h3>Anuncios Inactivos</h3>
+          <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <li v-for="item in inactive" :key="item" class="relative">
+              <AtomsButtons
+                btn-type="btn-icon"
+                icon-name="general/tune"
+                class="status-button"
+                @click="show_drop = item.id"
+              />
+              <MoleculesProperty
+                :property="item.property"
+                :property-id="item.id"
+              />
+              <div class="status-dropdown" v-if="show_drop === item.id">
+                <div class="flex items-center gap-3" @click="api_status = 'trashed', changeStatus(item.id)">
+                  <input type="radio" name="status">
+                  Borrar
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="empty-state" v-if="inactive.length <= 0">
+          <figure class="mb-4">
+            <img src="/img/not-found.png" class="object-contain max-w-[308px] mx-auto" />
+          </figure>
+          <h6 class="text-xl text-blue-100 font-bold mb-4 text-center">No tienes anuncios inactivos</h6>
+        </div>
+      </div>
+      <!-- Borrados -->
+      <div v-if="tab === 5">
         <div v-if="inactive.length > 0">
           <h3>Anuncios borrados</h3>
           <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            <li v-for="item in inactive" :key="item">
+            <li v-for="item in trashed" :key="item" class="relative">
+              <AtomsButtons
+                btn-type="btn-icon"
+                icon-name="general/tune"
+                class="status-button"
+                @click="show_drop = item.id"
+              />
               <MoleculesProperty
                 :property="item.property"
                 :property-id="item.id"
                 status-message="Anuncio Borrado"
                 status-background="bg-neutral-white text-neutral-black font-semibold"
               />
+              <div class="status-dropdown" v-if="show_drop === item.id">
+                <div class="flex items-center gap-3" @click="api_status = 'inactive', changeStatus(item.id)">
+                  <input type="radio" name="status">
+                  Inactivar
+                </div>
+              </div>
             </li>
           </ul>
         </div>
-        <div class="empty-state" v-if="inactive.length <= 0">
+        <div class="empty-state" v-if="trashed.length <= 0">
           <figure class="mb-4">
             <img src="/img/not-found.png" class="object-contain max-w-[308px] mx-auto" />
           </figure>
@@ -148,11 +209,30 @@ export default {
       tab: 0,
       selectedTab: 'activos',
       status: [
-        'activos',
-        'expirados',
-        'revision',
-        'rechazados',
-        'borrados'
+        {
+          name:'activos',
+          size: this.active_size
+        },
+        {
+          name:'expirados',
+          size: this.active_size
+        },
+        {
+          name:'en revision',
+          size: this.active_size
+        },
+        {
+          name:'rechazados',
+          size: this.active_size
+        },
+        {
+          name:'inactivos',
+          size: this.active_size
+        },
+        {
+          name:'borrados',
+          size: this.active_size
+        },
       ],
       user:useUserStore(),
       advertisement: false,
@@ -162,7 +242,16 @@ export default {
       revision: [],
       rejected: [],
       inactive: [],
-      config: useRuntimeConfig()
+      trashed: [],
+      config: useRuntimeConfig(),
+      api_status: '',
+      show_drop: 0,
+      active_size: 0,
+      expired_size: 0,
+      revision_size: 0,
+      rejected_size: 0,
+      inactive_size: 0,
+      trashed_size: 0
     }
   },
   methods: {
@@ -190,22 +279,42 @@ export default {
           const objeto = res[i];
           if (objeto.status === 'active') {
             this.actives.push(objeto);
+            this.status[0].size = this.actives.length;
           }
           if(objeto.status === 'expired') {
-            this.expired.push(objeto)
+            this.expired.push(objeto);
+            this.status[1].size = this.expired.length;
           }
           if(objeto.status === 'revision') {
-            this.revision.push(objeto)
+            this.revision.push(objeto);
+            this.status[2].size = this.revision.length;
           }
-          if(objeto.status === 'rejected' || objeto.status === 'rechazado') {
-            this.rejected.push(objeto)
+          if(objeto.status === 'refused') {
+            this.rejected.push(objeto);
+            this.status[3].size = this.rejected.length;
           }
 
-          if(objeto.status === 'inactive' || objeto.status === 'borrados') {
-            this.inactive.push(objeto)
+          if(objeto.status === 'inactive') {
+            this.inactive.push(objeto);
+            this.status[4].size = this.inactive.length;
+          }
+
+          if(objeto.status === 'trashed') {
+            this.trashed.push(objeto);
+            this.status[5].size = this.trashed.length;
           }
         }
       }
+    },
+    async changeStatus(id) {
+      const {data} = await useFetch(`advertisements/change-status/${id}/${this.api_status}?_method=PUT`,{
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        baseURL: this.config.public.API
+      });
+      console.log(data)
     }
   },
   beforeMount() {
@@ -220,6 +329,10 @@ h3 {
   @apply font-medium text-sm text-neutral-black text-[28px] leading-[42px] mb-8 uppercase pb-4 border-b border-[#F5F5F5];
 }
 
+.status-button { @apply absolute top-4 right-4 z-10; }
+.status-dropdown {
+  @apply rounded-lg bg-neutral-white p-4 absolute top-14 right-4 z-10;
+}
 .ads {
   & nav {
     & .btn {

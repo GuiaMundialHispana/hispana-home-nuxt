@@ -5,6 +5,7 @@ export default defineNuxtConfig({
   ],
   routeRules:{
     '/profile': { ssr: false },
+    '/edit-property': { ssr: false },
     '/PostProperty': { ssr: false },
   },
   app: {

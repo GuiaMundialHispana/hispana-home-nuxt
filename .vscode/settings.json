@@ -1,4 +1,5 @@
 {
   "css.hover.references": false,
-  "editor.suggest.showReferences": true
+  "editor.suggest.showReferences": true,
+  "editor.tabSize": 2
 }
