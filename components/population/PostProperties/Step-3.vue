@@ -21,7 +21,7 @@ function send_plan(id,pictures) {
   use_posts.plan_id = id;
   use_posts.plan_pictures = pictures;
   next.value = true;
-}
+};
 
 </script>
 

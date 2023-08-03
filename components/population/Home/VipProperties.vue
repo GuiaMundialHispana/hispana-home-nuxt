@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section v-if="property && property.length > 0">
     <div class="flex justify-between border-b border-[#F5F5F5] py-2 mb-6">
       <h2 class="text-[28px] leading-8 text-center md:text-left mx-auto md:mx-0 font-medium">
         Propiedades VIP
@@ -27,6 +27,7 @@
       }"
     >
       <swiper-slide v-for="plan in property" :key="plan">
+        {{ plan.name }}
         <MoleculesFeaturedProperties :property-id="plan.id" plantype="vip" :property="plan.property" />
       </swiper-slide>
     </Swiper>

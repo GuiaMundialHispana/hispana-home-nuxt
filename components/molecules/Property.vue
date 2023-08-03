@@ -244,7 +244,7 @@ article {
   & nav { @apply hidden absolute top-1/2 z-10 w-full justify-between px-4; 
   & button { @apply bg-neutral-white hover:bg-primary-100 border-none !important; }
   }
-  .advertisements{
+  & .advertisements{
     @apply absolute z-20 text-neutral-white top-0 bottom-0 left-0 right-0 flex items-center justify-center bg-opacity-40 bg-neutral-white;
     & p {
       @apply py-1.5 px-[15px] rounded-lg text-base w-fit text-center min-w-[209px];

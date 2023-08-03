@@ -17,7 +17,6 @@ function previewFiles(event) {
   images = event.target.files;
   totalImgs.value = previewImages.value.length + images.length;
   if (totalImgs.value <= planSelected.quantity) {
-    console.log('pasee el ig')
     for (let i = 0; i < images.length; i++) {
       if (allowedFileTypes.value.indexOf(images[i].type) !== -1) {
         let file = images[i];
@@ -29,16 +28,17 @@ function previewFiles(event) {
       } else { fileFormat.value = false; }
     }
   } else {
-    console.log('error')
+    console.log('error');
   };
-}
+};
+
 function setFirtsImg(array, index) {
   if (index > 0 && index < array.length) {
     const imgToMove = array[index];
     array.splice(index, 1);
     array.unshift(imgToMove);
   }
-}
+};
 </script>
 
 <template>

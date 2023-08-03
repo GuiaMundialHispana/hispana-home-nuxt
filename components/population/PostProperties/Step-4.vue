@@ -16,9 +16,17 @@ const meter = ref(Number);
 const meter_2 = ref(Number);
 const description = ref('');
 const property_status = ref('');
-const propertyStatus = ['New', 'Used'];
+const propertyStatus = [
+  {
+    name: 'Nuevo',
+    value: 'New'
+  },
+  {
+    name: 'Usado',
+    value: 'Used'
+  },
+];
 const feature = ref([]);
-
 let features = [];
 let countries = [];
 let country = ref(0);
@@ -65,13 +73,14 @@ async function getCities(sector_id) {
   const citiesApi = await $fetch(`generals/cities/${sector_id}`, {
     baseURL: config.public.API
   });
-  cities.push(citiesApi.results.data)
+  cities.push(citiesApi.results.data);
 };
 
 function getAddress(lant, long, location) {
   lat = lant;
   log = long;
   address.value = location;
+  console.log(lat, log, address.value)
 };
 
 function currencyFormat() {
@@ -103,11 +112,14 @@ function validateInput(event) {
 
 watch(country,(country_id) => {
   getStates(country_id);
+  sectors = reactive([]);
+  cities = reactive([]);
   displaySector.value = true;
 });
 
 watch(sector,(sector_id) => {
   getCities(sector_id);
+  cities = reactive([]);
   displayCity.value = true;
 });
 
@@ -118,21 +130,18 @@ watch(currencyTab,(new_value) => {
   price_us.value = 0;
   if (new_value === true) {
     pricePlaceholder = "pesos dominicanos DOP";
-    
   } else{
     pricePlaceholder = "dólares USD";
   }
-  
 });
 
 watch(price_temp,(new_price) => {
   if (currencyTab.value === true) {
-    price.value = new_price
-    price_us.value = (new_price / 58).toFixed(2);
-
+    price.value = parseInt(new_price);
+    price_us.value = parseInt(new_price / 58);
   } else {
-    price_us.value = new_price;
-    price.value = (new_price * 58);
+    price_us.value = parseInt(new_price);
+    price.value = parseInt(new_price * 58);
   }
 });
 
@@ -154,7 +163,8 @@ function save_data() {
   use_posts.meter = meter.value;
   use_posts.meter_2 = meter_2.value;
   use_posts.description = description.value;
-}
+};
+
 </script>
 
 <template>
@@ -249,8 +259,8 @@ function save_data() {
       <div class="mb-5 sm:mb-0">
         <label for="propertyStatus" class="mb-2">Estado</label>
         <select class="form-control" v-model="property_status" id="propertyStatus">
-          <option v-for="status in propertyStatus" :key="status" :value="status" class="option-label">
-            {{ status }}
+          <option v-for="status in propertyStatus" :key="status" :value="status.value" class="option-label">
+            {{ status.name }}
           </option>
         </select>
       </div>
@@ -289,8 +299,7 @@ function save_data() {
         </label>
       </div>
       {{ typeof(feature.value) }}
-      
-      <button @click="test">klk</button>
+      {{ feature }}
     </div>
     <!-- Superficie de construccion y total -->
     <div class="col-span-3 w-full gap-4 sm:flex sm:mb-2 mb-5">

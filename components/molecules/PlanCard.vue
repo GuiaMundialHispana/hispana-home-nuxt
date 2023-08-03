@@ -4,7 +4,7 @@
       {{ userQuantity }}
     </span>
     <span class="plan-category" :class="[renderPlanText]">{{ plan.name }}</span>
-    <ul class="plan-benefits">
+    <ul class="plan-benefits mb-2">
       <li>
         <AtomsIcon name="general/check" :size=16 class="text-[#FFAE10] mr-2" />
         Fotos por anuncio: {{plan.pictures }}
@@ -37,12 +37,14 @@
         <span class="total-plans">{{ planQuantity }}</span> RD$ {{ updatePrice  }}
       </AtomsButtons>
     </div>
-    <AtomsButtons v-if="plan.id != 4 || userQuantity != 0"
-      @click="payment()"
-      btn-style="outline-gray"
-      class="my-4 w-full">
-      Comprar
-    </AtomsButtons>
+    <div class="my-4 w-full" v-if="$route.path != '/PostProperty'">
+      <AtomsButtons v-if="plan.id != 4 || userQuantity != 0"
+        @click="payment()"
+        btn-style="outline-gray"
+        class="w-full">
+        Comprar
+      </AtomsButtons>
+    </div>
     <AtomsButtons v-if="$route.path === '/PostProperty' || $route.path === '/postProperty'"
       btn-style="outline-gray"
       class="my-2 w-full"

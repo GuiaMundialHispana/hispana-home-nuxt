@@ -7,8 +7,6 @@ const use_posts = usePostsStore();
 const user_store = useUserStore();
 const config = useRuntimeConfig();
 let step = ref(1);
-let errors = ref(null);
-let displayModal = ref(false);
 
 async function createAdvertisement() {
   Swal.showLoading();
@@ -118,7 +116,7 @@ async function createAdvertisement() {
         </div>
         <hr class="md:hidden border-[#bababa] border w-3" :class="[{active: step === 6}]">
         <div class="last-step">
-          <span>&#x2713</span>
+          <!-- <span>&#x2713</span> -->
           <p>Finalizado</p>
           <hr class="hidden lg:block border-primary-100 border w-12 ml-2" :class="[{'w-20': step === 6}]">
           <img v-if="step < 6" class="hidden lg:block w-[177px]" src="/img/property-post.png" alt="Property">

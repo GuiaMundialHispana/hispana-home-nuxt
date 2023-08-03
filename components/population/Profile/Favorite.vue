@@ -17,21 +17,21 @@
         <div class="skeleton-body"></div>
       </div>
     </div>
-    <div v-if="data && data.results.length < 1">
+    <div v-if="data && data.results.length < 1 || data === null && !pending">
       <figure class="mb-4">
         <img src="/img/not-found.png" class="object-contain max-w-[308px] mx-auto" />
       </figure>
       <h6 class="text-4xl text-blue-100 font-bold mb-8 text-center">Aún no tienes <span class="text-primary-100">publicaciones favoritas.</span></h6>
       <p class="text-sm text-neutral-black text-center">¡No dejes pasar esta oportunidad de mostrar tu propiedad al mundo!</p>
     </div>
-    <div v-if="data && data.results.length > 0">
+    <div v-if="data && data.results.length > 0 && !pending">
       <h3 class="font-semibold text-sm text-black md:text-[28px] md:leading-[42px] mb-5">Mis Favoritos</h3>
       <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         <li v-for="item in data.results" :key="item">
           <MoleculesProperty
             :is-favorite="true"
             :property="item.property"
-            :property-id="item.property.advertisements[0].id"
+            :property-id="item.advertisement_id"
           />
         </li>
       </ul>
@@ -54,8 +54,6 @@ const {data,pending} = useLazyFetch('users/favorites', {
   },
   baseURL: config.public.API
 });
-// properties = data.results;
-// properties.length > 0 ? favorite = true : favorite = false;
 </script>
 
 <style lang="postcss" scoped>

@@ -293,6 +293,7 @@ export default {
             });
             // useRouter().go()
             useRouter().push("/profile?tab=anuncio");
+            editUserData.$reset();
           }
         }
       });

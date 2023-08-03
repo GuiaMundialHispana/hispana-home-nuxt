@@ -40,8 +40,9 @@ export const useUserStore = defineStore('user', {
       const res2 = data;
     },
     async sendPassWordEmail() {
-      const { data, pending } = await useFetch(useRuntimeConfig().API+'auth/forgot-password',{
+      const { data, pending } = await useFetch('auth/forgot-password',{
         method: 'POST',
+        baseURL: this.config.public.API,
         body: {
           email: this.getEmail
         },
