@@ -6,7 +6,7 @@ import { usePostsStore } from '~/stores/Post';
 const use_posts = usePostsStore();
 const user_store = useUserStore();
 const config = useRuntimeConfig();
-let step = ref(1);
+let step = ref(5);
 
 //Obtener anuncio
 Swal.showLoading();
@@ -35,14 +35,14 @@ const { data: property, pending, error} = await useLazyFetch(`advertisements/${u
       use_posts.bathrooms = property_object.property.bathroom;
       use_posts.parking = property_object.property.parking;
       use_posts.property_status = property_object.property.property_status;
-      use_posts.feature = property_object.property.feature_ids;
+      use_posts.feature.push(property_object.property.feature_ids);
       use_posts.meter = property_object.property.meters;
       use_posts.meter_2 = property_object.property.solar_meters;
       use_posts.description = property_object.property.description;
       use_posts.saved_images = property_object.property.images;
       use_posts.lat = property_object.property.latitude;
       use_posts.log = property_object.property.longitude;
-      console.log(property_object)
+      // 
     }
   }
 });
@@ -75,7 +75,7 @@ async function createAdvertisement() {
   form.append('image', use_posts.saved_images[0]);
 
   use_posts.saved_images.forEach((element, index)=>{
-    form.append('images[' + index + ']',element);
+    form.append('images[' + index + ']',element.image);
   });
 
   await useFetch('advertisements',{

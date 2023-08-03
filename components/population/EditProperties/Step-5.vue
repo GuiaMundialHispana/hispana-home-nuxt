@@ -5,7 +5,8 @@ const use_posts = usePostsStore();
 const allowedFileTypes = ref(['image/jpeg', 'image/png', 'image/gif', 'image/svg', 'image/svg+xml']);
 let totalImgs = ref(0);
 let savedImages= ref([]);
-let previewImages = use_posts.saved_images;
+let previewImages = ref(use_posts.saved_images);
+// let previewImages = ref([]);
 let fileFormat = ref(true);
 let planSelected = {
   id: use_posts.plan_id,
@@ -16,13 +17,17 @@ function previewFiles(event) {
   let images = null;
   images = event.target.files;
   totalImgs.value = previewImages.value.length + images.length;
-  if (totalImgs.value <= planSelected.quantity) {
+  // totalImgs.value <= planSelected.quantity
+  let chocolate = ref(true)
+  if (chocolate) {
     for (let i = 0; i < images.length; i++) {
       if (allowedFileTypes.value.indexOf(images[i].type) !== -1) {
         let file = images[i];
         savedImages.value.push(images[i]);
         console.log(savedImages.value)
         previewImages.value.push(URL.createObjectURL(file));
+        console.log(images[i])
+
         fileFormat.value = true;
         use_posts.saved_images = savedImages.value;
       } else { fileFormat.value = false; }
@@ -56,7 +61,8 @@ function setFirtsImg(array, index) {
       </p>
     </div>
     <div class="upload-photos-container">
-      <div class="upload-button" v-if="previewImages.length <= planSelected.quantity">
+      <!-- v-if="previewImages.length <= planSelected.quantity" -->
+      <div class="upload-button">
         <div>
           <AtomsIcon name="general/upload" :size=28 class="text-primary-100" />
         </div>
@@ -84,7 +90,7 @@ function setFirtsImg(array, index) {
         <p :class="[{cover: index === 0}]">Portada</p>
       </figure>
     </div>
-    <p class="text-center mt-16 mb-8">{{ previewImages.length }}/{{planSelected.quantity}} Fotos</p>
+    <!-- <p class="text-center mt-16 mb-8">{{ previewImages.length }}/{{planSelected.quantity}} Fotos</p> -->
   </div>
   <nav class="control-steps-postProperty">
     <AtomsButtons @click="$emit('back')" btn-style="outline-primary">

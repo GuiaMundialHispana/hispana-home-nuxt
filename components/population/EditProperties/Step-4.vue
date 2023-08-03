@@ -251,7 +251,7 @@ watch(price,(new_price) => {
     <AtomsButtons @click="$emit('back')" btn-style="outline-primary">
       Atras
     </AtomsButtons>
-    <AtomsButtons @click="$emit('nexts'), save_data()">
+    <AtomsButtons @click="$emit('nexts')">
       Continuar
     </AtomsButtons>
   </nav>
