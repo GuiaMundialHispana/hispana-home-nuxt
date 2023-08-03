@@ -25,7 +25,7 @@
           class="md:w-full md:max-w-[230px]"
           @click="checkAdvertisement(item,index)"
         >
-          Anuncios {{item}} {{ index }}
+          Anuncios {{item.name}} <span>{{item.size}}</span>
         </AtomsButtons>
       </nav>
       <div v-if="tab === 0">
@@ -209,12 +209,30 @@ export default {
       tab: 0,
       selectedTab: 'activos',
       status: [
-        'activos',
-        'expirados',
-        'revision',
-        'rechazados',
-        'inactivos',
-        'borrados'
+        {
+          name:'activos',
+          size: this.active_size
+        },
+        {
+          name:'expirados',
+          size: this.active_size
+        },
+        {
+          name:'en revision',
+          size: this.active_size
+        },
+        {
+          name:'rechazados',
+          size: this.active_size
+        },
+        {
+          name:'inactivos',
+          size: this.active_size
+        },
+        {
+          name:'borrados',
+          size: this.active_size
+        },
       ],
       user:useUserStore(),
       advertisement: false,
@@ -227,7 +245,13 @@ export default {
       trashed: [],
       config: useRuntimeConfig(),
       api_status: '',
-      show_drop: 0
+      show_drop: 0,
+      active_size: 0,
+      expired_size: 0,
+      revision_size: 0,
+      rejected_size: 0,
+      inactive_size: 0,
+      trashed_size: 0
     }
   },
   methods: {
@@ -255,23 +279,29 @@ export default {
           const objeto = res[i];
           if (objeto.status === 'active') {
             this.actives.push(objeto);
+            this.status[0].size = this.actives.length;
           }
           if(objeto.status === 'expired') {
-            this.expired.push(objeto)
+            this.expired.push(objeto);
+            this.status[1].size = this.expired.length;
           }
           if(objeto.status === 'revision') {
-            this.revision.push(objeto)
+            this.revision.push(objeto);
+            this.status[2].size = this.revision.length;
           }
           if(objeto.status === 'refused') {
-            this.rejected.push(objeto)
+            this.rejected.push(objeto);
+            this.status[3].size = this.rejected.length;
           }
 
           if(objeto.status === 'inactive') {
-            this.inactive.push(objeto)
+            this.inactive.push(objeto);
+            this.status[4].size = this.inactive.length;
           }
 
           if(objeto.status === 'trashed') {
-            this.trashed.push(objeto)
+            this.trashed.push(objeto);
+            this.status[5].size = this.trashed.length;
           }
         }
       }
