@@ -64,6 +64,14 @@
     </Swiper>
     <!-- <NuxtLink :to="`/edit-property?${propertyId}`">Editar {{propertyId}}</NuxtLink> -->
     <NuxtLink :to="{
+      path: `edit-property`,
+      query: {
+        property_id: propertyId
+      }
+    }">
+    Editar {{propertyId}}
+    </NuxtLink>
+    <NuxtLink :to="{
       path: `/search/${property.name}`,
       query: {
         property_id: propertyId

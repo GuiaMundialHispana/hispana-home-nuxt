@@ -11,13 +11,13 @@ const use_posts = usePostsStore();
       ¿Vas a vender o alquilar?
     </h4>
     <div class="flex gap-2.5">
-      <label class="option" :class="[{checked: use_posts.option_selected === 'sell'}]">
+      <label class="option" :class="[{checked: use_posts.option_selected === 'sale'}]">
         Vender
         <input
           type="radio"
-          value="Sell"
-          name="sell"
-          @click="use_posts.option_selected = 'sell'"
+          value="sale"
+          name="sale"
+          @click="use_posts.option_selected = 'sale'"
         >
       </label>
       <label class="option" :class="[{checked: use_posts.option_selected === 'rent'}]">

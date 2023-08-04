@@ -6,7 +6,7 @@ import { usePostsStore } from '~/stores/Post';
 const use_posts = usePostsStore();
 const user_store = useUserStore();
 const config = useRuntimeConfig();
-let step = ref(5);
+let step = ref(1);
 
 //Obtener anuncio
 Swal.showLoading();
@@ -51,6 +51,7 @@ async function createAdvertisement() {
   Swal.showLoading();
   const form = new FormData();
   form.append('plan_id', use_posts.plan_id);
+  form.append('advertisement_id', useRoute().query.property_id);
   form.append('type', use_posts.option_selected);
   form.append('property_category', use_posts.category_id);
   form.append('name', use_posts.name);
@@ -72,13 +73,19 @@ async function createAdvertisement() {
   use_posts.feature.forEach((element, index) => {
     form.append(`features[${index}]`, element);
   });
-  form.append('image', use_posts.saved_images[0]);
+
+  form.append('image', use_posts.saved_images[0].image);
+  console.log(use_posts.saved_images[0].image)
 
   use_posts.saved_images.forEach((element, index)=>{
     form.append('images[' + index + ']',element.image);
   });
 
-  await useFetch('advertisements',{
+  use_posts.new_images.forEach((element, index)=>{
+    form.append('new_images[' + index + ']',element);
+  });
+
+  await useFetch('advertisements?_method=PUT',{
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${user_store.token}`,

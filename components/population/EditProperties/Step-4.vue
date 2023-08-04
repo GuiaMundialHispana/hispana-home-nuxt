@@ -69,7 +69,8 @@ function getAddress(lant, long, location) {
   lat = lant;
   log = long;
   address.value = location;
-  console.log(lat, log, address.value)
+  use_posts.address = location;
+  // console.log(lat, log, address.value)
 };
 
 const props = defineProps({
@@ -152,7 +153,7 @@ watch(price,(new_price) => {
     <!-- Map -->
     <div class="col-span-3">
       <ClientOnly>
-        <PopulationPostPropertiesMap @send-location="getAddress"/>
+        <PopulationEditPropertiesMap :lat="use_posts.lat" :long="use_posts.log" @send-location="getAddress"/>
       </ClientOnly>
     </div>
     <!-- Direccion -->
