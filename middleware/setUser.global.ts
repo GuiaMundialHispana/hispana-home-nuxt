@@ -4,7 +4,6 @@ import { useAuthStore } from '~/stores/Auth';
 export default defineNuxtRouteMiddleware((to, from) => {
   const user_store = useUserStore();
   const use_auth = useAuthStore();
-  console.log("global")
   if(process.client) {
     let get_token = window.localStorage.getItem('token');
     if(get_token !== null) {

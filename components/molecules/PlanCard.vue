@@ -38,6 +38,7 @@
       </AtomsButtons>
     </div>
     <div class="my-4 w-full" v-if="$route.path != '/PostProperty'">
+      <slot v-if="seleccionado" />
       <AtomsButtons v-if="plan.id != 4 || userQuantity != 0"
         @click="payment()"
         btn-style="outline-gray"
@@ -45,14 +46,16 @@
         Comprar
       </AtomsButtons>
     </div>
-    <AtomsButtons v-if="$route.path === '/PostProperty' || $route.path === '/postProperty'  || $route.path === '/edit-property'"
-      btn-style="outline-gray"
-      class="my-2 w-full"
-      :class="{active: active}"
-      @click="$emit('pay', plan.id, plan.pictures), active = !active"
-    >
-      Seleccionar
-    </AtomsButtons>
+    <div v-if="!seleccionado">
+      <AtomsButtons v-if="$route.path === '/PostProperty' || $route.path === '/postProperty'  || $route.path === '/edit-property'"
+        btn-style="outline-gray"
+        class="my-1 w-full"
+        :class="{active: active}"
+        @click="$emit('pay', plan.id, plan.pictures), active = !active"
+      >
+        Seleccionar
+      </AtomsButtons>
+    </div>
     <p class="price" v-if="plan.id != 4  && $route.path != '/PostProperty' && $route.path != 'postProperty' && $route.path != '/edit-property'">
       <span class="text-base"> RD$ </span>{{ plan.price  }}
     </p>
@@ -73,6 +76,10 @@ export default {
     },
     userQuantity: {
       type: Number
+    },
+    seleccionado: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

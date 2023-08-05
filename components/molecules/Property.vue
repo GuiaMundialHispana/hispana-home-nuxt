@@ -8,6 +8,18 @@
       @click="toggleFavorite()"
       v-if="$route.fullPath != '/profile?tab=anuncio'"
     />
+    <AtomsLink
+      :link-to="{
+        path: `edit-property`,
+        query: {
+          property_id: propertyId
+        }
+      }"
+      btn-type="btn-icon"
+      icon-name="general/pencil"
+      class="active absolute left-4 z-10 top-1"
+      v-if="$route.fullPath === '/profile?tab=anuncio'"
+    />
     <Swiper
       class="relative rounded-lg overflow-hidden"
       :modules="[SwiperAutoplay, SwiperEffectCreative]"
@@ -62,7 +74,6 @@
         />
       </nav>
     </Swiper>
-    <!-- <NuxtLink :to="`/edit-property?${propertyId}`">Editar {{propertyId}}</NuxtLink> -->
     <NuxtLink :to="{
       path: `/search/${property.name}`,
       query: {

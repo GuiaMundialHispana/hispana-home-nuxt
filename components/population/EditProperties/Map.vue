@@ -6,11 +6,11 @@
 
 <script setup>
   // Initialize and add the map
-  const props = defineProps(['lat', 'long'])
+  const props = defineProps(['lat', 'long']);
   const emit = defineEmits(['sendLocation']);
   let map;
   let marker;
-  let position = { lat: 18.45230271854065, lng: -69.9435523321845 }; // Default position (Hispana)
+  let position = { lat: props.lat, lng: props.long }; // Default position (Hispana)
 
   async function initMap() {
     const { Map } = await google.maps.importLibrary("maps");
@@ -66,35 +66,6 @@
         emit('sendLocation', lat, lng, savedAddress);
       }, 500);
     });
-
-    // Get the user's location and set it as the initial position of the marker
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        function (userPosition) {
-          let userLatLng = new google.maps.LatLng(
-            userPosition.coords.latitude,
-            userPosition.coords.longitude
-          );
-          map.setCenter(userLatLng);
-          marker.setPosition(userLatLng);
-        },
-        function (error) {
-          console.error("Error al obtener la ubicación del usuario:", error);
-          // If geolocation is not available, is going to use default location (Hispana)
-          map.setCenter(new google.maps.LatLng(position.lat, position.lng));
-          marker.setPosition(new google.maps.LatLng(position.lat, position.lng));
-        }
-      );
-    } else {
-      // If geolocation is not available, is going to use default location (Hispana)
-      map.setCenter(new google.maps.LatLng(position.lat, position.lng));
-      marker.setPosition(new google.maps.LatLng(position.lat, position.lng));
-    };
   }
   initMap();
 </script>
-
-<!-- <script>
-(g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="_ib",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>""+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})
-        ({key: "AIzaSyCPPtyX8Gz-9kxyUIEJ_ZgXtUgbaC4avk4", v: "beta"});
-</script> -->

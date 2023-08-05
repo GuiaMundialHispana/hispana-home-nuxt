@@ -51,7 +51,7 @@ async function register() {
     },
     baseURL: config.public.API,
     onResponse({response}) {
-      console.log(response._data)
+      // console.log(response._data)
       if(response.status === 400) {
         let errors = response._data.message;
         Swal.fire({
@@ -76,19 +76,19 @@ async function register() {
         });
         localStorage.setItem('token', response._data.results.access_token.original.access_token);
         auth.isLoggedIn = true;
-        let isAuthenticated = window.localStorage.getItem('token');
-        async function getProfile() {
-          const data = await $fetch('auth/profile', {
-            method: 'GET',
-            headers: {
-              'Authorization': 'Bearer ' + isAuthenticated
-            },
-            baseURL: config.public.API
-          });
-          const res = data.results.user;
-          user.userData = res;
-        }
-        getProfile();
+        // let isAuthenticated = window.localStorage.getItem('token');
+        // async function getProfile() {
+        //   const data = await $fetch('auth/profile', {
+        //     method: 'GET',
+        //     headers: {
+        //       'Authorization': 'Bearer ' + isAuthenticated
+        //     },
+        //     baseURL: config.public.API
+        //   });
+        //   const res = data.results.user;
+        //   user.userData = res;
+        // }
+        // getProfile();
         useRouter().push('/profile?tab=plan');
       }
     }

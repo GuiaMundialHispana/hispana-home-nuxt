@@ -9,10 +9,21 @@ const use_posts = usePostsStore();
 let next = ref(false);
 const config = useRuntimeConfig();
 
+const current = ref(false)
 const { data:plans,pending } = await useLazyFetch('user-plans',{
   method: 'GET',
   headers: {
     'Authorization': `Bearer ${user_store.token}`
+  },
+  onResponse({response}) {
+    if(response.status === 200) {
+      response._data.results.forEach(element => {
+        if(element.plan.id === use_posts.plan_id) {
+          use_posts.plan_pictures = element.plan.pictures;
+          current.value = true;
+        }
+      });
+    }
   },
   baseURL: config.public.API
 });
@@ -20,8 +31,11 @@ const { data:plans,pending } = await useLazyFetch('user-plans',{
 function send_plan(id,pictures) {
   use_posts.plan_id = id;
   use_posts.plan_pictures = pictures;
+  current.value = false;
   next.value = true;
 };
+
+// send_plan(use_posts.plan_id,use_posts.plan_pictures);
 </script>
 
 <template>
@@ -79,7 +93,12 @@ function send_plan(id,pictures) {
         @pay="send_plan"
         :plan="plan.plan"
         :user-quantity="plan.quantity"
-      />
+        :seleccionado="plan.plan.id === use_posts.plan_id && current"
+      >
+        <AtomsButtons class="my-2 w-full active">
+          Seleccionado
+        </AtomsButtons>
+      </MoleculesPlanCard>
     </li>
   </ul>
   <div class="flex justify-center">
@@ -89,7 +108,8 @@ function send_plan(id,pictures) {
     <AtomsButtons @click="$emit('back')" btn-style="outline-primary">
       Atras
     </AtomsButtons>
-    <AtomsButtons @click="$emit('nexts')" :disabled="!next">
+    <!-- :disabled="!next" -->
+    <AtomsButtons @click="$emit('nexts')">
       Continuar
     </AtomsButtons>
   </nav>

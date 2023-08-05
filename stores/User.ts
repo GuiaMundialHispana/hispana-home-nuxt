@@ -82,21 +82,40 @@ export const useUserStore = defineStore('user', {
       }
     },
     async get_user() {
-      const { data } = await useFetch('auth/profile',{
+      const { data, error } = await useFetch('auth/profile',{
         method: 'GET',
+        baseURL: this.config.public.API,
+        headers: {
+          'Authorization': `Bearer ${this.token}`
+        }
+      });
+      
+      if(data.value != null) {
+        let response = data.value;
+        let user_response = data.value.results.user;
+        console.log(data)
+
+        if(response.code === 200) {
+          this.userData = user_response;
+        }
+      } else {
+        console.log(data.value)
+        // this.refresh_token();
+      }
+    },
+    async refresh_token() {
+      const {data} = await useFetch('auth/refresh',{
+        method: 'POST',
         baseURL: this.config.public.API,
         headers: {
           'Authorization': `Bearer ${this.token}`
         },
       });
-      
-      if(data) {
-        let response = data.value;
-        let user_response = data.value.results.user;
+      // console.log(data);
+      if(data.value != null) {
+        this.token = data.value.results.access_token;
+        localStorage.setItem('token', this.token);
 
-        if(response.code = 200) {
-          this.userData = user_response;
-        }
       }
     }
   }

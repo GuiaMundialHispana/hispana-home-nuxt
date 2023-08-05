@@ -6,16 +6,17 @@ import { usePostsStore } from '~/stores/Post';
 const use_posts = usePostsStore();
 const user_store = useUserStore();
 const config = useRuntimeConfig();
-let step = ref(5);
+let step = ref(1);
 
 //Obtener anuncio
-Swal.showLoading();
+// Swal.showLoading();
+Swal.showLoading()
 const { data: property, pending, error} = await useLazyFetch(`advertisements/${useRoute().query.property_id}`, {
   method: 'GET',
   baseURL: config.public.API,
   transform:(_property) => _property.results,
   onResponse({response}){
-    Swal.hideLoading();
+    Swal.close()
     if(response.status === 400) {
       return navigateTo('/notFound')
     }
@@ -35,7 +36,14 @@ const { data: property, pending, error} = await useLazyFetch(`advertisements/${u
       use_posts.bathrooms = property_object.property.bathroom;
       use_posts.parking = property_object.property.parking;
       use_posts.property_status = property_object.property.property_status;
-      use_posts.feature.push(property_object.property.feature_ids);
+      // use_posts.feature = property_object.property.feature_ids;
+      var arreglo = property_object.property.feature_ids.split(',');
+      // Convierte los elementos en números enteros
+      var arregloNumeros = arreglo.map(function(elemento) {
+        // return parseInt(elemento);
+        use_posts.feature.push(elemento)
+      });
+
       use_posts.meter = property_object.property.meters;
       use_posts.meter_2 = property_object.property.solar_meters;
       use_posts.description = property_object.property.description;
@@ -51,6 +59,7 @@ async function createAdvertisement() {
   Swal.showLoading();
   const form = new FormData();
   form.append('plan_id', use_posts.plan_id);
+  form.append('advertisement_id', useRoute().query.property_id);
   form.append('type', use_posts.option_selected);
   form.append('property_category', use_posts.category_id);
   form.append('name', use_posts.name);
@@ -72,13 +81,21 @@ async function createAdvertisement() {
   use_posts.feature.forEach((element, index) => {
     form.append(`features[${index}]`, element);
   });
-  form.append('image', use_posts.saved_images[0]);
 
   use_posts.saved_images.forEach((element, index)=>{
     form.append('images[' + index + ']',element.image);
   });
 
-  await useFetch('advertisements',{
+  if(use_posts.new_images.length > 0) {
+    use_posts.new_images.forEach((element, index)=>{
+      form.append('new_images[' + index + ']',element);
+    });
+    form.append('new_image', use_posts.new_images[0]);
+  } else {
+    form.append('image', use_posts.saved_images[0].image);
+  }
+
+  await useFetch('advertisements?_method=PUT',{
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${user_store.token}`,
@@ -91,6 +108,7 @@ async function createAdvertisement() {
       const res = response._data;
       console.log(res)
       if(res.code === 200 ) {
+        use_posts.$reset();
         Swal.fire({
           icon: 'success',
           text:  `${res.message}`,
@@ -99,7 +117,7 @@ async function createAdvertisement() {
         });
         step.value = 6;
         setTimeout(() => {
-          useRouter().push("advertisements?_method=PUT");
+          useRouter().push("/profile?tab=anuncio");
         }, 3000);
       }
 
@@ -192,7 +210,7 @@ async function createAdvertisement() {
     <PopulationEditPropertiesStep6 v-if="step === 6" />
     <nav class="control-steps-postProperty">
       <AtomsButtons v-if="step === 5" @click="createAdvertisement()">
-        Crear Anuncio
+        Actualizar Anuncio
       </AtomsButtons>
     </nav>
   </section>
