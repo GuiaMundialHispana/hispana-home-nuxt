@@ -210,7 +210,7 @@ async function createAdvertisement() {
     <PopulationEditPropertiesStep6 v-if="step === 6" />
     <nav class="control-steps-postProperty">
       <AtomsButtons v-if="step === 5" @click="createAdvertisement()">
-        Crear Anuncio
+        Actualizar Anuncio
       </AtomsButtons>
     </nav>
   </section>
