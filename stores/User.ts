@@ -104,16 +104,19 @@ export const useUserStore = defineStore('user', {
       }
     },
     async refresh_token() {
-      await useFetch('auth/refresh',{
+      const {data} = await useFetch('auth/refresh',{
         method: 'POST',
         baseURL: this.config.public.API,
         headers: {
           'Authorization': `Bearer ${this.token}`
         },
-        onResponse({response}) {
-          console.log(response)
-        }
       });
+      // console.log(data);
+      if(data.value != null) {
+        this.token = data.value.results.access_token;
+        localStorage.setItem('token', this.token);
+
+      }
     }
   }
 })
