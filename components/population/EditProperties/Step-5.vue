@@ -27,9 +27,9 @@ function previewFiles(event) {
         savedImages.value.push(images[i]);
         newPreview.value.push(URL.createObjectURL(file));
         fileFormat.value = true;
-        use_posts.new_images.push(savedImages.value);
+        // use_posts.new_images.push(savedImages.value);
 
-        // use_posts.new_images = savedImages.value;
+        use_posts.new_images = savedImages.value;
         //
         // const unifiedArray = newPreview.value.concat(previewImages);
         // previewImages.forEach((element, index)=>{

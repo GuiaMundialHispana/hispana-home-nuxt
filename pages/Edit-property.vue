@@ -36,7 +36,14 @@ const { data: property, pending, error} = await useLazyFetch(`advertisements/${u
       use_posts.bathrooms = property_object.property.bathroom;
       use_posts.parking = property_object.property.parking;
       use_posts.property_status = property_object.property.property_status;
-      use_posts.feature.push(property_object.property.feature_ids);
+      // use_posts.feature = property_object.property.feature_ids;
+      var arreglo = property_object.property.feature_ids.split(',');
+      // Convierte los elementos en números enteros
+      var arregloNumeros = arreglo.map(function(elemento) {
+        // return parseInt(elemento);
+        use_posts.feature.push(elemento)
+      });
+
       use_posts.meter = property_object.property.meters;
       use_posts.meter_2 = property_object.property.solar_meters;
       use_posts.description = property_object.property.description;
@@ -75,20 +82,15 @@ async function createAdvertisement() {
     form.append(`features[${index}]`, element);
   });
 
-  // form.append('image', use_posts.saved_images[0].image);
-  // console.log(use_posts.saved_images[0].image)
-
   use_posts.saved_images.forEach((element, index)=>{
     form.append('images[' + index + ']',element.image);
   });
-
-  console.log(use_posts.new_images)
 
   if(use_posts.new_images.length > 0) {
     use_posts.new_images.forEach((element, index)=>{
       form.append('new_images[' + index + ']',element);
     });
-    form.append('new_image', use_posts.new_images[0].image);
+    form.append('new_image', use_posts.new_images[0]);
   } else {
     form.append('image', use_posts.saved_images[0].image);
   }
@@ -106,6 +108,7 @@ async function createAdvertisement() {
       const res = response._data;
       console.log(res)
       if(res.code === 200 ) {
+        use_posts.$reset();
         Swal.fire({
           icon: 'success',
           text:  `${res.message}`,
@@ -114,7 +117,7 @@ async function createAdvertisement() {
         });
         step.value = 6;
         setTimeout(() => {
-          useRouter().push("advertisements?_method=PUT");
+          useRouter().push("/profile?tab=anuncio");
         }, 3000);
       }
 

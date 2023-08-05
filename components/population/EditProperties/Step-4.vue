@@ -294,8 +294,7 @@ watch(price,(new_price) => {
           {{ item.name }}
         </label>
       </div>
-      {{ use_posts.feature }}
-      {{ feature }}
+      <!-- {{ use_posts.feature }} -->
     </div>
     <!-- Superficie de construccion y total -->
     <div class="col-span-3 w-full gap-4 sm:flex sm:mb-2 mb-5">
