@@ -9,13 +9,14 @@ const config = useRuntimeConfig();
 let step = ref(1);
 
 //Obtener anuncio
-Swal.showLoading();
+// Swal.showLoading();
+Swal.showLoading()
 const { data: property, pending, error} = await useLazyFetch(`advertisements/${useRoute().query.property_id}`, {
   method: 'GET',
   baseURL: config.public.API,
   transform:(_property) => _property.results,
   onResponse({response}){
-    Swal.hideLoading();
+    Swal.close()
     if(response.status === 400) {
       return navigateTo('/notFound')
     }
@@ -74,16 +75,23 @@ async function createAdvertisement() {
     form.append(`features[${index}]`, element);
   });
 
-  form.append('image', use_posts.saved_images[0].image);
-  console.log(use_posts.saved_images[0].image)
+  // form.append('image', use_posts.saved_images[0].image);
+  // console.log(use_posts.saved_images[0].image)
 
   use_posts.saved_images.forEach((element, index)=>{
     form.append('images[' + index + ']',element.image);
   });
 
-  use_posts.new_images.forEach((element, index)=>{
-    form.append('new_images[' + index + ']',element);
-  });
+  console.log(use_posts.new_images)
+
+  if(use_posts.new_images.length > 0) {
+    use_posts.new_images.forEach((element, index)=>{
+      form.append('new_images[' + index + ']',element);
+    });
+    form.append('new_image', use_posts.new_images[0].image);
+  } else {
+    form.append('image', use_posts.saved_images[0].image);
+  }
 
   await useFetch('advertisements?_method=PUT',{
     method: 'POST',

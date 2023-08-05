@@ -25,7 +25,7 @@ export const usePostsStore = defineStore('posts', {
       meter_2: '',
       description: '',
       saved_images: null,
-      new_images: null
+      new_images: []
     }
   }
 });

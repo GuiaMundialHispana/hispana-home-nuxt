@@ -27,7 +27,9 @@ function previewFiles(event) {
         savedImages.value.push(images[i]);
         newPreview.value.push(URL.createObjectURL(file));
         fileFormat.value = true;
-        use_posts.new_images = savedImages.value;
+        use_posts.new_images.push(savedImages.value);
+
+        // use_posts.new_images = savedImages.value;
         //
         // const unifiedArray = newPreview.value.concat(previewImages);
         // previewImages.forEach((element, index)=>{
@@ -48,6 +50,15 @@ function setFirtsImg(array, index) {
     array.unshift(imgToMove);
   }
 };
+
+let previewPortada = ref(false);
+let newPortada = ref(false);
+watch(newPreview.value, (newx) => {
+  if(newPreview.value.length > 0 ) {
+    console.log()
+    newPortada.value = true;
+  }
+});
 </script>
 
 <template>
@@ -66,48 +77,49 @@ function setFirtsImg(array, index) {
     </div>
     <div class="upload-photos-container">
       <!-- v-if="previewImages.length <= planSelected.quantity" -->
-      <div class="upload-button">
+      <div class="upload-button" v-if="previewImages.length <= planSelected.quantity">
         <div>
           <AtomsIcon name="general/upload" :size=28 class="text-primary-100" />
         </div>
         <p class="text-[#707070]"><span class="text-primary-100">Click para subir</span> o arrastra y suelta SVG, PNG, <br> JPG (max. 800px400px)</p>
         <input type="file" @change="previewFiles" ref="file" multiple="multiple" class="absolute left-0 top-0 scale-[9] cursor-pointer opacity-0">
       </div>
-      <figure v-for="(img, index) in previewImages" :key="index">
-        <img :src="`https://seal-app-4mhut.ondigitalocean.app/${img.image}`" class="w-full h-full object-cover">
-        <AtomsButtons
-          :class="[{cover: index === 0}]"
-          class="absolute top-2 right-2"
-          icon-name="general/trash-can"
-          btn-type="btn-icon"
-          @click="previewImages.splice(index, 1), savedImages.splice(index, 1)"
-        />
-        <AtomsButtons
-          class="top-2 left-2 absolute bg-neutral-white"
-          btn-style="outline-primary"
-          icon-name="general/star"
-          btn-type="btn-icon"
-          :iconSize=20
-          @click="setFirtsImg(previewImages, index), setFirtsImg(savedImages, index)" 
-        />
-        <!-- <p :class="[{cover: index === 0}]">Portada</p> -->
-      </figure>
       <figure v-for="(img, index) in newPreview" :key="index">
         <img :src="img" class="w-full h-full object-cover">
         <AtomsButtons
-          :class="[{cover: index === 0}]"
           class="absolute top-2 right-2"
           icon-name="general/trash-can"
           btn-type="btn-icon"
           @click="newPreview.splice(index, 1), savedImages.splice(index, 1)"
         />
         <AtomsButtons
+          :class="[{newPortada: index === 0}]"
           class="top-2 left-2 absolute bg-neutral-white"
           btn-style="outline-primary"
           icon-name="general/star"
           btn-type="btn-icon"
           :iconSize=20
           @click="setFirtsImg(newPreview, index), setFirtsImg(savedImages, index)" 
+        />
+        <!-- <p :class="[{cover: index === 0}]">Portada</p> -->
+      </figure>
+      <figure v-for="(img, index) in previewImages" :key="index">
+        <img :src="`https://seal-app-4mhut.ondigitalocean.app/${img.image}`" class="w-full h-full object-cover">
+        <AtomsButtons
+          class="absolute top-2 right-2"
+          icon-name="general/trash-can"
+          btn-type="btn-icon"
+          @click="previewImages.splice(index, 1), savedImages.splice(index, 1)"
+        />
+        <AtomsButtons
+          v-if="!newPortada"
+          :class="[{previewPortada: index === 0}]"
+          class="top-2 left-2 absolute bg-neutral-white"
+          btn-style="outline-primary"
+          icon-name="general/star"
+          btn-type="btn-icon"
+          :iconSize=20
+          @click="setFirtsImg(previewImages, index), setFirtsImg(savedImages, index)" 
         />
         <!-- <p :class="[{cover: index === 0}]">Portada</p> -->
       </figure>

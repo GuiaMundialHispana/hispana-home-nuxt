@@ -298,8 +298,8 @@ function save_data() {
           {{ item.name }}
         </label>
       </div>
-      {{ typeof(feature.value) }}
-      {{ feature }}
+      <!-- {{ typeof(feature.value) }}
+      {{ feature }} -->
     </div>
     <!-- Superficie de construccion y total -->
     <div class="col-span-3 w-full gap-4 sm:flex sm:mb-2 mb-5">

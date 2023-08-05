@@ -63,7 +63,7 @@
       </nav>
     </Swiper>
     <!-- <NuxtLink :to="`/edit-property?${propertyId}`">Editar {{propertyId}}</NuxtLink> -->
-    <NuxtLink :to="{
+    <NuxtLink v-if="$route.path === '/profile'" :to="{
       path: `edit-property`,
       query: {
         property_id: propertyId
