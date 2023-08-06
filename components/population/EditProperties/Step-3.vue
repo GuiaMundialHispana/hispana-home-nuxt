@@ -4,6 +4,7 @@ import { usePostsStore } from '~/stores/Post';
 
 const user_store = useUserStore();
 const use_posts = usePostsStore();
+const emit = defineEmits(['back', 'nexts'])
 
 // let plans = [];
 let next = ref(false);
@@ -105,11 +106,11 @@ function send_plan(id,pictures) {
     <AtomsLink link-to="/plans" class="mx-auto my-6">Adquirir mas planes</AtomsLink>
   </div>
   <nav class="control-steps-postProperty">
-    <AtomsButtons @click="$emit('back')" btn-style="outline-primary">
+    <AtomsButtons @click="emit('back')" btn-style="outline-primary">
       Atras
     </AtomsButtons>
     <!-- :disabled="!next" -->
-    <AtomsButtons @click="$emit('nexts')">
+    <AtomsButtons @click="emit('nexts')">
       Continuar
     </AtomsButtons>
   </nav>

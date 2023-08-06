@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { usePostsStore } from '~/stores/Post';
 const use_posts = usePostsStore();
+const emit = defineEmits(['nexts'])
 </script>
 
 <template>
@@ -35,7 +36,7 @@ const use_posts = usePostsStore();
     <AtomsLink btn-style="outline-primary" link-to="/profile?tab=anuncio">
       Cancelar
     </AtomsLink>
-    <AtomsButtons :disabled="use_posts.option_selected === ''" @click="$emit('nexts')">
+    <AtomsButtons :disabled="use_posts.option_selected === ''" @click="emit('nexts')">
       Continuar
     </AtomsButtons>
   </nav>

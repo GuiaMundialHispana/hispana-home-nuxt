@@ -15,6 +15,7 @@ watch(categorySelected,(value) => {
   use_posts.category_id = value;
 });
 
+const emit = defineEmits(['back', 'nexts'])
 </script>
 
 <template>
@@ -58,10 +59,10 @@ watch(categorySelected,(value) => {
     </label>
   </div>
   <nav class="control-steps-postProperty">
-    <AtomsButtons @click="$emit('back')" btn-style="outline-primary">
+    <AtomsButtons @click="emit('back')" btn-style="outline-primary">
       Atras
     </AtomsButtons>
-    <AtomsButtons @click="$emit('nexts')" :disabled="categorySelected === 0">
+    <AtomsButtons @click="emit('nexts')" :disabled="categorySelected === 0">
       Continuar
     </AtomsButtons>
   </nav>

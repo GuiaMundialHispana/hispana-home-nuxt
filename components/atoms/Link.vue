@@ -42,7 +42,7 @@ export default {
       default: "btn"
     },
     linkTo: {
-      type: String,
+      type: String || Object,
       default: ""
     },
     isDisabled: {

@@ -1,6 +1,6 @@
 <script setup>
 import { usePostsStore } from '~/stores/Post';
-
+const emit = defineEmits(['back', 'nexts'])
 const use_posts = usePostsStore();
 const allowedFileTypes = ref(['image/jpeg', 'image/png', 'image/gif', 'image/svg', 'image/svg+xml']);
 let totalImgs = ref(0);
@@ -127,7 +127,7 @@ watch(newPreview.value, (newx) => {
     <p class="text-center mt-16 mb-8">{{ newPreview.length }}/{{planSelected.quantity}} Fotos</p>
   </div>
   <nav class="control-steps-postProperty">
-    <AtomsButtons @click="$emit('back')" btn-style="outline-primary">
+    <AtomsButtons @click="emit('back')" btn-style="outline-primary">
       Atras
     </AtomsButtons>
   </nav>
