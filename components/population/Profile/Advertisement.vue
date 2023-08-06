@@ -25,8 +25,9 @@
           class="md:w-full md:max-w-[230px]"
           @click="checkAdvertisement(item,index)"
         >
-          Anuncios {{item.name}} <span>{{item.size}}</span>
+          Anuncios {{item.name}} <span v-if="item.size !== 0 || item.size !== null || item.size != ''">{{item.size}}</span>
         </AtomsButtons>
+        {{ status[1].size }} z
       </nav>
       <div v-if="tab === 0">
         <div v-if="actives.length > 0">
@@ -37,22 +38,32 @@
                 btn-type="btn-icon"
                 icon-name="general/tune"
                 class="status-button"
+                v-if="show_drop != item.id"
                 @click="show_drop = item.id"
+              />
+              <AtomsButtons
+                btn-type="btn-icon"
+                icon-name="general/close"
+                class="status-button"
+                v-if="show_drop === item.id"
+                @click="show_drop = 0"
               />
               <MoleculesProperty
                 :property="item.property"
                 :property-id="item.id"
               />
-              <div class="status-dropdown" v-if="show_drop === item.id">
-                <div class="flex items-center gap-3 cursor-pointer" @click="api_status = 'inactive', changeStatus(item.id)">
-                  <input type="radio" name="status">
-                  Inactivar
+              <OnClickOutside @trigger="show_drop = 0">
+                <div class="status-dropdown" v-if="show_drop === item.id">
+                  <div class="flex items-center gap-3 cursor-pointer" @click="api_status = 'inactive', changeStatus(item.id)">
+                    <input type="radio" name="status">
+                    Inactivar
+                  </div>
+                  <div class="flex items-center gap-3 cursor-pointer" @click="api_status = 'trashed', changeStatus(item.id)">
+                    <input type="radio" name="status">
+                    Borrar
+                  </div>
                 </div>
-                <div class="flex items-center gap-3 cursor-pointer" @click="api_status = 'trashed', changeStatus(item.id)">
-                  <input type="radio" name="status">
-                  Borrar
-                </div>
-              </div>
+              </OnClickOutside>
             </li>
           </ul>
         </div>
@@ -137,18 +148,28 @@
                 btn-type="btn-icon"
                 icon-name="general/tune"
                 class="status-button"
+                v-if="show_drop != item.id"
                 @click="show_drop = item.id"
+              />
+              <AtomsButtons
+                btn-type="btn-icon"
+                icon-name="general/close"
+                class="status-button"
+                v-if="show_drop === item.id"
+                @click="show_drop = 0"
               />
               <MoleculesProperty
                 :property="item.property"
                 :property-id="item.id"
               />
-              <div class="status-dropdown" v-if="show_drop === item.id">
-                <div class="flex items-center gap-3 cursor-pointer" @click="api_status = 'trashed', changeStatus(item.id)">
-                  <input type="radio" name="status">
-                  Borrar
+              <OnClickOutside @trigger="show_drop = 0">
+                <div class="status-dropdown" v-if="show_drop === item.id">
+                  <div class="flex items-center gap-3 cursor-pointer" @click="api_status = 'trashed', changeStatus(item.id)">
+                    <input type="radio" name="status">
+                    Borrar
+                  </div>
                 </div>
-              </div>
+              </OnClickOutside>
             </li>
           </ul>
         </div>
@@ -169,7 +190,15 @@
                 btn-type="btn-icon"
                 icon-name="general/tune"
                 class="status-button"
+                v-if="show_drop != item.id"
                 @click="show_drop = item.id"
+              />
+              <AtomsButtons
+                btn-type="btn-icon"
+                icon-name="general/close"
+                class="status-button"
+                v-if="show_drop === item.id"
+                @click="show_drop = 0"
               />
               <MoleculesProperty
                 :property="item.property"
@@ -177,12 +206,14 @@
                 status-message="Anuncio Borrado"
                 status-background="bg-neutral-white text-neutral-black font-semibold"
               />
-              <div class="status-dropdown" v-if="show_drop === item.id">
-                <div class="flex items-center gap-3 cursor-pointer" @click="api_status = 'inactive', changeStatus(item.id)">
-                  <input type="radio" name="status">
-                  Inactivar
+              <OnClickOutside @trigger="show_drop = 0">
+                <div class="status-dropdown" v-if="show_drop === item.id">
+                  <div class="flex items-center gap-3 cursor-pointer" @click="api_status = 'inactive', changeStatus(item.id)">
+                    <input type="radio" name="status">
+                    Inactivar
+                  </div>
                 </div>
-              </div>
+              </OnClickOutside>
             </li>
           </ul>
         </div>
@@ -350,6 +381,11 @@ export default {
   }
 }
 </script>
+
+<script setup>
+import { OnClickOutside } from '@vueuse/components';
+</script>
+
 
 <style lang="postcss" scoped>
 

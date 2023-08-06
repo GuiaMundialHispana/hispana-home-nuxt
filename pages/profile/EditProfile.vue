@@ -124,7 +124,10 @@
           <div class="flex flex-col items-center">
             <p class="whitespace-nowrap">Actualiza tu foto de perfil</p>
             <figure class="w-[107px] h-[107px] rounded-full border-[5px] border-primary-50 mt-5">
-              <img :src="`https://seal-app-4mhut.ondigitalocean.app/${editUser.editUserData.profile_pic}`" :alt="editUser.editUserData.name" class="rounded-full w-full h-full object-cover">
+              <img v-if="editUser.editUserData != null || editUser.editUserData != ''" :src="`https://seal-app-4mhut.ondigitalocean.app/${editUser.editUserData.profile_pic}`" :alt="editUser.editUserData.name" class="rounded-full w-full h-full object-cover">
+              <span v-if="editUser.editUserData === null || editUser.editUserData === ''" class="w-full h-full flex items-center justify-center font-bold text-primary-100 text-6xl rounded-full border-2 border-primary-100 bg-primary-50">
+                {{user.userData.name.charAt(0)}}{{ user.userData.lastname.charAt(0) }}
+              </span>
             </figure>
           </div>
         </div>
