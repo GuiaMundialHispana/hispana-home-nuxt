@@ -64,7 +64,7 @@
       <!-- User information -->
       <div class="lg:col-span-4 md:col-span-8 md:col-start-3 col-span-12 pb-4 border-b border-gray-100 h-max">
         <figure class="user-image">
-          <img :src="`https://seal-app-4mhut.ondigitalocean.app/api/v1/${user.profile_pic}`" :alt="user.name">
+          <img :src="`https://seal-app-4mhut.ondigitalocean.app/${user.profile_pic}`" :alt="user.name">
         </figure>
         <h6 class="user-name">{{ user.name }} {{ user.lastname }}</h6>
         <p class="user-position">Vendedor inmobiliario</p>

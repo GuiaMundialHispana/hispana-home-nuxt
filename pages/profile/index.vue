@@ -3,7 +3,7 @@
     <div class="xl:container mx-auto lg:px-16 md:px-8 px-4">
       <div class="profile-wrapper">
         <figure class="profile-image" v-if="user.userData.name != null || user.userData.name !== ''">
-          <img :src="`https://seal-app-4mhut.ondigitalocean.app/${user.userData.profile_pic}`" v-if="user.userData.profile_pic != null || ''" :alt="user.userData.name">
+          <img v-if="user.userData.profile_pic != null || ''"  :src="`https://seal-app-4mhut.ondigitalocean.app/${user.userData.profile_pic}`" :alt="user.userData.name">
           <span v-else class="w-[117px] h-[117px] flex items-center justify-center font-bold text-primary-100 text-6xl rounded-full border-2 border-primary-100 bg-primary-50">
             {{user.userData.name.charAt(0)}}{{ user.userData.lastname.charAt(0) }}
           </span>
