@@ -252,10 +252,29 @@ export default {
       this.form.append('email', this.editUser.editUserData.email)
       this.form.append('name', this.editUser.editUserData.name);
       this.form.append('lastname', this.editUser.editUserData.lastname);
-      this.form.append('birthdate', this.editUser.editUserData.birthdate);
-      this.form.append('country_id', this.editUser.editUserData.country_id);
-      this.form.append('cellphone', this.editUser.editUserData.cellphone);
-      this.form.append('phone', this.editUser.editUserData.phone);
+      if(this.editUser.editUserData.phone === '' || this.editUser.editUserData.phone === null ) {
+        this.form.append('phone', 123456789);
+      } else {
+        this.form.append('phone', this.editUser.editUserData.phone);
+      }
+
+      if(this.editUser.editUserData.birthdate === '' ||this.editUser.editUserData.birthdate === null ) {
+        this.form.append('birthdate', '');
+      } else {
+        this.form.append('birthdate', this.editUser.editUserData.birthdate);
+      }
+
+      if(this.editUser.editUserData.cellphone === '' || this.editUser.editUserData.cellphone === null ) {
+        this.form.append('cellphone', 12345678);
+      } else {
+        this.form.append('cellphone', this.editUser.editUserData.cellphone);
+      }
+
+      if(this.editUser.editUserData.country_id === '' || this.editUser.editUserData.country_id === null || this.editUser.editUserData.country_id === 0) {
+        this.form.append('country_id', 12345678);
+      } else {
+        this.form.append('country_id', this.editUser.editUserData.country_id);
+      }
 
       await useFetch('users/update?_method=PUT',{
         method: 'POST',
