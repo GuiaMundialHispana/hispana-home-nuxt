@@ -4,6 +4,7 @@ import { usePostsStore } from '~/stores/Post';
 
 const use_posts = usePostsStore();
 const config = useRuntimeConfig();
+const emit = defineEmits(['back', 'nexts'])
 const currencyTab = ref(true);
 let price = ref(Number);
 let price_us = ref(Number);
@@ -31,6 +32,7 @@ let categories = [];
 let lat = null;
 let log = null;
 let address = ref('');
+let pricePlaceholder = ref('pesos dominicanos');
 
 let countriesApi = await $fetch('generals/countries', {
   baseURL: config.public.API
@@ -314,10 +316,10 @@ watch(price,(new_price) => {
     </div>
   </div>
   <nav class="control-steps-postProperty">
-    <AtomsButtons @click="$emit('back')" btn-style="outline-primary">
+    <AtomsButtons @click="emit('back')" btn-style="outline-primary">
       Atras
     </AtomsButtons>
-    <AtomsButtons @click="$emit('nexts')">
+    <AtomsButtons @click="emit('nexts')">
       Continuar
     </AtomsButtons>
   </nav>
