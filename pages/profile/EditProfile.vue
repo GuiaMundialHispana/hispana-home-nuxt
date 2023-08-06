@@ -124,7 +124,10 @@
           <div class="flex flex-col items-center">
             <p class="whitespace-nowrap">Actualiza tu foto de perfil</p>
             <figure class="w-[107px] h-[107px] rounded-full border-[5px] border-primary-50 mt-5">
-              <img :src="`https://seal-app-4mhut.ondigitalocean.app/${editUser.editUserData.profile_pic}`" :alt="editUser.editUserData.name" class="rounded-full w-full h-full object-cover">
+              <img v-if="editUser.editUserData != null || editUser.editUserData != ''" :src="`https://seal-app-4mhut.ondigitalocean.app/${editUser.editUserData.profile_pic}`" :alt="editUser.editUserData.name" class="rounded-full w-full h-full object-cover">
+              <span v-if="editUser.editUserData === null || editUser.editUserData === ''" class="w-full h-full flex items-center justify-center font-bold text-primary-100 text-6xl rounded-full border-2 border-primary-100 bg-primary-50">
+                {{user.userData.name.charAt(0)}}{{ user.userData.lastname.charAt(0) }}
+              </span>
             </figure>
           </div>
         </div>
@@ -252,10 +255,29 @@ export default {
       this.form.append('email', this.editUser.editUserData.email)
       this.form.append('name', this.editUser.editUserData.name);
       this.form.append('lastname', this.editUser.editUserData.lastname);
-      this.form.append('birthdate', this.editUser.editUserData.birthdate);
-      this.form.append('country_id', this.editUser.editUserData.country_id);
-      this.form.append('cellphone', this.editUser.editUserData.cellphone);
-      this.form.append('phone', this.editUser.editUserData.phone);
+      if(this.editUser.editUserData.phone === '' || this.editUser.editUserData.phone === null ) {
+        this.form.append('phone', 123456789);
+      } else {
+        this.form.append('phone', this.editUser.editUserData.phone);
+      }
+
+      if(this.editUser.editUserData.birthdate === '' ||this.editUser.editUserData.birthdate === null ) {
+        this.form.append('birthdate', '');
+      } else {
+        this.form.append('birthdate', this.editUser.editUserData.birthdate);
+      }
+
+      if(this.editUser.editUserData.cellphone === '' || this.editUser.editUserData.cellphone === null ) {
+        this.form.append('cellphone', 12345678);
+      } else {
+        this.form.append('cellphone', this.editUser.editUserData.cellphone);
+      }
+
+      if(this.editUser.editUserData.country_id === '' || this.editUser.editUserData.country_id === null || this.editUser.editUserData.country_id === 0) {
+        this.form.append('country_id', 12345678);
+      } else {
+        this.form.append('country_id', this.editUser.editUserData.country_id);
+      }
 
       await useFetch('users/update?_method=PUT',{
         method: 'POST',

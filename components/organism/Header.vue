@@ -37,6 +37,9 @@
             <li class="user-wrapper" v-if="auth.isLoggedIn" @click="userDropdown = !userDropdown">
               <div class="flex items-center gap-2">
                 <img :src="`https://seal-app-4mhut.ondigitalocean.app/${user.userData.profile_pic}`" v-if="user.userData.profile_pic != null || ''" :alt="user.userData.name">
+                <span v-else class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-primary-100 text-sm border border-primary-100 bg-primary-50">
+                  {{user.userData.name.charAt(0)}}{{ user.userData.lastname.charAt(0) }}
+                </span>
                 <img src="/img/user.jpg" v-if="user.userData.profile_pic === null || ''" :alt="user.userData.name">
                 {{ user.userData.name }} {{ user.userData.lastname }}
                 <AtomsIcon name="arrows/arrow-down" v-show="!userDropdown" :size=15 class="text-primary-100" />
