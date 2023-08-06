@@ -178,12 +178,6 @@ watch(price,(new_price) => {
     <div class="flex col-span-3 sm:mb-2 mb-5">
       <label class="w-full">
         Precio
-        <!-- <input v-if="currencyTab"
-          class="form-control"
-          v-model="use_posts.price"
-          placeholder="Precio Dominicano"
-          @blur="currencyFormat"
-        > -->
         <input
           class="form-control"
           v-model="use_posts.price"
@@ -233,18 +227,18 @@ watch(price,(new_price) => {
         </option>
       </select>
     </label>
-    <!-- Sector -->
+    <!-- Ciudad -->
     <label class="w-full sm:mb-2 mb-5" v-if="displaySector">
-      Sector
+      Ciudad
       <select class="form-control col-span-3" v-model="sector">
         <option v-for="sector in sectors[0]" :value="sector.id" :key="sector.id" class="option-label">
         {{ sector.name }}
         </option>
       </select>
     </label>
-    <!-- Ciudad -->
+    <!-- Sector -->
     <label class="w-full sm:mb-2 mb-5" v-if="displayCity">
-      Ciudad
+      Sector
       <select class="form-control" v-model="city">
         <option v-for="item in cities[0]" :value="item.id" :key="item.id" class="option-label">
         {{ item.name }}
