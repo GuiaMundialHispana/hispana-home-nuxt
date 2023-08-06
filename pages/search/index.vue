@@ -12,7 +12,8 @@
       >Filtrar propiedades
     </AtomsButtons>
     <OnClickOutside @trigger="showFilters = false" :class="{'hidden': !showFilters, 'flex' : showFilters}" class="filters-overflow">
-      <AtomsButtons 
+      <AtomsButtons
+        v-show="viewport.isLessThan('lg')"
         btn-type="btn-icon"
         icon-name="general/close"
         :icon-size=20
