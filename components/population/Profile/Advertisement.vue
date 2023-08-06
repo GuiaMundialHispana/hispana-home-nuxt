@@ -27,7 +27,6 @@
         >
           Anuncios {{item.name}} <span v-if="item.size !== 0 || item.size !== null || item.size != ''">{{item.size}}</span>
         </AtomsButtons>
-        {{ status[1].size }} z
       </nav>
       <div v-if="tab === 0">
         <div v-if="actives.length > 0">
