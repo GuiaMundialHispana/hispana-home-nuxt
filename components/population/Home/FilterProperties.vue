@@ -129,17 +129,17 @@
           <p class="flex justify-between text-base text-neutral-black">
             Precio
             <label for="RD" class="price-btn ml-auto">
-              <input type="radio" id="RD" value="RD" v-model="picked">
+              <input type="radio" id="RD" value="RD" name="currency" checked v-model="picked">
             </label>
             <label for="USD" class="price-btn">
-              <input type="radio" id="USD" value="USD" checked v-model="picked">
+              <input type="radio" id="USD" value="USD" name="currency" v-model="picked">
             </label>
           </p>
           <MultiRangeSlider class="mx-auto mt-[14px] w-[200px]"
             baseClassName="multi-range-slider-bar-only"
             :min="0"
-            :max="55000000"
-            :step="500000"
+            :max="maxPrice"
+            :step="priceRangeSteps"
             :ruler="false"
             :label="false"
             :minValue="barMinValue"
@@ -200,9 +200,10 @@ export default {
         sector: false,
       },
       barMinValue:0,
-      barMaxValue:1000000,
-      showBarMinValue: 0,
-      showBarMaxValue:0,
+      barMaxValue:10000000,
+      showBarMinValue: '0',
+      showBarMaxValue:"10,000,000",
+      maxPrice: 50000000,
       countries: [],
       country_id:0,
       cities:[],
@@ -211,8 +212,9 @@ export default {
       categories: [],
       category_id: 0,
       state_id:0,
-      picked:'USD',
+      picked:'RD',
       price:'',
+      priceRangeSteps: 500000,
       bedroomQuantity:0,
       bathroomQuantity:0,
       parkingLotQuantity:0,
@@ -230,9 +232,9 @@ export default {
     UpdateValues(e) {
       this.barMinValue = e.minValue;
       this.barMaxValue = e.maxValue;
-      this.showBarMinValue = this.barMinValue.toString();
-      this.showBarMaxValue = this.barMaxValue.toString();
-      this.price = this.showBarMinValue + '-' + this.showBarMaxValue;
+      this.showBarMinValue = this.barMinValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      this.showBarMaxValue = this.barMaxValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      this.price = this.barMinValue.toString() + '-' + this.barMaxValue.toString();
     },
     toggleList(list) {
       if (this.dropdownLists[list]) {
@@ -271,6 +273,21 @@ export default {
   watch: {
     picked(newPicked) {
       this.queryBody.price_type = newPicked;
+      if (newPicked === 'USD') {
+        this.barMinValue = 0,
+        this.barMaxValue = 1000000,
+        this.showBarMinValue = '0';
+        this.showBarMaxValue = '1,000,000';
+        this.maxPrice = 3000000;
+        this.priceRangeSteps = 50000;
+      } else{
+        this.barMinValue = 0,
+        this.barMaxValue = 10000000,
+        this.showBarMinValue = '0';
+        this.showBarMaxValue = '10,000,000';
+        this.maxPrice = 50000000;
+        this.priceRangeSteps = 500000;
+      }
     },
     price(price) {
       this.queryBody.price = price;
