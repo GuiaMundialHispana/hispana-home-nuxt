@@ -13,6 +13,14 @@
     </AtomsButtons>
     <OnClickOutside @trigger="showFilters = false" :class="{'hidden': !showFilters, 'flex' : showFilters}" class="filters-overflow">
       <div class="flex flex-wrap gap-2 xl:flex-row flex-col">
+      <AtomsButtons 
+        btn-type="btn-icon"
+        icon-name="general/close"
+        :icon-size=20
+        btn-size="small"
+        class="mr-0 ml-auto"
+        @click="showFilters = false"
+      />
         <MoleculesFilterStatusProperties class="filterStatus-tabs-sm" />
         <MoleculesSearchFiltersBar @send-properties="getFilterResults" />
       </div>

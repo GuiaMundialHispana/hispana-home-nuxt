@@ -224,18 +224,18 @@ function save_data() {
         </option>
       </select>
     </label>
-    <!-- Sector -->
+    <!-- Ciudad -->
     <label class="w-full sm:mb-2 mb-5" v-if="displaySector">
-      Sector
+      Ciudad
       <select class="form-control col-span-3" v-model="sector">
         <option v-for="sector in sectors[0]" :value="sector.id" :key="sector.id" class="option-label">
         {{ sector.name }}
         </option>
       </select>
     </label>
-    <!-- Ciudad -->
+    <!-- Sector -->
     <label class="w-full sm:mb-2 mb-5" v-if="displayCity">
-      Ciudad
+      Sector
       <select class="form-control" v-model="city">
         <option v-for="item in cities[0]" :value="item.id" :key="item.id" class="option-label">
         {{ item.name }}
@@ -268,20 +268,6 @@ function save_data() {
     <!-- Amenidades -->
     <div class="col-span-3">
       <label for="amenities" class="mb-2">Otras amenidades</label>
-      <!-- <select
-        id="amenities"
-        class="form-control select-multiple col-span-3 sm:mb-2 mb-5"
-        v-model="feature"
-        multiple>
-        <option
-          v-for="item in features"
-          :value="item.id"
-          :key="item"
-          class="option-label"
-        >
-          {{ item.name }}
-        </option>
-      </select> -->
       <div class="amenities-wrapper scrollbar">
         <label 
           v-for="item in features"
@@ -298,8 +284,6 @@ function save_data() {
           {{ item.name }}
         </label>
       </div>
-      <!-- {{ typeof(feature.value) }}
-      {{ feature }} -->
     </div>
     <!-- Superficie de construccion y total -->
     <div class="col-span-3 w-full gap-4 sm:flex sm:mb-2 mb-5">
@@ -337,7 +321,6 @@ label {
 .form-control {
   @apply h-8 w-full border border-[#D9D9D9] text-sm rounded-md px-3 placeholder:text-opacity-25 placeholder:font-normal focus:outline-primary-100;
 }
-
 .select-multiple { @apply h-40; }
 .price-btn {
   @apply border-y border-gray-300 text-primary-100 w-[37px] h-8 text-[12px] mb-0 mt-auto ;

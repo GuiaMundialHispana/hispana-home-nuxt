@@ -100,11 +100,15 @@
     },
     watch: {
       initial(){
-        if (this.initial >= this.property.price_us) {
-          this.initial = this.property.price_us - (this.property.price_us * 0.05)
-        };
-        this.getPercentage(this.initial, this.property.price_us);
-        this.calculateEstimatedQuota(this.interest, this.initial, this.years,this.property.price_us )
+        if (this.initial < 0) {
+          this.initial = 0;
+        } else {
+            if (this.initial >= this.property.price_us) {
+            this.initial = this.property.price_us - (this.property.price_us * 0.05)
+          };
+          this.getPercentage(this.initial, this.property.price_us);
+          this.calculateEstimatedQuota(this.interest, this.initial, this.years,this.property.price_us )
+          }
       },
       years(){
         this.calculateEstimatedQuota(this.interest, this.initial, this.years,this.property.price_us )
