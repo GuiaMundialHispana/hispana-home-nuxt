@@ -8,18 +8,18 @@
       @click="toggleFavorite()"
       v-if="$route.fullPath != '/profile?tab=anuncio'"
     />
-    <AtomsLink
+    <NuxtLink
       :link-to="{
         path: `edit-property`,
         query: {
           property_id: propertyId
         }
       }"
-      btn-type="btn-icon"
-      icon-name="general/pencil"
-      class="active absolute left-4 z-10 top-1"
+      class="btn-icon small active absolute left-4 z-10 top-1"
       v-if="$route.fullPath === '/profile?tab=anuncio'"
-    />
+    >
+      <AtomsIcon name="general/pencil" class="text-neutral-white" />
+    </NuxtLink>
     <Swiper
       class="relative rounded-lg overflow-hidden"
       :modules="[SwiperAutoplay, SwiperEffectCreative]"
@@ -260,6 +260,12 @@ article {
       @apply py-1.5 px-[15px] rounded-lg text-base w-fit text-center min-w-[209px];
     }
   }
-}
 
+  & .btn-icon {
+    @apply bg-primary-100 inline-flex justify-center items-center no-underline cursor-pointer duration-300 focus:outline-none;
+
+    &.small { @apply w-8 rounded-full h-8; }
+  }
+
+}
 </style>
