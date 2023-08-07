@@ -9,7 +9,7 @@
       v-if="$route.fullPath != '/profile?tab=anuncio'"
     />
     <NuxtLink
-      :link-to="{
+      :to="{
         path: `edit-property`,
         query: {
           property_id: propertyId
