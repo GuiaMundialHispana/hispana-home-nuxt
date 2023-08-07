@@ -12,6 +12,15 @@
       >Filtrar propiedades
     </AtomsButtons>
     <OnClickOutside @trigger="showFilters = false" :class="{'hidden': !showFilters, 'flex' : showFilters}" class="filters-overflow">
+      <AtomsButtons
+        v-show="viewport.isLessThan('lg')"
+        btn-type="btn-icon"
+        icon-name="general/close"
+        :icon-size=20
+        btn-size="small"
+        class="mr-0 ml-auto"
+        @click="showFilters = false"
+      />
       <div class="flex flex-wrap gap-2 xl:flex-row flex-col">
         <MoleculesFilterStatusProperties class="filterStatus-tabs-sm" />
         <MoleculesSearchFiltersBar @send-properties="getFilterResults" />
