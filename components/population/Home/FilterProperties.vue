@@ -44,7 +44,7 @@
             </div>
           </OnClickOutside>
           <button v-if="states.length > 0" class="sector-filter-btn" :class="{'active': dropdownLists.sector}" @click="toggleList('sector')">
-            Sector <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16 />
+            Ciudad <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16 />
           </button>
           <OnClickOutside @trigger="toggleList('sector')" v-if="dropdownLists.sector">
             <div class="dropdown-wrapper scrollbar mt-[5px] min-h-max max-h-[273px]">
@@ -62,7 +62,7 @@
             </div>
           </OnClickOutside>
           <button v-if="cities.length > 0" class="sector-filter-btn" :class="{'active': dropdownLists.city}" @click="toggleList('city')">
-            Ciudad <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16></AtomsIcon>
+            Sector <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16></AtomsIcon>
           </button>
           <OnClickOutside @trigger="toggleList('city')" v-if="dropdownLists.city" >
             <div class="dropdown-wrapper scrollbar mt-[5px] min-h-max max-h-[273px]">
