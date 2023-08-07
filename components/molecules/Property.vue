@@ -38,6 +38,10 @@
         next: {
           translate: ['100%', 0, 0],
         },
+      }"
+      :navigation="{
+        nextEl: '.next',
+        prevEl: '.prev'
       }">
       <SwiperSlide>
         <NuxtLink class="bg-gray-10" :to="{
@@ -57,13 +61,14 @@
         </NuxtLink>
       </SwiperSlide>
       <AtomsPropertyPlans class="absolute bottom-0 right-0 z-10" />
-      <nav v-if="property.images">
+      <!-- <nav v-if="property.images">
         <AtomsButtons
           btn-type="btn-icon"
           btn-size="xsmall"
           btn-style="outline-gray"
           icon-name="arrows/arrow-left"
           :icon-size=15
+          class="prev"
         />
         <AtomsButtons
           btn-type="btn-icon"
@@ -71,8 +76,9 @@
           btn-style="outline-gray"
           icon-name="arrows/arrow-right"
           :icon-size=15
+          class="next"
         />
-      </nav>
+      </nav> -->
     </Swiper>
     <NuxtLink :to="{
       path: `/search/${property.name}`,

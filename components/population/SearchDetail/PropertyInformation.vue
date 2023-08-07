@@ -65,8 +65,8 @@
       <div class="lg:col-span-4 md:col-span-8 md:col-start-3 col-span-12 pb-4 border-b border-gray-100 h-max">
         <figure class="user-image">
           <img v-if="user.profile_pic != null" :src="`https://seal-app-4mhut.ondigitalocean.app/${user.profile_pic}`" :alt="user.name">
-          <span v-else class="w-24 h-24 rounded-full flex items-center justify-center font-bold text-primary-100 text-sm border border-primary-100 bg-primary-50">
-            {{user.userData.name.charAt(0)}}{{ user.userData.lastname.charAt(0) }}
+          <span v-else class="w-full h-full flex items-center justify-center font-bold text-primary-100 text-2xl uppercase bg-primary-50">
+            {{user.name.charAt(0)}}{{ user.lastname.charAt(0) }}
           </span>
         </figure>
         <h6 class="user-name">{{ user.name }} {{ user.lastname }}</h6>
