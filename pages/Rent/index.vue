@@ -14,7 +14,7 @@
     <OnClickOutside @trigger="showFilters = false" :class="{'hidden': !showFilters, 'flex' : showFilters}" class="filters-overflow">
       <div class="flex flex-wrap gap-2 xl:flex-row flex-col">
       <AtomsButtons 
-        v-show="viewport.isLessThan('lg')"
+        v-show="viewport.isLessThan('xl')"
         btn-type="btn-icon"
         icon-name="general/close"
         :icon-size=20

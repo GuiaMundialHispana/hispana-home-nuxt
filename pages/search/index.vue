@@ -13,7 +13,7 @@
     </AtomsButtons>
     <OnClickOutside @trigger="showFilters = false" :class="{'hidden': !showFilters, 'flex' : showFilters}" class="filters-overflow">
       <AtomsButtons
-        v-show="viewport.isLessThan('lg')"
+        v-show="viewport.isLessThan('xl')"
         btn-type="btn-icon"
         icon-name="general/close"
         :icon-size=20
