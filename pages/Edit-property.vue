@@ -86,11 +86,22 @@ async function createAdvertisement() {
     form.append('images[' + index + ']',element.image);
   });
 
+  // images = arregloe de string de las imagenes que recibo
+  // image = campo donde mando la imagen como portada
+  // new_images = array de FILES de las nuevas imagenes
+  // new_image = la imagen de portada que debe ser un FILE cuando cambian la imagen de portada
+
   if(use_posts.new_images.length > 0) {
+    // arreglo de las nuevas imagenes
     use_posts.new_images.forEach((element, index)=>{
       form.append('new_images[' + index + ']',element);
     });
-    form.append('new_image', use_posts.new_images[0]);
+    //portada
+    if(use_posts.testPortada){
+      form.append('new_image', use_posts.new_images[0]);
+    } else {
+      form.append('image', use_posts.saved_images[0].image);
+    }
   } else {
     form.append('image', use_posts.saved_images[0].image);
   }

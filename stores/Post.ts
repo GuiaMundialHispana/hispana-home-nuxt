@@ -25,7 +25,9 @@ export const usePostsStore = defineStore('posts', {
       meter_2: '',
       description: '',
       saved_images: [],
-      new_images: []
+      new_images: [],
+      new_portada: File || '',
+      testPortada: false,
     }
   }
 });

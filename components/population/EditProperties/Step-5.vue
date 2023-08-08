@@ -8,6 +8,7 @@ let savedImages= ref([]);
 let previewImages = use_posts.saved_images;
 let newPreview = ref([]);
 let fileFormat = ref(true);
+let testPortada = use_posts.testPortada;
 let planSelected = {
   id: use_posts.plan_id,
   quantity: use_posts.plan_pictures
@@ -76,7 +77,6 @@ watch(newPreview.value, (newx) => {
       </p>
     </div>
     <div class="upload-photos-container">
-      <!-- v-if="previewImages.length <= planSelected.quantity" -->
       <div class="upload-button" v-if="previewImages.length <= planSelected.quantity">
         <div>
           <AtomsIcon name="general/upload" :size=28 class="text-primary-100" />
@@ -84,6 +84,7 @@ watch(newPreview.value, (newx) => {
         <p class="text-[#707070]"><span class="text-primary-100">Click para subir</span> o arrastra y suelta SVG, PNG, <br> JPG (max. 800px400px)</p>
         <input type="file" @change="previewFiles" ref="file" multiple="multiple" class="absolute left-0 top-0 scale-[9] cursor-pointer opacity-0">
       </div>
+      <!-- Estas son las que subo -->
       <figure v-for="(img, index) in newPreview" :key="index">
         <img :src="img" class="w-full h-full object-cover">
         <AtomsButtons
@@ -93,16 +94,17 @@ watch(newPreview.value, (newx) => {
           @click="newPreview.splice(index, 1), savedImages.splice(index, 1)"
         />
         <AtomsButtons
-          :class="[{newPortada: index === 0}]"
+          :class="[{newPortada: index === 0 && use_posts.testPortada}]"
           class="top-2 left-2 absolute bg-neutral-white"
           btn-style="outline-primary"
           icon-name="general/star"
           btn-type="btn-icon"
           :iconSize=20
-          @click="setFirtsImg(newPreview, index), setFirtsImg(savedImages, index)" 
+          @click="setFirtsImg(newPreview, index), setFirtsImg(savedImages, index), use_posts.testPortada = true" 
         />
-        <!-- <p :class="[{cover: index === 0}]">Portada</p> -->
+        <p :class="[{cover: index === 0 && use_posts.testPortada}]">Portada</p>
       </figure>
+      <!-- estas son las que traigo del api -->
       <figure v-for="(img, index) in previewImages" :key="index">
         <img :src="`https://seal-app-4mhut.ondigitalocean.app/${img.image}`" class="w-full h-full object-cover">
         <AtomsButtons
@@ -112,16 +114,15 @@ watch(newPreview.value, (newx) => {
           @click="previewImages.splice(index, 1), savedImages.splice(index, 1)"
         />
         <AtomsButtons
-          v-if="!newPortada"
-          :class="[{previewPortada: index === 0}]"
+          :class="[{previewPortada: index === 0 && !use_posts.testPortada}]"
           class="top-2 left-2 absolute bg-neutral-white"
           btn-style="outline-primary"
           icon-name="general/star"
           btn-type="btn-icon"
           :iconSize=20
-          @click="setFirtsImg(previewImages, index), setFirtsImg(savedImages, index)" 
+          @click="setFirtsImg(previewImages, index), setFirtsImg(savedImages, index), use_posts.testPortada = false" 
         />
-        <!-- <p :class="[{cover: index === 0}]">Portada</p> -->
+        <p :class="[{cover: index === 0 && !use_posts.testPortada}]">Portada</p>
       </figure>
     </div>
     <p class="text-center mt-16 mb-8">{{ newPreview.length }}/{{planSelected.quantity}} Fotos</p>
