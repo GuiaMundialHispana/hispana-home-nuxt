@@ -43,7 +43,8 @@
     </div>
     <div class="my-4 w-full">
       <slot v-if="seleccionado && $route.path != '/PostProperty'" />
-      <AtomsButtons v-if="plan.id != 4 || userQuantity != 0"
+      <!-- plan.id != 4 || userQuantity != 0-->
+      <AtomsButtons 
         @click="payment()"
         btn-style="outline-gray"
         class="w-full">
