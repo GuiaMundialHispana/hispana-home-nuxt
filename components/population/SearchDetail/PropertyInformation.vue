@@ -49,11 +49,11 @@
         <ul class="short-information">
           <li class="md:border-r border-primary-100 xl:pr-14 md:pr-8">
             <AtomsIcon name="general/share-location" :size=19 class="text-primary-100 mr-2.5" />
-            Autopista San Isidro
+            {{ property.address }}
           </li>
           <li class="md:border-r border-primary-100 xl:px-14 md:px-8">
             <AtomsIcon name="general/status" :size=19 class="text-primary-100 mr-2.5" />
-            Estado: Nuevo
+            Estado: {{ property.property_status === 'New' ? 'Nuevo' : 'Usado' }}
           </li>
           <li class="xl:pl-14 md:pl-8">
             <AtomsIcon name="general/calendar_month" :size=19 class="text-primary-100 mr-2.5" />
