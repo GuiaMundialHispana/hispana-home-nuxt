@@ -1,5 +1,5 @@
 <template>
-  <section class="lg:px-16 md:px-8 px-4">
+  <section class="lg:px-16 md:px-8 px-4 md:min-h-screen">
     <AtomsButtons
       v-show="viewport.isLessThan('xl')"
       class="mt-5 font-semibold w-full"
