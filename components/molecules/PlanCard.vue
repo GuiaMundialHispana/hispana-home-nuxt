@@ -1,6 +1,7 @@
 <template>
   <div class="plan-wrapper">
-    <span class="user-quantity" v-if="plan.id != 4 && $route.path === '/PostProperty' || $route.path === '/postProperty' || $route.path === '/edit-property'">
+    <!-- plan.id != 4 &&   -->
+    <span class="user-quantity" v-if="$route.path === '/PostProperty' || $route.path === '/postProperty' || $route.path === '/edit-property'">
       {{ userQuantity }}
     </span>
     <span class="plan-category" :class="[renderPlanText]">{{ plan.name }}</span>
@@ -26,15 +27,18 @@
         Exclusividad en página de inicio
       </li>
     </ul>
-    <div class="action-buttons" v-if="plan.id != 4 && $route.path === '/profile' || $route.path === '/plans'">
+    <!-- plan.id != 4 &&   -->
+    <div class="action-buttons" v-if="$route.path === '/profile' || $route.path === '/plans'">
       <div class="plan-quantity">
-        <button @click="planQuantity--">-</button>
+        <button :disabled="planQuantity < 2" @click="planQuantity--">-</button>
         <input type="number" readonly :value="planQuantity">
         <button @click="planQuantity++">+</button>
       </div>
       <!--  -->
       <AtomsButtons btn-size="xsmall" class="w-full">
-        <span class="total-plans">{{ planQuantity }}</span> RD$ {{ updatePrice  }}
+        <span class="total-plans">{{ planQuantity }}</span>
+        <p v-if="updatePrice > 0">RD$ {{ updatePrice  }}</p>
+        <p v-else>Gratis</p>
       </AtomsButtons>
     </div>
     <div class="my-4 w-full" v-if="$route.path != '/PostProperty'">
