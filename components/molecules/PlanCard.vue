@@ -41,8 +41,8 @@
         <p v-else>Gratis</p>
       </AtomsButtons>
     </div>
-    <div class="my-4 w-full" v-if="$route.path != '/PostProperty'">
-      <slot v-if="seleccionado" />
+    <div class="my-4 w-full">
+      <slot v-if="seleccionado && $route.path != '/PostProperty'" />
       <AtomsButtons v-if="plan.id != 4 || userQuantity != 0"
         @click="payment()"
         btn-style="outline-gray"

@@ -66,19 +66,27 @@ async function createAdvertisement() {
 
       if(res.code === 400) {
         let errors = response._data.message;
-        Swal.fire({
-          icon: 'error',
-          html: '<ul></ul>',
-          didOpen: () => {
-            const b = Swal.getHtmlContainer().querySelector('ul');
-            Object.keys(errors).forEach(clave => {
-              const li = document.createElement('li');
-              li.classList.add('text-primary-100', 'text-left', 'text-sm', 'mb-2')
-              li.textContent = errors[clave];
-              b.appendChild(li);
-            });
-          },
-        });
+        if(typeof errors === 'string') {
+          Swal.fire({
+            icon: 'error',
+            text:  `${errors}`,
+            timer: 4000
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            html: '<ul></ul>',
+            didOpen: () => {
+              const b = Swal.getHtmlContainer().querySelector('ul');
+              Object.keys(errors).forEach(clave => {
+                const li = document.createElement('li');
+                li.classList.add('text-primary-100', 'text-left', 'text-sm', 'mb-2')
+                li.textContent = errors[clave];
+                b.appendChild(li);
+              });
+            },
+          });
+        }
       }
     }    
   });
