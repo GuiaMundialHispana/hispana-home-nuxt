@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<PopulationHomeHero />
+		<OrganismExclusiveProperties />
 		<OrganismVipProperties />
 		<OrganismSilverProperties />
-		<OrganismExclusiveProperties />
 		<PopulationHomeBenefits />
 		<OrganismExploreProperties :property_id=1 />
 	</div>

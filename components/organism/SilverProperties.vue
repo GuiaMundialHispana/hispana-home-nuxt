@@ -56,9 +56,6 @@
       </swiper-slide>
     </Swiper>
   </section>
-  <div v-if="pending">
-    <OrganismSkeleton class="w-12 h-8"></OrganismSkeleton>
-  </div>
 </template>
 
 <script setup>
