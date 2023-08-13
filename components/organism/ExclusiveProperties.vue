@@ -4,7 +4,7 @@
       <h2 class="text-[28px] leading-8 text-center md:text-left mx-auto md:mx-0 font-medium">
         Propiedades Exclusivas
       </h2>
-      <nav class="hidden md:flex gap-4">
+      <nav class="hidden md:flex gap-4" v-if="property.length >= 4">
         <AtomsButtons class="prevExcl" btn-type="btn-icon" btn-style="outline-gray" icon-name="arrows/arrow-left" btn-size="xsmall" :icon-size=15 />
         <AtomsButtons class="nextExcl" btn-type="btn-icon" btn-style="outline-gray" icon-name="arrows/arrow-right" btn-size="xsmall" :icon-size=15 />
       </nav>
