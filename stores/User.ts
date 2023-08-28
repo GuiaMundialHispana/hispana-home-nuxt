@@ -81,22 +81,37 @@ export const useUserStore = defineStore('user', {
       }
     },
     async get_user() {
-      const { data } = await useFetch('auth/profile',{
+      const { data, error } = await useFetch('auth/profile',{
         method: 'GET',
         baseURL: this.config.public.API,
         headers: {
           'Authorization': `Bearer ${this.token}`
         },
+        onResponse({response}) {
+          let responseApi = response._data.message;
+
+          if(responseApi === "Token invalid or not provided.") {
+            localStorage.removeItem('token');
+            Swal.fire({
+              icon: 'error',
+              text: 'Confirma que tus datos esten correctos',
+              timer: 2000
+            });
+          }
+        }
       });
       
       if(data) {
         let response = data.value;
         let user_response = data.value.results.user;
-        console.log(data)
 
         if(response.code = 200) {
           this.userData = user_response;
         }
+      }
+      
+      if(error) {
+        console.log("creta")
       }
     }
   }
