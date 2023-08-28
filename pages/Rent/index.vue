@@ -1,5 +1,5 @@
 <template>
-  <section class="lg:px-16 md:px-8 px-4">
+  <section class="lg:px-16 md:px-8 px-4 md:min-h-screen">
     <AtomsButtons
       v-show="viewport.isLessThan('xl')"
       class="mt-5 font-semibold w-full"
@@ -13,6 +13,15 @@
     </AtomsButtons>
     <OnClickOutside @trigger="showFilters = false" :class="{'hidden': !showFilters, 'flex' : showFilters}" class="filters-overflow">
       <div class="flex flex-wrap gap-2 xl:flex-row flex-col">
+      <AtomsButtons 
+        v-show="viewport.isLessThan('xl')"
+        btn-type="btn-icon"
+        icon-name="general/close"
+        :icon-size=20
+        btn-size="small"
+        class="mr-0 ml-auto"
+        @click="showFilters = false"
+      />
         <MoleculesFilterStatusProperties class="filterStatus-tabs-sm" />
         <MoleculesSearchFiltersBar @send-properties="getFilterResults" />
       </div>
@@ -78,9 +87,6 @@
           <img src="/img/not-found.png" class="object-contain max-w-[308px] mx-auto" />
         </figure>
         <h6 class="text-4xl text-blue-100 font-bold mb-4 text-center">No hemos encontramos propiedades <br/>con estos resultados</h6>
-        <div class="flex justify-center mb-4">
-          <AtomsButtons class="mx-auto">Borrar filtros</AtomsButtons>
-        </div>
       </div>
       <!-- Pagination -->
       <!-- <ul class="flex items-center gap-2 mt-16 justify-center">

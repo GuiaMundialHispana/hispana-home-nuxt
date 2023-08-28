@@ -3,6 +3,11 @@ export default defineNuxtConfig({
   css: [
     '@/assets/css/main.css',
   ],
+  routeRules:{
+    '/profile': { ssr: false },
+    '/edit-property': { ssr: false },
+    '/PostProperty': { ssr: false },
+  },
   app: {
     head: {
       title: 'Hispana Home',
@@ -11,11 +16,11 @@ export default defineNuxtConfig({
       ],
       script: [
         {
-          src: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCPPtyX8Gz-9kxyUIEJ_ZgXtUgbaC4avk4',
+          src: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyD4T85-FkXl586zyEpYLy32ipUyGAvLSAs',
           defer: true
         }
-      ],
-    }
+      ]
+    },
   },
   modules: [
     'nuxt-icons',

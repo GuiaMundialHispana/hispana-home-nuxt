@@ -6,71 +6,89 @@
           <img src='/img/logo-header.png' alt='Hispana Homes' class="lg:w-32 w-24 object-contain">
         </figure>
       </NuxtLink>
-      <nav :class="{'hidden':!showMenu}">
-        <ul>
-          <li v-for='item in menu'
-            :key='item.name'
-            class="text-sm text-neutral-black font-normal hover:text-primary-100 mb-4 lg:mb-0 cursor-pointer"
-          >
-            <NuxtLink :to='item.route'  @click="showMenu = false">{{item.name}}</NuxtLink>
-          </li>
-          <li class="text-sm text-neutral-black font-normal hover:text-primary-100 mb-4 lg:mb-0 cursor-pointer" v-show="auth.isLoggedIn">
-            <NuxtLink to="/PostProperty">Vender</NuxtLink>
-          </li>
-          <li class="mb-4 lg:mb-0" v-show="!auth.isLoggedIn">
-            <AtomsButtons @click="showMenu = false; displayModal = true">
-              Iniciar sesión
-            </AtomsButtons>
-          </li>
-          <!-- User Logged -->
-          <li class="user-wrapper" v-if="auth.isLoggedIn" @click="userDropdown = !userDropdown">
-            <div class="flex items-center gap-2">
-              <img :src="`https://seal-app-4mhut.ondigitalocean.app/${user.userData.profile_pic}`" v-if="user.userData.profile_pic != null || ''" :alt="user.userData.name">
-              <img src="/img/user.jpg" v-if="user.userData.profile_pic === null || ''" :alt="user.userData.name">
-              {{ user.userData.name }} {{ user.userData.lastname }}
-              <AtomsIcon name="arrows/arrow-down" v-show="!userDropdown" :size=15 class="text-primary-100" />
-              <AtomsIcon name="arrows/arrow-down" v-show="userDropdown" :size=15 class="text-primary-100 rotate-180" />
-            </div>
-            <div class="user-dropdown" v-show="userDropdown">
-              <ul>
-                <li>
-                  <NuxtLink to="/profile?tab=anuncio">
-                    <AtomsIcon name="general/border-all" class="mr-2.5" />
-                    Mis anuncios
-                  </NuxtLink>
-                </li>
-                <li>
-                  <NuxtLink to="/profile?tab=favorite">
-                    <AtomsIcon name="general/favorite" class="mr-2.5" />
-                    Mis favoritos
-                  </NuxtLink>
-                </li>
-                <li>
-                  <NuxtLink to="/profile?tab=plan">
-                    <AtomsIcon name="general/user-document" class="mr-2.5" />
-                    Mis planes
-                  </NuxtLink>
-                </li>
-                <li @click="auth.logOut(), showMenu = false">
-                  <AtomsIcon name="general/logout" class="mr-2.5" />
-                  Cerrar sesión
-                </li>
-              </ul>
-            </div>
-          </li>
-          <li v-show="auth.isLoggedIn">
-            <AtomsLink
-              link-to="/PostProperty"
-              icon-name="general/plus"
-              icon-position="left"
-              :icon-size=14
-              btnStyle="outline-primary"
+      <OnClickOutside @trigger="showMenu = false">
+        <nav :class="{'hidden':!showMenu}">
+          <span class="w-full flex justify-end" v-if="showMenu === true">
+            <AtomsButtons 
+            @click="showMenu = false"
+            btn-type="btn-icon" 
+            btn-style="outline-primary" 
+            icon-name="general/close" 
+            btn-size="xsmall" 
+            :icon-size=16 
+          />
+          </span>
+          <ul>
+            <li v-for='item in menu'
+              :key='item.name'
+              class="text-sm text-neutral-black font-normal hover:text-primary-100 mb-4 lg:mb-0 cursor-pointer"
             >
-              Publicar
-            </AtomsLink>
-          </li>
-        </ul>
-      </nav>
+              <NuxtLink :to='item.route'  @click="showMenu = false">{{item.name}}</NuxtLink>
+            </li>
+            <li class="text-sm text-neutral-black font-normal hover:text-primary-100 mb-4 lg:mb-0 cursor-pointer" v-show="auth.isLoggedIn">
+              <NuxtLink to="/PostProperty">Vender</NuxtLink>
+            </li>
+            <li class="mb-4 lg:mb-0" v-show="!auth.isLoggedIn">
+              <AtomsButtons @click="showMenu = false; displayModal = true">
+                Iniciar sesión
+              </AtomsButtons>
+            </li>
+            <!-- User Logged -->
+            <li class="user-wrapper" v-if="auth.isLoggedIn" @click="userDropdown = !userDropdown">
+              <div class="flex items-center gap-2">
+                <img v-if="user.userData.profile_pic !== null" :src="`https://seal-app-4mhut.ondigitalocean.app/${user.userData.profile_pic}`" :alt="user.userData.name">
+                <span v-else class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-primary-100 text-sm border border-primary-100 bg-primary-50">
+                  {{user.userData.name.charAt(0)}}{{ user.userData.lastname.charAt(0) }}
+                </span>
+                <!-- <img src="/img/user.jpg" v-if="user.userData.profile_pic === null || ''" :alt="user.userData.name"> -->
+                {{ user.userData.name }} {{ user.userData.lastname }}
+                <AtomsIcon name="arrows/arrow-down" v-show="!userDropdown" :size=15 class="text-primary-100" />
+                <AtomsIcon name="arrows/arrow-down" v-show="userDropdown" :size=15 class="text-primary-100 rotate-180" />
+              </div>
+              <OnClickOutside @trigger="userDropdown = false" class="user-dropdown">
+                <div v-show="userDropdown">
+                  <ul>
+                    <li>
+                      <NuxtLink to="/profile?tab=anuncio" @click="showMenu = false">
+                        <AtomsIcon name="general/border-all" class="mr-2.5" />
+                        Mis anuncios
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/profile?tab=favorite" @click="showMenu = false">
+                        <AtomsIcon name="general/favorite" class="mr-2.5" />
+                        Mis favoritos
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/profile?tab=plan" @click="showMenu = false">
+                        <AtomsIcon name="general/user-document" class="mr-2.5" />
+                        Mis planes
+                      </NuxtLink>
+                    </li>
+                    <li @click="auth.logOut(), showMenu = false">
+                      <AtomsIcon name="general/logout" class="mr-2.5" />
+                      Cerrar sesión
+                    </li>
+                  </ul>
+                </div>
+              </OnClickOutside>
+            </li>
+            <li v-show="auth.isLoggedIn">
+              <AtomsLink
+                @click="showMenu = false"
+                link-to="/PostProperty"
+                icon-name="general/plus"
+                icon-position="left"
+                :icon-size=14
+                btnStyle="outline-primary"
+              >
+                Publicar
+              </AtomsLink>
+            </li>
+          </ul>
+        </nav>
+      </OnClickOutside>
       <!-- Open Menu -->
       <button
         v-show="viewport.isLessThan('lg')"
@@ -84,12 +102,12 @@
   <!-- Modal login and register component -->
   <OrganismLogInaAndRegister
     @closeModal="displayModal = false"
-    v-show="displayModal"
+    v-if="displayModal"
   />
 </template>
 
 <script>
-import menu from '~/assets/mocks/Header';
+// import menu from '~/assets/mocks/Header';
 import { useAuthStore } from '~/stores/Auth';
 import { useUserStore } from '~/stores/User';
 export default {
@@ -98,11 +116,33 @@ export default {
     return {
       auth: useAuthStore(),
       user: useUserStore(),
-      menu: menu.menu,
+
       viewport: useViewport(),
       showMenu: false,
       userDropdown: false,
       displayModal: false,
+      menu: [
+        {
+          name: 'Todos',
+          route: '/search?type=All',
+        },
+        {
+          name: 'Comprar',
+          route: '/sales?type=Sale',
+        },
+        {
+          name: 'Alquilar',
+          route: '/rent?type=Rent',
+        },
+        {
+          name: 'Contacto',
+          route: '/contact'
+        },
+        {
+          name: 'Planes',
+          route: '/plans'
+        },
+      ]
     }
   },
   watch: {
@@ -124,14 +164,18 @@ export default {
 }
 </script>
 
+<script setup>
+import { OnClickOutside } from '@vueuse/components';
+</script>
+
 <style lang="postcss" scoped>
 
 header {
-  @apply w-full lg:h-[102px] h-16 flex items-center py-2 absolute top-0 lg:z-[60] z-[71] bg-neutral-white border-b border-gray-300;
+  @apply w-full lg:h-[102px] h-16 flex items-center py-2 absolute top-0 lg:z-[60] bg-neutral-white border-b border-gray-300;
 }
 
 nav {
-  @apply lg:block lg:static absolute lg:top-0 top-16 right-0 lg:h-full h-screen lg:w-max w-full md:max-w-sm lg:max-w-none max-w-full lg:p-0 p-6 z-[60] bg-neutral-white;
+  @apply lg:block lg:static absolute top-0 right-0 h-screen lg:h-full lg:w-max w-full md:max-w-sm lg:max-w-none max-w-full lg:p-0 p-6 z-[80] bg-neutral-white;
 
   & > ul { @apply flex lg:items-center xl:gap-x-8 lg:gap-3 lg:flex-row flex-col; }
 

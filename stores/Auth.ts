@@ -46,8 +46,9 @@ export const useAuthStore = defineStore('auth', {
       }
     },
     async logOut() {
-      await useFetch(useRuntimeConfig().API+'auth/logout',{
+      await useFetch('auth/logout',{
         method: 'POST',
+        baseURL: this.config.public.API,
         body: {
           token: localStorage.getItem('token')
         }

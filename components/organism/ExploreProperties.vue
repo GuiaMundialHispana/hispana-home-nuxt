@@ -44,7 +44,6 @@ const {data:properties} = await useFetch(`advertisements/related/${props.propert
   baseURL: config.public.API,
   transform:(_property) => _property.results
 });
-console.log(properties)
 </script>
 
 <style lang="postcss" scoped>

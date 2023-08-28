@@ -1,30 +1,42 @@
 <script setup>
 import { usePostsStore } from '~/stores/Post';
-
+const emit = defineEmits(['back', 'nexts'])
 const use_posts = usePostsStore();
 const allowedFileTypes = ref(['image/jpeg', 'image/png', 'image/gif', 'image/svg', 'image/svg+xml']);
 let totalImgs = ref(0);
 let savedImages= ref([]);
-let previewImages = ref([]);
+let previewImages = use_posts.saved_images;
+let newPreview = ref([]);
 let fileFormat = ref(true);
+let testPortada = use_posts.testPortada;
 let planSelected = {
   id: use_posts.plan_id,
   quantity: use_posts.plan_pictures
 };
 
+// previewImages.forEach((element, index)=>{
+//   newPreview.value.push(element.image);
+// });
 function previewFiles(event) {
   let images = null;
   images = event.target.files;
-  totalImgs.value = previewImages.value.length + images.length;
+  totalImgs.value = newPreview.value.length + images.length;
   if (totalImgs.value <= planSelected.quantity) {
     for (let i = 0; i < images.length; i++) {
       if (allowedFileTypes.value.indexOf(images[i].type) !== -1) {
         let file = images[i];
         savedImages.value.push(images[i]);
-        console.log(savedImages.value)
-        previewImages.value.push(URL.createObjectURL(file));
+        newPreview.value.push(URL.createObjectURL(file));
         fileFormat.value = true;
-        use_posts.saved_images = savedImages.value;
+        // use_posts.new_images.push(savedImages.value);
+
+        use_posts.new_images = savedImages.value;
+        //
+        // const unifiedArray = newPreview.value.concat(previewImages);
+        // previewImages.forEach((element, index)=>{
+        //   newPreview.value.push(element.image);
+        // });
+        // console.log(unifiedArray);
       } else { fileFormat.value = false; }
     }
   } else {
@@ -39,6 +51,15 @@ function setFirtsImg(array, index) {
     array.unshift(imgToMove);
   }
 };
+
+let previewPortada = ref(false);
+let newPortada = ref(false);
+watch(newPreview.value, (newx) => {
+  if(newPreview.value.length > 0 ) {
+    console.log()
+    newPortada.value = true;
+  }
+});
 </script>
 
 <template>
@@ -63,31 +84,51 @@ function setFirtsImg(array, index) {
         <p class="text-[#707070]"><span class="text-primary-100">Click para subir</span> o arrastra y suelta SVG, PNG, <br> JPG (max. 800px400px)</p>
         <input type="file" @change="previewFiles" ref="file" multiple="multiple" class="absolute left-0 top-0 scale-[9] cursor-pointer opacity-0">
       </div>
-      <figure v-for="(img, index) in previewImages" :key="index">
+      <!-- Estas son las que subo -->
+      <figure v-for="(img, index) in newPreview" :key="index">
         <img :src="img" class="w-full h-full object-cover">
         <AtomsButtons
-          :class="[{cover: index === 0}]"
+          class="absolute top-2 right-2"
+          icon-name="general/trash-can"
+          btn-type="btn-icon"
+          @click="newPreview.splice(index, 1), savedImages.splice(index, 1)"
+        />
+        <AtomsButtons
+          :class="[{newPortada: index === 0 && use_posts.testPortada}]"
+          class="top-2 left-2 absolute bg-neutral-white"
+          btn-style="outline-primary"
+          icon-name="general/star"
+          btn-type="btn-icon"
+          :iconSize=20
+          @click="setFirtsImg(newPreview, index), setFirtsImg(savedImages, index), use_posts.testPortada = true" 
+        />
+        <p :class="[{cover: index === 0 && use_posts.testPortada}]">Portada</p>
+      </figure>
+      <!-- estas son las que traigo del api -->
+      <figure v-for="(img, index) in previewImages" :key="index">
+        <img :src="`https://seal-app-4mhut.ondigitalocean.app/${img.image}`" class="w-full h-full object-cover">
+        <AtomsButtons
           class="absolute top-2 right-2"
           icon-name="general/trash-can"
           btn-type="btn-icon"
           @click="previewImages.splice(index, 1), savedImages.splice(index, 1)"
         />
         <AtomsButtons
-          :class="[{active: index === 0}]"
+          :class="[{previewPortada: index === 0 && !use_posts.testPortada}]"
           class="top-2 left-2 absolute bg-neutral-white"
           btn-style="outline-primary"
           icon-name="general/star"
           btn-type="btn-icon"
           :iconSize=20
-          @click="setFirtsImg(previewImages, index), setFirtsImg(savedImages, index)" 
+          @click="setFirtsImg(previewImages, index), setFirtsImg(savedImages, index), use_posts.testPortada = false" 
         />
-        <p :class="[{cover: index === 0}]">Portada</p>
+        <p :class="[{cover: index === 0 && !use_posts.testPortada}]">Portada</p>
       </figure>
     </div>
-    <p class="text-center mt-16 mb-8">{{ previewImages.length }}/{{planSelected.quantity}} Fotos</p>
+    <p class="text-center mt-16 mb-8">{{ newPreview.length }}/{{planSelected.quantity}} Fotos</p>
   </div>
   <nav class="control-steps-postProperty">
-    <AtomsButtons @click="$emit('back')" btn-style="outline-primary">
+    <AtomsButtons @click="emit('back')" btn-style="outline-primary">
       Atras
     </AtomsButtons>
   </nav>

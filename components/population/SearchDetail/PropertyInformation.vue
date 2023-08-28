@@ -49,11 +49,11 @@
         <ul class="short-information">
           <li class="md:border-r border-primary-100 xl:pr-14 md:pr-8">
             <AtomsIcon name="general/share-location" :size=19 class="text-primary-100 mr-2.5" />
-            Autopista San Isidro
+            {{ property.address }}
           </li>
           <li class="md:border-r border-primary-100 xl:px-14 md:px-8">
             <AtomsIcon name="general/status" :size=19 class="text-primary-100 mr-2.5" />
-            Estado: Nuevo
+            Estado: {{ property.property_status === 'New' ? 'Nuevo' : 'Usado' }}
           </li>
           <li class="xl:pl-14 md:pl-8">
             <AtomsIcon name="general/calendar_month" :size=19 class="text-primary-100 mr-2.5" />
@@ -64,7 +64,10 @@
       <!-- User information -->
       <div class="lg:col-span-4 md:col-span-8 md:col-start-3 col-span-12 pb-4 border-b border-gray-100 h-max">
         <figure class="user-image">
-          <img :src="`${user.profile_pic}`" :alt="user.name">
+          <img v-if="user.profile_pic != null" :src="`https://seal-app-4mhut.ondigitalocean.app/${user.profile_pic}`" :alt="user.name">
+          <span v-else class="w-full h-full flex items-center justify-center font-bold text-primary-100 text-2xl uppercase bg-primary-50">
+            {{user.name.charAt(0)}}{{ user.lastname.charAt(0) }}
+          </span>
         </figure>
         <h6 class="user-name">{{ user.name }} {{ user.lastname }}</h6>
         <p class="user-position">Vendedor inmobiliario</p>

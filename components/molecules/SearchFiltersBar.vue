@@ -29,7 +29,7 @@
         </OnClickOutside>
         <!--  -->
         <button v-if="states.length > 0" class="sector-filter-btn" :class="{'active': dropdownLists.sector}" @click="toggleList('sector')">
-          Sector <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16 />
+          Ciudad <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16 />
         </button>
         <OnClickOutside @trigger="toggleList('sector')" v-if="dropdownLists.sector">
           <div class="dropdown-wrapper scrollbar min-h-max max-h-[273px]">
@@ -48,7 +48,7 @@
         </OnClickOutside>
         <!--  -->
         <button v-if="cities.length > 0" class="sector-filter-btn" :class="{'active': dropdownLists.city}" @click="toggleList('city')">
-          Ciudad <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16></AtomsIcon>
+          Sector <AtomsIcon class="text-primary-100" name="arrows/arrow-down" :size=16></AtomsIcon>
         </button>
         <OnClickOutside @trigger="toggleList('city')" v-if="dropdownLists.city">
           <div class="dropdown-wrapper scrollbar min-h-max max-h-[273px]">
@@ -160,29 +160,29 @@
         <!-- <p>{{ showBarMinValue > 0 ? `${showBarMinValue}-${showBarMaxValue}` : 'Rango de precio' }}</p> -->
         <AtomsIcon name="arrows/arrow-down" class="text-primary-100" :size=15 />
       </button>
-      <OnClickOutside @trigger="toggleList('priceRange')" v-if="dropdownLists.priceRange" class="dropdown w-[238px] h-fit">
+      <OnClickOutside @trigger="toggleList('priceRange')" v-if="dropdownLists.priceRange" class="dropdown md:w-[238px] h-fit">
         <p class="flex justify-between text-base text-neutral-black">
           Precio
           <label for="RD" class="price-btn ml-auto">
-            <input type="radio" id="RD" value="RD" v-model="picked">
+            <input type="radio" id="RD" value="RD" name="currency" v-model="picked" checked>
           </label>
           <label for="USD" class="price-btn">
-            <input type="radio" id="USD" checked value="USD" v-model="picked">
+            <input type="radio" id="USD" value="USD" name="currency" v-model="picked">
           </label>
         </p>
         <!--  -->
-        <MultiRangeSlider class="mx-auto mt-[14px] w-[200px]"
+        <MultiRangeSlider class="mx-auto mt-[14px] md:w-[200px]"
           baseClassName="multi-range-slider-bar-only"
           :min="0"
-          :max="55000000"
-          :step="500000"
+          :max="maxPrice"
+          :step="priceRangeSteps"
           :ruler="false"
           :label="false"
           :minValue="barMinValue"
           :maxValue="barMaxValue"
           @input="UpdateValues"
         />
-        <p class="whitespace-normal text-sm font-medium">
+        <p class="whitespace-normal text-sm font-medium max-w-[200px] ">
           Desde <b>{{picked}}${{ showBarMinValue }}</b>
           hasta <b>{{picked}}${{ showBarMaxValue }}</b>+
           {{publishedBooksMessage  }}
@@ -225,7 +225,7 @@
         </div>
       </OnClickOutside>
     </div>
-    <button class="search-button" @click="clearFilter();" v-if="filter">
+    <button class="search-button" @click="clearFilter()" v-if="filter">
       <p class="xl:hidden mr-3 font-semibold">Borrar filtros</p>
       <AtomsIcon name="general/close" :size=17  />
     </button>
@@ -259,9 +259,10 @@ export default {
         other: false
       },
       barMinValue:0,
-      barMaxValue:1000000,
-      showBarMinValue: 0,
-      showBarMaxValue:0,
+      barMaxValue:10000000,
+      showBarMinValue: '0',
+      showBarMaxValue:"10,000,000",
+      maxPrice: 50000000,
       countries: [],
       country_id:0,
       country_name: '',
@@ -271,8 +272,9 @@ export default {
       city_id:0,
       states:[],
       state_id:0,
-      picked:'USD',
+      picked:'RD',
       price:'',
+      priceRangeSteps: 500000,
       bedroomQuantity:0,
       bathroomQuantity:0,
       parkingLotQuantity:0,
@@ -292,9 +294,9 @@ export default {
     UpdateValues(e) {
       this.barMinValue = e.minValue;
       this.barMaxValue = e.maxValue;
-      this.showBarMinValue = this.barMinValue.toString();
-      this.showBarMaxValue = this.barMaxValue.toString();
-      this.price = this.showBarMinValue + '-' + this.showBarMaxValue;
+      this.showBarMinValue = this.barMinValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      this.showBarMaxValue = this.barMaxValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      this.price = this.barMinValue.toString() + '-' + this.barMaxValue.toString();
     },
     toggleList(list) {
       if (this.dropdownLists[list]) {
@@ -358,6 +360,21 @@ export default {
     picked(newPicked) {
       this.queryBody.price_type = newPicked;
       this.$emit('sendProperties', this.queryBody);
+      if (newPicked === 'USD') {
+        this.barMinValue = 0,
+        this.barMaxValue = 1000000,
+        this.showBarMinValue = '0';
+        this.showBarMaxValue = '1,000,000';
+        this.maxPrice = 3000000;
+        this.priceRangeSteps = 50000;
+      } else{
+        this.barMinValue = 0,
+        this.barMaxValue = 10000000,
+        this.showBarMinValue = '0';
+        this.showBarMaxValue = '10,000,000';
+        this.maxPrice = 50000000;
+        this.priceRangeSteps = 500000;
+      }
     },
     bedroomQuantity(bedroomQuantity) {
       this.queryBody.bedroom = bedroomQuantity;
@@ -387,10 +404,6 @@ export default {
     },
     city_id(city_id) {
       this.queryBody.city_id = city_id;
-      this.$emit('sendProperties', this.queryBody);
-    },
-    picked(picked) {
-      this.queryBody.price_type = picked;
       this.$emit('sendProperties', this.queryBody);
     },
     price(price) {

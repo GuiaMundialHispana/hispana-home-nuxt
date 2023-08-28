@@ -8,7 +8,7 @@
             <label class="mb-2">Monto inicial</label>
             <div class="relative flex">
               <input type="number" class="form-control" v-model.lazy="initial">
-              <span class="bg-primary-100 text-neutral-white font-semibold text-sm p-2.5 rounded-tr-lg rounded-br-lg">{{initialPercentage}}%</span>
+              <span class="absolute right-0 bg-primary-100 text-neutral-white font-semibold text-sm p-2.5 rounded-tr-lg rounded-br-lg">{{initialPercentage}}%</span>
             </div>
           </div>
           <div class="form-group">
@@ -100,11 +100,15 @@
     },
     watch: {
       initial(){
-        if (this.initial >= this.property.price_us) {
-          this.initial = this.property.price_us - (this.property.price_us * 0.05)
-        };
-        this.getPercentage(this.initial, this.property.price_us);
-        this.calculateEstimatedQuota(this.interest, this.initial, this.years,this.property.price_us )
+        if (this.initial < 0) {
+          this.initial = 0;
+        } else {
+            if (this.initial >= this.property.price_us) {
+            this.initial = this.property.price_us - (this.property.price_us * 0.05)
+          };
+          this.getPercentage(this.initial, this.property.price_us);
+          this.calculateEstimatedQuota(this.interest, this.initial, this.years,this.property.price_us )
+          }
       },
       years(){
         this.calculateEstimatedQuota(this.interest, this.initial, this.years,this.property.price_us )

@@ -1,10 +1,11 @@
 <template>
   <div class="plan-wrapper">
-    <span class="user-quantity" v-if="plan.id != 4 && $route.path === '/PostProperty' || $route.path === '/postProperty'">
+    <!-- plan.id != 4 &&   -->
+    <span class="user-quantity" v-if="$route.path === '/PostProperty' || $route.path === '/postProperty' || $route.path === '/edit-property'">
       {{ userQuantity }}
     </span>
     <span class="plan-category" :class="[renderPlanText]">{{ plan.name }}</span>
-    <ul class="plan-benefits">
+    <ul class="plan-benefits mb-2">
       <li>
         <AtomsIcon name="general/check" :size=16 class="text-[#FFAE10] mr-2" />
         Fotos por anuncio: {{plan.pictures }}
@@ -26,32 +27,41 @@
         Exclusividad en página de inicio
       </li>
     </ul>
-    <div class="action-buttons" v-if="plan.id != 4 && $route.path === '/profile' || $route.path === '/plans'">
+    <!-- plan.id != 4 &&   -->
+    <div class="action-buttons" v-if="$route.path === '/profile' || $route.path === '/plans'">
       <div class="plan-quantity">
-        <button @click="planQuantity--">-</button>
+        <button :disabled="planQuantity < 2" @click="planQuantity--">-</button>
         <input type="number" readonly :value="planQuantity">
         <button @click="planQuantity++">+</button>
       </div>
       <!--  -->
       <AtomsButtons btn-size="xsmall" class="w-full">
-        <span class="total-plans">{{ planQuantity }}</span> RD$ {{ updatePrice  }}
+        <span class="total-plans">{{ planQuantity }}</span>
+        <p v-if="updatePrice > 0">RD$ {{ updatePrice  }}</p>
+        <p v-else>Gratis</p>
       </AtomsButtons>
     </div>
-    <AtomsButtons v-if="plan.id != 4 || userQuantity != 0"
-      @click="payment()"
-      btn-style="outline-gray"
-      class="my-4 w-full">
-      Comprar
-    </AtomsButtons>
-    <AtomsButtons v-if="$route.path === '/PostProperty' || $route.path === '/postProperty'"
-      btn-style="outline-gray"
-      class="my-2 w-full"
-      :class="{active: active}"
-      @click="$emit('pay', plan.id, plan.pictures), active = !active"
-    >
-      Seleccionar
-    </AtomsButtons>
-    <p class="price" v-if="plan.id != 4  && $route.path != '/PostProperty' && $route.path != 'postProperty'">
+    <div class="my-4 w-full">
+      <slot v-if="seleccionado && $route.path != '/PostProperty'" />
+      <!-- plan.id != 4 || userQuantity != 0-->
+      <AtomsButtons 
+        @click="payment()"
+        btn-style="outline-gray"
+        class="w-full">
+        Comprar
+      </AtomsButtons>
+    </div>
+    <div v-if="!seleccionado">
+      <AtomsButtons v-if="$route.path === '/PostProperty' || $route.path === '/postProperty'  || $route.path === '/edit-property'"
+        btn-style="outline-gray"
+        class="my-1 w-full"
+        :class="{active: active}"
+        @click="$emit('pay', plan.id, plan.pictures), active = !active"
+      >
+        Seleccionar
+      </AtomsButtons>
+    </div>
+    <p class="price" v-if="plan.id != 4  && $route.path != '/PostProperty' && $route.path != 'postProperty' && $route.path != '/edit-property'">
       <span class="text-base"> RD$ </span>{{ plan.price  }}
     </p>
     <p v-if="plan.id === 4" class="free-price mt-4">
@@ -71,6 +81,10 @@ export default {
     },
     userQuantity: {
       type: Number
+    },
+    seleccionado: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

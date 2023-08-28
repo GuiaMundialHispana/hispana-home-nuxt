@@ -36,11 +36,16 @@
         />
       </nav>
       <swiper-slide v-for="image in property.images" :key="image">
-        <NuxtLink :to="`/search/${propertyId}`" class="h-[305px] relative flex justify-center pb-2 bg-gray-10 rounded-lg">
+        <NuxtLink :to="{
+          path: `/search/${property.name}`,
+          query: {
+            property_id: propertyId
+          }
+        }" class="h-[305px] relative flex justify-center pb-2 bg-gray-10 rounded-lg figure">
           <img
-            :src="`https://seal-app-4mhut.ondigitalocean.app/api/v1/${image.image}`"
+            :src="`https://seal-app-4mhut.ondigitalocean.app/${image.image}`"
             :alt="property.name"
-            class="object-cover h-full w-full absolute top-0 left-0"
+            class="object-cover h-full w-full absolute top-0 left-0 rounded-lg"
           >
           <p class="property-name">{{ property.name }}</p>
         </NuxtLink>
@@ -96,12 +101,20 @@ article {
 
   & .swiper {
     & .property-name {
-      @apply text-neutral-white font-semibold text-2xl relative mt-auto text-center overflow-hidden truncate whitespace-nowrap w-11/12;
+      @apply text-neutral-white z-10 relative font-semibold text-2xl mt-auto text-center overflow-hidden truncate whitespace-nowrap w-11/12;
     } 
   }
   & .swiper:hover > nav { @apply flex; }
   
   & .title-price { @apply text-sm text-neutral-black text-center font-normal; }
   & .price { @apply text-primary-100 font-semibold text-xl uppercase text-center; }
+
+  & .figure {
+    @apply relative;
+    @apply before:absolute before:top-0 before:left-0 before:w-full before:h-full before:z-[5] before:rounded-lg;
+    &::before {
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 72.76%, #000 100%);
+    }
+  }
 }
 </style>

@@ -6,7 +6,20 @@
       class="favorite-button"
       :class="{active: property.is_favorite}"
       @click="toggleFavorite()"
+      v-if="$route.fullPath != '/profile?tab=anuncio'"
     />
+    <NuxtLink
+      :to="{
+        path: `edit-property`,
+        query: {
+          property_id: propertyId
+        }
+      }"
+      class="btn-icon small active absolute left-4 z-10 top-1"
+      v-if="$route.fullPath === '/profile?tab=anuncio'"
+    >
+      <AtomsIcon name="general/pencil" class="text-neutral-white" />
+    </NuxtLink>
     <Swiper
       class="relative rounded-lg overflow-hidden"
       :modules="[SwiperAutoplay, SwiperEffectCreative]"
@@ -25,6 +38,10 @@
         next: {
           translate: ['100%', 0, 0],
         },
+      }"
+      :navigation="{
+        nextEl: '.next',
+        prevEl: '.prev'
       }">
       <SwiperSlide>
         <NuxtLink class="bg-gray-10" :to="{
@@ -44,13 +61,14 @@
         </NuxtLink>
       </SwiperSlide>
       <AtomsPropertyPlans class="absolute bottom-0 right-0 z-10" />
-      <nav v-if="property.images">
+      <!-- <nav v-if="property.images">
         <AtomsButtons
           btn-type="btn-icon"
           btn-size="xsmall"
           btn-style="outline-gray"
           icon-name="arrows/arrow-left"
           :icon-size=15
+          class="prev"
         />
         <AtomsButtons
           btn-type="btn-icon"
@@ -58,8 +76,9 @@
           btn-style="outline-gray"
           icon-name="arrows/arrow-right"
           :icon-size=15
+          class="next"
         />
-      </nav>
+      </nav> -->
     </Swiper>
     <NuxtLink :to="{
       path: `/search/${property.name}`,
@@ -85,9 +104,7 @@
       />
       <!-- Price -->
       <p class="price-title">Desde:</p>
-      <p class="price">
-        US${{showParsedPrice(property.price_us)}}
-      </p>
+      <p class="price">US${{showParsedPrice(property.price_us)}}</p>
       <!-- <p class="price">
         RD${{showParsedPrice(property.price)}}
       </p> -->
@@ -243,12 +260,18 @@ article {
   & nav { @apply hidden absolute top-1/2 z-10 w-full justify-between px-4; 
   & button { @apply bg-neutral-white hover:bg-primary-100 border-none !important; }
   }
-  .advertisements{
+  & .advertisements{
     @apply absolute z-20 text-neutral-white top-0 bottom-0 left-0 right-0 flex items-center justify-center bg-opacity-40 bg-neutral-white;
     & p {
       @apply py-1.5 px-[15px] rounded-lg text-base w-fit text-center min-w-[209px];
     }
   }
-}
 
+  & .btn-icon {
+    @apply bg-primary-100 inline-flex justify-center items-center no-underline cursor-pointer duration-300 focus:outline-none;
+
+    &.small { @apply w-8 rounded-full h-8; }
+  }
+
+}
 </style>

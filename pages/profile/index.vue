@@ -2,15 +2,22 @@
   <section class="pb-32">
     <div class="xl:container mx-auto lg:px-16 md:px-8 px-4">
       <div class="profile-wrapper">
-        <figure class="profile-image">
-          <img :src="`https://seal-app-4mhut.ondigitalocean.app/${user.userData.profile_pic}`" v-if="user.userData.profile_pic != null || ''" :alt="user.userData.name">
-          <img src="/img/user.jpg" v-if="user.userData.profile_pic === null || ''" :alt="user.userData.name">
+        <figure class="profile-image overflow-hidden" v-if="user.userData.name === null || user.userData.name === ''">
+          <div class="skeleton w-[117px] h-[117px] rounded-full"></div>
+        </figure>
+        <figure class="profile-image overflow-hidden" v-else>
+          <img v-if="user.userData.profile_pic != null" :src="`https://seal-app-4mhut.ondigitalocean.app/${user.userData.profile_pic}`" :alt="user.userData.name">
+          <!--  -->
+          <span v-if="user.userData.profile_pic === null" class="w-[117px] h-[117px] uppercase flex items-center justify-center font-bold text-primary-100 text-6xl rounded-full border-2 border-primary-100 bg-primary-50">
+            {{user.userData.name.charAt(0)}}{{ user.userData.lastname.charAt(0) }}
+          </span>
         </figure>
         <div class="profile-information">
-          <h3>
+          <h3 v-if="user.userData.name != null || user.userData.name !== ''">
             <span class="text-primary-100">Hola,</span><br class="md:block hidden">
             {{user.userData.name}} {{user.userData.lastname}}
           </h3>
+          <div v-if="user.userData.name === null || user.userData.name === ''" class="w-40 h-5 skeleton rounded-lg mb-4"></div>
           <AtomsLink btn-style="outline-primary" link-to="/profile/editProfile">Editar perfil</AtomsLink>
         </div>
       </div>

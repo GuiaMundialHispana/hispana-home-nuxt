@@ -95,6 +95,7 @@
             <input
               type="password"
               placeholder="******"
+              v-model="current_password"
             >
           </label>
           <label>
@@ -123,7 +124,20 @@
           <div class="flex flex-col items-center">
             <p class="whitespace-nowrap">Actualiza tu foto de perfil</p>
             <figure class="w-[107px] h-[107px] rounded-full border-[5px] border-primary-50 mt-5">
-              <img :src="`https://seal-app-4mhut.ondigitalocean.app/${editUser.editUserData.profile_pic}`" :alt="editUser.editUserData.name" class="rounded-full w-full h-full object-cover">
+              <img v-if="!isNewImage"
+                :src="`https://seal-app-4mhut.ondigitalocean.app/${editUser.editUserData.profile_pic}`"
+                :alt="editUser.editUserData.name"
+                class="rounded-full w-full h-full object-cover"
+              >
+              <img
+                v-if="isNewImage && editUser.editUserData != null"
+                :src="`${editUser.editUserData.profile_pic}`"
+                :alt="editUser.editUserData.name"
+                class="rounded-full w-full h-full object-cover"
+              >
+              <span v-if="isNewImage && editUser.editUserData === null" class="w-full h-full flex items-center justify-center font-bold text-primary-100 text-6xl rounded-full border-2 border-primary-100 bg-primary-50">
+                {{user.userData.name.charAt(0)}}{{ user.userData.lastname.charAt(0) }}
+              </span>
             </figure>
           </div>
         </div>
@@ -144,6 +158,7 @@
           btn-size="xsmall"
           btn-style="outline-gray"
           link-to="/profile"
+          @click="isNewImage = false, editUser.$reset()"
           >Cancelar
         </AtomsLink>
         <AtomsButtons
@@ -173,6 +188,7 @@ export default {
       form: new FormData(),
       password: '',
       password_confirmation: '',
+      current_password: '',
       isNewImage: false
     }
   },
@@ -201,6 +217,7 @@ export default {
     async changesPassword(){
       Swal.showLoading();
       this.form.append('email', this.editUser.editUserData.email);
+      this.form.append('current_password', this.current_password);
       this.form.append('password', this.password);
       this.form.append('password_confirmation', this.password_confirmation);
       await useFetch('users/update?_method=PUT',{
@@ -249,10 +266,29 @@ export default {
       this.form.append('email', this.editUser.editUserData.email)
       this.form.append('name', this.editUser.editUserData.name);
       this.form.append('lastname', this.editUser.editUserData.lastname);
-      this.form.append('birthdate', this.editUser.editUserData.birthdate);
-      this.form.append('country_id', this.editUser.editUserData.country_id);
-      this.form.append('cellphone', this.editUser.editUserData.cellphone);
-      this.form.append('phone', this.editUser.editUserData.phone);
+      if(this.editUser.editUserData.phone === '' || this.editUser.editUserData.phone === null ) {
+        this.form.append('phone', 123456789);
+      } else {
+        this.form.append('phone', this.editUser.editUserData.phone);
+      }
+
+      if(this.editUser.editUserData.birthdate === '' ||this.editUser.editUserData.birthdate === null ) {
+        this.form.append('birthdate', '');
+      } else {
+        this.form.append('birthdate', this.editUser.editUserData.birthdate);
+      }
+
+      if(this.editUser.editUserData.cellphone === '' || this.editUser.editUserData.cellphone === null ) {
+        this.form.append('cellphone', 12345678);
+      } else {
+        this.form.append('cellphone', this.editUser.editUserData.cellphone);
+      }
+
+      if(this.editUser.editUserData.country_id === '' || this.editUser.editUserData.country_id === null || this.editUser.editUserData.country_id === 0) {
+        this.form.append('country_id', 12345678);
+      } else {
+        this.form.append('country_id', this.editUser.editUserData.country_id);
+      }
 
       await useFetch('users/update?_method=PUT',{
         method: 'POST',
@@ -290,6 +326,7 @@ export default {
             });
             // useRouter().go()
             useRouter().push("/profile?tab=anuncio");
+            editUserData.$reset();
           }
         }
       });

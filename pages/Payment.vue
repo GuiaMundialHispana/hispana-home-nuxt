@@ -17,9 +17,10 @@
                 <option :value="parseInt($route.query.quantity)">Cantidad: {{$route.query.quantity}}</option>
               </select>
             </div>
-            <h6 class="plan-price">
+            <h6 class="plan-price" v-if="plan.price > 0">
               RD$ {{ plan.price }}
             </h6>
+            <h6 class="plan-price uppercase" v-else>gratis</h6>
           </li>
         </ul>
         <p class="total-price max-w-max md:w-full md:ml-auto md:mr-0 mr-auto">
@@ -111,6 +112,8 @@ export default {
         return 'exclusive';
       } else if(this.plan.name === 'DESTACADOS') {
         return '';
+      } else if(this.plan.name === 'BÁSICO') {
+        return 'basic';
       }
     },
   },
@@ -131,6 +134,8 @@ h4 {
 
     & .plan-name-card {
       @apply rounded-lg md:w-[100px] w-full md:h-[70px] h-8 flex items-center justify-center font-medium;
+
+      &.basic { @apply bg-primary-100 text-neutral-white; }
       
       &.vip {
         background: linear-gradient(99.8deg, #FFAE10 -9.48%, #FFB800 45.36%, #FFD058 96.88%);
