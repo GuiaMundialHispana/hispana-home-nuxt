@@ -104,7 +104,7 @@ export const useUserStore = defineStore('user', {
       }
     },
     async refresh_token() {
-      const {data} = await useFetch('auth/refresh',{
+      const {data, error} = await useFetch('auth/refresh',{
         method: 'POST',
         baseURL: this.config.public.API,
         headers: {
@@ -123,17 +123,15 @@ export const useUserStore = defineStore('user', {
           }
         }
       });
-<<<<<<< HEAD
-      
+
       if(data) {
         let response = data.value;
         let user_response = data.value.results.user;
-=======
-      // console.log(data);
+      }
+
       if(data.value != null) {
         this.token = data.value.results.access_token;
         localStorage.setItem('token', this.token);
->>>>>>> 2443f4e13bdabb23f0616fd20e29a7078483cb69
 
       }
       
