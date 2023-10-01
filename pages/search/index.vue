@@ -45,7 +45,6 @@
       <ul v-if="!pending" class="property-list">
         <li v-for="property in properties" :key="property">
           <MoleculesProperty
-            :is-favorite="property.property.is_favorite"
             :property="property.property"
             :property-id="property.advertisement_id"
           />
@@ -95,13 +94,18 @@
 
 <script setup>
 import { OnClickOutside } from '@vueuse/components';
+import { useAuthStore } from '~/stores/Auth';
+import { useUserStore } from '~/stores/User';
+
 const config = useRuntimeConfig();
 const route = useRoute();
 const viewport = useViewport();
+const auth = useAuthStore();
+const user_store = useUserStore();
 
 //Mostrar propiedades
 let test = ref(null);
-let properties = reactive([]);
+let properties = ref([]);
 let showFilters = ref(false);
 
 const { data, pending } = await useLazyFetch('advertisements/search', {
@@ -110,13 +114,34 @@ const { data, pending } = await useLazyFetch('advertisements/search', {
   transform:(data) => {
     let response = data.results.data;
     response.forEach(element => {
-      properties.push(element)
+      properties.value.push(element)
     });
   },
   query: route.query
 });
 
-console.log(properties)
+const propertiesIds = ref([]);
+watch(pending,(xxx)=> {
+  if(xxx === false) {
+    properties.value.forEach(element => {
+      propertiesIds.value.push(element.properties_ids)
+    })
+  }
+})
+
+console.log(propertiesIds.value)
+
+
+const {data: favorites} = useFetch('users/favorites', {
+  method: 'GET',
+  headers: {
+    'Authorization': `Bearer ${user_store.token}`,
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  },
+  baseURL: config.public.API
+});
+console.log(favorites.value)
 
 function getFilterResults(e) {
   test = e;
@@ -140,6 +165,19 @@ async function searchProperties() {
   });
 };
 
+// onMounted(()=> {
+//   if(auth.isLoggedIn) {
+//     const {data} = useFetch('users/favorites', {
+//       method: 'GET',
+//       headers: {
+//         'Authorization': `Bearer ${user_store.token}`,
+//         'Content-Type': 'application/json',
+//         'Accept': 'application/json'
+//       },
+//       baseURL: config.public.API
+//     });
+//   }
+// })
 </script>
 
 <style lang="postcss" scoped>

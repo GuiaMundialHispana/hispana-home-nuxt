@@ -125,7 +125,7 @@ watch(newPreview.value, (newx) => {
         <p :class="[{cover: index === 0 && !use_posts.testPortada}]">Portada</p>
       </figure>
     </div>
-    <p class="text-center mt-16 mb-8">{{ newPreview.length }}/{{planSelected.quantity}} Fotos</p>
+    <p class="text-center mt-16 mb-8">{{ newPreview.length + previewImages.length }}/{{planSelected.quantity}} Fotos</p>
   </div>
   <nav class="control-steps-postProperty">
     <AtomsButtons @click="emit('back')" btn-style="outline-primary">

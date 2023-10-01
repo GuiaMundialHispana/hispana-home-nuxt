@@ -29,7 +29,6 @@
       <ul class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         <li v-for="item in data.results" :key="item">
           <MoleculesProperty
-            :is-favorite="true"
             :property="item.property"
             :property-id="item.advertisement_id"
           />
