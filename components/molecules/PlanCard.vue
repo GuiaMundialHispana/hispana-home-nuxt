@@ -62,7 +62,7 @@
       </AtomsButtons>
     </div>
     <p class="price" v-if="plan.id != 4  && $route.path != '/PostProperty' && $route.path != 'postProperty' && $route.path != '/edit-property'">
-      <span class="text-base"> RD$ </span>{{ plan.price  }}
+      <span class="text-base"> RD$ </span>{{ showParsedNumber(plan.price)  }}
     </p>
     <p v-if="plan.id === 4" class="free-price mt-4">
       Gratis
@@ -144,6 +144,9 @@ export default {
           timer: 2000
         });
       }
+    },
+    showParsedNumber(number) {
+      return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
   }
 }
