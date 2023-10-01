@@ -56,7 +56,7 @@
             >
               <p :class="statusBackground">{{ statusMessage }}</p>
             </div>
-            <img :src="`https://seal-app-4mhut.ondigitalocean.app/${property.image}`" :alt="property.name" class="object-cover h-full w-full">
+            <img :src="`https://hispana-autos-3284x.ondigitalocean.app/hispana-home-api${property.image}`" :alt="property.name" class="object-cover h-full w-full">
           </figure>
         </NuxtLink>
       </SwiperSlide>
@@ -133,7 +133,10 @@ export default {
     statusBackground: {
       type: String,
       default: ''
-    }
+    },
+    // favorite: {
+    //   type: Boolean
+    // }
   },
   data() {
     return {
@@ -210,7 +213,7 @@ export default {
       if(this.auth.isLoggedIn) {
         if(this.isFavorite) {
           this.deleteFavorite();
-          useRouter().go();
+          // useRouter().go();
         } else {
           this.addFavorite();
         }

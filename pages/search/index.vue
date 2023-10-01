@@ -121,27 +121,13 @@ const { data, pending } = await useLazyFetch('advertisements/search', {
 });
 
 const propertiesIds = ref([]);
-watch(pending,(xxx)=> {
-  if(xxx === false) {
+watch(pending,(newPending)=> {
+  if(newPending === false) {
     properties.value.forEach(element => {
       propertiesIds.value.push(element.properties_ids)
     })
   }
 })
-
-console.log(propertiesIds.value)
-
-
-const {data: favorites} = useFetch('users/favorites', {
-  method: 'GET',
-  headers: {
-    'Authorization': `Bearer ${user_store.token}`,
-    'Content-Type': 'application/json',
-    'Accept': 'application/json'
-  },
-  baseURL: config.public.API
-});
-console.log(favorites.value)
 
 function getFilterResults(e) {
   test = e;
@@ -165,19 +151,21 @@ async function searchProperties() {
   });
 };
 
-// onMounted(()=> {
-//   if(auth.isLoggedIn) {
-//     const {data} = useFetch('users/favorites', {
-//       method: 'GET',
-//       headers: {
-//         'Authorization': `Bearer ${user_store.token}`,
-//         'Content-Type': 'application/json',
-//         'Accept': 'application/json'
-//       },
-//       baseURL: config.public.API
-//     });
-//   }
-// })
+// if(auth.isLoggedIn) {
+//   console.log("esta logueado")
+//   const { data: favorites} = useLazyFetch('users/favorites', {
+//     method: 'GET',
+//     headers: {
+//       'Authorization': `Bearer ${user_store.token}`,
+//       'Content-Type': 'application/json',
+//       'Accept': 'application/json'
+//     },
+//     baseURL: config.public.API,
+//     onResponse({response}) {
+//       console.log(response)
+//     }
+//   });
+// }
 </script>
 
 <style lang="postcss" scoped>
