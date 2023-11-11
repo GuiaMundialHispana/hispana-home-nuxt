@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="min-h-screen">
     <div class="grid lg:grid-cols-2 h-full">
       <div class="w-full lg:px-8 px-4 lg:py-16 py-8">
         <h4 class="flex items-center">
@@ -14,61 +14,51 @@
             <div class="plan-information">
               <p class="capitalize">Plan {{ useRoute().query.name }}</p>
               <select readonly="readonly">
-                <option :value="parseInt($route.query.quantity)">Cantidad: {{useRoute().query.quantity}}</option>
+                <option :value="parseInt(useRoute().query.quantity)">Cantidad: {{useRoute().query.quantity}}</option>
               </select>
             </div>
             <h6 class="plan-price" v-if="useRoute().query.price > 0">
-              RD$ {{ useRoute().query.price }}
+              RD$ {{ converPrice(useRoute().query.price) }}
             </h6>
             <h6 class="plan-price uppercase" v-else>gratis</h6>
           </li>
         </ul>
         <p class="total-price max-w-max md:w-full md:ml-auto md:mr-0 mr-auto">
           <span class="text-sm font-normal block text-left mt-8">Pago total</span>
-          RD$ {{ test($route.query.newPrice) }}
+          RD$ {{ converPrice($route.query.newPrice) }}
         </p>
       </div>
       <!--  -->
       <div class="payment-wrapper">
-        <div id="card-form" ref="cardRef"></div>
-        <!-- <div class="form-group">
-          <label>Correo</label>
-          <input v-if="user.token" type="email" :value="user.userData.email">
-          <input v-else type="email">
-        </div> -->
-        <!-- <div class="form-group card-information">
-          <label>Información de la tarjeta</label>
-          <input type="text" class="border-b-0" placeholder="1234 4567 1234 4567">
-          <div class="flex items-center">
-            <input type="text" placeholder="MM/YY7">
-            <input type="text" placeholder="CVC">
-          </div>
-        </div>
         <div class="form-group">
-          <label>Nombre de la tarjeta</label>
-          <input type="text">
-        </div> -->
-        <AtomsButtons @click="processPayment()" class="w-full">Pagar</AtomsButtons>
+          <label>Nombre</label>
+          <input type="text" v-model="name">
+        </div>
+        <div class="form-group my-4">
+          <label>Correo</label>
+          <input type="email" v-model="email">
+        </div>
+        <div id="card-form" ref="cardRef" class="h-10 mt-8"></div>
+        <p v-if="stripeError.length > 0" class="font-semibold text-primary-100 my-3">{{stripeError}}</p>
+        <AtomsButtons btnSize="medium" @click="processPayment()" class="w-full mt-4" :disabled="name.length === 0 || email.length === 0">Pagar</AtomsButtons>
       </div>
     </div>
+    <OrganismPaymentConfirmation v-if="modal" />
   </section>
 </template>
 
 <script setup>
-import { useUserStore } from '~/stores/User';
 
 const isDataFilled = ref(false);
 const stripeCardElement = ref(null);
 const stripe = useStripe();
-const config = useRuntimeConfig();
-const user = useUserStore();
-const route = useRoute();
-const plan = ref({});
 const cardRef = ref(null);
-
+const email = ref("");
+const name = ref("");
+const modal = stripe.successPayment;
+const stripeError = stripe.stripeMessage;
 
 onMounted( async () => {
-  // decodeInnerObject();
   await stripe.initStripe();
   stripeCardElement.value = await stripe.setCardElement("#card-form");
   stripeCardElement.value.on('change', (event) => {
@@ -77,44 +67,12 @@ onMounted( async () => {
 });
 
 async function processPayment() {
-  await stripe.submitPayment(stripeCardElement.value)
-  // const form = new FormData();
-  // form.append('plan_id', plan.value.id);
-  // form.append('quantity', route.query.quantity)
-  // const { data }  = await useFetch('user-plans',{
-  //   method: 'POST',
-  //   headers: {
-  //     'Authorization': `Bearer ${localStorage.getItem('token')}`
-  //   },
-  //   baseURL: config.public.API,
-  //   body: form,
-  // });
-
-  // try {
-  //   const res = data.value.results;
-  //   this.$swal.fire({
-  //     icon: 'success',
-  //     text: 'Su pago ha sido realizado con exito',
-  //     timer: 2000
-  //   })
-  //   useRouter().push('/profile?tab=plan')
-  // } catch (error) {
-  //   $swal.fire({
-  //     icon: 'error',
-  //     text: 'En estos momentos estamos presentando un error, intente mas tarde'
-  //   })
-  // }
+  await stripe.submitPayment(stripeCardElement.value, email.value, name.value, useRoute().query.quantity, useRoute().query.planId );
 };
 
-function test(price) {
+function converPrice(price) {
   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
-
-// function decodeInnerObject() {
-//   const decodedValue = decodeURIComponent(route.query.plans);
-//   const innerObject = JSON.parse(decodedValue);
-//   return plan.value = innerObject;
-// };
 
 const renderPlanText = computed(()=> {
   if(useRoute().query.name === 'VIP') {
@@ -129,7 +87,6 @@ const renderPlanText = computed(()=> {
     return 'basic';
   }
 });
-
 
 </script>
 

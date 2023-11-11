@@ -122,7 +122,8 @@ export default {
           quantity: this.planQuantity,
           price: this.plan.price,
           name:this.plan.name,
-          pictures: this.plan.pictures
+          pictures: this.plan.pictures,
+          planId: this.plan.id
         }
         this.$swal.fire({
           title: '¿Deseas pagar este plan?',

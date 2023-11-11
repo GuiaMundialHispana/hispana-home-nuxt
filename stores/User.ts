@@ -102,6 +102,7 @@ export const useUserStore = defineStore('user', {
                 allowOutsideClick: false,
                 timer: 5000
               });
+              location.reload();
             });
           }
 
