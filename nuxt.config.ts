@@ -57,5 +57,8 @@ export default defineNuxtConfig({
       API: process.env.BASE_URL,
       PUBLISH_KEY: process.env.PUBLISH_KEY
     }
+  },
+  experimental: {
+    renderJsonPayloads: false
   }
 })

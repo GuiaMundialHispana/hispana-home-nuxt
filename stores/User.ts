@@ -90,6 +90,7 @@ export const useUserStore = defineStore('user', {
         },
         onResponse({ response }) {
           let responseApi = response._data.message;
+          console.log("hubo un error", response)
 
           if(response.status === 404 || responseApi === "Token invalid or not provided.") {
             localStorage.removeItem('token');
