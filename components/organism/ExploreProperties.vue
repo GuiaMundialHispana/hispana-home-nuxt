@@ -1,5 +1,5 @@
 <template>
-  <section v-if="properties.length > 0" class="pt-4 lg:px-16 md:px-6 px-4 mx-auto max-w-[97rem] pb-8">
+  <section v-if="property && property.length > 0" class="pt-4 lg:px-16 md:px-6 px-4 mx-auto max-w-[97rem] pb-8">
     <div class="flex flex-col md:flex-row justify-between border-b border-[#F5F5F5] py-2">
       <h2 class="text-2xl text md:text-[28px] leading-[28px] font-medium text-center md:text-left">
         Descubre que más tenemos <span class="text-primary-100">para ti</span>
@@ -33,13 +33,33 @@
       </swiper-slide>
     </Swiper>
   </section>
+  <Swiper
+    v-if="pending"
+    :modules="[SwiperFreeMode, SwiperNavigation, SwiperAutoplay]"
+    :effect="'fade'"
+    :lazy="true"
+    :space-between="32"
+    slides-per-view="auto"
+    :autoplay="{
+      delay: 4000,
+      disableOnInteraction: true
+    }"
+  >
+    <swiper-slide v-for="index in 5" :key="index">
+      <div class="skeleton">
+        <div class="skeleton-image"></div>
+        <div class="skeleton-date"></div>
+        <div class="skeleton-body"></div>
+      </div>
+    </swiper-slide>
+  </Swiper>
 </template>
 
 <script setup>
 const props = defineProps(['property_id'])
 const config = useRuntimeConfig();
 
-const {data:properties} = await useFetch(`advertisements/related/${props.property_id}`, {
+const { data: property, pending, error} = await useFetch(`advertisements/related/${props.property_id}`, {
   method: 'GET',
   baseURL: config.public.API,
   transform:(_property) => _property.results

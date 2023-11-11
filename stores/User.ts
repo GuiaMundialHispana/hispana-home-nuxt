@@ -101,7 +101,6 @@ export const useUserStore = defineStore('user', {
                 showConfirmButton: false,
                 allowOutsideClick: false
               });
-              useRouter().go();
             });
           }
 
