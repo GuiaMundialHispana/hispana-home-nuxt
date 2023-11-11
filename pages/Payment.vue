@@ -30,12 +30,13 @@
       </div>
       <!--  -->
       <div class="payment-wrapper">
-        <div class="form-group">
+        <div id="card-form" ref="cardRef"></div>
+        <!-- <div class="form-group">
           <label>Correo</label>
           <input v-if="user.token" type="email" :value="user.userData.email">
           <input v-else type="email">
-        </div>
-        <div class="form-group card-information">
+        </div> -->
+        <!-- <div class="form-group card-information">
           <label>Información de la tarjeta</label>
           <input type="text" class="border-b-0" placeholder="1234 4567 1234 4567">
           <div class="flex items-center">
@@ -46,81 +47,90 @@
         <div class="form-group">
           <label>Nombre de la tarjeta</label>
           <input type="text">
-        </div>
+        </div> -->
         <AtomsButtons @click="processPayment()" class="w-full">Pagar</AtomsButtons>
       </div>
     </div>
   </section>
 </template>
 
-<script>
+<script setup>
 import { useUserStore } from '~/stores/User';
-export default {
-  data() {
-    return {
-      plan: {},
-      config: useRuntimeConfig(),
-      user: useUserStore(),
-      route: useRoute()
-    }
-  },
-  methods: {
-    decodeInnerObject() {
-      const decodedValue = decodeURIComponent(this.route.query.plans);
-      const innerObject = JSON.parse(decodedValue);
-      return this.plan = innerObject;
-    },
-    async processPayment() {
-      const form = new FormData();
-      form.append('plan_id', this.plan.id);
-      form.append('quantity', this.route.query.quantity)
-      const { data }  = await useFetch('user-plans',{
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        baseURL: this.config.public.API,
-        body: form,
-      });
 
-      try {
-        const res = data.value.results;
-        this.$swal.fire({
-          icon: 'success',
-          text: 'Su pago ha sido realizado con exito',
-          timer: 2000
-        })
-        useRouter().push('/profile?tab=plan')
-      } catch (error) {
-        this.$swal.fire({
-          icon: 'error',
-          text: 'En estos momentos estamos presentando un error, intente mas tarde'
-        })
-      }
-    },
-    test(price) {
-      return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-  },
-  computed: {
-    renderPlanText() {
-      if(this.plan.name === 'VIP') {
-        return 'vip';
-      } else if (this.plan.name === 'SILVER') {
-        return 'silver';
-      } else if (this.plan.name === 'EXCLUSIVO') {
-        return 'exclusive';
-      } else if(this.plan.name === 'DESTACADOS') {
-        return '';
-      } else if(this.plan.name === 'BÁSICO') {
-        return 'basic';
-      }
-    },
-  },
-  mounted() {
-    this.decodeInnerObject();
+const isDataFilled = ref(false);
+const stripeCardElement = ref(null);
+const stripe = useStripe();
+const config = useRuntimeConfig();
+const user = useUserStore();
+const route = useRoute();
+const plan = ref({});
+const cardRef = ref(null);
+
+
+onMounted( async () => {
+  decodeInnerObject();
+  await stripe.initStripe();
+  stripeCardElement.value = await stripe.setCardElement("#card-form");
+  stripeCardElement.value.on('change', (event) => {
+    isDataFilled.value = !event.empty;
+  });
+});
+
+async function processPayment() {
+  await stripe.submitPayment(stripeCardElement.value)
+  // const form = new FormData();
+  // form.append('plan_id', plan.value.id);
+  // form.append('quantity', route.query.quantity)
+  // const { data }  = await useFetch('user-plans',{
+  //   method: 'POST',
+  //   headers: {
+  //     'Authorization': `Bearer ${localStorage.getItem('token')}`
+  //   },
+  //   baseURL: config.public.API,
+  //   body: form,
+  // });
+
+  // try {
+  //   const res = data.value.results;
+  //   this.$swal.fire({
+  //     icon: 'success',
+  //     text: 'Su pago ha sido realizado con exito',
+  //     timer: 2000
+  //   })
+  //   useRouter().push('/profile?tab=plan')
+  // } catch (error) {
+  //   $swal.fire({
+  //     icon: 'error',
+  //     text: 'En estos momentos estamos presentando un error, intente mas tarde'
+  //   })
+  // }
+};
+
+function test(price) {
+  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+
+function decodeInnerObject() {
+  const decodedValue = decodeURIComponent(route.query.plans);
+  const innerObject = JSON.parse(decodedValue);
+  return plan.value = innerObject;
+};
+
+const renderPlanText = computed(()=> {
+  if(plan.value.name === 'VIP') {
+    return 'vip';
+  } else if (plan.value.name === 'SILVER') {
+    return 'silver';
+  } else if (plan.value.name === 'EXCLUSIVO') {
+    return 'exclusive';
+  } else if(plan.value.name === 'DESTACADOS') {
+    return '';
+  } else if(plan.value.name === 'BÁSICO') {
+    return 'basic';
   }
-}
+});
+
+
 </script>
 
 <style lang="postcss" scoped>
