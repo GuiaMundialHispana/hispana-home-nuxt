@@ -99,7 +99,8 @@ export const useUserStore = defineStore('user', {
                 icon: 'error',
                 text: 'Por favor inicia sesion nuevamente',
                 showConfirmButton: false,
-                allowOutsideClick: false
+                allowOutsideClick: false,
+                timer: 5000
               });
             });
           }
