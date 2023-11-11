@@ -9,16 +9,16 @@
         <ul class="payment-plan-resume">
           <li class="plan-price-card">
             <div class="plan-name-card" :class="[renderPlanText]">
-              <p>{{plan.name}}</p>
+              <p>{{useRoute().query.name}}</p>
             </div>
             <div class="plan-information">
-              <p class="capitalize">Plan {{ plan.name }}</p>
+              <p class="capitalize">Plan {{ useRoute().query.name }}</p>
               <select readonly="readonly">
-                <option :value="parseInt($route.query.quantity)">Cantidad: {{$route.query.quantity}}</option>
+                <option :value="parseInt($route.query.quantity)">Cantidad: {{useRoute().query.quantity}}</option>
               </select>
             </div>
-            <h6 class="plan-price" v-if="plan.price > 0">
-              RD$ {{ plan.price }}
+            <h6 class="plan-price" v-if="useRoute().query.price > 0">
+              RD$ {{ useRoute().query.price }}
             </h6>
             <h6 class="plan-price uppercase" v-else>gratis</h6>
           </li>
@@ -68,7 +68,7 @@ const cardRef = ref(null);
 
 
 onMounted( async () => {
-  decodeInnerObject();
+  // decodeInnerObject();
   await stripe.initStripe();
   stripeCardElement.value = await stripe.setCardElement("#card-form");
   stripeCardElement.value.on('change', (event) => {
@@ -110,22 +110,22 @@ function test(price) {
   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
-function decodeInnerObject() {
-  const decodedValue = decodeURIComponent(route.query.plans);
-  const innerObject = JSON.parse(decodedValue);
-  return plan.value = innerObject;
-};
+// function decodeInnerObject() {
+//   const decodedValue = decodeURIComponent(route.query.plans);
+//   const innerObject = JSON.parse(decodedValue);
+//   return plan.value = innerObject;
+// };
 
 const renderPlanText = computed(()=> {
-  if(plan.value.name === 'VIP') {
+  if(useRoute().query.name === 'VIP') {
     return 'vip';
-  } else if (plan.value.name === 'SILVER') {
+  } else if (useRoute().query.name === 'SILVER') {
     return 'silver';
-  } else if (plan.value.name === 'EXCLUSIVO') {
+  } else if (useRoute().query.name === 'EXCLUSIVO') {
     return 'exclusive';
-  } else if(plan.value.name === 'DESTACADOS') {
+  } else if(useRoute().query.name === 'DESTACADOS') {
     return '';
-  } else if(plan.value.name === 'BÁSICO') {
+  } else if(useRoute().query.name === 'BÁSICO') {
     return 'basic';
   }
 });
