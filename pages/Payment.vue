@@ -48,7 +48,6 @@
 </template>
 
 <script setup>
-
 const isDataFilled = ref(false);
 const stripeCardElement = ref(null);
 const stripe = useStripe();
@@ -57,6 +56,10 @@ const email = ref("");
 const name = ref("");
 const modal = stripe.successPayment;
 const stripeError = stripe.stripeMessage;
+
+definePageMeta({
+  middleware: 'check-auth'
+});
 
 onMounted( async () => {
   await stripe.initStripe();
