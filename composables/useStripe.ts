@@ -44,7 +44,6 @@ export function useStripe() {
         resolve();
       } catch (error) {
         stripeMessage.value = error.message;
-        console.log(typeof(error.message))
         reject(error);
       }
     });
@@ -75,6 +74,10 @@ export function useStripe() {
             navigateTo("/profile?tab=plan")
           }, 3000);
         }
+        if(response._data.status === false) {
+          stripeMessage.value = response._data.message;
+        }
+        console.log(response)
       }
     })
   }
