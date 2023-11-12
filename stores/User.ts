@@ -91,7 +91,7 @@ export const useUserStore = defineStore('user', {
         onResponse({ response }) {
           let responseApi = response._data.message;
 
-          if(response.status === 404 || responseApi === "Token invalid or not provided.") {
+          if(response.status === 404 || responseApi === "Token invalid or not provided." || response.status === 500) {
             localStorage.removeItem('token');
             Swal.showLoading();
             useRouter().push("/").then(() => {
@@ -102,20 +102,12 @@ export const useUserStore = defineStore('user', {
                 allowOutsideClick: false,
                 timer: 5000
               });
+              navigateTo('/')
               location.reload();
             });
           }
 
           if(response._data.status === false) {
-            localStorage.removeItem('token');
-            Swal.fire({
-              icon: 'error',
-              text: 'Confirma que tus datos esten correctos',
-              timer: 2000
-            });
-          }
-
-          if(response._data.code === 400) {
             localStorage.removeItem('token');
             Swal.fire({
               icon: 'error',
