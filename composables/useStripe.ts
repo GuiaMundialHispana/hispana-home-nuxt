@@ -77,7 +77,6 @@ export function useStripe() {
         if(response._data.status === false) {
           stripeMessage.value = response._data.message;
         }
-        console.log(response)
       }
     })
   }
