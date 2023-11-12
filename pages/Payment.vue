@@ -1,6 +1,6 @@
 <template>
-  <section class="min-h-screen">
-    <div class="grid lg:grid-cols-2 h-full">
+  <section>
+    <div class="grid lg:grid-cols-2 min-h-screen">
       <div class="w-full lg:px-8 px-4 lg:py-16 py-8">
         <h4 class="flex items-center">
           <AtomsButtons @click="useRouter().back()" btn-type="btn-icon" class="mr-2" iconName="arrows/arrow-left"></AtomsButtons>
