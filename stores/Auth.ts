@@ -59,6 +59,7 @@ export const useAuthStore = defineStore('auth', {
 
       try {
         Swal.hideLoading();
+        Swal.close();
         useRouter().push("/")
       } 
       catch (error) {
