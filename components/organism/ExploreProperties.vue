@@ -28,7 +28,7 @@
         nextEl: '.next',
         prevEl: '.prev'
       }">
-      <swiper-slide v-for="property in properties" :key="property">
+      <swiper-slide v-for="property in property" :key="property">
         <MoleculesProperty :property="property.property" :property-id="property.id" />
       </swiper-slide>
     </Swiper>
@@ -64,6 +64,7 @@ const { data: property, pending, error} = await useFetch(`advertisements/related
   baseURL: config.public.API,
   transform:(_property) => _property.results
 });
+
 </script>
 
 <style lang="postcss" scoped>
