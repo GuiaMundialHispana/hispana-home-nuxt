@@ -20,7 +20,7 @@
       <input placeholder="Repite contraseña" type="password" v-model="password_confirmation">
       <AtomsIcon name="general/lock" :size=14 class="absolute text-primary-100 z-50 top-1/4 left-2" />
     </div>
-    <AtomsButtons btn-size="medium"  @click="register(),$emit('close')">
+    <AtomsButtons btn-size="medium"  @click="register()">
       Registrar
     </AtomsButtons>
   </div>
@@ -38,6 +38,7 @@ let lastname = ref('');
 let email = ref('');
 let password = ref('');
 let password_confirmation = ref('');
+const emit = defineEmits(['close'])
 
 async function register() {
   Swal.showLoading()
@@ -53,7 +54,6 @@ async function register() {
     baseURL: config.public.API,
     onResponse({response}) {
       Swal.hideLoading();
-      // console.log(response._data)
       if(response.status === 400) {
         let errors = response._data.message;
         Swal.fire({
@@ -78,20 +78,8 @@ async function register() {
         });
         localStorage.setItem('token', response._data.results.access_token.original.access_token);
         auth.isLoggedIn = true;
-        // let isAuthenticated = window.localStorage.getItem('token');
-        // async function getProfile() {
-        //   const data = await $fetch('auth/profile', {
-        //     method: 'GET',
-        //     headers: {
-        //       'Authorization': 'Bearer ' + isAuthenticated
-        //     },
-        //     baseURL: config.public.API
-        //   });
-        //   const res = data.results.user;
-        //   user.userData = res;
-        // }
-        // getProfile();
         useRouter().push('/profile?tab=plan');
+        emit('close');
       }
     }
   });
