@@ -80,7 +80,6 @@ function getAddress(lant, long, location) {
   lat = lant;
   log = long;
   address.value = location;
-  console.log(lat, log, address.value)
 };
 
 function currencyFormat() {
