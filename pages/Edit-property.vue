@@ -8,6 +8,10 @@ const user_store = useUserStore();
 const config = useRuntimeConfig();
 let step = ref(1);
 
+definePageMeta({
+  middleware: 'check-auth'
+});
+
 //Obtener anuncio
 // Swal.showLoading();
 Swal.showLoading()
@@ -117,7 +121,6 @@ async function createAdvertisement() {
     onResponse({ response }) {
       Swal.hideLoading();
       const res = response._data;
-      console.log(res)
       if(res.code === 200 ) {
         use_posts.$reset();
         Swal.fire({

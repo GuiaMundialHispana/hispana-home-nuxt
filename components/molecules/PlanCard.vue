@@ -27,8 +27,7 @@
         Exclusividad en página de inicio
       </li>
     </ul>
-    <!-- plan.id != 4 &&   -->
-    <div class="action-buttons" v-if="$route.path === '/profile' || $route.path === '/plans'">
+    <div class="action-buttons" v-if="plan.id !== 4">
       <div class="plan-quantity">
         <button :disabled="planQuantity < 2" @click="planQuantity--">-</button>
         <input type="number" readonly :value="planQuantity">
@@ -43,8 +42,8 @@
     </div>
     <div class="my-4 w-full">
       <slot v-if="seleccionado && $route.path != '/PostProperty'" />
-      <!-- plan.id != 4 || userQuantity != 0-->
       <AtomsButtons 
+        v-if="plan.id != 4"
         @click="payment()"
         btn-style="outline-gray"
         class="w-full">
@@ -64,7 +63,7 @@
     <p class="price" v-if="plan.id != 4  && $route.path != '/PostProperty' && $route.path != 'postProperty' && $route.path != '/edit-property'">
       <span class="text-base"> RD$ </span>{{ showParsedNumber(plan.price)  }}
     </p>
-    <p v-if="plan.id === 4" class="free-price mt-4">
+    <p v-if="plan.id === 4 && useRoute().path !== '/PostProperty'" class="free-price mt-4">
       Gratis
     </p>
   </div>

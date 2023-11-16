@@ -44,12 +44,7 @@
         prevEl: '.prev'
       }">
       <SwiperSlide>
-        <NuxtLink class="bg-gray-10" :to="{
-          path: `/search/${property.name}`,
-          query: {
-            property_id: propertyId
-          }
-        }">
+        <NuxtLink class="bg-gray-10" :to="`/search/${property.name}`" @click="saveId(propertyId)">
           <figure class="h-52 bg-gray-10">
             <div class="advertisements" v-if="
               $route.path === '/profile' && statusMessage !== ''"
@@ -61,31 +56,8 @@
         </NuxtLink>
       </SwiperSlide>
       <AtomsPropertyPlans class="absolute bottom-0 right-0 z-10" />
-      <!-- <nav v-if="property.images">
-        <AtomsButtons
-          btn-type="btn-icon"
-          btn-size="xsmall"
-          btn-style="outline-gray"
-          icon-name="arrows/arrow-left"
-          :icon-size=15
-          class="prev"
-        />
-        <AtomsButtons
-          btn-type="btn-icon"
-          btn-size="xsmall"
-          btn-style="outline-gray"
-          icon-name="arrows/arrow-right"
-          :icon-size=15
-          class="next"
-        />
-      </nav> -->
     </Swiper>
-    <NuxtLink :to="{
-      path: `/search/${property.name}`,
-      query: {
-        property_id: propertyId
-      }
-    }">
+    <NuxtLink :to="`/search/${property.name}`" @click="saveId(propertyId)">
       <p class="property-title">{{property.name }}</p>
       <p class="address">
         <AtomsIcon
@@ -105,9 +77,6 @@
       <!-- Price -->
       <p class="price-title">Desde:</p>
       <p class="price">US${{showParsedPrice(property.price_us)}}</p>
-      <!-- <p class="price">
-        RD${{showParsedPrice(property.price)}}
-      </p> -->
     </NuxtLink>
   </article>
 </template>
@@ -226,7 +195,10 @@ export default {
           timer: 2000
         });
       }
-    }
+    },
+    saveId(propertyId) {
+      sessionStorage.setItem('propertyId', propertyId);
+    },
   },
   mounted() {
     if(useRoute().fullPath === "/profile?tab=favorite") {
