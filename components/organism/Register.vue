@@ -20,7 +20,7 @@
       <input placeholder="Repite contraseña" type="password" v-model="password_confirmation">
       <AtomsIcon name="general/lock" :size=14 class="absolute text-primary-100 z-50 top-1/4 left-2" />
     </div>
-    <AtomsButtons btn-size="medium"  @click="register()">
+    <AtomsButtons type="submit" btn-size="medium" @click="register()">
       Registrar
     </AtomsButtons>
   </div>
@@ -29,29 +29,28 @@
 <script setup>
 import Swal from 'sweetalert2';
 import { useAuthStore } from '~/stores/Auth';
-import { useUserStore  } from '~/stores/User';
+
 const config = useRuntimeConfig();
 const auth = useAuthStore();
-const user = useUserStore();
 let name = ref('');
 let lastname = ref('');
 let email = ref('');
 let password = ref('');
 let password_confirmation = ref('');
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close']);
 
 async function register() {
   Swal.showLoading()
-  const {pending, data} = await useFetch('auth/register',{
+  await useFetch('auth/register',{
     method: 'POST',
-    body: {
-      name: name,
-      lastname: lastname,
-      email: email,
-      password: password,
-      password_confirmation: password_confirmation
-    },
     baseURL: config.public.API,
+    body: {
+      name: name.value,
+      lastname: lastname.value,
+      email: email.value,
+      password: password.value,
+      password_confirmation: password_confirmation.value
+    },
     onResponse({response}) {
       Swal.hideLoading();
       if(response.status === 400) {
