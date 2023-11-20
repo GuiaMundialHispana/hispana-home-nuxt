@@ -171,7 +171,7 @@ export default {
 <style lang="postcss" scoped>
 .user-image {
   @apply w-24 h-24 rounded-full border-4 border-solid border-primary-50 overflow-hidden mx-auto mb-2;
-  & img { @apply w-full h-full bg-cover bg-center; }
+  & img { @apply w-full h-full object-cover object-center; }
 }
 
 .user-name { @apply text-neutral-black text-base font-semibold text-center; }

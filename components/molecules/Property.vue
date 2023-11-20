@@ -44,7 +44,7 @@
         prevEl: '.prev'
       }">
       <SwiperSlide>
-        <NuxtLink class="bg-gray-10" :to="`/search/${property.name}`" @click="saveId(propertyId)">
+        <NuxtLink class="bg-gray-10" :to="`/search/${property.slug}`">
           <figure class="h-52 bg-gray-10">
             <div class="advertisements" v-if="
               $route.path === '/profile' && statusMessage !== ''"
@@ -57,7 +57,7 @@
       </SwiperSlide>
       <AtomsPropertyPlans class="absolute bottom-0 right-0 z-10" />
     </Swiper>
-    <NuxtLink :to="`/search/${property.name}`" @click="saveId(propertyId)">
+    <NuxtLink :to="`/search/${property.slug}`">
       <p class="property-title">{{property.name }}</p>
       <p class="address">
         <AtomsIcon
@@ -195,9 +195,6 @@ export default {
           timer: 2000
         });
       }
-    },
-    saveId(propertyId) {
-      sessionStorage.setItem('propertyId', propertyId);
     },
   },
   mounted() {

@@ -36,7 +36,7 @@
         />
       </nav>
       <swiper-slide v-for="image in property.images" :key="image">
-        <NuxtLink :to="`/search/${property.name}`" @click="saveId(propertyId)" class="h-[305px] relative flex justify-center pb-2 bg-gray-10 rounded-lg figure">
+        <NuxtLink :to="`/search/${property.slug}`" class="h-[305px] relative flex justify-center pb-2 bg-gray-10 rounded-lg figure">
           <img
             :src="`${image.image}`"
             :alt="property.name"
@@ -76,9 +76,6 @@ export default {
   methods: {
     showParsedPrice(price) {
       return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    },
-    saveId(propertyId) {
-      sessionStorage.setItem('propertyId', propertyId);
     },
   }
 }
