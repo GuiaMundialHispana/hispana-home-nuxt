@@ -15,7 +15,7 @@ definePageMeta({
 //Obtener anuncio
 // Swal.showLoading();
 Swal.showLoading()
-const { data: property, pending, error} = await useLazyFetch(`advertisements/${useRoute().query.property_id}`, {
+const { data: property, pending, error} = await useLazyFetch(`advertisements/${useRoute().query.slug}`, {
   method: 'GET',
   baseURL: config.public.API,
   transform:(_property) => _property.results,
@@ -63,7 +63,7 @@ async function createAdvertisement() {
   Swal.showLoading();
   const form = new FormData();
   form.append('plan_id', use_posts.plan_id);
-  form.append('advertisement_id', useRoute().query.property_id);
+  form.append('advertisement_id', property.value.property.id);
   form.append('type', use_posts.option_selected);
   form.append('property_category', use_posts.category_id);
   form.append('name', use_posts.name);
