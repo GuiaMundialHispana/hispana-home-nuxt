@@ -28,6 +28,7 @@ export default defineNuxtConfig({
     'nuxt-viewport',
     'nuxt-swiper',
     '@pinia/nuxt',
+    '@vee-validate/nuxt',
   ],
   viewport: {
     breakpoints: {

@@ -1,7 +1,6 @@
 <script setup>
-import { Field, Form, ErrorMessage } from 'vee-validate';
-import { useForm } from 'vee-validate';
-import * as yup from 'yup';
+import { useForm } from "vee-validate";
+import * as yup from "yup";
 import {ref, watch} from 'vue';
 import { usePostsStore } from '~/stores/Post';
 
