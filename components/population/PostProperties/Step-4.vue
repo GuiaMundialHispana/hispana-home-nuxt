@@ -1,9 +1,13 @@
 <script setup>
+import { Field, Form, ErrorMessage } from 'vee-validate';
+import { useForm } from 'vee-validate';
+import * as yup from 'yup';
 import {ref, watch} from 'vue';
 import { usePostsStore } from '~/stores/Post';
 
 const use_posts = usePostsStore();
 const config = useRuntimeConfig();
+const emit = defineEmits(['nexts'])
 const currencyTab = ref(true);
 const name = ref('');
 let price = ref(Number);
@@ -26,60 +30,48 @@ const propertyStatus = [
     value: 'Used'
   },
 ];
+const countries = useGetCountry().countries;
+const country = ref("");
+const features = useGetFeatures().features;
 const feature = ref([]);
-let features = [];
-let countries = [];
-let country = ref(0);
-let sectors = reactive([]);
 let sector = ref(0);
 let displaySector = ref(false);
-let cities = reactive([]);
 let city = ref([]);
 let displayCity = ref(false);
-let categories = [];
-let lat = null;
-let log = null;
+// let categories = [];
+let lat = ref(null);
+let log = ref(null);
 let address = ref('');
 let pricePlaceholder = ref('pesos dominicanos');
 let priceInput = ref('');
 
-let countriesApi = await $fetch('generals/countries', {
-  baseURL: config.public.API
+const schema = yup.object({
+  name: yup.string().required(),
+  address: yup.string().required(),
+  country: yup.string().required(),
+  sector: yup.string().required(),
+  city: yup.string().required(),
+  bedrooms: yup.number().required(),
+  bathrooms: yup.number().required(),
+  parking: yup.number().required(),
+  property_status: yup.string().required(),
+  meter: yup.number().required(),
+  meter_2: yup.number().required(),
+  description: yup.string().required(),
 });
-countriesApi.results.data.forEach(element => {
-  if(element.id === 63 || element.id === 236) {
-    countries.push(element)
+
+const { errors, handleSubmit, setFieldValue, handleReset, setFieldError } = useForm(
+  {
+    validationSchema: schema,
   }
-});
-
-let featuresApi = await $fetch('generals/features', {
-  baseURL: config.public.API
-});
-features = featuresApi.results;
-
-let categoriesApi = await $fetch('generals/categories', {
-  baseURL: config.public.API
-});
-categoriesApi.results = categories;
-
-async function getStates(country_id) {
-  const statesApi = await $fetch(`generals/states/${country_id}`, {
-    baseURL: config.public.API
-  });
-  sectors.push(statesApi.results.data);
-};
-
-async function getCities(sector_id) {
-  const citiesApi = await $fetch(`generals/cities/${sector_id}`, {
-    baseURL: config.public.API
-  });
-  cities.push(citiesApi.results.data);
-};
+);
 
 function getAddress(lant, long, location) {
-  lat = lant;
-  log = long;
+  lat.value = lant;
+  log.value = long;
   address.value = location;
+  console.log(lat.value, log.value)
+  setFieldValue('address', location);
 };
 
 function currencyFormat() {
@@ -93,6 +85,7 @@ function currencyFormat() {
     price_temp.value = numero;
   }
 }
+
 function validateInput(event) {
   const inputValue = event.target.value;
   const regex = /^[0-9.]*$/;
@@ -109,17 +102,32 @@ function validateInput(event) {
   };
 }
 
+let sectors = ref([])
 watch(country,(country_id) => {
-  getStates(country_id);
-  sectors = reactive([]);
-  cities = reactive([]);
   displaySector.value = true;
+  sectors.value = [];
+  const { data } = useFetch(`generals/states/${country_id}`, {
+    method: 'GET',
+    baseURL: config.public.API,
+    server: false,
+    transform(data) {
+      sectors.value.push(data.results.data)
+    }
+  })
 });
 
+let cities = ref([]);
 watch(sector,(sector_id) => {
-  getCities(sector_id);
-  cities = reactive([]);
   displayCity.value = true;
+  cities.value = [];
+  const { data } = useFetch(`generals/cities/${sector_id}`, {
+    method: 'GET',
+    baseURL: config.public.API,
+    server: false,
+    transform(data) {
+      cities.value.push(data.results.data)
+    }
+  })
 });
 
 watch(currencyTab,(new_value) => {
@@ -144,25 +152,26 @@ watch(price_temp,(new_price) => {
   }
 });
 
-function save_data() {
-  use_posts.name = name.value;
+const onSubmit = handleSubmit((values) => {
+  use_posts.name = values.name;
   use_posts.price = price.value;
   use_posts.price_us = price_us.value;
-  use_posts.lat = lat;
-  use_posts.log = log;
-  use_posts.address = address.value;
-  use_posts.country = country.value;
-  use_posts.sector = sector.value;;
-  use_posts.city = city.value;
-  use_posts.bedrooms = bedrooms.value;;
-  use_posts.bathrooms = bathrooms.value;;
-  use_posts.parking = parking.value;
-  use_posts.property_status = property_status.value;;
+  use_posts.lat = lat.value;
+  use_posts.log = log.value;
+  use_posts.address = values.address;
+  use_posts.country = values.country;
+  use_posts.sector = values.sector;
+  use_posts.city = values.city;
+  use_posts.bedrooms = values.bedrooms;
+  use_posts.bathrooms = values.bathrooms;
+  use_posts.parking = values.parking;
+  use_posts.property_status = values.property_status;
   use_posts.feature = feature.value;
-  use_posts.meter = meter.value;
-  use_posts.meter_2 = meter_2.value;
-  use_posts.description = description.value;
-};
+  use_posts.meter = values.meter;
+  use_posts.meter_2 = values.meter_2;
+  use_posts.description = values.description;
+  emit('nexts');
+});
 
 </script>
 
@@ -170,13 +179,14 @@ function save_data() {
   <h4 class="mt-11 mb-7 text-center">
     Cuéntanos sobre tu <span class="text-primary-100">inmueble</span>
   </h4>
-  <div class="mx-4 px-4 md:px-8 sm:grid sm:grid-cols-3 sm:mx-auto gap-4 max-w-[995px]">
-    <!-- Nombre -->
+  <form @submit="onSubmit" class="mx-4 px-4 md:px-8 sm:grid sm:grid-cols-3 sm:mx-auto gap-4 max-w-[995px]" :validation-schema="schema">
     <label class="col-span-3 sm:mb-2 mb-5">
       Nombre del proyecto
-      <input class="form-control" v-model="name" placeholder="Nombre del proyecto" type="text">
+      <!-- <input class="form-control" v-model="name" placeholder="Nombre del proyecto" type="text"> -->
+      <Field class="form-control" name="name" type="text" placeholder="Nombre del proyecto" />
+      <ErrorMessage name="name" />
     </label>
-    <!-- Price -->
+    <!-- TODO Price -->
     <div class="flex col-span-3 sm:mb-2 mb-5">
       <label class="w-full">
         Precio
@@ -211,60 +221,68 @@ function save_data() {
     <div class="col-span-3">
       <label class="w-full sm:mb-2 mb-5">
       Direccion
-      <input class="form-control" readonly v-model="address" placeholder="Direccion" type="text">
+      <Field class="form-control" v-model="address" name="address" type="text" placeholder="Direccion" />
+      <ErrorMessage name="address" />
     </label>
     </div>
     <!-- Pais -->
     <label class="w-full sm:mb-2 mb-5">
       País
-      <select class="form-control col-span-3" v-model="country">
-        <option v-for="country in countries" :value="country.id" :key="country.id" class="option-label">
-        {{ country.name }}
+      <Field name="country" as="select" v-model="country" class="form-control">
+        <option v-for="country in countries" :key="country" :value="country.id" class="option-label">
+          {{ country.name }}
         </option>
-      </select>
+      </Field>
+      <ErrorMessage name="country" />
     </label>
     <!-- Ciudad -->
     <label class="w-full sm:mb-2 mb-5" v-if="displaySector">
       Ciudad
-      <select class="form-control col-span-3" v-model="sector">
+      <Field name="sector" as="select" v-model="sector" class="form-control">
         <option v-for="sector in sectors[0]" :value="sector.id" :key="sector.id" class="option-label">
-        {{ sector.name }}
+          {{ sector.name }}
         </option>
-      </select>
+      </Field>
+      <ErrorMessage name="sector" />
     </label>
     <!-- Sector -->
     <label class="w-full sm:mb-2 mb-5" v-if="displayCity">
       Sector
-      <select class="form-control" v-model="city">
+      <Field name="city" as="select" class="form-control">
         <option v-for="item in cities[0]" :value="item.id" :key="item.id" class="option-label">
-        {{ item.name }}
+          {{ item.name }}
         </option>
-      </select>
+      </Field>
+      <ErrorMessage name="city" />
     </label>
-    <!-- Habitaciones, banos, parqueos -->
+
     <div class="col-span-3 gap-4 sm:grid grid-cols-2">
       <label class="w-full sm:mb-2 mb-5">
         Habitaciones
-        <input class="form-control" v-model="bedrooms" placeholder="Cantidad de habitaciones" type="number">
+        <Field class="form-control" name="bedrooms" type="number" placeholder="Cantidad de habitaciones" />
+        <ErrorMessage name="bedrooms" />
       </label>
       <label class="w-full sm:mb-2 mb-5">
         Baños
-        <input class="form-control" v-model="bathrooms" placeholder="Cantidad de baños" type="number">
+        <Field class="form-control" name="bathrooms" type="number" placeholder="Cantidad de baños" />
+        <ErrorMessage name="bathrooms" />
       </label>
       <label class="w-full sm:mb-2 mb-5">
         Parqueos
-        <input class="form-control" v-model="parking" placeholder="Cantidad de parqueos" type="number">
+        <Field class="form-control" name="parking" type="number" placeholder="Cantidad de parqueos" />
+        <ErrorMessage name="parking" />
       </label>
       <div class="mb-5 sm:mb-0">
         <label for="propertyStatus" class="mb-2">Estado</label>
-        <select class="form-control" v-model="property_status" id="propertyStatus">
+        <Field class="form-control" name="property_status" as="select" id="propertyStatus">
           <option v-for="status in propertyStatus" :key="status" :value="status.value" class="option-label">
             {{ status.name }}
           </option>
-        </select>
+        </Field>
+        <ErrorMessage name="property_status" />
       </div>
     </div>
-    <!-- Amenidades -->
+    <!-- TODO Amenidades -->
     <div class="col-span-3">
       <label for="amenities" class="mb-2">Otras amenidades</label>
       <div class="amenities-wrapper scrollbar">
@@ -288,27 +306,31 @@ function save_data() {
     <div class="col-span-3 w-full gap-4 sm:flex sm:mb-2 mb-5">
       <label class="w-full mb-5 sm:mb-0">
         Superficie de construcción
-        <input class="form-control" v-model="meter" placeholder="Metros²" type="number">
+        <Field class="form-control" name="meter" type="number" placeholder="Metros²" />
+        <ErrorMessage name="meter" />
       </label>
       <label class="w-full">
         Superficie de total
-        <input class="form-control" v-model="meter_2" placeholder="Metros²" type="number">
+        <Field class="form-control" name="meter_2" type="number" placeholder="Metros²" />
+        <ErrorMessage name="meter_2" />
       </label>
     </div>
     <!-- Descripcion -->
     <div class="flex flex-col col-span-3">
       <label>Descripción</label>
-      <textarea type="text" v-model="description" placeholder="Descripcion de la propiedad"></textarea>
+      <Field as="textarea" name="description" type="text" placeholder="Descripcion de la propiedad" />
+      <ErrorMessage name="description" />
     </div>
-  </div>
-  <nav class="control-steps-postProperty">
-    <AtomsButtons @click="$emit('back')" btn-style="outline-primary">
-      Atras
-    </AtomsButtons>
-    <AtomsButtons @click="$emit('nexts'), save_data()">
-      Continuar
-    </AtomsButtons>
-  </nav>
+    <!--  -->
+    <div class="col-span-3 flex justify-center w-full gap-4">
+      <AtomsButtons @click="$emit('back')" btn-style="outline-primary">
+        Atras
+      </AtomsButtons>
+      <AtomsButtons @click="onSubmit">
+        Continuar
+      </AtomsButtons>
+    </div>
+  </form>
 </template>
 
 <style lang="postcss" scoped>
@@ -360,5 +382,9 @@ textarea {
   &::-webkit-scrollbar-thumb {
     @apply border-[10px] border-solid border-neutral-white rounded-full bg-[#C1C1C1];
   }
+}
+
+span[role=alert] {
+  @apply text-[red] font-medium text-sm;
 }
 </style>
