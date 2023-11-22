@@ -4,7 +4,18 @@ import { usePostsStore } from '~/stores/Post';
 
 const use_posts = usePostsStore();
 const config = useRuntimeConfig();
-const emit = defineEmits(['back', 'nexts'])
+const emit = defineEmits(['back', 'nexts']);
+const props = defineProps({
+  countryId: {
+    type: Number
+  },
+  sectorId: {
+    type: Number
+  },
+  cityId: {
+    type: Number
+  }
+});
 const currencyTab = ref(true);
 let price = ref(Number);
 let price_us = ref(Number);
@@ -79,17 +90,6 @@ function getAddress(lant, long, location) {
   // console.log(lat, log, address.value)
 };
 
-const props = defineProps({
-  countryId: {
-    type: Number
-  },
-  sectorId: {
-    type: Number
-  },
-  cityId: {
-    type: Number
-  }
-});
 getStates(props.countryId);
 getCities(props.sectorId);
 
