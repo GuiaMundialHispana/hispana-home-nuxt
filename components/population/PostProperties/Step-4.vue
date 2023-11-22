@@ -12,13 +12,6 @@ const name = ref('');
 let price = ref(Number);
 let price_us = ref(Number);
 let price_temp = ref(Number);
-const bedrooms = ref(Number);
-const bathrooms = ref(Number);
-const parking = ref(Number);
-const meter = ref(Number);
-const meter_2 = ref(Number);
-const description = ref('');
-const property_status = ref('');
 const propertyStatus = [
   {
     name: 'Nuevo',
@@ -45,25 +38,23 @@ let pricePlaceholder = ref('pesos dominicanos');
 let priceInput = ref('');
 
 const schema = yup.object({
-  name: yup.string().required(),
-  address: yup.string().required(),
-  country: yup.string().required(),
-  sector: yup.string().required(),
-  city: yup.string().required(),
-  bedrooms: yup.number().required(),
-  bathrooms: yup.number().required(),
-  parking: yup.number().required(),
-  property_status: yup.string().required(),
-  meter: yup.number().required(),
-  meter_2: yup.number().required(),
-  description: yup.string().required(),
+  name: yup.string().required("El nombre es requrido"),
+  address: yup.string().required("La direccion es requerida"),
+  country: yup.string().required("El pais es requerido"),
+  sector: yup.string().required("El sector es requerido"),
+  city: yup.string().required("La ciudad es requerida"),
+  bedrooms: yup.number().required("Este campo es requerido y debe ser un numero"),
+  bathrooms: yup.number().required("Este campo es requerido y debe ser un numero"),
+  parking: yup.number().required("Este campo es requerido y debe ser un numero"),
+  property_status: yup.string().required("Este campo es requerido"),
+  meter: yup.number().required("Este campo es requerido y debe ser un numero"),
+  meter_2: yup.number().required("Este campo es requerido y debe ser un numero"),
+  description: yup.string().required("La descripcion es requerida"),
 });
 
-const { errors, handleSubmit, setFieldValue, handleReset, setFieldError } = useForm(
-  {
-    validationSchema: schema,
-  }
-);
+const { handleSubmit, setFieldValue} = useForm({
+  validationSchema: schema,
+});
 
 function getAddress(lant, long, location) {
   lat.value = lant;
@@ -305,7 +296,7 @@ const onSubmit = handleSubmit((values) => {
     <div class="col-span-3 w-full gap-4 sm:flex sm:mb-2 mb-5">
       <label class="w-full mb-5 sm:mb-0">
         Superficie de construcción
-        <Field class="form-control" name="meter" type="number" placeholder="Metros²" />
+        <Field class="form-control" name="meter" placeholder="Metros²" />
         <ErrorMessage name="meter" />
       </label>
       <label class="w-full">
