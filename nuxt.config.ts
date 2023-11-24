@@ -15,6 +15,7 @@ export default defineNuxtConfig({
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' }
       ],
+      link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.svg" }],
       script: [
         {
           src: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyD4T85-FkXl586zyEpYLy32ipUyGAvLSAs',
