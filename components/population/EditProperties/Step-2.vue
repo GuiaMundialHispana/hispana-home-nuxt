@@ -53,8 +53,8 @@ const emit = defineEmits(['back', 'nexts'])
       v-for="category in data.results"
       :key="category"
       class="option"
-      :class="[{checked: categorySelected === category.id}]">
-      <input type="radio" :value="category.id" v-model="categorySelected">
+      :class="[{checked: use_posts.category_id === category.id}]">
+      <input type="radio" :value="category.id" v-model="use_posts.category_id">
       {{ category.name }}
     </label>
   </div>

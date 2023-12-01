@@ -44,6 +44,7 @@ let lat = null;
 let log = null;
 let address = ref('');
 let pricePlaceholder = ref('pesos dominicanos');
+let priceInput = ref('');
 
 let countriesApi = await $fetch('generals/countries', {
   baseURL: config.public.API
@@ -152,11 +153,11 @@ watch(currencyTab,(new_value) => {
 
 watch(price_temp,(new_price) => {
   if (currencyTab.value === true) {
-    price.value = parseInt(new_price);
-    price_us.value = parseInt(new_price / 58);
+    use_posts.price = parseInt(new_price);
+    use_posts.price_us = parseInt(new_price / 58);
   } else {
-    price_us.value = parseInt(new_price);
-    price.value = parseInt(new_price * 58);
+    use_posts.price_us = parseInt(new_price);
+    use_posts.price = parseInt(new_price * 58);
   }
 });
 
@@ -182,16 +183,10 @@ watch(price,(new_price) => {
         Precio
         <input
           class="form-control"
-          v-model="use_posts.price"
+          v-model="priceInput"
           @blur="currencyFormat"
           @input="validateInput"
-          :placeholder="`Precio en `+ pricePlaceholder"
-        >
-        <input v-if="!currencyTab"
-          class="form-control"
-          v-model="use_posts.price_us"
-          placeholder="Precio en Dolares"
-          type="number"
+          :placeholder="use_posts.price"
         >
       </label>
       <div class="flex items-center ml-2.5">
