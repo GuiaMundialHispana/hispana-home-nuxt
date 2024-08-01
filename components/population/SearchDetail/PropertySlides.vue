@@ -10,7 +10,6 @@
       :thumbs="{ swiper: thumbsSwiper }"
       :modules="[SwiperNavigation,SwiperThumbs]"
       class="swiper-hero relative">
-        <!-- TODO Eeliminar statitc route image env -->
         <swiper-slide
           @click="showModal = true"
           v-for="image in images" :key="image"
@@ -18,7 +17,7 @@
           <!-- <div class="overlay">
             <AtomsIcon name="general/zoom" :size=35 class="text-neutral-white" />
           </div> -->
-          <img :src="`${image.image}`" class="w-full h-full object-cover rounded-lg" />
+          <!-- <img :src="`${image.image}`" class="w-full h-full object-cover rounded-lg" /> -->
           <!-- <atoms-property-plans :plan-type="renderPlanText" plan-position="top" class="z-20 top-0 absolute !rounded-none" /> -->
         </swiper-slide>
     </swiper>
