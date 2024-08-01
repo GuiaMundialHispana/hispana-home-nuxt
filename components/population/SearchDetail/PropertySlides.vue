@@ -26,7 +26,7 @@
         </swiper-slide>
     </Swiper>
     <!--  -->
-    
+
     <!-- Thumbs -->
     <!-- <swiper
       @swiper="setThumbsSwiper"
@@ -81,9 +81,9 @@ const renderPlanText = computed(() => {
 <style lang="postcss" scoped>
 
 section {
-  @apply md:px-14 px-4 mb-10 gap-5 mt-8 2xl:max-w-[1440px] mx-auto grid xl:grid-cols-[1fr,205px] overflow-hidden;
+  /* @apply md:px-14 px-4 mb-10 gap-5 mt-8 2xl:max-w-[1440px] mx-auto grid xl:grid-cols-[1fr,205px] overflow-hidden; */
 }
 
 
-.swiper-slide { @apply rounded-lg overflow-hidden relative !important; }
+/* .swiper-slide { @apply rounded-lg overflow-hidden relative !important; } */
 </style>
