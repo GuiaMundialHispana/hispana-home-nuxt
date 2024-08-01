@@ -1,5 +1,5 @@
 <template>
-  <section class="w-full md:h-[450px] lg:h-[780px] relative pt-6 sm:pt-16 md:pt-20 mx-auto lg:pt-60 mb-[50px] border-b border-gray-300">
+  <section class="w-full md:h-[450px] lg:h-[580px] relative pt-6 sm:pt-16 mx-auto  mb-[50px] border-b border-gray-300">
     <div class="md:pl-14 relative z-10 md:text-left text-center px-4 max-w-[97rem] mx-auto">
       <h1 class="lg:whitespace-nowrap">Estás más cerca del <br class="hidden sm:block"/><span class="text-primary-100 font-bold">hogar de tus sueños</span>
       </h1>
