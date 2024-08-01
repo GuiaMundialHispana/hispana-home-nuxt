@@ -93,7 +93,8 @@ input[type=number] {
 
 
 .swiper-hero-property {
-  /* @apply md:px-14 px-4 mb-10 gap-5 mt-8 2xl:max-w-[1440px] mx-auto grid xl:grid-cols-[1fr,205px] overflow-hidden; */
+  /* 2xl:max-w-[1440px] */
+  @apply md:px-14 px-4 mb-10 gap-5 mt-8 mx-auto grid xl:grid-cols-[1fr,205px] overflow-hidden;
 
   .swiper-hero {
     @apply  w-full m-0 !important;
