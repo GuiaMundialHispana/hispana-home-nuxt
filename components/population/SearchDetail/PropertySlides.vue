@@ -73,7 +73,7 @@ const renderPlanText = computed(() => {
 <style lang="postcss" scoped>
 
 section {
-  @apply md:px-14 px-4 mb-10 gap-5 mt-8 2xl:max-w-[1440px] mx-auto grid xl:grid-cols-[auto,205px];
+  @apply md:px-14 px-4 mb-10 gap-5 mt-8 2xl:max-w-[1440px] mx-auto grid xl:grid-cols-[1fr,205px];
 }
 
 .swiper-hero {
