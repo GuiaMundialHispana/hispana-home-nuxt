@@ -17,7 +17,6 @@
           v-for="image in images"
           :key="image"
         >
-          {{ image }}
           <div class="overlay">
             <AtomsIcon name="general/zoom" :size=35 class="text-neutral-white" />
           </div>
@@ -28,7 +27,7 @@
     <!--  -->
 
     <!-- Thumbs -->
-    <!-- <swiper
+    <swiper
       @swiper="setThumbsSwiper"
       :freeMode="true"
       :modules="[SwiperThumbs, SwiperFreeMode]"
@@ -43,14 +42,14 @@
       <swiper-slide v-for="image in images" :key="image">
         <img :src="`${image.image}`" class="w-full h-full object-cover rounded-lg" />
       </swiper-slide>
-    </swiper> -->
+    </swiper>
 
     <!-- Zoom image -->
-    <!-- <PopulationSearchDetailModalZoomSlides
+    <PopulationSearchDetailModalZoomSlides
       :modalImages="images"
       @close="showModal = false"
       v-show="showModal"
-    /> -->
+    />
   </section>
 </template>
 
@@ -77,13 +76,3 @@ const renderPlanText = computed(() => {
   }
 });
 </script>
-
-<style lang="postcss" scoped>
-
-section {
-  /* @apply md:px-14 px-4 mb-10 gap-5 mt-8 2xl:max-w-[1440px] mx-auto grid xl:grid-cols-[1fr,205px] overflow-hidden; */
-}
-
-
-/* .swiper-slide { @apply rounded-lg overflow-hidden relative !important; } */
-</style>
