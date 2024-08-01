@@ -17,13 +17,13 @@
           <!-- <div class="overlay">
             <AtomsIcon name="general/zoom" :size=35 class="text-neutral-white" />
           </div> -->
-          <!-- <img :src="`${image.image}`" class="w-full h-full object-cover rounded-lg" /> -->
+          <img :src="`${image.image}`" class="w-full h-full object-cover rounded-lg" />
           <!-- <atoms-property-plans :plan-type="renderPlanText" plan-position="top" class="z-20 top-0 absolute !rounded-none" /> -->
         </swiper-slide>
     </swiper>
     <!--  -->
     <!-- Thumbs -->
-    <swiper
+    <!-- <swiper
       @swiper="setThumbsSwiper"
       :spaceBetween="10"
       class="swiper-thumbs"
@@ -35,7 +35,7 @@
       <swiper-slide v-for="image in images" :key="image">
         <img :src="`${image.image}`" class="w-full h-full object-cover rounded-lg" />
       </swiper-slide>
-    </swiper>
+    </swiper> -->
     <!-- Zoom image -->
     <PopulationSearchDetailModalZoomSlides
       :modalImages="images"
