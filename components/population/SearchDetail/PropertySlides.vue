@@ -1,6 +1,6 @@
 <template>
-  <section>
-    <swiper
+  <section class="swiper-hero-property">
+    <Swiper
       :style="{
         '--swiper-navigation-color': '#fff',
         '--swiper-pagination-color': '#fff',
@@ -8,11 +8,15 @@
       :spaceBetween="10"
       :navigation="true"
       :thumbs="{ swiper: thumbsSwiper }"
-      :modules="[SwiperNavigation,SwiperThumbs]"
-      class="swiper-hero relative">
+      :modules="[SwiperNavigation,SwiperThumbs, SwiperFreeMode]"
+      :effect="'fade'"
+      :slides-per-view="1"
+      class="swiper-hero relative"
+      >
         <swiper-slide
           @click="showModal = true"
-          v-for="image in images" :key="image"
+          v-for="image in images"
+          :key="image"
         >
           <!-- <div class="overlay">
             <AtomsIcon name="general/zoom" :size=35 class="text-neutral-white" />
@@ -20,11 +24,14 @@
           <img :src="`${image.image}`" class="w-full h-full object-cover rounded-lg" />
           <!-- <atoms-property-plans :plan-type="renderPlanText" plan-position="top" class="z-20 top-0 absolute !rounded-none" /> -->
         </swiper-slide>
-    </swiper>
+    </Swiper>
     <!--  -->
     <!-- Thumbs -->
-    <!-- <swiper
+    <swiper
       @swiper="setThumbsSwiper"
+      :freeMode="true"
+      :modules="[SwiperThumbs, SwiperFreeMode]"
+      watch-slides-progress
       :spaceBetween="10"
       class="swiper-thumbs"
       :breakpoints="{
@@ -35,7 +42,7 @@
       <swiper-slide v-for="image in images" :key="image">
         <img :src="`${image.image}`" class="w-full h-full object-cover rounded-lg" />
       </swiper-slide>
-    </swiper> -->
+    </swiper>
     <!-- Zoom image -->
     <PopulationSearchDetailModalZoomSlides
       :modalImages="images"
@@ -46,7 +53,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 
 const props = defineProps(['images','planType']);
 
@@ -72,23 +79,9 @@ const renderPlanText = computed(() => {
 <style lang="postcss" scoped>
 
 section {
-  @apply md:px-14 px-4 mb-10 gap-5 mt-8 2xl:max-w-[1440px] mx-auto grid xl:grid-cols-[1fr,205px];
+  @apply md:px-14 px-4 mb-10 gap-5 mt-8 2xl:max-w-[1440px] mx-auto grid xl:grid-cols-[1fr,205px] overflow-hidden;
 }
 
-.swiper-hero {
-  @apply  w-full m-0 !important;
-
-  /* & .swiper-wrapper {
-    @apply h-full w-full rounded-lg overflow-hidden m-0;
-  } */
-
-  & > span { @apply absolute z-10 rounded-lg top-4 left-4 h-8 !important; }
-
-  & .overlay { @apply bg-neutral-black bg-opacity-50 z-[65] absolute w-full h-full bottom-0 left-0 hidden items-center justify-center p-4 cursor-pointer; }
-
-  & .swiper-slide:hover > .overlay { @apply flex; }
-
-}
 
 .swiper-thumbs {
   @apply xl:w-52 w-full xl:h-[560px] h-32 ;

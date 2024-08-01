@@ -90,3 +90,23 @@ input[type=number] {
 .skeleton {
   @apply bg-neutral-20 animate-pulse;
 }
+
+
+.swiper-hero-property {
+  .swiper-hero {
+    @apply  w-full m-0 !important;
+  
+    /* & .swiper-wrapper {
+      @apply h-full w-full rounded-lg overflow-hidden m-0;
+    } */
+  
+    & > span { @apply absolute z-10 rounded-lg top-4 left-4 h-8 !important; }
+  
+    & .overlay { @apply bg-neutral-black bg-opacity-50 z-[65] absolute w-full h-full bottom-0 left-0 hidden items-center justify-center p-4 cursor-pointer; }
+  
+    & .swiper-slide:hover > .overlay { @apply flex; }
+  
+  }
+
+  .swiper-slide { @apply rounded-lg !important; }
+}
