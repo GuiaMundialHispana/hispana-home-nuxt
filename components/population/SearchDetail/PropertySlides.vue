@@ -26,6 +26,7 @@
         </swiper-slide>
     </Swiper>
     <!--  -->
+    
     <!-- Thumbs -->
     <!-- <swiper
       @swiper="setThumbsSwiper"
@@ -43,6 +44,7 @@
         <img :src="`${image.image}`" class="w-full h-full object-cover rounded-lg" />
       </swiper-slide>
     </swiper> -->
+
     <!-- Zoom image -->
     <!-- <PopulationSearchDetailModalZoomSlides
       :modalImages="images"
