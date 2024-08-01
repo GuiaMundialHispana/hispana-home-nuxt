@@ -14,7 +14,6 @@
       class="swiper-hero"
       >
         <swiper-slide
-          @click="showModal = true"
           v-for="image in images"
           :key="image"
         >
@@ -44,11 +43,11 @@
       </swiper-slide>
     </swiper>
     <!-- Zoom image -->
-    <PopulationSearchDetailModalZoomSlides
+    <!-- <PopulationSearchDetailModalZoomSlides
       :modalImages="images"
       @close="showModal = false"
       v-show="showModal"
-    />
+    /> -->
   </section>
 </template>
 
