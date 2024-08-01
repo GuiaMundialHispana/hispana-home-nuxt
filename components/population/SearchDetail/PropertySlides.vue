@@ -77,7 +77,7 @@ section {
 }
 
 .swiper-hero {
-  @apply md:h-[560px] h-[360px] w-full m-0 !important;
+  @apply  w-full m-0 !important;
 
   /* & .swiper-wrapper {
     @apply h-full w-full rounded-lg overflow-hidden m-0;
