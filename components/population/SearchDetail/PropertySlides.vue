@@ -11,18 +11,17 @@
       :modules="[SwiperNavigation,SwiperThumbs, SwiperFreeMode]"
       :effect="'fade'"
       :slides-per-view="1"
-      class="swiper-hero"
       >
         <swiper-slide
           v-for="image in images"
           :key="image"
         >
           {{ image }}
-          <!-- <div class="overlay">
+          <div class="overlay">
             <AtomsIcon name="general/zoom" :size=35 class="text-neutral-white" />
-          </div> -->
-          <!-- <img :src="`${image.image}`" class="w-full h-full object-cover rounded-lg" /> -->
-          <!-- <atoms-property-plans :plan-type="renderPlanText" plan-position="top" class="z-20 top-0 absolute !rounded-none" /> -->
+          </div>
+          <img :src="`${image.image}`" class="w-full h-full object-cover rounded-lg" />
+          <atoms-property-plans :plan-type="renderPlanText" plan-position="top" class="z-20 top-0 absolute !rounded-none" />
         </swiper-slide>
     </Swiper>
     <!--  -->
