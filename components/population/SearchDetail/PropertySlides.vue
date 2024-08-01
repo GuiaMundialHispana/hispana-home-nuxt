@@ -11,6 +11,7 @@
       :modules="[SwiperNavigation,SwiperThumbs, SwiperFreeMode]"
       :effect="'fade'"
       :slides-per-view="1"
+      class="swiper-hero"
       >
         <swiper-slide
           v-for="image in images"

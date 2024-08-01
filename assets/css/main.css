@@ -108,7 +108,7 @@ input[type=number] {
   
   }
 
-  /* .swiper-slide { @apply rounded-lg !important; } */
+  .swiper-slide { @apply rounded-lg !important; }
 
   .swiper-thumbs {
     @apply xl:w-52 w-full xl:h-[560px] h-32 ;
