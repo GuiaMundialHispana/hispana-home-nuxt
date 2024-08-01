@@ -83,15 +83,5 @@ section {
 }
 
 
-.swiper-thumbs {
-  @apply xl:w-52 w-full xl:h-[560px] h-32 ;
-
-  & .swiper-wrapper {
-    @apply w-52 h-full m-0 !important;
-
-    & .swiper-slide { @apply w-52 h-32 xl:mx-0 mr-4 mb-4 object-cover !important; }
-  }
-}
-
 .swiper-slide { @apply rounded-lg overflow-hidden relative !important; }
 </style>
