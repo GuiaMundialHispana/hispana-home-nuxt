@@ -3,7 +3,7 @@
     <div class='w-full mx-auto flex items-center justify-between xl:px-14 px-4'>
       <NuxtLink to="/">
         <figure>
-          <img src='/img/logo-header.png' alt='Hispana Homes' class="lg:w-32 w-24 object-contain">
+          <img src='/img/logo-header.svg' alt='Grupo Casas & mass' class="lg:w-32 w-24 object-contain">
         </figure>
       </NuxtLink>
       <OnClickOutside @trigger="showMenu = false">

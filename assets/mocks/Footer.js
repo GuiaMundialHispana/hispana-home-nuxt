@@ -1,7 +1,7 @@
 export default {
   information:{
     logo: 'logo.png',
-    description: 'Busca, encuentra y compra el inmueble perfecto con Hispana Home, el buscador de inmuebles que te ofrece la mejor selección de propiedades. ¡Empieza tu búsqueda hoy mismo!'
+    description: 'Busca, encuentra y compra el inmueble perfecto con Grupo Casas & mas, el buscador de inmuebles que te ofrece la mejor selección de propiedades. ¡Empieza tu búsqueda hoy mismo!'
   },
   navigation: [
     // {

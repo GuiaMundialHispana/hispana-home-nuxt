@@ -78,7 +78,7 @@
       </div>
       <div class="flex flex-col mt-8">
         <h4>Contraseña</h4>
-        <p class="mt-3 mb-6">Una contraseña segura que te ayuda a proteger tu cuenta de Hispana Home</p>
+        <p class="mt-3 mb-6">Una contraseña segura que te ayuda a proteger tu cuenta de Grupo Casas & mas</p>
         <p>*************************</p>
         <button class="flex items-center gap-2 text-primary-100 mb-4 mt-4" @click="togglePassword = !togglePassword">
           Cambiar contraseña 

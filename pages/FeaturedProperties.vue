@@ -3,7 +3,7 @@
     <div class="md:pl-14 relative z-10 md:text-left text-center px-4 max-w-[97rem] w-full mx-auto text-neutral-white">
       <h1 class="lg:whitespace-nowrap text-neutral-white">Estás más cerca del <br class="hidden sm:block"/><span class="font-bold">hogar de tus sueños</span>
       </h1>
-      <p class="pt-6 md:pt-8 text-sm lg:whitespace-nowrap">Busca, encuentra y compra el inmueble perfecto con <strong>Hispana Home</strong>, el buscador de inmuebles<br class="md:block hidden"> que te ofrece la mejor selección de propiedades. ¡Empieza tu búsqueda hoy mismo!</p>
+      <p class="pt-6 md:pt-8 text-sm lg:whitespace-nowrap">Busca, encuentra y compra el inmueble perfecto con <strong>Grupo Casas & mas</strong>, el buscador de inmuebles<br class="md:block hidden"> que te ofrece la mejor selección de propiedades. ¡Empieza tu búsqueda hoy mismo!</p>
       <AtomsLink
         linkTo="/search?type=All" 
         btn-size="large" 
