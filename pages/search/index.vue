@@ -162,6 +162,10 @@ async function searchProperties() {
       pending.value = false;
       properties.splice(0,properties.length);
       let response = data.results.data;
+      propertiesVip.value = [];
+      propertiesExclusive.value = [];
+      propertiesSilver.value = [];
+      propertiesBasic.value = [];
       response.forEach(element => {
         if(element.plan_id === 1) propertiesVip.value.push(element)
         if(element.plan_id === 2) propertiesExclusive.value.push(element)
