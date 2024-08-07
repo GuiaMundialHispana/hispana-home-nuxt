@@ -33,17 +33,28 @@
         </span>
         encontrados
       </p>
-      <!-- <div>
-        <label for="filter" class="text-black mr-2">Ordena por:</label>
-        <select name="filter" class="appearance-none text-primary-100 focus:outline-none cursor-pointer px-2">
-          <option value="">Más recientes</option>
-          <option value="">Mas Baratas</option>
-        </select>
-      </div> -->
     </div>
     <div class="mt-8 pb-14">
       <ul v-if="!pending" class="property-list">
-        <li v-for="property in properties" :key="property">
+        <li v-for="property in propertiesVip" :key="property">
+          <MoleculesProperty
+            :property="property.property"
+            :property-id="property.advertisement_id"
+          />
+        </li>
+        <li v-for="property in propertiesExclusive" :key="property">
+          <MoleculesProperty
+            :property="property.property"
+            :property-id="property.advertisement_id"
+          />
+        </li>
+        <li v-for="property in propertiesSilver" :key="property">
+          <MoleculesProperty
+            :property="property.property"
+            :property-id="property.advertisement_id"
+          />
+        </li>
+        <li v-for="property in propertiesBasic" :key="property">
           <MoleculesProperty
             :property="property.property"
             :property-id="property.advertisement_id"
@@ -106,6 +117,10 @@ const user_store = useUserStore();
 //Mostrar propiedades
 let test = ref(null);
 let properties = ref([]);
+let propertiesVip = ref([]);
+let propertiesExclusive = ref([]);
+let propertiesSilver = ref([]);
+let propertiesBasic = ref([]);
 let showFilters = ref(false);
 
 const { data, pending } = await useLazyFetch('advertisements/search', {
@@ -114,6 +129,10 @@ const { data, pending } = await useLazyFetch('advertisements/search', {
   transform:(data) => {
     let response = data.results.data;
     response.forEach(element => {
+      if(element.plan_id === 1) propertiesVip.value.push(element)
+      if(element.plan_id === 2) propertiesExclusive.value.push(element)
+      if(element.plan_id === 3) propertiesSilver.value.push(element)
+      if(element.plan_id === 4) propertiesBasic.value.push(element)
       properties.value.push(element)
     });
   },
@@ -144,6 +163,10 @@ async function searchProperties() {
       properties.splice(0,properties.length);
       let response = data.results.data;
       response.forEach(element => {
+        if(element.plan_id === 1) propertiesVip.value.push(element)
+        if(element.plan_id === 2) propertiesExclusive.value.push(element)
+        if(element.plan_id === 3) propertiesSilver.value.push(element)
+        if(element.plan_id === 4) propertiesBasic.value.push(element)
         properties.push(element)
       });
     },
@@ -151,21 +174,6 @@ async function searchProperties() {
   });
 };
 
-// if(auth.isLoggedIn) {
-//   console.log("esta logueado")
-//   const { data: favorites} = useLazyFetch('users/favorites', {
-//     method: 'GET',
-//     headers: {
-//       'Authorization': `Bearer ${user_store.token}`,
-//       'Content-Type': 'application/json',
-//       'Accept': 'application/json'
-//     },
-//     baseURL: config.public.API,
-//     onResponse({response}) {
-//       console.log(response)
-//     }
-//   });
-// }
 </script>
 
 <style lang="postcss" scoped>
