@@ -10,31 +10,8 @@
       :space-between="2"
       :autoplay="{
         delay: 4000,
-        disableOnInteraction: true
-      }"
-      :navigation="{
-        nextEl: '.nextF',
-        prevEl: '.prevF'
       }"
     >
-      <nav>
-        <AtomsButtons
-          class="prevF"
-          btn-type="btn-icon"
-          btn-size="xsmall"
-          btn-style="outline-gray"
-          icon-name="arrows/arrow-left"
-          :icon-size=15
-        />
-        <AtomsButtons
-          class="nextF"
-          btn-type="btn-icon"
-          btn-size="xsmall"
-          btn-style="outline-gray"
-          icon-name="arrows/arrow-right"
-          :icon-size=15
-        />
-      </nav>
       <swiper-slide v-for="image in property.images" :key="image">
         <NuxtLink :to="`/search/${property.slug}`" class="h-[305px] relative flex justify-center pb-2 bg-gray-10 rounded-lg figure">
           <img

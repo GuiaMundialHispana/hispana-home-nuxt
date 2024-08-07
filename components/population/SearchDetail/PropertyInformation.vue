@@ -51,11 +51,11 @@
             <AtomsIcon name="general/share-location" :size=19 class="text-primary-100 mr-2.5" />
             {{ property.address }}
           </li>
-          <li class="md:border-r border-primary-100 xl:px-14 md:px-8">
+          <li class=" border-primary-100 xl:px-14 md:px-8" :class="[property.property_status === 'New' ? 'md:border-r' : '']">
             <AtomsIcon name="general/status" :size=19 class="text-primary-100 mr-2.5" />
             Estado: {{ property.property_status === 'New' ? 'Nuevo' : 'Usado' }}
           </li>
-          <li class="xl:pl-14 md:pl-8">
+          <li class="xl:pl-14 md:pl-8" v-if="property.property_status === 'new'">
             <AtomsIcon name="general/calendar_month" :size=19 class="text-primary-100 mr-2.5" />
             Entrega: 2024
           </li>

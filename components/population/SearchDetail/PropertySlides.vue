@@ -72,7 +72,7 @@ const renderPlanText = computed(() => {
   } else if ( props.planType === 2) {
     return 'exclusive';
   } else if(props.planType === 4 ) {
-    return 'featured';
+    return 'basic';
   }
 });
 </script>
