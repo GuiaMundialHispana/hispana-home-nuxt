@@ -1,6 +1,5 @@
-import VueSweetalert2 from 'vue-sweetalert2';
-import 'sweetalert2/dist/sweetalert2.min.css';
+import { createPinia } from 'pinia';
 
 export default defineNuxtPlugin((nuxtApp) => {
-  nuxtApp.vueApp.use(VueSweetalert2)
+  nuxtApp.vueApp.use(createPinia)
 })
