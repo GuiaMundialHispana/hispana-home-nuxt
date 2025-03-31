@@ -1,9 +1,12 @@
 <template>
   <article>
     <AtomsPropertyPlans class="property-type-component" :planType="plantype" planPosition="top" />
-    <AtomsPropertyLocation class="property-location-component" :location="property.address" />
+    <span v-if="property.address" class="property-location-component">
+      <AtomsIcon name="general/share-location" class="mr-2" />
+      {{property.address}}
+    </span>
     <Swiper
-      :modules="[SwiperFreeMode, SwiperNavigation]"
+      :modules="[SwiperFreeMode]"
       :effect="'fade'"
       :lazy="true"
       slides-per-view="auto"
@@ -17,6 +20,7 @@
           <img
             :src="`${image.image}`"
             :alt="property.name"
+            loading="lazy"
             class="object-cover h-full w-full absolute top-0 left-0 rounded-lg"
           >
           <p class="property-name">{{ property.name }}</p>
@@ -35,40 +39,26 @@
   </article>
 </template>
 
-<script>
-export default {
-  props: {
-    plantype: {
-      type: String,
-      default: "exclusive"
-    },
-    property: {
-      type: Object,
-      default: () => {}
-    },
-    propertyId: {
-      type: Number
-    }
-  },
-  methods: {
-    showParsedPrice(price) {
-      return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    },
-  }
+<script setup lang="ts">
+const props = defineProps<{
+  planType: string;
+  property: Property;
+  propertyId: number;
+}>();
+
+function showParsedPrice(price: number) {
+  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 </script>
 
 <style lang="postcss" scoped>
 article {
-  @apply rounded-2xl p-2 w-full sm:w-[350px] bg-neutral-white shadow-sm border border-gray-10 relative;
+  @apply rounded-2xl w-full sm:w-[350px] bg-neutral-white relative;
 
-  & .property-type-component { @apply absolute right-2 z-10 top-2 rounded-tr-lg; }
+  & .property-type-component { @apply absolute right-0 z-10 top-0 rounded-tr-lg; }
 
-  & .property-location-component { @apply absolute top-3 left-3 z-10; }
-
-  & nav {
-    @apply hidden absolute top-1/2 z-10 w-full justify-between px-4; 
-    & button { @apply bg-neutral-white hover:bg-primary-100 border-none !important; }
+  .property-location-component {
+    @apply truncate bg-neutral-black bg-opacity-50 text-neutral-white text-xs p-2 rounded-lg flex items-center font-normal absolute w-44 top-3 left-3 z-10;
   }
 
   & .swiper {

@@ -2,34 +2,26 @@
   <span :class="[planType, planPosition]">{{renderPlanText}}</span>
 </template>
 
-<script>
-export default {
-  props: {
-    planType: {
-      type: String,
-      default: ''
-    },
-    planPosition: {
-      type: String,
-      default: 'bottom'
-    }
-  },
-  computed: {
-    renderPlanText() {
-      if(this.planType === 'vip') {
-        return this.planText = 'vip';
-      } else if (this.planType === 'silver') {
-        return this.planText = 'Silver';
-      } else if ( this.planType === 'exclusive') {
-        return this.planText = 'exclusive';
-      } else if(this.planType === 'featured') {
-        return this.planText = 'destacado';
-      } else if(this.planType === 'basic') {
-        return this.planText = 'Basico';
-      }
-    }
+<script lang="ts" setup>
+
+const props = defineProps<{
+  planType: string;
+  planPosition: string;
+}>();
+
+const renderPlanText = computed(() => {
+  if(props.planType === 'vip') {
+    return 'vip';
+  } else if (props.planType === 'silver') {
+    return 'Silver';
+  } else if ( props.planType === 'exclusive') {
+    return 'exclusive';
+  } else if(props.planType === 'featured') {
+    return 'destacado';
+  } else if(props.planType === 'basic') {
+    return 'Basico';
   }
-}
+});
 </script>
 
 <style lang="postcss" scoped>

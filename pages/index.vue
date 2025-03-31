@@ -18,8 +18,8 @@
 			</div>
 		</section>
 		<GeneralExclusiveProperties :properties="exclusive" :pending="exclusive_status" />
-		<OrganismVipProperties />
-		<OrganismSilverProperties />
+		<GeneralVipProperties :properties="vip" :pending="vip_status" />
+    <GeneralSilverProperties :properties="silver" :pending="silver_status" />
 		<section class="benefits">
 			<p class="leading-10 bg-primary-50 text-primary-100 text-sm font-semibold px-2.5 w-fit rounded-lg">Beneficios</p>
 			<h2 class="mt-[34px] text-[28px] font-medium leading-7 text-center">¿Conoces los beneficios de<br hidden class="md:block"> <span class="text-primary-100">utilizar Grupo Casas & mas?</span></h2>
@@ -54,7 +54,19 @@
 <script setup>
 const config = useRuntimeConfig();
 
-const { data: exclusive, status: exclusive_status, error} = await useFetch('advertisements/home?plan=2', {
+const { data: exclusive, status: exclusive_status } = await useFetch('advertisements/home?plan=2', {
+  method: 'GET',
+  baseURL: config.public.API,
+  transform:(_property) => _property.results.data
+});
+
+const { data: vip, status: vip_status } = await useFetch('advertisements/home?plan=1', {
+  method: 'GET',
+  baseURL: config.public.API,
+  transform:(_property) => _property.results.data
+});
+
+const { data: silver, status: silver_status } = await useFetch('advertisements/home?plan=3', {
   method: 'GET',
   baseURL: config.public.API,
   transform:(_property) => _property.results.data
