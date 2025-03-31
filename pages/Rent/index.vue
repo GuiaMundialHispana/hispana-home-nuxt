@@ -32,18 +32,11 @@
           {{ properties.length }} resultados
         </span> encontrados
       </p>
-      <!-- <div>
-        <label for="filter" class="text-black mr-2">Ordena por:</label>
-        <select name="filter" class="appearance-none text-primary-100 focus:outline-none cursor-pointer px-2">
-          <option value="">Más recientes</option>
-          <option value="">Mas Baratas</option>
-        </select>
-      </div> -->
     </div>
     <div class="mt-8 pb-14">
       <ul v-if="!pending" class="property-list">
         <li v-for="property in properties" :key="property">
-          <MoleculesProperty
+          <GeneralProperty
             :property="property.property"
             :property-id="property.advertisement_id"
           />

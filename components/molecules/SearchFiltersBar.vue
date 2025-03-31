@@ -229,10 +229,6 @@
       <p class="xl:hidden mr-3 font-semibold">Borrar filtros</p>
       <AtomsIcon name="general/close" :size=17  />
     </button>
-    <!-- <button @click="clearFilter();" v-if="filter" class="flex items-center">
-      <p class="xl:hidden mr-3 font-semibold">Borrar filtros</p>
-      <AtomsIcon name="general/close" :size=17  />
-    </button> -->
   </div>
 </template>
 
@@ -330,15 +326,6 @@ export default {
       this.cities = citiesApi.results.data;
     },
     clearFilter() {
-      // this.price = '';
-      // this.bedroomQuantity = 0;
-      // this.bathroomQuantity = null;
-      // this.parkingLotQuantity = null;
-      // this.country_id = null;
-      // this.state_id = null;
-      // this.city_id = null;
-      // this.picked = null;
-      // this.status = null;
       delete this.queryBody.bedroom;
       delete this.queryBody.bathroom;
       delete this.queryBody.parking;

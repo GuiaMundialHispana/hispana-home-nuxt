@@ -26,6 +26,7 @@
         <MoleculesSearchFiltersBar @send-properties="getFilterResults" />
       </div>
     </OnClickOutside>
+    <!--  Counts-->
     <div class="flex items-center justify-between mt-8 2xl:mt-11 text-sm font-normal">
       <p class="text-neutral-black">
         <span class="text-primary-100 font-semibold">
@@ -35,21 +36,25 @@
       </p>
     </div>
     <div class="mt-8 pb-14">
+      <!-- Properties-->
       <ul v-if="!pending" class="property-list">
         <li v-for="property in propertiesVip" :key="property">
           <GeneralProperty
+            property-type="vip"
             :property="property.property"
             :property-id="property.advertisement_id"
           />
         </li>
         <li v-for="property in propertiesExclusive" :key="property">
           <GeneralProperty
+            property-type="exclusive"
             :property="property.property"
             :property-id="property.advertisement_id"
           />
         </li>
         <li v-for="property in propertiesSilver" :key="property">
           <GeneralProperty
+            property-type="silver"
             :property="property.property"
             :property-id="property.advertisement_id"
           />
@@ -61,41 +66,14 @@
           />
         </li>
       </ul>
+      <!-- Skeleton-->
       <div v-if="pending" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        <div class="skeleton">
-          <div class="skeleton-image"></div>
-          <div class="skeleton-date"></div>
-          <div class="skeleton-body"></div>
-        </div>
-        <div class="skeleton">
-          <div class="skeleton-image"></div>
-          <div class="skeleton-date"></div>
-          <div class="skeleton-body"></div>
-        </div>
-        <div class="skeleton">
-          <div class="skeleton-image"></div>
-          <div class="skeleton-date"></div>
-          <div class="skeleton-body"></div>
-        </div>
-        <div class="skeleton">
-          <div class="skeleton-image"></div>
-          <div class="skeleton-date"></div>
-          <div class="skeleton-body"></div>
-        </div>
-        <div class="skeleton">
-          <div class="skeleton-image"></div>
-          <div class="skeleton-date"></div>
-          <div class="skeleton-body"></div>
-        </div>
-        <div class="skeleton">
-          <div class="skeleton-image"></div>
-          <div class="skeleton-date"></div>
-          <div class="skeleton-body"></div>
-        </div>
+        <GeneralSkeletonProperty  />
       </div>
+      <!-- Empty Properties-->
       <div v-if="properties.length === 0 && !pending">
         <figure class="mb-4">
-          <img src="/img/not-found.png" class="object-contain max-w-[308px] mx-auto" />
+          <img alt="Hispana" src="/img/not-found.png" class="object-contain max-w-[308px] mx-auto" />
         </figure>
         <h6 class="text-4xl text-blue-100 font-bold mb-4 text-center">No hemos encontramos propiedades <br/>con estos resultados</h6>
       </div>
@@ -103,7 +81,7 @@
   </section>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { OnClickOutside } from '@vueuse/components';
 import { useAuthStore } from '~/stores/Auth';
 import { useUserStore } from '~/stores/User';
@@ -150,6 +128,7 @@ watch(pending,(newPending)=> {
 
 function getFilterResults(e) {
   test = e;
+  console.log(test)
   pending.value = true;
   searchProperties();
 }
@@ -176,7 +155,7 @@ async function searchProperties() {
     },
     query: test
   });
-};
+}
 
 </script>
 

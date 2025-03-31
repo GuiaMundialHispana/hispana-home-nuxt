@@ -9,7 +9,7 @@
       @click="toggleFavorite()"
       v-if="$route.fullPath != '/profile?tab=anuncio'"
     />
-    <!--    Editar la propiedad/ pero debo validar si esta logueado no solo con la ruta -->
+    <!-- Editar la propiedad/ pero debo validar si esta logueado no solo con la ruta -->
     <NuxtLink :to="{ path: `edit-property`, query: { slug: property.slug }}"
       class="btn-icon small active absolute left-4 z-10 top-1"
       v-if="$route.fullPath === '/profile?tab=anuncio'"
@@ -39,7 +39,7 @@
           </figure>
         </NuxtLink>
       </SwiperSlide>
-      <AtomsPropertyPlans class="absolute bottom-0 right-0 z-10" />
+      <AtomsPropertyPlans :plan-type="propertyType" plan-position="bottom" class="absolute bottom-0 right-0 z-10" />
     </Swiper>
     <!-- Information Card-->
     <NuxtLink :to="`/search/${property.slug}`" class="block mt-3">
@@ -78,6 +78,10 @@ const props = defineProps({
   },
   propertyId: {
     type: Number
+  },
+  propertyType: {
+    type: String,
+    default: ''
   },
   statusMessage: {
     type: String,
