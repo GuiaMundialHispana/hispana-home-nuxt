@@ -1,6 +1,5 @@
 <template>
   <div class="absolute left-0 bottom-[-6%] text-[#232323] z-10">
-    <!-- <MoleculesFilterStatusProperties class="filterStatus-tabs-lg"/> -->
     <div class="flex items-center overflow-hidden rounded-lg border-2 border-gray-100 bg-neutral-white text-[#232323] shadow-sm w-fit flex-none filterStatus-tabs-lg">
       <AtomsButtons
         v-for="(btn,i) in types"
@@ -180,12 +179,12 @@ export default {
           name: 'Todo'
         },
         {
-          getPath: '/sales?type=Sale',
+          getPath: '/search?type=Sale',
           getType: 'Sale',
           name: 'Comprar'
         },
         {
-          getPath: '/rent?type=Rent',
+          getPath: '/search?type=Rent',
           getType: 'Rent',
           name: 'Rentar'
         }
