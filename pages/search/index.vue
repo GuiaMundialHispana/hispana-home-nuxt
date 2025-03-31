@@ -37,25 +37,25 @@
     <div class="mt-8 pb-14">
       <ul v-if="!pending" class="property-list">
         <li v-for="property in propertiesVip" :key="property">
-          <MoleculesProperty
+          <GeneralProperty
             :property="property.property"
             :property-id="property.advertisement_id"
           />
         </li>
         <li v-for="property in propertiesExclusive" :key="property">
-          <MoleculesProperty
+          <GeneralProperty
             :property="property.property"
             :property-id="property.advertisement_id"
           />
         </li>
         <li v-for="property in propertiesSilver" :key="property">
-          <MoleculesProperty
+          <GeneralProperty
             :property="property.property"
             :property-id="property.advertisement_id"
           />
         </li>
         <li v-for="property in propertiesBasic" :key="property">
-          <MoleculesProperty
+          <GeneralProperty
             :property="property.property"
             :property-id="property.advertisement_id"
           />

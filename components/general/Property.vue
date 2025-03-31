@@ -1,5 +1,6 @@
 <template>
   <article>
+    <!-- Agrega a favoritos-->
     <AtomsButtons
       btn-type="btn-icon"
       icon-name="general/favorite"
@@ -8,57 +9,41 @@
       @click="toggleFavorite()"
       v-if="$route.fullPath != '/profile?tab=anuncio'"
     />
-    <NuxtLink
-      :to="{
-        path: `edit-property`,
-        query: {
-          slug: property.slug
-        }
-      }"
+    <!--    Editar la propiedad/ pero debo validar si esta logueado no solo con la ruta -->
+    <NuxtLink :to="{ path: `edit-property`, query: { slug: property.slug }}"
       class="btn-icon small active absolute left-4 z-10 top-1"
       v-if="$route.fullPath === '/profile?tab=anuncio'"
     >
       <AtomsIcon name="general/pencil" class="text-neutral-white" />
     </NuxtLink>
+    <!-- Images slider -->
+    <nav>
+      <AtomsButtons :class="`prev-${propertyId}`" class="prev" btn-type="btn-icon" btn-style="outline-gray" icon-name="arrows/arrow-left" btn-size="xsmall" :icon-size=15 />
+      <AtomsButtons :class="`next-${propertyId}`" btn-type="btn-icon" btn-style="outline-gray" icon-name="arrows/arrow-right" btn-size="xsmall" :icon-size=15 />
+    </nav>
     <Swiper
+      :modules="[SwiperNavigation]"
       class="relative rounded-lg overflow-hidden"
-      :modules="[SwiperAutoplay, SwiperEffectCreative]"
       :slides-per-view="1"
-      :loop="true"
-      :effect="'creative'"
-      :autoplay="{
-        delay: 8000,
-        disableOnInteraction: true,
-      }"
-      :creative-effect="{
-        prev: {
-          shadow: false,
-          translate: ['-20%', 0, -1],
-        },
-        next: {
-          translate: ['100%', 0, 0],
-        },
-      }"
       :navigation="{
-        nextEl: '.next',
-        prevEl: '.prev'
+        nextEl: `.next-${propertyId}`,
+        prevEl: `.prev-${propertyId}`
       }">
-      <SwiperSlide>
+      <SwiperSlide v-for="image in property.images" :key="image">
         <NuxtLink class="bg-gray-10" :to="`/search/${property.slug}`">
           <figure class="h-52 bg-gray-10">
-            <div class="advertisements" v-if="
-              $route.path === '/profile' && statusMessage !== ''"
-            >
+            <div class="advertisements" v-if="$route.path === '/profile' && statusMessage !== ''">
               <p :class="statusBackground">{{ statusMessage }}</p>
             </div>
-            <img :src="`${property.image}`" :alt="property.name" class="object-cover h-full w-full">
+            <img :src="`${image.image}`" :alt="property.name" class="object-cover h-full w-full">
           </figure>
         </NuxtLink>
       </SwiperSlide>
       <AtomsPropertyPlans class="absolute bottom-0 right-0 z-10" />
     </Swiper>
+    <!-- Information Card-->
     <NuxtLink :to="`/search/${property.slug}`">
-      <p class="property-title">{{property.name }}</p>
+      <h6 class="property-title">{{property.name }}</h6>
       <p class="address">
         <AtomsIcon
           name="general/share-location"
@@ -103,9 +88,6 @@ export default {
       type: String,
       default: ''
     },
-    // favorite: {
-    //   type: Boolean
-    // }
   },
   data() {
     return {
@@ -209,40 +191,57 @@ export default {
 article {
   @apply rounded-2xl bg-neutral-white p-2 w-full relative;
 
-  &:hover { box-shadow: 0px 4px 11px rgba(0, 0, 0, 0.07); }
-
-  & > button.favorite-button {
-    @apply absolute right-4 top-4 z-[5] bg-neutral-white border border-primary-50 hover:bg-primary-90 text-[#ADADAD] hover:text-neutral-white !important;
-    &.active { @apply bg-primary-100 text-neutral-white hover:bg-primary-90 !important; }
+  &:hover {
+    box-shadow: 0px 4px 11px rgba(0, 0, 0, 0.07);
+    nav { @apply flex; }
   }
 
-  & > a, & h6 { @apply font-semibold text-neutral-black mt-3 text-base block; }
+  .favorite-button {
+    @apply absolute right-4 top-4 z-[5] bg-neutral-white border border-primary-50 hover:bg-primary-90 text-[#ADADAD] hover:text-neutral-white !important;
 
-  & .property-title {
+    &.active {
+      @apply bg-primary-100 text-neutral-white hover:bg-primary-90 !important;
+    }
+  }
+
+  .property-title {
     @apply overflow-hidden truncate whitespace-nowrap w-11/12;
   }
 
-  & .address { @apply flex items-start font-normal text-neutral-black my-3 overflow-hidden truncate whitespace-nowrap w-11/12; }
-
-  & .price-title { @apply text-sm text-neutral-black font-normal; }
-  & .price { @apply text-primary-100 font-semibold text-xl uppercase; }
-
-  & .swiper:hover > nav { @apply flex; }
-
-  & nav { @apply hidden absolute top-1/2 z-10 w-full justify-between px-4; 
-  & button { @apply bg-neutral-white hover:bg-primary-100 border-none !important; }
+  .address {
+    @apply flex items-start font-normal text-neutral-black my-3 overflow-hidden truncate whitespace-nowrap w-11/12;
   }
-  & .advertisements{
+
+  .price-title {
+    @apply text-sm text-neutral-black font-normal;
+  }
+
+  .price {
+    @apply text-primary-100 font-semibold text-xl uppercase;
+  }
+
+  nav {
+    @apply hidden justify-between w-full  !text-primary-100 absolute left-0 top-[25%] z-[5] px-4;
+  }
+
+  & button {
+    @apply bg-neutral-white hover:bg-primary-100 border-none !important;
+  }
+
+  .advertisements {
     @apply absolute z-20 text-neutral-white top-0 bottom-0 left-0 right-0 flex items-center justify-center bg-opacity-40 bg-neutral-white;
+
     & p {
       @apply py-1.5 px-[15px] rounded-lg text-base w-fit text-center min-w-[209px];
     }
   }
 
-  & .btn-icon {
+  .btn-icon {
     @apply bg-primary-100 inline-flex justify-center items-center no-underline cursor-pointer duration-300 focus:outline-none;
 
-    &.small { @apply w-8 rounded-full h-8; }
+    &.small {
+      @apply w-8 rounded-full h-8;
+    }
   }
 
 }
