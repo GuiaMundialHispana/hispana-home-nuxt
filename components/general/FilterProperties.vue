@@ -5,7 +5,7 @@
         v-for="(btn,i) in types"
         @click="sendPath = btn.getPath, sendType = btn.getType, btnSelected = i"
         :class="{active: i === btnSelected}"
-        :key="btn">
+        :key="i">
         {{btn.name}}
       </AtomsButtons>
     </div>
@@ -160,162 +160,158 @@
   </div>
 </template>
 
-<script setup>
-  import { OnClickOutside } from '@vueuse/components';
-</script>
+<script lang="ts" setup>
+import { OnClickOutside } from '@vueuse/components';
+import { ref, reactive, watch, onMounted } from 'vue';
+import { useRoute, useRouter, useRuntimeConfig } from '#imports';
+import MultiRangeSlider from 'multi-range-slider-vue';
 
-<script>
-import  MultiRangeSlider  from "multi-range-slider-vue";
-export default {
-  data() {
-    return {
-      btnSelected:0,
-      route: useRoute(),
-      config:useRuntimeConfig(),
-      types:[
-        {
-          getPath: '/search?type=All',
-          getType: 'All',
-          name: 'Todo'
-        },
-        {
-          getPath: '/search?type=Sale',
-          getType: 'Sale',
-          name: 'Comprar'
-        },
-        {
-          getPath: '/search?type=Rent',
-          getType: 'Rent',
-          name: 'Rentar'
-        }
-      ],
-      dropdownLists: {
-        location: false,
-        propertyType: false,
-        priceRange: false,
-        country: false,
-        city: false,
-        municipality: false, 
-        sector: false,
-      },
-      barMinValue:0,
-      barMaxValue:10000000,
-      showBarMinValue: '0',
-      showBarMaxValue:"10,000,000",
-      maxPrice: 50000000,
-      countries: [],
-      country_id:0,
-      cities:[],
-      city_id:0,
-      states:[],
-      categories: [],
-      category_id: 0,
-      state_id:0,
-      picked:'RD',
-      price:'',
-      priceRangeSteps: 500000,
-      bedroomQuantity:0,
-      bathroomQuantity:0,
-      parkingLotQuantity:0,
-      status:'',
-      queryBody: {},
-      sendPath: '/search?type=All',
-      sendType: 'All',
-      ready: true
-    }
-  },
-  components: {
-    MultiRangeSlider
-  },
-  methods: {
-    UpdateValues(e) {
-      this.barMinValue = e.minValue;
-      this.barMaxValue = e.maxValue;
-      this.showBarMinValue = this.barMinValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      this.showBarMaxValue = this.barMaxValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      this.price = this.barMinValue.toString() + '-' + this.barMaxValue.toString();
-    },
-    toggleList(list) {
-      if (this.dropdownLists[list]) {
-        setTimeout(() => {
-          this.dropdownLists[list] = false;
-        }, 50);
-      } else { this.dropdownLists[list] = true; }
-    },
-    async getCountries() {
-      const countriesApi = await $fetch(this.config.public.API+'generals/countries');
-      countriesApi.results.data.forEach(element => {
-        if(element.id === 63 || element.id === 236) {
-          this.countries.push(element)
-        }
-      });
-    },
-    async getStates(country_id) {
-      const statesApi = await $fetch(this.config.public.API+'generals/states/'+`${country_id}`);
-      this.states = statesApi.results.data;
-    }, 
-    async getCities(state_id) {
-      const citiesApi = await $fetch(this.config.public.API+'generals/cities/'+`${state_id}`);
-      this.cities = citiesApi.results.data;
-    },
-    async searchProperties() {
-      useRouter().push({
-        path: this.sendPath, 
-        query: this.queryBody 
-      })
-    },
-    async getCategories() {
-      const categoriesApi = await $fetch(this.config.public.API+'generals/categories');
-      this.categories = categoriesApi.results;
-    },
-  },
-  watch: {
-    picked(newPicked) {
-      this.queryBody.price_type = newPicked;
-      if (newPicked === 'USD') {
-        this.barMinValue = 0,
-        this.barMaxValue = 1000000,
-        this.showBarMinValue = '0';
-        this.showBarMaxValue = '1,000,000';
-        this.maxPrice = 3000000;
-        this.priceRangeSteps = 50000;
-      } else{
-        this.barMinValue = 0,
-        this.barMaxValue = 10000000,
-        this.showBarMinValue = '0';
-        this.showBarMaxValue = '10,000,000';
-        this.maxPrice = 50000000;
-        this.priceRangeSteps = 500000;
-      }
-    },
-    price(price) {
-      this.queryBody.price = price;
-    },
-    country_id(country_id) {
-      this.getStates(this.country_id);
-      this.queryBody.country_id = country_id;
-    },
-    state_id(state_id) {
-      this.getCities(this.state_id);
-      this.queryBody.town_id = state_id;
-    },
-    city_id(city_id) {
-      this.queryBody.city_id = city_id;
-    },
-    sendType(route) {
-      this.queryBody.type = route;
-    },
-    category_id(category_id) {
-      this.queryBody.property_category_id = category_id;
-    }
-  },
-  mounted() {
-    this.getCountries();
-    this.getCategories();
-    this.queryBody.type = this.sendType;
-    this.queryBody.price_type = this.picked;
+const route = useRoute();
+const router = useRouter();
+const config = useRuntimeConfig();
+
+const btnSelected = ref(0);
+const types = [
+  { getPath: '/resultados?type=All', getType: 'All', name: 'Todo' },
+  { getPath: '/resultados?type=Sale', getType: 'Sale', name: 'Comprar' },
+  { getPath: '/resultados?type=Rent', getType: 'Rent', name: 'Rentar' }
+];
+
+const dropdownLists = reactive({
+  location: false,
+  propertyType: false,
+  priceRange: false,
+  country: false,
+  city: false,
+  municipality: false,
+  sector: false,
+});
+
+const barMinValue = ref(0);
+const barMaxValue = ref(10000000);
+const showBarMinValue = ref('0');
+const showBarMaxValue = ref('10,000,000');
+const maxPrice = ref(50000000);
+const countries = ref([]);
+const country_id = ref(0);
+const cities = ref([]);
+const city_id = ref(0);
+const states = ref([]);
+const categories = ref([]);
+const category_id = ref(0);
+const state_id = ref(0);
+const picked = ref('RD');
+const price = ref('');
+const priceRangeSteps = ref(500000);
+const bedroomQuantity = ref(0);
+const bathroomQuantity = ref(0);
+const parkingLotQuantity = ref(0);
+const status = ref('');
+const queryBody = reactive({});
+const sendPath = ref('/resultados?type=All');
+const sendType = ref('All');
+const ready = ref(true);
+
+const UpdateValues = (e: any) => {
+  barMinValue.value = e.minValue;
+  barMaxValue.value = e.maxValue;
+  showBarMinValue.value = barMinValue.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  showBarMaxValue.value = barMaxValue.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  price.value = barMinValue.value.toString() + '-' + barMaxValue.value.toString();
+};
+
+const toggleList = (list: string) => {
+  if (dropdownLists[list]) {
+    setTimeout(() => {
+      dropdownLists[list] = false;
+    }, 50);
+  } else {
+    dropdownLists[list] = true;
   }
-}
+};
+
+const getCountries = async () => {
+  const countriesApi = await $fetch(config.public.API + 'generals/countries');
+  countriesApi.results.data.forEach((element: any) => {
+    if (element.id === 63 || element.id === 236) {
+      countries.value.push(element);
+    }
+  });
+};
+
+const getStates = async (country_id: number) => {
+  const statesApi = await $fetch(config.public.API + 'generals/states/' + `${country_id}`);
+  states.value = statesApi.results.data;
+};
+
+const getCities = async (state_id: number) => {
+  const citiesApi = await $fetch(config.public.API + 'generals/cities/' + `${state_id}`);
+  cities.value = citiesApi.results.data;
+};
+
+const searchProperties = async () => {
+  router.push({
+    path: sendPath.value,
+    query: queryBody
+  });
+};
+
+const getCategories = async () => {
+  const categoriesApi = await $fetch(config.public.API + 'generals/categories');
+  categories.value = categoriesApi.results;
+};
+
+watch(picked, (newPicked) => {
+  queryBody.price_type = newPicked;
+  if (newPicked === 'USD') {
+    barMinValue.value = 0;
+    barMaxValue.value = 1000000;
+    showBarMinValue.value = '0';
+    showBarMaxValue.value = '1,000,000';
+    maxPrice.value = 3000000;
+    priceRangeSteps.value = 50000;
+  } else {
+    barMinValue.value = 0;
+    barMaxValue.value = 10000000;
+    showBarMinValue.value = '0';
+    showBarMaxValue.value = '10,000,000';
+    maxPrice.value = 50000000;
+    priceRangeSteps.value = 500000;
+  }
+});
+
+watch(price, (newPrice) => {
+  queryBody.price = newPrice;
+});
+
+watch(country_id, (newCountryId) => {
+  getStates(newCountryId);
+  queryBody.country_id = newCountryId;
+});
+
+watch(state_id, (newStateId) => {
+  getCities(newStateId);
+  queryBody.town_id = newStateId;
+});
+
+watch(city_id, (newCityId) => {
+  queryBody.city_id = newCityId;
+});
+
+watch(sendType, (newRoute) => {
+  queryBody.type = newRoute;
+});
+
+watch(category_id, (newCategoryId) => {
+  queryBody.property_category_id = newCategoryId;
+});
+
+onMounted(() => {
+  getCountries();
+  getCategories();
+  queryBody.type = sendType.value;
+  queryBody.price_type = picked.value;
+});
 </script>
 
 <style lang="postcss" scoped>

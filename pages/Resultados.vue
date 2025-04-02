@@ -4,14 +4,14 @@
       v-show="viewport.isLessThan('xl')"
       class="mt-5 font-semibold w-full"
       icon-position="right"
-      btn-style="solid-primary" 
+      btn-style="solid-primary"
       icon-name="general/search"
       btn-size="large"
       :icon-size=18
       @click="showFilters = !showFilters"
-      >Filtrar propiedades
+    >Filtrar propiedades
     </AtomsButtons>
-    <OnClickOutside @trigger="showFilters = false" :class="{'hidden': !showFilters, 'flex' : showFilters}" class="filters-overflow">
+    <OnClickOutside @trigger="showFilters = false" :class="showFilterDrodown" class="filters-overflow">
       <AtomsButtons
         v-show="viewport.isLessThan('xl')"
         btn-type="btn-icon"
@@ -101,7 +101,12 @@ let propertiesBasic = ref([]);
 let showFilters = ref(false);
 const createQuery = ref({});
 
+const showFilterDrodown = computed(() => {
+  return showFilters.value ? 'flex' : 'hidden';
+})
+
 function getFilterResults(e) {
+  console.log(e);
   createQuery.value = e;
   createQuery.value.type = route.query.type;
 }
@@ -139,6 +144,11 @@ watch(isPending,(newPending)=> {
     })
   }
 })
+
+const routeHasQuery = useRoute().query;
+if(routeHasQuery) {
+  getFilterResults(routeHasQuery);
+}
 </script>
 
 <style lang="postcss" scoped>
