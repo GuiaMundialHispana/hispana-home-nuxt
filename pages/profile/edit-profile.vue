@@ -120,7 +120,7 @@
               <img
                 v-if="isNewImage"
                 :src="`${profilePic}`"
-                :alt="userStore.userData.name"
+                :alt="user.name"
                 class="rounded-full w-full h-full object-cover"
               >
             </figure>
@@ -156,9 +156,8 @@
   </section>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import Swal from 'sweetalert2';
-import { useUserStore } from '~/stores/User';
 import { VueTelInput } from 'vue-tel-input';
 import 'vue-tel-input/vue-tel-input.css';
 
@@ -181,7 +180,6 @@ const email = ref('');
 const password = ref('');
 const current_password = ref('');
 const password_confirmation = ref('');
-const userStore = useUserStore();
 const form = new FormData();
 const { countries } = useGetCountry();
 
@@ -199,11 +197,11 @@ watch(user, () => {
 const togglePassword = ref(false);
 async function changesPassword(){
   Swal.showLoading();
-  email.value === '' ? form.append('email', userStore.userData.email) : form.append('email', email.value);
+  email.value === '' ? form.append('email', user.value.email) : form.append('email', email.value);
   form.append('current_password', current_password.value);
   form.append('password', password.value);
   form.append('password_confirmation', password_confirmation.value);
-  await useFetch('users/update?_method=PUT',{
+  $fetch('users/update?_method=PUT',{
     method: 'POST',
     body: form,
     headers: {

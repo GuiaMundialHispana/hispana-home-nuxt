@@ -19,6 +19,7 @@
             {{user.name}} {{user.lastname}}
           </h3>
           <div v-if="user.name === null || user.name === ''" class="w-40 h-5 skeleton rounded-lg mb-4"></div>
+          <nuxtLink to="/profile/edit-profile">editar perfil</nuxtLink>
           <AtomsLink btn-style="outline-primary" link-to="/profile/edit-profile">Editar perfil</AtomsLink>
         </div>
       </div>
