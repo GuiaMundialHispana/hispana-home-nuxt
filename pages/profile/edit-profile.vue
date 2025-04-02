@@ -49,6 +49,12 @@
           </label>
         </div>
       </div>
+      <div class="mt-4">
+        <label>
+          Correo electrónico:
+          <input type="email" v-model="email">
+        </label>
+      </div>
       <h4>Contactos</h4>
       <div class="flex md:flex-row flex-col gap-2">
         <label>
@@ -58,15 +64,6 @@
         <label>
           Teléfono residencial:
           <vue-tel-input v-model="phone" mode="international" class="lg:mr-4 mr-0"></vue-tel-input>
-        </label>
-      </div>
-      <div>
-        <label>
-          Correo electrónico:
-          <input
-            type="email"
-            v-model="email"
-          >
         </label>
       </div>
       <div class="flex flex-col mt-8">
@@ -108,19 +105,18 @@
           </div>
         </div>
       </div>
-      <div class="mt-8 md:h-40 flex-col md:flex-row">
+      <div v-if="user" class="mt-8 md:h-40 flex-col md:flex-row">
         <div class="flex flex-col md:mr-14 mb-6 md:mb-0">
           <div class="flex flex-col items-center">
             <p class="whitespace-nowrap">Actualiza tu foto de perfil</p>
             <figure class="w-[107px] h-[107px] rounded-full border-[5px] border-primary-50 mt-5">
-              <img v-if="!isNewImage && userStore.userData.profile_pic != null"
-                :src="`${userStore.userData.profile_pic}`"
-                :alt="userStore.userData.name"
+              <NuxtImg
+                v-if="!isNewImage && user.profile_pic !== null"
+                :src="user.profile_pic"
+                placeholder="/img/featured-properties-bg.jpg"
+                :alt="user.name"
                 class="rounded-full w-full h-full object-cover"
-              >
-              <span v-if="!isNewImage && userStore.userData.profile_pic === null" class="w-full h-full flex items-center justify-center font-bold text-primary-100 uppercase text-6xl rounded-full">
-                {{userStore.userData.name.charAt(0)}}{{ userStore.userData.lastname.charAt(0) }}
-              </span>
+              />
               <img
                 v-if="isNewImage"
                 :src="`${profilePic}`"
@@ -171,30 +167,36 @@ definePageMeta({
   middleware: 'check-auth'
 });
 
+const { pendingUserData } = useUser();
+const user = useState('user');
+const config = useRuntimeConfig();
+
 const name = ref('');
 const lastName = ref('');
 const birthdate = ref(null);
 const country = ref(null);
-const phone = ref('');
-const cellphone = ref('');
+const phone = ref(null);
+const cellphone = ref(null);
 const email = ref('');
 const password = ref('');
 const current_password = ref('');
 const password_confirmation = ref('');
 const userStore = useUserStore();
 const form = new FormData();
+const { countries } = useGetCountry();
+
+watch(user, () => {
+  name.value = user.value.name;
+  lastName.value = user.value.lastname;
+  birthdate.value = user.value.birthdate;
+  country.value = user.value.country_id;
+  phone.value = user.value.phone.toString();
+  cellphone.value = user.value.cellphone.toString();
+  email.value = user.value.email;
+})
+
+
 const togglePassword = ref(false);
-const images = ref(null);
-const profilePic = ref('');
-const isNewImage = ref(false);
-
-const { data: countries } = await useFetch('generals/countries', {
-  baseURL: useRuntimeConfig().public.API,
-  transform(data) {
-    return data.results.data;
-  }
-});
-
 async function changesPassword(){
   Swal.showLoading();
   email.value === '' ? form.append('email', userStore.userData.email) : form.append('email', email.value);
@@ -241,20 +243,37 @@ async function changesPassword(){
   });
 };
 
+const images = ref(null);
+const profilePic = ref('');
+const isNewImage = ref(false);
+function previewFiles(event) {
+  images.value = event.target.files[0]
+  profilePic.value = URL.createObjectURL(images.value);
+};
+
+watch(profilePic,() => {
+  form.append('profile_pic', images.value);
+  isNewImage.value = true;
+})
+
+watch(images,() => {
+  form.append('profile_pic', images.value);
+});
+
+
 async function updateUser() {
   Swal.showLoading();
-  form.append('user_id', userStore.userData.id);
+  form.append('user_id', user.value.id);
   form.append('email', email.value);
+  form.append('name', name.value);
+  form.append('lastname', lastName.value);
+  form.append('birthdate', birthdate.value);
+  form.append('phone', phone.value.toString());
+  form.append('cellphone', cellphone.value.toString());
+  form.append('country_id', country.value);
 
-  name.value === '' ? form.append('name', userStore.userData.name) : form.append('name', name.value);
-  lastName.value === '' ? form.append('lastname', userStore.userData.lastname) : form.append('lastname', lastName.value);
-  email.value === '' ? form.append('email', userStore.userData.email) : form.append('email', email.value);
-  phone.value === '' ? form.append('phone', 123456789) : form.append('phone', phone.value);
-  birthdate.value === null ? form.append('birthdate', '') : form.append('birthdate', birthdate.value);
-  cellphone.value === '' ? form.append('cellphone', 12345678) : form.append('cellphone', cellphone.value);
-  country.value === null ? form.append('country_id', 12345678) :  form.append('country_id', country.value);
 
-  await useFetch('users/update?_method=PUT',{
+  await $fetch('users/update?_method=PUT',{
     method: 'POST',
     body: form,
     headers: {
@@ -288,26 +307,10 @@ async function updateUser() {
           showConfirmButton: false,
           timer: 2000
         });
-        useRouter().push("/profile?tab=anuncio");
       }
     }
   });
 }
-
-function previewFiles(event) {
-  images.value = event.target.files[0]
-  profilePic.value = URL.createObjectURL(images.value);
-};
-
-watch(profilePic,() => {
-  form.append('profile_pic', images.value);
-  isNewImage.value = true;
-})
-
-watch(images,() => {
-  form.append('profile_pic', images.value);
-});
-
 </script>
 
 <style lang="postcss" scoped>

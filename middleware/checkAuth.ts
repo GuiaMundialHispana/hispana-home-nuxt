@@ -1,10 +1,10 @@
 import { useAuthStore } from '~/stores/Auth';
 
 export default defineNuxtRouteMiddleware(()=> {
-  const auth_store = useAuthStore();
+  const isLogged = useState('isLogged');
  
   setTimeout(() => {
-    if(!auth_store.isLoggedIn) {
+    if(!isLogged) {
       return navigateTo('/');
     }    
   },100);

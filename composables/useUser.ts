@@ -5,20 +5,22 @@ export default function useUser() {
   const token = useState('token');
   const user = useState('user', () => {});
   const { logOut } = useLogOut();
+  const pendingUserData = ref(false);
 
   async function getUser() {
-    $fetch('auth/profile',{
+    pendingUserData.value = true;
+    await $fetch('auth/profile',{
       method: 'GET',
-      baseURL: useRuntimeConfig().public.API,
+      baseURL: config.public.API,
       headers: {
         'Authorization': `Bearer ${token.value}`
       },
       onResponse({ response }) {
         let response_data = response._data;
-        console.log(response_data);
 
         if(response_data.status || response_data.code === 200) {
           user.value = response_data.results.user;
+          pendingUserData.value = false
         }
 
         if(!response_data.status || response_data.message === "Token invalid or not provided.") {
@@ -65,7 +67,7 @@ export default function useUser() {
   }
 
   async function changePassword(email:string, newPassword:string, repeatPassword:string) {
-    await $fetch(useRuntimeConfig().public.API+'auth/change-password',{
+    await $fetch(config.public.API+'auth/change-password',{
       method: 'POST',
       body: {
         email,
@@ -97,7 +99,7 @@ export default function useUser() {
   async function sendPassWordEmail(email:string) {
     await $fetch('auth/forgot-password',{
       method: 'POST',
-      baseURL: useRuntimeConfig().public.API,
+      baseURL: config.public.API,
       body: {
         email
       },
@@ -141,6 +143,7 @@ export default function useUser() {
 
   return {
     getUser,
+    pendingUserData,
     changePassword,
     sendPassWordEmail
   }

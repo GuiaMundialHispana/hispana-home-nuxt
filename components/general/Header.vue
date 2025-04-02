@@ -106,7 +106,6 @@
 
 <script lang="ts" setup>
 import Swal from 'sweetalert2';
-import { useUserStore } from '~/stores/User';
 const user = useState('user');
 const viewport = useViewport();
 

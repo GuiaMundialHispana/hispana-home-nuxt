@@ -2,23 +2,24 @@
   <section class="pb-32">
     <div class="xl:container mx-auto lg:px-16 md:px-8 px-4">
       <div class="profile-wrapper">
-        <figure class="profile-image overflow-hidden" v-if="user.userData.name === null || user.userData.name === ''">
+        <figure v-if="pendingUserData" class="profile-image overflow-hidden">
           <div class="skeleton w-[117px] h-[117px] rounded-full"></div>
         </figure>
-        <figure class="profile-image overflow-hidden" v-else>
-          <img v-if="user.userData.profile_pic != null" :src="`${user.userData.profile_pic}`" :alt="user.userData.name">
-          <!--  -->
-          <span v-if="user.userData.profile_pic === null" class="w-[117px] h-[117px] uppercase flex items-center justify-center font-bold text-primary-100 text-6xl rounded-full border-2 border-primary-100 bg-primary-50">
-            {{user.userData.name.charAt(0)}}{{ user.userData.lastname.charAt(0) }}
-          </span>
+        <figure v-if="!pendingUserData && user" class="profile-image overflow-hidden">
+          <NuxtImg
+            v-if="user.profile_pic !== null"
+            :src="user.profile_pic"
+            placeholder="/img/featured-properties-bg.jpg"
+            :alt="user.name"
+          />
         </figure>
-        <div class="profile-information">
-          <h3 v-if="user.userData.name != null || user.userData.name !== ''">
+        <div v-if="!pendingUserData && user" class="profile-information">
+          <h3 v-if="user.name != null || user.name !== ''">
             <span class="text-primary-100">Hola,</span><br class="md:block hidden">
-            {{user.userData.name}} {{user.userData.lastname}}
+            {{user.name}} {{user.lastname}}
           </h3>
-          <div v-if="user.userData.name === null || user.userData.name === ''" class="w-40 h-5 skeleton rounded-lg mb-4"></div>
-          <AtomsLink btn-style="outline-primary" link-to="/profile/editProfile">Editar perfil</AtomsLink>
+          <div v-if="user.name === null || user.name === ''" class="w-40 h-5 skeleton rounded-lg mb-4"></div>
+          <AtomsLink btn-style="outline-primary" link-to="/profile/edit-profile">Editar perfil</AtomsLink>
         </div>
       </div>
       <nav class="user-filter">
@@ -51,12 +52,15 @@
   </section>
 </template>
 
-<script setup>
-  import { useUserStore } from '~/stores/User';
-  definePageMeta({
-    middleware: 'check-auth'
-  });
-  const user = useUserStore();
+<script lang="ts" setup>
+definePageMeta({
+  middleware: 'check-auth'
+});
+
+const { pendingUserData } = useUser();
+const user = useState('user');
+const route = useRouter();
+console.log(user);
 </script>
 
 <style lang="postcss" scoped>
