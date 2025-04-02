@@ -24,7 +24,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useAuthStore } from '~/stores/Auth';
 import Swal from 'sweetalert2';
 
 const config = useRuntimeConfig();

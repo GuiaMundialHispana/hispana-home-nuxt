@@ -10,23 +10,21 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
 import useRefresh from '~/composables/RefreshToken';
-import { useUserStore } from '~/stores/User';
-import { useAuthStore  } from '~/stores/Auth';
 
-const user_store = useUserStore();
-const auth_store = useAuthStore();
 const isLogged = useState<boolean>('isLogged', () => false);
-const token = useState<string>('token', () => '');
-
-const miFuncionGlobal = () => {
-  if(auth_store.isLoggedIn) {
-    user_store.refresh_token();
-  }
-}
+const { refresh_token } = useRefresh();
+console.log(isLogged.value);
 
 onMounted(() => {
-  useRefresh(miFuncionGlobal)
-})
+  const interval = setInterval(() => {
+    if(isLogged.value) {
+      refresh_token()
+    }
+  }, 60000); // 2 minutes
+
+  onUnmounted(() => {
+    clearInterval(interval);
+  });
+});
 </script>
