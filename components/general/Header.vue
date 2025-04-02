@@ -31,15 +31,15 @@
               </AtomsButtons>
             </li>
             <!-- User Logged -->
-            <li class="user-wrapper" v-if="isLogged" @click="userDropdown = !userDropdown">
+            <li class="user-wrapper" v-if="isLogged && user" @click="userDropdown = !userDropdown">
               <div class="flex items-center gap-2">
                 <NuxtImg
-                  v-if="user.userData.profile_pic !== null"
-                  :src="user.userData.profile_pic"
+                  v-if="user.profile_pic !== null"
+                  :src="user.profile_pic"
                   placeholder="/img/featured-properties-bg.jpg"
-                  :alt="user.userData.name"
+                  :alt="user.name"
                 />
-                {{ user.userData.name }} {{ user.userData.lastname }}
+                {{ user.name }} {{ user.lastname }}
                 <AtomsIcon name="arrows/arrow-down" v-show="!userDropdown" :size=15 class="text-primary-100" />
                 <AtomsIcon name="arrows/arrow-down" v-show="userDropdown" :size=15 class="text-primary-100 rotate-180" />
               </div>
@@ -107,7 +107,7 @@
 <script lang="ts" setup>
 import Swal from 'sweetalert2';
 import { useUserStore } from '~/stores/User';
-const user = useUserStore();
+const user = useState('user');
 const viewport = useViewport();
 
 const showMenu = ref(false);

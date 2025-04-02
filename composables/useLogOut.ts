@@ -17,6 +17,7 @@ export default function useLogOut() {
       }
     });
     isLogged.value = false;
+    token.value = '';
     localStorage.removeItem('token');
 
     try {
@@ -27,6 +28,7 @@ export default function useLogOut() {
     } 
     catch (error) {
       console.log(error);
+      useRouter().push("/")
     }
   }
 
