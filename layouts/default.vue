@@ -9,25 +9,24 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { onMounted } from 'vue'
 import useRefresh from '~/composables/RefreshToken';
 import { useUserStore } from '~/stores/User';
 import { useAuthStore  } from '~/stores/Auth';
 
-export default {
-  setup() {
-    const user_store = useUserStore();
-    const auth_store = useAuthStore();
-    const miFuncionGlobal = () => {
-      if(auth_store.isLoggedIn) {
-        user_store.refresh_token();
-      }
-    }
+const user_store = useUserStore();
+const auth_store = useAuthStore();
+const isLogged = useState<boolean>('isLogged', () => false);
+const token = useState<string>('token', () => '');
 
-    onMounted(() => {
-      useRefresh(miFuncionGlobal)
-    })
-  },
+const miFuncionGlobal = () => {
+  if(auth_store.isLoggedIn) {
+    user_store.refresh_token();
+  }
 }
+
+onMounted(() => {
+  useRefresh(miFuncionGlobal)
+})
 </script>

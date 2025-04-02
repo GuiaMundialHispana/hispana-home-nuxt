@@ -19,28 +19,26 @@
           />
           </span>
           <ul>
-            <li v-for='item in menu'
-              :key='item.name'
-              class="text-sm text-neutral-black font-normal hover:text-primary-100 mb-4 lg:mb-0 cursor-pointer"
-            >
+            <li v-for="item in menu" :key='item.name' class="nav-item">
               <NuxtLink :to='item.route'  @click="showMenu = false">{{item.name}}</NuxtLink>
             </li>
-            <li class="text-sm text-neutral-black font-normal hover:text-primary-100 mb-4 lg:mb-0 cursor-pointer" v-show="auth.isLoggedIn">
+            <li class="nav-item" v-show="isLogged">
               <NuxtLink to="/PostProperty">Vender</NuxtLink>
             </li>
-            <li class="mb-4 lg:mb-0" v-show="!auth.isLoggedIn">
+            <li class="mb-4 lg:mb-0" v-show="!isLogged">
               <AtomsButtons @click="showMenu = false; displayModal = true">
                 Iniciar sesión
               </AtomsButtons>
             </li>
             <!-- User Logged -->
-            <li class="user-wrapper" v-if="auth.isLoggedIn" @click="userDropdown = !userDropdown">
+            <li class="user-wrapper" v-if="isLogged" @click="userDropdown = !userDropdown">
               <div class="flex items-center gap-2">
-                <img v-if="user.userData.profile_pic !== null" :src="`${user.userData.profile_pic}`" :alt="user.userData.name">
-                <span v-else class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-primary-100 text-sm border border-primary-100 bg-primary-50">
-                  {{user.userData.name.charAt(0)}}{{ user.userData.lastname.charAt(0) }}
-                </span>
-                <!-- <img src="/img/user.jpg" v-if="user.userData.profile_pic === null || ''" :alt="user.userData.name"> -->
+                <NuxtImg
+                  v-if="user.userData.profile_pic !== null"
+                  :src="user.userData.profile_pic"
+                  placeholder="/img/featured-properties-bg.jpg"
+                  :alt="user.userData.name"
+                />
                 {{ user.userData.name }} {{ user.userData.lastname }}
                 <AtomsIcon name="arrows/arrow-down" v-show="!userDropdown" :size=15 class="text-primary-100" />
                 <AtomsIcon name="arrows/arrow-down" v-show="userDropdown" :size=15 class="text-primary-100 rotate-180" />
@@ -66,7 +64,7 @@
                         Mis planes
                       </NuxtLink>
                     </li>
-                    <li @click="auth.logOut(), showMenu = false">
+                    <li @click="logOut(), showMenu = false">
                       <AtomsIcon name="general/logout" class="mr-2.5" />
                       Cerrar sesión
                     </li>
@@ -74,7 +72,7 @@
                 </div>
               </OnClickOutside>
             </li>
-            <li v-show="auth.isLoggedIn">
+            <li v-show="isLogged">
               <AtomsLink
                 @click="showMenu = false"
                 link-to="/PostProperty"
@@ -106,66 +104,67 @@
   />
 </template>
 
-<script>
-// import menu from '~/assets/mocks/Header';
+<script lang="ts" setup>
+import Swal from 'sweetalert2';
 import { useAuthStore } from '~/stores/Auth';
 import { useUserStore } from '~/stores/User';
-export default {
-  name: 'AppHeader',
-  data() {
-    return {
-      auth: useAuthStore(),
-      user: useUserStore(),
+const auth = useAuthStore();
+const user = useUserStore();
+const viewport = useViewport();
 
-      viewport: useViewport(),
-      showMenu: false,
-      userDropdown: false,
-      displayModal: false,
-      menu: [
-        {
-          name: 'Todos',
-          route: '/search?type=All',
-        },
-        {
-          name: 'Comprar',
-          route: '/sales?type=Sale',
-        },
-        {
-          name: 'Alquilar',
-          route: '/rent?type=Rent',
-        },
-        {
-          name: 'Contacto',
-          route: '/contact'
-        },
-        {
-          name: 'Planes',
-          route: '/plans'
-        },
-      ]
+const showMenu = ref(false);
+const userDropdown = ref(false);
+const displayModal = ref(false);
+const isLogged = useState('isLogged');
+const config = useRuntimeConfig();
+
+const menu = reactive([
+  { name: 'Todos', route: '/resultados?type=All' },
+  { name: 'Comprar', route: '/resultados?type=Sale' },
+  { name: 'Alquilar', route: '/resultados?type=Rent' },
+  { name: 'Contacto', route: '/contact' },
+  { name: 'Planes', route: '/plans' },
+]);
+
+// Watchers
+watch(showMenu, (newValue: boolean) => {
+  if (newValue) {
+    document.body.classList.add('modal-open');
+  } else {
+    document.body.classList.remove('modal-open');
+  }
+});
+
+watch(displayModal, (newValue: boolean) => {
+  if (newValue) {
+    document.body.classList.add('modal-open');
+  } else {
+    document.body.classList.remove('modal-open');
+  }
+});
+
+async function logOut() {
+  Swal.showLoading()
+  await $fetch('auth/logout',{
+    method: 'POST',
+    baseURL: config.public.API,
+    body: {
+      token: localStorage.getItem('token')
     }
-  },
-  watch: {
-    showMenu: function() {
-      if(this.showMenu) {
-        document.body.classList.add('modal-open')
-      } else {
-        document.body.classList.remove('modal-open')
-      }
-    },
-    displayModal: function() {
-      if(this.displayModal) {
-        document.body.classList.add('modal-open')
-      } else {
-        document.body.classList.remove('modal-open')
-      }
-    }
-  },
+  });
+  isLogged.value = false;
+  localStorage.removeItem('token');
+
+  try {
+    Swal.hideLoading();
+    Swal.close();
+    useUserStore().$reset();
+    useRouter().push("/")
+  } 
+  catch (error) {
+    console.log(error);
+  }
 }
-</script>
-
-<script setup>
-import { OnClickOutside } from '@vueuse/components';
 </script>
 
 <style lang="postcss" scoped>
@@ -196,6 +195,13 @@ nav {
   }
 }
 
+.user-name-span {
+  @apply w-8 h-8 rounded-full flex items-center justify-center font-bold text-primary-100 text-sm border border-primary-100 bg-primary-50;
+}
+
+.nav-item {
+  @apply text-sm text-neutral-black font-normal hover:text-primary-100 mb-4 lg:mb-0 cursor-pointer;
+}
 .router-link-active {
   @apply text-primary-100 font-semibold
 }

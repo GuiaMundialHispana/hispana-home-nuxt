@@ -27,13 +27,7 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: [
-    'nuxt-icons',
-    'nuxt-viewport',
-    'nuxt-swiper',
-    '@pinia/nuxt',
-    '@vee-validate/nuxt',
-  ],
+  modules: ['nuxt-icons', 'nuxt-viewport', 'nuxt-swiper', '@pinia/nuxt', '@vee-validate/nuxt', '@nuxt/image'],
 
   viewport: {
     breakpoints: {
