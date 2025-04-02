@@ -106,9 +106,7 @@
 
 <script lang="ts" setup>
 import Swal from 'sweetalert2';
-import { useAuthStore } from '~/stores/Auth';
 import { useUserStore } from '~/stores/User';
-const auth = useAuthStore();
 const user = useUserStore();
 const viewport = useViewport();
 
@@ -117,6 +115,7 @@ const userDropdown = ref(false);
 const displayModal = ref(false);
 const isLogged = useState('isLogged');
 const config = useRuntimeConfig();
+const { logOut } = useLogOut()
 
 const menu = reactive([
   { name: 'Todos', route: '/resultados?type=All' },
@@ -142,29 +141,6 @@ watch(displayModal, (newValue: boolean) => {
     document.body.classList.remove('modal-open');
   }
 });
-
-async function logOut() {
-  Swal.showLoading()
-  await $fetch('auth/logout',{
-    method: 'POST',
-    baseURL: config.public.API,
-    body: {
-      token: localStorage.getItem('token')
-    }
-  });
-  isLogged.value = false;
-  localStorage.removeItem('token');
-
-  try {
-    Swal.hideLoading();
-    Swal.close();
-    useUserStore().$reset();
-    useRouter().push("/")
-  } 
-  catch (error) {
-    console.log(error);
-  }
-}
 </script>
 
 <style lang="postcss" scoped>
