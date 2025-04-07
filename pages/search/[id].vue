@@ -9,7 +9,7 @@
       :user="property.user"
     />
     <PopulationSearchDetailPropertyLoan :property="property.property" class="md:px-14 px-4" />
-    <OrganismExploreProperties :property_id='property.property.id' />
+    <GeneralExclusiveProperties :property_id='property.property.id' />
   </div>
   <div class="p-16" v-if="pending">
     <OrganismSkeleton class="md:h-[560px] h-[360px] max-w-6xl mb-7" />

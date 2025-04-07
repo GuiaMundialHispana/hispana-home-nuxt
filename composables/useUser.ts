@@ -44,17 +44,17 @@ export default function useUser() {
         }
       },
       onResponseError({response}) {
-        // logOut();
-          Swal.fire({
-            icon: 'error',
-            text: 'Por favor inicia sesion nuevamente',
-            showConfirmButton: false,
-            allowOutsideClick: false,
-            timer: 5000
-          });
+        logOut();
+        Swal.fire({
+          icon: 'error',
+          text: 'Por favor inicia sesion nuevamente',
+          showConfirmButton: false,
+          allowOutsideClick: false,
+          timer: 5000
+        });
       },
       onRequestError({response}) {
-        // logOut();
+        logOut();
         Swal.fire({
           icon: 'error',
           text: 'Por favor inicia sesion nuevamente',

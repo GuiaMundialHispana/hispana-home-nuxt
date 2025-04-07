@@ -27,7 +27,6 @@ import { useUserStore } from '~/stores/User';
 let config = useRuntimeConfig();
 
 const token = useState('token');
-console.log(token.value);
 
 const {data, status} = useLazyFetch('users/favorites', {
   method: 'GET',

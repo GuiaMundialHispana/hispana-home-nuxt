@@ -16,7 +16,29 @@
       Foto de <a href="https://unsplash.com/es/@chatelp?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Pierre Châtel-Innocenti</a> en <a href="https://unsplash.com/es/fotos/N5RN0JE5kaY?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
     </p>
   </section>
-  <OrganismExclusiveProperties />
-  <OrganismVipProperties  />
-  <OrganismSilverProperties class="mb-20" />
+  <GeneralExclusiveProperties :properties="exclusive" :pending="exclusive_status" />
+  <GeneralVipProperties :properties="vip" :pending="vip_status" />
+  <GeneralSilverProperties :properties="silver" :pending="silver_status" />
 </template>
+
+<script lang="ts" setup>
+const config = useRuntimeConfig();
+
+const { data: exclusive, status: exclusive_status } = useFetch('advertisements/home?plan=2', {
+  method: 'GET',
+  baseURL: config.public.API,
+  transform:(_property) => _property.results.data
+});
+
+const { data: vip, status: vip_status } = useFetch('advertisements/home?plan=1', {
+  method: 'GET',
+  baseURL: config.public.API,
+  transform:(_property) => _property.results.data
+});
+
+const { data: silver, status: silver_status } = useFetch('advertisements/home?plan=3', {
+  method: 'GET',
+  baseURL: config.public.API,
+  transform:(_property) => _property.results.data
+});
+</script>

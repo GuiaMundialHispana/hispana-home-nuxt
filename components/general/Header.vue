@@ -19,7 +19,7 @@
           />
           </span>
           <ul>
-            <li v-for="item in menu" :key='item.name' class="nav-item">
+            <li v-for="item in menu" :key='item.name' class="nav-item" :class="{'active': route.fullPath === item.route}">
               <NuxtLink :to='item.route'  @click="showMenu = false">{{item.name}}</NuxtLink>
             </li>
             <li class="nav-item" v-show="isLogged">
@@ -115,6 +115,7 @@ const displayModal = ref(false);
 const isLogged = useState('isLogged');
 const config = useRuntimeConfig();
 const { logOut } = useLogOut()
+const route = useRoute();
 
 const menu = reactive([
   { name: 'Todos', route: '/resultados?type=All' },
@@ -177,7 +178,7 @@ nav {
 .nav-item {
   @apply text-sm text-neutral-black font-normal hover:text-primary-100 mb-4 lg:mb-0 cursor-pointer;
 }
-.router-link-active {
+ .active {
   @apply text-primary-100 font-semibold
 }
 </style>

@@ -1,11 +1,14 @@
+import { useAuthStore } from '@/stores/auth';
 export default defineNuxtRouteMiddleware((to, from) => {
   const isLogged = useState('isLogged');
   const token = useState('token');
+  const user_store = useAuthStore();
   const { getUser } = useUser();
   if(import.meta.client) {
     let tokenClient = window.localStorage.getItem('token');
     if(tokenClient) {
       token.value = tokenClient;
+      user_store.token = tokenClient;
       getUser();
       isLogged.value = true;
     } else {
