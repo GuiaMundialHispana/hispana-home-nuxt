@@ -14,7 +14,6 @@ import useRefresh from '~/composables/RefreshToken';
 
 const isLogged = useState<boolean>('isLogged', () => false);
 const { refresh_token } = useRefresh();
-console.log(isLogged.value);
 
 onMounted(() => {
   const interval = setInterval(() => {

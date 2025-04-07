@@ -1,81 +1,20 @@
 <template>
   <section class="pb-32">
     <div class="xl:container mx-auto lg:px-16 md:px-8 px-4">
-      <div class="profile-wrapper">
-        <figure v-if="pendingUserData" class="profile-image overflow-hidden">
-          <div class="skeleton w-[117px] h-[117px] rounded-full"></div>
-        </figure>
-        <figure v-if="!pendingUserData && user" class="profile-image overflow-hidden">
-          <NuxtImg
-            v-if="user.profile_pic !== null"
-            :src="user.profile_pic"
-            placeholder="/img/featured-properties-bg.jpg"
-            :alt="user.name"
-          />
-        </figure>
-        <div v-if="!pendingUserData && user" class="profile-information">
-          <h3 v-if="user.name != null || user.name !== ''">
-            <span class="text-primary-100">Hola,</span><br class="md:block hidden">
-            {{user.name}} {{user.lastname}}
-          </h3>
-          <div v-if="user.name === null || user.name === ''" class="w-40 h-5 skeleton rounded-lg mb-4"></div>
-          <nuxtLink to="/profile/edit-profile">editar perfil</nuxtLink>
-          <AtomsLink btn-style="outline-primary" link-to="/profile/edit-profile">Editar perfil</AtomsLink>
-        </div>
-      </div>
-      <nav class="user-filter">
-        <NuxtLink
-          class="btn-tab"
-          :class="{ active: $route.fullPath === '/profile?tab=anuncio'} "
-          :to="{ path: 'profile', query: { tab: 'anuncio' }}"
-        >
-          Mis anuncios
-        </NuxtLink>
-        <NuxtLink
-          class="btn-tab"
-          :to="{ path: 'profile', query: { tab: 'favorite' }}"
-          :class="{ active: $route.fullPath === '/profile?tab=favorite'} "
-        >
-          Mis favoritos
-        </NuxtLink>
-        <NuxtLink
-          class="btn-tab"
-          :to="{ path: 'profile', query: { tab: 'plan' }}"
-          :class="{ active: $route.fullPath === '/profile?tab=plan'} "
-        >
-          Mis planes
-        </NuxtLink>
-      </nav>
-      <PopulationProfileAdvertisement v-show="$route.query.tab === 'anuncio'" />
-      <PopulationProfileFavorite v-show="$route.query.tab === 'favorite'" />
-      <PopulationProfilePlans v-show="$route.query.tab === 'plan'" /> 
+      <PopulationProfileAdvertisement v-show="route.query.tab === 'anuncio'" />
+      <PopulationProfileFavorite v-show="route.query.tab === 'favorite'" />
+      <PopulationProfilePlans v-show="route.query.tab === 'plan'" /> 
     </div>
   </section>
 </template>
 
 <script lang="ts" setup>
 definePageMeta({
-  middleware: 'check-auth'
+  middleware: 'check-auth',
+  layout: 'dashboard',
 });
 
 const { pendingUserData } = useUser();
 const user = useState('user');
-const route = useRouter();
-console.log(user);
+const route = useRoute();
 </script>
-
-<style lang="postcss" scoped>
-.profile-wrapper {
-  @apply flex items-center justify-center gap-5 py-16 border-b border-gray-300 mb-10;
-  & .profile-image img { @apply overflow-hidden w-[117px] h-[117px] rounded-full object-cover object-center border-4 border-primary-50; }
-  & h3 { @apply text-[28px] leading-[28px] font-semibold mb-4; }
-}
-
-.user-filter {
-  @apply border-b border-gray-300 mb-10 flex md:overflow-hidden overflow-x-scroll;
-  & .btn-tab {
-    @apply flex-none mr-8 hover:text-primary-100 hover:border-b hover:border-primary-100 text-neutral-black text-base pb-2;
-    &.active { @apply text-primary-100 border-b border-primary-100;}
-  }
-}
-</style>

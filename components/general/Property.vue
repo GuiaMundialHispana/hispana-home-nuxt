@@ -17,30 +17,42 @@
       <AtomsIcon name="general/pencil" class="text-neutral-white" />
     </NuxtLink>
     <!-- Images slider -->
-    <nav>
+    <nav v-if="property.images">
       <AtomsButtons :class="`prev-${propertyId}`" class="prev" btn-type="btn-icon" btn-style="outline-gray" icon-name="arrows/arrow-left" btn-size="xsmall" :icon-size=15 />
       <AtomsButtons :class="`next-${propertyId}`" btn-type="btn-icon" btn-style="outline-gray" icon-name="arrows/arrow-right" btn-size="xsmall" :icon-size=15 />
     </nav>
     <Swiper
+      v-if="property.images"
       :modules="[SwiperNavigation]"
       class="relative rounded-lg overflow-hidden"
       :slides-per-view="1"
-      :navigation="{
-        nextEl: `.next-${propertyId}`,
-        prevEl: `.prev-${propertyId}`
-      }">
+      :navigation="navigation">
       <SwiperSlide v-for="image in property.images" :key="image">
         <NuxtLink class="bg-gray-10" :to="`/search/${property.slug}`">
           <figure class="h-52 bg-gray-10">
-            <div v-if="$route.path === '/profile' && statusMessage !== ''" class="advertisements">
+            <div v-if="route.path === '/profile' && statusMessage !== ''" class="advertisements">
               <p :class="statusBackground">{{ statusMessage }}</p>
             </div>
-            <img :src="`${image.image}`" :alt="property.name" class="object-cover h-full w-full">
+            <NuxtImg
+              :src="`${image.image}`"
+              placeholder="/img/featured-properties-bg.jpg"
+              alt="property.name"
+              class="object-cover h-full w-full"
+            />
           </figure>
         </NuxtLink>
       </SwiperSlide>
-      <AtomsPropertyPlans :plan-type="propertyType" plan-position="bottom" class="absolute bottom-0 right-0 z-10" />
+      <AtomsPropertyPlans :plan-type="propertyType" planPosition="bottom" class="absolute bottom-0 right-0 z-10" />
     </Swiper>
+    <div v-else class="relative rounded-lg overflow-hidden">
+      <NuxtImg
+        :src="property.image"
+        placeholder="/img/featured-properties-bg.jpg"
+        alt="property.name"
+        class="object-cover h-52 w-full"
+      />
+      <AtomsPropertyPlans :plan-type="propertyType" planPosition="bottom" class="absolute bottom-0 right-0 z-10" />
+    </div>
     <!-- Information Card-->
     <NuxtLink :to="`/search/${property.slug}`" class="block mt-3">
       <h6 class="property-title">{{property.name }}</h6>
@@ -102,6 +114,11 @@ const isFavorite = ref(false);
 const showParsedPrice = (price: number) => {
   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
+
+const navigation = ref({
+  nextEl: `.next-${props.propertyId}`,
+  prevEl: `.prev-${props.propertyId}`
+});
 
 const addFavorite = async () => {
   const { data, error } = await useFetch('users/favorites', {
