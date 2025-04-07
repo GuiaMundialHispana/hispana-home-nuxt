@@ -9,6 +9,11 @@ export default function useLogOut() {
 
   async function logOut() {
     Swal.showLoading()
+    isLogged.value = false;
+    token.value = '';
+    localStorage.removeItem('token');
+    useRouter().push("/")
+    useUserStore().$reset();
     await $fetch('auth/logout',{
       method: 'POST',
       baseURL: config.public.API,
@@ -16,9 +21,6 @@ export default function useLogOut() {
         token: localStorage.getItem('token')
       }
     });
-    isLogged.value = false;
-    token.value = '';
-    localStorage.removeItem('token');
 
     try {
       Swal.hideLoading();
@@ -27,7 +29,6 @@ export default function useLogOut() {
       useRouter().push("/")
     } 
     catch (error) {
-      console.log(error);
       useRouter().push("/")
     }
   }

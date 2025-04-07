@@ -44,7 +44,6 @@ export default function useUser() {
         }
       },
       onResponseError({response}) {
-        logOut();
         Swal.fire({
           icon: 'error',
           text: 'Por favor inicia sesion nuevamente',
@@ -52,9 +51,9 @@ export default function useUser() {
           allowOutsideClick: false,
           timer: 5000
         });
+        logOut();
       },
       onRequestError({response}) {
-        logOut();
         Swal.fire({
           icon: 'error',
           text: 'Por favor inicia sesion nuevamente',
@@ -62,6 +61,7 @@ export default function useUser() {
           allowOutsideClick: false,
           timer: 5000
         });
+        logOut();
       }
     });
   }
