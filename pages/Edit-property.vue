@@ -14,6 +14,7 @@ definePageMeta({
 
 //Obtener anuncio
 // Swal.showLoading();
+const token = useState('token')
 Swal.showLoading()
 const { data: property, pending, error} = await useLazyFetch(`advertisements/${useRoute().query.slug}`, {
   method: 'GET',
@@ -113,7 +114,7 @@ async function createAdvertisement() {
   await useFetch('advertisements?_method=PUT',{
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${user_store.token}`,
+      'Authorization': `Bearer ${token.value}`,
       'Accept': 'application/json'
     },
     body: form,

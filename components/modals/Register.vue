@@ -38,6 +38,7 @@ let email = ref('');
 let password = ref('');
 let password_confirmation = ref('');
 const emit = defineEmits(['close']);
+const isLogged = useState('isLogged');
 
 async function register() {
   Swal.showLoading()
@@ -76,7 +77,9 @@ async function register() {
           text: `${response._data.message}`
         });
         localStorage.setItem('token', response._data.results.access_token.original.access_token);
-        auth.isLoggedIn = true;
+        const token = useState('token', () => '')
+        token.value = response._data.results.access_token.original.access_token;
+        isLogged.value = true;
         useRouter().push('/profile?tab=plan');
         emit('close');
       }

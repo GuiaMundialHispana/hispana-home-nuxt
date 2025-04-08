@@ -110,6 +110,7 @@ const route = useRouter();
 const auth = useAuthStore();
 const user_store = useUserStore();
 const isFavorite = ref(false);
+const isLogged = useState('isLogged');
 
 const showParsedPrice = (price: number) => {
   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -120,10 +121,11 @@ const navigation = ref({
   prevEl: `.prev-${props.propertyId}`
 });
 
+const token = useState('token');
 const addFavorite = async () => {
   const { data, error } = await useFetch('users/favorites', {
     method: 'post',
-    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+    headers: { 'Authorization': `Bearer ${token.value}`},
     body: { property_id: props.property.id },
     baseURL: config.public.API,
     onResponse({ response }) {
@@ -143,7 +145,7 @@ const addFavorite = async () => {
           showConfirmButton: false,
           timer: 2000
         });
-        user_store.get_user();
+        useUser().getUser()
       }
     }
   });
@@ -181,7 +183,7 @@ const deleteFavorite = async () => {
 };
 
 const toggleFavorite = () => {
-  if (auth.isLoggedIn) {
+  if (isLogged.value) {
     if (isFavorite.value) {
       deleteFavorite();
     } else {

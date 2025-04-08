@@ -11,7 +11,6 @@ export default function useLogOut() {
     Swal.showLoading()
     isLogged.value = false;
     token.value = '';
-    localStorage.removeItem('token');
     useRouter().push("/")
     useUserStore().$reset();
     await $fetch('auth/logout',{
@@ -21,6 +20,7 @@ export default function useLogOut() {
         token: localStorage.getItem('token')
       }
     });
+    localStorage.removeItem('token');
 
     try {
       Swal.hideLoading();
