@@ -1,27 +1,16 @@
 <template>
-  <div v-if="pending" class="pt-6 md:pt-14 lg:px-16 md:px-6 px-4 mx-auto max-w-[97rem];">
-    <div class="container flex flex-wrap gap-8">
-      <div v-for="index in 3" :key="index">
-        <div class="skeleton">
-          <div class="skeleton-image"></div>
-          <div class="skeleton-date"></div>
-          <div class="skeleton-body"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <section v-if="!pending && property && property.length > 0">
+  <GeneralSkeletonProperty v-if="isPending" />
+  <section v-if="!isPending && properties">
     <div class="flex justify-between border-b border-[#F5F5F5] py-2 mb-6">
       <h2 class="text-[28px] leading-8 text-center md:text-left mx-auto md:mx-0 font-medium">
         Propiedades VIP
       </h2>
-      <nav class="hidden md:flex gap-4" v-if="property.length >= 4">
+      <nav class="hidden md:flex gap-4" v-if="properties.length >= 4">
         <AtomsButtons class="prevVIP" btn-type="btn-icon" btn-style="outline-gray" icon-name="arrows/arrow-left" btn-size="xsmall" :icon-size=15 />
         <AtomsButtons class="nextVIP" btn-type="btn-icon" btn-style="outline-gray" icon-name="arrows/arrow-right" btn-size="xsmall" :icon-size=15 />
       </nav>
     </div>
     <Swiper
-      v-if="property"
       :modules="[SwiperFreeMode, SwiperNavigation, SwiperAutoplay]"
       :effect="'fade'"
       :lazy="true"
@@ -37,22 +26,28 @@
         prevEl: '.prevVIP'
       }"
     >
-      <swiper-slide v-for="plan in property" :key="plan">
-        {{ plan.name }}
-        <MoleculesFeaturedProperties :property-id="plan.id" plantype="vip" :property="plan.property" />
+      <swiper-slide v-for="(property, index) in properties" :key="index">
+        <GeneralFeaturedProperties :property-id="property.id" plantype="vip" :property="property.property" />
       </swiper-slide>
     </Swiper>
   </section>
 </template>
 
-<script setup>
-const config = useRuntimeConfig();
-
-const { data: property, pending, error} = await useFetch('advertisements/home?plan=1', {
-  method: 'GET',
-  baseURL: config.public.API,
-  transform:(_property) => _property.results.data
+<script lang="ts" setup>
+const props = defineProps({
+  properties: {
+    type: Array,
+    required: true
+  },
+  pending: {
+    type: String,
+    required: true
+  },
 });
+
+const isPending = computed(() => {
+  return props.pending === 'pending' || props.pending === 'iddle'
+})
 </script>
 
 <style lang="postcss" scoped>

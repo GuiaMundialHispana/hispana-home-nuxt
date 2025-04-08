@@ -8,11 +8,12 @@ const use_posts = usePostsStore();
 // let plans = [];
 let next = ref(false);
 const config = useRuntimeConfig();
+const token = useState('token')
 
 const { data:plans,pending } = await useLazyFetch('user-plans',{
   method: 'GET',
   headers: {
-    'Authorization': `Bearer ${user_store.token}`
+    'Authorization': `Bearer ${token.value}`
   },
   baseURL: config.public.API
 });

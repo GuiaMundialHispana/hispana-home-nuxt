@@ -47,7 +47,7 @@
   </section>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 const isDataFilled = ref(false);
 const stripeCardElement = ref(null);
 const stripe = useStripe();

@@ -20,40 +20,7 @@
         />
       </nav>
     </div>
-    <!-- <Swiper
-      class="relative mt-10"
-      :modules="[SwiperAutoplay, SwiperEffectCreative]"
-      slidesPerView="auto"
-      :loop="true"
-      :autoplay="{
-        delay: 8000,
-        disableOnInteraction: true,
-      }">
-      <SwiperSlide>
-        <MoleculesFeaturedProperties plantype="vip" />
-      </SwiperSlide>
-      <SwiperSlide>
-        <MoleculesFeaturedProperties plantype="exclusive" />
-      </SwiperSlide>
-      <SwiperSlide>
-        <MoleculesFeaturedProperties plantype="silver" />
-      </SwiperSlide>
-      <SwiperSlide>
-        <MoleculesFeaturedProperties plantype="vip" />
-      </SwiperSlide>
-      <SwiperSlide>
-        <MoleculesFeaturedProperties plantype="vip" />
-      </SwiperSlide>
-      <SwiperSlide>
-        <MoleculesFeaturedProperties plantype="exclusive" />
-      </SwiperSlide>
-      <SwiperSlide>
-        <MoleculesFeaturedProperties plantype="silver" />
-      </SwiperSlide>
-      <SwiperSlide>
-        <MoleculesFeaturedProperties plantype="vip" />
-      </SwiperSlide>
-    </Swiper> -->
+
   </div>
 </template>
 

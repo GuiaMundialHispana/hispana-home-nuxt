@@ -9,12 +9,13 @@ const emit = defineEmits(['back', 'nexts'])
 // let plans = [];
 let next = ref(false);
 const config = useRuntimeConfig();
+const token = useState('token')
 
 const current = ref(false)
 const { data:plans,pending } = await useLazyFetch('user-plans',{
   method: 'GET',
   headers: {
-    'Authorization': `Bearer ${user_store.token}`
+    'Authorization': `Bearer ${token.value}`
   },
   onResponse({response}) {
     if(response.status === 200) {

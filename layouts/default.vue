@@ -1,33 +1,29 @@
 <template>
   <div>
     <NuxtLoadingIndicator />
-    <OrganismHeader />
+    <GeneralHeader />
     <main class="lg:pt-[102px] pt-16">
       <slot />
     </main>
-    <OrganismFooter />
+    <GeneralFooter />
   </div>
 </template>
 
-<script>
-import { onMounted } from 'vue'
+<script setup lang="ts">
 import useRefresh from '~/composables/RefreshToken';
-import { useUserStore } from '~/stores/User';
-import { useAuthStore  } from '~/stores/Auth';
 
-export default {
-  setup() {
-    const user_store = useUserStore();
-    const auth_store = useAuthStore();
-    const miFuncionGlobal = () => {
-      if(auth_store.isLoggedIn) {
-        user_store.refresh_token();
-      }
+const isLogged = useState<boolean>('isLogged', () => false);
+const { refresh_token } = useRefresh();
+
+onMounted(() => {
+  const interval = setInterval(() => {
+    if(isLogged.value) {
+      refresh_token()
     }
+  }, 60000); // 2 minutes
 
-    onMounted(() => {
-      useRefresh(miFuncionGlobal)
-    })
-  },
-}
+  onUnmounted(() => {
+    clearInterval(interval);
+  });
+});
 </script>

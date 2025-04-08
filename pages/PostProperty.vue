@@ -12,6 +12,7 @@ definePageMeta({
   middleware: 'check-auth'
 });
 
+const token = useState('token')
 async function createAdvertisement() {
   Swal.showLoading();
   const form = new FormData();
@@ -46,7 +47,7 @@ async function createAdvertisement() {
   await useFetch('advertisements',{
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${user_store.token}`,
+      'Authorization': `Bearer ${token.value}`,
       'Accept': 'application/json'
     },
     body: form,

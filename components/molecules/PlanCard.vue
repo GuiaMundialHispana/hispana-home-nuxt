@@ -69,7 +69,7 @@
   </div>
 </template>
 
-<script>
+<!-- <script>
 import { useAuthStore } from '~/stores/Auth';
 
 export default {
@@ -152,6 +152,96 @@ export default {
       return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
   }
+}
+</script> -->
+<script setup>
+import Swal from 'sweetalert2';
+import { ref, computed } from 'vue';
+import { useAuthStore } from '~/stores/Auth';
+
+const user = useState('user');
+const isLogged = useState('isLogged');
+// Props
+const props = defineProps({
+  plan: {
+    type: Object,
+    default: () => ({})
+  },
+  userQuantity: {
+    type: Number
+  },
+  seleccionado: {
+    type: Boolean,
+    default: false
+  }
+});
+
+// Stores y router
+const auth = useAuthStore();
+const router = useRouter();
+const route = useRoute();
+
+// Refs y estado local
+const planQuantity = ref(1);
+const priceUpdated = ref(0);
+const active = ref(false);
+
+// Computed
+const renderPlanText = computed(() => {
+  const name = props.plan.name;
+  if (name === 'VIP') return 'vip';
+  if (name === 'SILVER') return 'silver';
+  if (name === 'EXCLUSIVO') return 'exclusive';
+  if (name === 'DESTACADOS') return '';
+});
+
+const updatePrice = computed(() => {
+  return parseInt(props.plan.price * planQuantity.value);
+});
+
+const disabledPayment = computed(() => {
+  return planQuantity.value <= 0;
+});
+
+// Métodos
+function payment() {
+  if (isLogged.value) {
+    const planInformation = {
+      newPrice: updatePrice.value,
+      quantity: planQuantity.value,
+      price: props.plan.price,
+      name: props.plan.name,
+      pictures: props.plan.pictures,
+      planId: props.plan.id,
+      ref: route.query.ref
+    };
+
+    Swal.fire({
+      title: '¿Deseas pagar este plan?',
+      showDenyButton: false,
+      showCancelButton: true,
+      confirmButtonText: 'Pagar plan',
+      denyButtonText: 'Seleccionar otro plan',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        router.push({
+          path: '/payment',
+          query: planInformation
+        });
+      }
+    });
+  } else {
+    Swal.fire({
+      icon: 'error',
+      text: 'Debes iniciar sesión',
+      showConfirmButton: false,
+      timer: 2000
+    });
+  }
+}
+
+function showParsedNumber(number) {
+  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 </script>
 

@@ -3,12 +3,14 @@ export default defineNuxtConfig({
   css: [
     '@/assets/css/main.css',
   ],
+
   routeRules:{
     '/profile': { ssr: false },
     '/edit-property': { ssr: false },
     '/PostProperty': { ssr: false },
     '/payment': {ssr: false}
   },
+
   app: {
     head: {
       title: 'Grupo Casas & mas',
@@ -24,13 +26,9 @@ export default defineNuxtConfig({
       ]
     },
   },
-  modules: [
-    'nuxt-icons',
-    'nuxt-viewport',
-    'nuxt-swiper',
-    '@pinia/nuxt',
-    '@vee-validate/nuxt',
-  ],
+
+  modules: ['nuxt-icons', 'nuxt-viewport', 'nuxt-swiper', '@pinia/nuxt', '@vee-validate/nuxt', '@nuxt/image'],
+
   viewport: {
     breakpoints: {
       xs: 320,
@@ -47,6 +45,7 @@ export default defineNuxtConfig({
     },
     fallbackBreakpoint: 'lg'
   },
+
   postcss: {
     plugins: {
       'tailwindcss/nesting': 'postcss-nesting',
@@ -54,12 +53,14 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
+
   runtimeConfig: {
     public: {
       API: process.env.BASE_URL,
       PUBLISH_KEY: process.env.PUBLISH_KEY
     }
   },
+
   vite: {
     build: {
       rollupOptions: {
@@ -78,7 +79,10 @@ export default defineNuxtConfig({
       },
     },
   },
+
   experimental: {
     renderJsonPayloads: false
-  }
+  },
+
+  compatibilityDate: '2025-03-31'
 })

@@ -40,7 +40,7 @@
         prevEl: '.prev'
       }">
       <swiper-slide v-for="property in property" :key="property">
-        <MoleculesProperty :property="property.property" :property-id="property.id" />
+        <GeneralProperty :property="property.property" :property-id="property.id" />
       </swiper-slide>
     </Swiper>
   </section>
