@@ -98,18 +98,19 @@
 					<span class="buttons-separation"></span>
 					<div class="flex justify-center">
 						<button class="filter-btn" :class="{'active': dropdownLists.propertyType}" @click="toggleList('propertyType')">
-							<div class="icon-container">
+							<div class="icon-container flex-none">
 								<AtomsIcon class="text-primary-100" name="general/property" :size=20 />
 							</div>
 							<div>
-								<h2>Tipo de propiedad</h2>
-								<p>Selecciona el tipo de propiedad
+								<h2 class=" whitespace-nowrap">Tipo de propiedad</h2>
+								<p>
+									{{ 	categoryName }}
 									<AtomsIcon class="pl-2 text-primary-100" name="arrows/arrow-down" :size=15 />
 								</p>
 							</div>
 						</button>
-						<OnClickOutside @trigger="toggleList('propertyType')" v-if="dropdownLists.propertyType" class="dropdown w-[288px] h-[273px]">
-							<div class="dropdown-wrapper scrollbar mt-[5px] min-h-max max-h-[273px]">
+						<OnClickOutside @trigger="toggleList('propertyType')" v-if="dropdownLists.propertyType" class="dropdown w-[288px] h-[273px] !p-0 !m-0">
+							<div class="dropdown-wrapper scrollbar min-h-max max-h-[273px]">
 								<label class="checkbox-labels" :for="category.name" v-for="category in categories" :key="category">
 									<input
 										type="radio"
@@ -118,6 +119,7 @@
 										v-model="category_id"
 										:value="category.id"
 										:id="category.name"
+										@click="categoryName = category.name"
 									>
 									{{ category.name }}
 								</label>
@@ -133,7 +135,8 @@
 						</div>
 						<div>
 							<h2>Rango de precio</h2>
-							<p>Selecciona el rango de precio
+							<p>
+								{{ priceLabel === '' ? 'Selecciona el rango de precio' : priceLabel }}
 								<AtomsIcon class="pl-2 text-primary-100" name="arrows/arrow-down" :size=15 />
 							</p>
 						</div>
@@ -272,6 +275,10 @@ const locationName = computed(() => {
   return countryName.value ? `${countryName.value} ${stateName.value} ${cityName.value}` : 'Selecciona la ubicación';
 })
 
+const categoryName = computed(() => {
+	return category_id.value ? categories.value.find((category) => category.id === category_id.value).name : 'Selecciona el tipo de propiedad';
+})
+
 watch(country_id, (newCountryId: number | string) => {
   getStates(newCountryId);
   queryBody.country_id = newCountryId;
@@ -290,12 +297,14 @@ watch(city_id, (newCityId: number | string) => {
 const queryBody = reactive({});
 const sendPath = ref('/resultados?type=All');
 
+const priceLabel = ref('');
 const UpdateValues = (e: any) => {
   barMinValue.value = e.minValue;
   barMaxValue.value = e.maxValue;
   showBarMinValue.value = barMinValue.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   showBarMaxValue.value = barMaxValue.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   price.value = barMinValue.value.toString() + '-' + barMaxValue.value.toString();
+	priceLabel.value = showBarMinValue.value + '-' + showBarMaxValue.value;
 };
 
 const toggleList = (list: string) => {
