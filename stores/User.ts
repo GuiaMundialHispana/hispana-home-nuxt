@@ -101,19 +101,8 @@ export const useUserStore = defineStore('user', {
           let responseApi = response._data.message;
 
           if(response.status === 404 || responseApi === "Token invalid or not provided." || response.status === 500 || response.status === 302) {
-            localStorage.removeItem('token');
-            Swal.showLoading();
-            useRouter().push("/").then(() => {
-              Swal.fire({
-                icon: 'error',
-                text: 'Por favor inicia sesion nuevamente',
-                showConfirmButton: false,
-                allowOutsideClick: false,
-                timer: 5000
-              });
-              navigateTo('/')
-              location.reload();
-            });
+            console.log('error')
+            useErrorResponseLogOut();
           }
 
           if(response._data.status === false) {
@@ -126,34 +115,12 @@ export const useUserStore = defineStore('user', {
           }
         },
         onResponseError({response}) {
-          if(response) {
-            localStorage.removeItem('token');
-            Swal.showLoading();
-            useRouter().push("/").then(() => {
-              Swal.fire({
-                icon: 'error',
-                text: 'Por favor inicia sesion nuevamente',
-                showConfirmButton: false,
-                allowOutsideClick: false,
-                timer: 5000
-              });
-            });
-          }
+          console.log('error')
+          useErrorResponseLogOut();
         },
         onRequestError({response}) {
-          if(response) {
-            localStorage.removeItem('token');
-            Swal.showLoading();
-            useRouter().push("/").then(() => {
-              Swal.fire({
-                icon: 'error',
-                text: 'Por favor inicia sesion nuevamente',
-                showConfirmButton: false,
-                allowOutsideClick: false,
-                timer: 5000
-              });
-            });
-          }
+          console.log('error')
+          useErrorResponseLogOut();
         }
       });
       

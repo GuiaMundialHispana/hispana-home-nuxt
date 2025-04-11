@@ -24,44 +24,22 @@ export default function useUser() {
         }
 
         if(!response_data.status || response_data.message === "Token invalid or not provided.") {
-          // logOut();
-          Swal.fire({
-            icon: 'error',
-            text: 'Por favor inicia sesion nuevamente',
-            showConfirmButton: false,
-            allowOutsideClick: false,
-            timer: 5000
-          });
+          console.log('error')
+          useErrorResponseLogOut();
         }
 
         if(response._data.status === false) {
-          // logOut();
-          Swal.fire({
-            icon: 'error',
-            text: 'Confirma que tus datos esten correctos',
-            timer: 2000
-          });
+          console.log('error')
+          useErrorResponseLogOut();
         }
       },
       onResponseError({response}) {
-        Swal.fire({
-          icon: 'error',
-          text: 'Por favor inicia sesion nuevamente',
-          showConfirmButton: false,
-          allowOutsideClick: false,
-          timer: 5000
-        });
-        logOut();
+        console.log('error')
+        useErrorResponseLogOut();
       },
       onRequestError({response}) {
-        Swal.fire({
-          icon: 'error',
-          text: 'Por favor inicia sesion nuevamente',
-          showConfirmButton: false,
-          allowOutsideClick: false,
-          timer: 5000
-        });
-        logOut();
+        console.log('error')
+        useErrorResponseLogOut();
       }
     });
   }
