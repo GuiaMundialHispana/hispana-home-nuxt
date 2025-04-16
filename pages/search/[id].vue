@@ -72,12 +72,11 @@ watch(property, () => {
       '@type': 'Brand',
       name: 'GrupoCasas'
     },
-    sku: property.value.property.sku,
     offers: {
       '@type': 'Offer',
       url: currentUrl.value,
       priceCurrency: 'USD',
-      price: property.value.property.price,
+      price: property.value.property.price_us,
       itemCondition: 'New',
     }
   })
