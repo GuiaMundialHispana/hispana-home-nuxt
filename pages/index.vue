@@ -227,21 +227,20 @@ const config = useRuntimeConfig();
 const { data: exclusive, status: exclusive_status } = useFetch('advertisements/home?plan=2', {
   method: 'GET',
   baseURL: config.public.API,
-  transform:(_property) => _property.results.data
+  transform:(_data) => data.results.data
 });
 
 const { data: vip, status: vip_status } = useFetch('advertisements/home?plan=1', {
   method: 'GET',
   baseURL: config.public.API,
-  transform:(_property) => _property.results.data
+  transform:(_data) => data.results.data
 });
 
 const { data: silver, status: silver_status } = useFetch('advertisements/home?plan=3', {
   method: 'GET',
   baseURL: config.public.API,
-  transform:(_property) => _property.results.data
+  transform:(_data) => data.results.data
 });
-
 
 const router = useRouter();
 
@@ -261,7 +260,6 @@ const dropdownLists = reactive({
   municipality: false,
   sector: false,
 });
-
 
 const { countries, getStates, states, getCities, cities } = useGetCountry();
 const country_id = ref(0);
@@ -292,7 +290,6 @@ watch(state_id, (newStateId: number | string) => {
 watch(city_id, (newCityId: number | string) => {
   queryBody.city_id = newCityId;
 });
-
 
 const queryBody = reactive({});
 const sendPath = ref('/resultados?type=All');
@@ -366,12 +363,10 @@ watch(category_id, (newCategoryId:any) => {
   queryBody.property_category_id = newCategoryId;
 });
 
-
 const sendType = ref('All');
 watch(sendType, (newRoute:any) => {
   queryBody.type = newRoute;
 });
-
 
 onMounted(() => {
   getCategories();
