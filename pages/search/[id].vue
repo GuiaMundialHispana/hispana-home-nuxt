@@ -52,7 +52,7 @@ watch(property, () => {
     '@context': 'https://schema.org',
     '@type': 'RealEstateListing',
     name: property.value.property.name,
-    image: images,
+    image: property.value.property.image,
     description: property.value.property.description,
     offers: {
       '@type': 'Offer',
