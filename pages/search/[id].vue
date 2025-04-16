@@ -43,7 +43,7 @@ definePageMeta({
 });
 
 watch(property, () => {
-  const images = property.value.property.images.map((image) => image.src);
+  const images = property.value.property.images.map((image) => image.image);
   // useSchemaOrg({
   //   '@context': 'https://schema.org',
   //   '@type': 'RealEstateListing',
