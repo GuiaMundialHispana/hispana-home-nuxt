@@ -43,7 +43,7 @@ definePageMeta({
 });
 
 watch(property, () => {
-  const images = property.value.property.images.map((image) => image.image);
+  const images = property.value.property.images.map((image) => image.src);
   // useSchemaOrg({
   //   '@context': 'https://schema.org',
   //   '@type': 'RealEstateListing',
@@ -66,7 +66,7 @@ watch(property, () => {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: property.value.property.name,
-    image: images,
+    image: property.value.property.image,
     description: property.value.property.description,
     brand: {
       '@type': 'Brand',
