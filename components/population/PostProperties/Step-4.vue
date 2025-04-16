@@ -60,7 +60,6 @@ function getAddress(lant, long, location) {
   lat.value = lant;
   log.value = long;
   address.value = location;
-  console.log(lat.value, log.value)
   setFieldValue('address', location);
 };
 

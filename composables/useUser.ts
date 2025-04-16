@@ -83,7 +83,6 @@ export default function useUser() {
       },
       onResponse({response}) {
         if(response._data.code === 200) {
-          console.log('Email enviado');
           Swal.hideLoading();
           Swal.fire({
             icon: 'success',

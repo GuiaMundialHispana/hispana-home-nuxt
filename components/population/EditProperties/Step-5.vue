@@ -45,7 +45,6 @@ let previewPortada = ref(false);
 let newPortada = ref(false);
 watch(newPreview.value, (newx) => {
   if(newPreview.value.length > 0 ) {
-    console.log()
     newPortada.value = true;
   }
 });
@@ -94,25 +93,27 @@ watch(newPreview.value, (newx) => {
         <p :class="[{cover: index === 0 && use_posts.testPortada}]">Portada</p>
       </figure>
       <!-- estas son las que traigo del api -->
-      <figure v-for="(img, index) in previewImages" :key="index">
-        <img :src="`${img.image}`" class="w-full h-full object-cover">
-        <AtomsButtons
-          class="absolute top-2 right-2"
-          icon-name="general/trash-can"
-          btn-type="btn-icon"
-          @click="previewImages.splice(index, 1), savedImages.splice(index, 1)"
-        />
-        <AtomsButtons
-          :class="[{previewPortada: index === 0 && !use_posts.testPortada}]"
-          class="top-2 left-2 absolute bg-neutral-white"
-          btn-style="outline-primary"
-          icon-name="general/star"
-          btn-type="btn-icon"
-          :iconSize=20
-          @click="setFirtsImg(previewImages, index), setFirtsImg(savedImages, index), use_posts.testPortada = false" 
-        />
-        <p :class="[{cover: index === 0 && !use_posts.testPortada}]">Portada</p>
-      </figure>
+      <template v-for="(img, index) in previewImages" :key="index">
+        <figure v-if="img">
+          <img :src="`${img.image}`" class="w-full h-full object-cover">
+          <AtomsButtons
+            class="absolute top-2 right-2"
+            icon-name="general/trash-can"
+            btn-type="btn-icon"
+            @click="previewImages.splice(index, 1), savedImages.splice(index, 1)"
+          />
+          <AtomsButtons
+            :class="[{previewPortada: index === 0 && !use_posts.testPortada}]"
+            class="top-2 left-2 absolute bg-neutral-white"
+            btn-style="outline-primary"
+            icon-name="general/star"
+            btn-type="btn-icon"
+            :iconSize=20
+            @click="setFirtsImg(previewImages, index), setFirtsImg(savedImages, index), use_posts.testPortada = false"
+          />
+          <p :class="[{cover: index === 0 && !use_posts.testPortada}]">Portada</p>
+        </figure>
+      </template>
     </div>
     <p class="text-center mt-16 mb-8">{{ newPreview.length + previewImages.length }}/{{planSelected.quantity}} Fotos</p>
   </div>
