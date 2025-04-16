@@ -188,12 +188,14 @@ const onSubmit = handleSubmit((values) => {
         >
       </label>
       <div class="flex items-center ml-2.5">
-        <button 
+        <button
+          type="button"
           class="price-btn border-l rounded-l-md" 
           :class="{'active': currencyTab}" 
           @click="currencyTab = true">RD
         </button>
-        <button 
+        <button
+          type="button"
           class="price-btn border-r rounded-r-md" 
           :class="{'active': !currencyTab}" 
           @click="currencyTab = false">USD
