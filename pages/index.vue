@@ -214,7 +214,6 @@
 				</div>
 			</div> 
 		</section>
-		<!-- <OrganismExploreProperties :property_id=1 /> -->
 	</div>
 </template>
 
@@ -227,19 +226,25 @@ const config = useRuntimeConfig();
 const { data: exclusive, status: exclusive_status } = useFetch('advertisements/home?plan=2', {
   method: 'GET',
   baseURL: config.public.API,
-  transform:(_data) => data.results.data
+  transform:(_data) => {
+    return _data.results.data;
+  }
 });
 
 const { data: vip, status: vip_status } = useFetch('advertisements/home?plan=1', {
   method: 'GET',
   baseURL: config.public.API,
-  transform:(_data) => data.results.data
+  transform:(_data) => {
+    return _data.results.data;
+  }
 });
 
 const { data: silver, status: silver_status } = useFetch('advertisements/home?plan=3', {
   method: 'GET',
   baseURL: config.public.API,
-  transform:(_data) => data.results.data
+  transform:(_data) => {
+    return _data.results.data;
+  }
 });
 
 const router = useRouter();
