@@ -41,4 +41,21 @@ const { data: property, pending, error} = await useLazyFetch(`advertisements/${u
 definePageMeta({
   middleware: ["not-found"]
 });
+
+watch(property, () => {
+  const images = property.value.property.images.map((image) => image.src);
+  useSchemaOrg({
+    '@context': 'https://schema.org',
+    '@type': 'RealEstateListing',
+    name: property.value.property.name,
+    image: images,
+    description: property.value.property.description,
+    offers: {
+      '@type': 'Offer',
+      priceCurrency: 'USD',
+      price: property.value.property.price_us,
+      itemCondition: 'New',
+    }
+  })
+})
 </script>

@@ -27,7 +27,15 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: ['nuxt-icons', 'nuxt-viewport', 'nuxt-swiper', '@pinia/nuxt', '@vee-validate/nuxt', '@nuxt/image'],
+  modules: [
+    'nuxt-icons',
+    'nuxt-viewport',
+    'nuxt-swiper',
+    '@pinia/nuxt',
+    '@vee-validate/nuxt',
+    '@nuxt/image',
+    'nuxt-schema-org'
+  ],
 
   viewport: {
     breakpoints: {
@@ -82,6 +90,11 @@ export default defineNuxtConfig({
 
   experimental: {
     renderJsonPayloads: false
+  },
+  
+  schemaOrg: {
+    defaults: false,
+    reactive: true,
   },
 
   compatibilityDate: '2025-03-31'
