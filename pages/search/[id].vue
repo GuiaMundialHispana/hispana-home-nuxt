@@ -47,42 +47,23 @@ const route = useRoute();
 const origin = computed(() => `${url.protocol}//${url.host}`);
 const currentUrl = computed(() => `${origin.value}${route.fullPath}`);
 watch(property, () => {
-  if(property.value) {
-    const images = property.value.property.images.map((image) => image.src);
-    useSchemaOrg({
-      '@context': 'https://schema.org',
-      '@type': 'RealEstateListing',
-      name: property.value.property.name,
-      image: images,
-      description: property.value.property.description,
-      offers: {
-        '@type': 'Offer',
-        priceCurrency: 'USD',
-        price: property.value.property.price_us,
-        itemCondition: 'New',
-      }
-    })
-  }
-
-  // useSchemaOrg({
-  //   '@context': 'https://schema.org',
-  //   '@type': 'Product',
-  //   name: property.value.property.name,
-  //   image: property.value.property.image,
-  //   description: property.value.property.description,
-  //   brand: {
-  //     '@type': 'Brand',
-  //     name: 'GrupoCasas'
-  //   },
-  //   offers: {
-  //     '@type': 'Offer',
-  //     url: currentUrl.value,
-  //     priceCurrency: 'USD',
-  //     price: property.value.property.price_us,
-  //     itemCondition: 'New',
-  //   }
-  // })
-})
-var a2a_config = a2a_config || {};
-a2a_config.num_services = 22;
+  useSchemaOrg({
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: property.value.property.name,
+    image: property.value.property.image,
+    description: property.value.property.description,
+    brand: {
+      '@type': 'Brand',
+      name: 'GrupoCasas'
+    },
+    offers: {
+      '@type': 'Offer',
+      url: currentUrl.value,
+      priceCurrency: 'USD',
+      price: property.value.property.price_us,
+      itemCondition: 'New',
+    }
+  })
+});
 </script>

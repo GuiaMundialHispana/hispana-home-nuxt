@@ -97,7 +97,6 @@ export default defineNuxtConfig({
   },
   
   schemaOrg: {
-    defaults: false,
     reactive: true,
   },
 
