@@ -1,4 +1,13 @@
 <template>
+  <Head v-if="property">
+    <Title>{{ property.property.name }}</Title>
+    <Meta name="title" :content="property.property.name" />
+    <Meta name="description" :content="property.property.description" />
+    <Meta property="og:url" :content="currentUrl" />
+    <Meta property="og:title" :content="property.property.name" />
+    <Meta property="og:description" :content="property.property.description" />
+    <Meta property="og:image" :content="property.property.image" />
+  </Head>
   <div v-if="property">
     <PopulationSearchDetailPropertySlides
       :plan-type="property.plan_id"
@@ -47,7 +56,6 @@ const route = useRoute();
 const origin = computed(() => `${url.protocol}//${url.host}`);
 const currentUrl = computed(() => `${origin.value}${route.fullPath}`);
 watch(property, () => {
-  const images = property.value.property.images.map((image) => image.src);
   useSchemaOrg({
     '@context': 'https://schema.org',
     '@type': 'RealEstateListing',
