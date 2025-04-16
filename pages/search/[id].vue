@@ -47,23 +47,20 @@ const route = useRoute();
 const origin = computed(() => `${url.protocol}//${url.host}`);
 const currentUrl = computed(() => `${origin.value}${route.fullPath}`);
 watch(property, () => {
+  const images = property.value.property.images.map((image) => image.src);
   useSchemaOrg({
     '@context': 'https://schema.org',
-    '@type': 'Product',
+    '@type': 'RealEstateListing',
     name: property.value.property.name,
-    image: property.value.property.image,
+    image: images,
     description: property.value.property.description,
-    brand: {
-      '@type': 'Brand',
-      name: 'GrupoCasas'
-    },
     offers: {
       '@type': 'Offer',
-      url: currentUrl.value,
       priceCurrency: 'USD',
       price: property.value.property.price_us,
       itemCondition: 'New',
     }
   })
-});
+})
+
 </script>
