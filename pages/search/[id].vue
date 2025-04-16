@@ -62,5 +62,4 @@ watch(property, () => {
     }
   })
 })
-
 </script>
