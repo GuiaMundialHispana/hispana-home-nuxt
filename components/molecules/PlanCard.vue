@@ -36,7 +36,7 @@
       <!--  -->
       <AtomsButtons btn-size="xsmall" class="w-full">
         <span class="total-plans">{{ planQuantity }}</span>
-        <p v-if="updatePrice > 0">RD$ {{ updatePrice  }}</p>
+        <p v-if="updatePrice > 0">RD$ {{showParsedNumber(updatePrice)}}</p>
         <p v-else>Gratis</p>
       </AtomsButtons>
     </div>
@@ -68,92 +68,6 @@
     </p>
   </div>
 </template>
-
-<!-- <script>
-import { useAuthStore } from '~/stores/Auth';
-
-export default {
-  props: {
-    plan: {
-      type: Object,
-      default: () => {}
-    },
-    userQuantity: {
-      type: Number
-    },
-    seleccionado: {
-      type: Boolean,
-      default: false
-    }
-  },
-  data() {
-    return {
-      auth: useAuthStore(),
-      planQuantity: 1,
-      priceUpdated: 0,
-      active: false
-    }
-  },
-  computed: {
-    renderPlanText() {
-      if(this.plan.name === 'VIP') {
-        return 'vip';
-      } else if (this.plan.name === 'SILVER') {
-        return 'silver';
-      } else if (this.plan.name === 'EXCLUSIVO') {
-        return 'exclusive';
-      } else if(this.plan.name === 'DESTACADOS') {
-        return '';
-      }
-    },
-    updatePrice() {
-      return parseInt(this.plan.price * this.planQuantity);
-    },
-    disabledPayment() {
-     if(this.planQuantity <= 0) { return true } else { false}
-    },
-  },
-  methods: {
-    payment() {
-      if(this.auth.isLoggedIn) {
-        let planInformation =  {
-          newPrice: this.updatePrice,
-          quantity: this.planQuantity,
-          price: this.plan.price,
-          name:this.plan.name,
-          pictures: this.plan.pictures,
-          planId: this.plan.id,
-          ref: this.$route.query.ref
-        }
-        this.$swal.fire({
-          title: '¿Deseas pagar este plan?',
-          showDenyButton: false,
-          showCancelButton: true,
-          confirmButtonText: 'Pagar plan',
-          denyButtonText: 'Seleccionar otro plan',
-        }).then((result) => {
-          if (result.isConfirmed) {
-            useRouter().push({
-              path: '/payment',
-              query: planInformation
-            })
-          }
-        })
-      } else {
-        this.$swal.fire({
-          icon: 'error',
-          text: 'Debes iniciar sesion',
-          showConfirmButton: false,
-          timer: 2000
-        });
-      }
-    },
-    showParsedNumber(number) {
-      return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-  }
-}
-</script> -->
 <script setup>
 import Swal from 'sweetalert2';
 import { ref, computed } from 'vue';
@@ -270,7 +184,7 @@ function showParsedNumber(number) {
   & .price { @apply text-neutral-black text-3xl font-semibold text-center mb-4; }
   & .free-price { @apply  text-primary-100 text-3xl text-center font-semibold; }
   & .action-buttons {
-    @apply flex items-center gap-1.5 md:flex-row flex-col justify-center mt-4;
+    @apply flex flex-wrap items-center gap-1.5 md:flex-row flex-col justify-center mt-4;
 
     & .plan-quantity {
       @apply max-w-[118px] w-full h-8 bg-neutral-white border border-[#ADADAD] rounded-lg flex items-center justify-between px-3 py-1;
