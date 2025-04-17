@@ -22,7 +22,7 @@ export default defineNuxtConfig({
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         { name: "description", content: 'Busca, encuentra y compra el inmueble perfecto con Grupo Casas & mas, el buscador de inmuebles\n' +
             'que te ofrece la mejor selección de propiedades. ¡Empieza tu búsqueda hoy mismo!' },
-        { property: 'og:image' , content: '/images/logo-header.png' },
+        { property: 'og:image' , content: '/logo-header.png' },
       ],
       link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.svg" }],
       script: [
