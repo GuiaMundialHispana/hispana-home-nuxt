@@ -22,8 +22,14 @@
             <li v-for="item in menu" :key='item.name' class="nav-item" :class="{'active': route.fullPath === item.route}">
               <NuxtLink :to='item.route'  @click="showMenu = false">{{item.name}}</NuxtLink>
             </li>
-            <li class="nav-item" v-show="isLogged">
-              <NuxtLink to="/PostProperty">Vender</NuxtLink>
+            <li class="nav-item" @click="checkSell">
+              Vender
+            </li>
+            <li class="nav-item" :class="{'active': route.fullPath === '/contact'}">
+              <NuxtLink to='/contact'  @click="showMenu = false">Contacto</NuxtLink>
+            </li>
+            <li class="nav-item" :class="{'active': route.fullPath === '/plans'}">
+              <NuxtLink to='/plans'  @click="showMenu = false">Planes</NuxtLink>
             </li>
             <li class="mb-4 lg:mb-0" v-show="!isLogged">
               <AtomsButtons @click="showMenu = false; displayModal = true">
@@ -99,7 +105,7 @@
   </header>
   <!-- Modal login and register component -->
   <OrganismLogInaAndRegister
-    @closeModal="displayModal = false"
+    @closeModal="displayModal = false, showMenu = false"
     v-if="displayModal"
   />
 </template>
@@ -121,8 +127,6 @@ const menu = reactive([
   { name: 'Todos', route: '/resultados?type=All' },
   { name: 'Comprar', route: '/resultados?type=Sale' },
   { name: 'Alquilar', route: '/resultados?type=Rent' },
-  { name: 'Contacto', route: '/contact' },
-  { name: 'Planes', route: '/plans' },
 ]);
 
 // Watchers
@@ -133,6 +137,16 @@ watch(showMenu, (newValue: boolean) => {
     document.body.classList.remove('modal-open');
   }
 });
+
+function checkSell() {
+  if(isLogged.value) {
+    navigateTo('/PostProperty');
+    showMenu.value = false
+  } else {
+    showMenu.value = false
+    displayModal.value = true
+  }
+}
 
 watch(displayModal, (newValue: boolean) => {
   if (newValue) {
