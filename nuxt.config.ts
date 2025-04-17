@@ -34,15 +34,7 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: [
-    'nuxt-icons',
-    'nuxt-viewport',
-    'nuxt-swiper',
-    '@pinia/nuxt',
-    '@vee-validate/nuxt',
-    '@nuxt/image',
-    'nuxt-schema-org'
-  ],
+  modules: ['nuxt-icons', 'nuxt-viewport', 'nuxt-swiper', '@pinia/nuxt', '@vee-validate/nuxt', '@nuxt/image', 'nuxt-schema-org', '@nuxtjs/sitemap'],
 
   viewport: {
     breakpoints: {
@@ -74,6 +66,11 @@ export default defineNuxtConfig({
       API: process.env.BASE_URL,
       PUBLISH_KEY: process.env.PUBLISH_KEY
     }
+  },
+  
+  site: {
+    url: 'https://www.grupocasasymas.com/',
+    name: 'Grupo Casas & más',
   },
 
   vite: {
