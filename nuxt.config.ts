@@ -20,9 +20,8 @@ export default defineNuxtConfig({
       },
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: "description", content: 'Busca, encuentra y compra el inmueble perfecto con Grupo Casas & mas, el buscador de inmuebles\n' +
-            'que te ofrece la mejor selección de propiedades. ¡Empieza tu búsqueda hoy mismo!' },
-        { property: 'og:image' , content: 'https://www.grupocasasymas.com/img/logo-header.svg' },
+        { name: "description", content: 'Busca, encuentra y compra el inmueble perfecto con Grupo Casas & mas, el buscador de inmuebles que te ofrece la mejor selección de propiedades. ¡Empieza tu búsqueda hoy mismo!' },
+        { property: 'og:image' , content: 'https://www.grupocasasymas.com/img/logo-header.svg' }
       ],
       link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.svg" }],
       script: [
@@ -34,7 +33,7 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: ['nuxt-icons', 'nuxt-viewport', 'nuxt-swiper', '@pinia/nuxt', '@vee-validate/nuxt', '@nuxt/image', 'nuxt-schema-org', '@nuxtjs/sitemap'],
+  modules: ['nuxt-icons', 'nuxt-viewport', 'nuxt-swiper', '@pinia/nuxt', '@vee-validate/nuxt', '@nuxt/image', 'nuxt-schema-org', '@nuxtjs/sitemap', 'nuxt-og-image'],
 
   viewport: {
     breakpoints: {
