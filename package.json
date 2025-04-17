@@ -16,7 +16,6 @@
     "@unhead/vue": "^2.0.8",
     "@vueuse/components": "^10.1.2",
     "nuxt": "^3.8.2",
-    "nuxt-og-image": "^5.1.2",
     "nuxt-schema-org": "^5.0.5",
     "nuxt-viewport": "^2.0.3",
     "postcss": "^8.4.21",
