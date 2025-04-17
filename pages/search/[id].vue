@@ -3,12 +3,12 @@
     <Title>{{ property.property.name }}</Title>
     <Meta name="title" :content="property.property.name" />
     <Meta name="description" :content="property.property.description" />
-    <Meta name="image" :content="property.property.image" />
-    <Meta property="og:type" content="product" />
+    <Meta property="og:type" content="article" />
     <Meta property="og:url" :content="currentUrl" />
     <Meta property="og:title" :content="property.property.name" />
     <Meta property="og:description" :content="property.property.description" />
     <Meta property="og:image" :content="property.property.image" />
+    <Meta property="og:locale" content="es_ES" />
     <Meta name="twitter:card" :content="property.property.image" />
   </Head>
   <div v-if="property">
