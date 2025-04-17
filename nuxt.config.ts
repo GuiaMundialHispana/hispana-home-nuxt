@@ -37,7 +37,7 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: ['nuxt-icons', 'nuxt-viewport', 'nuxt-swiper', '@pinia/nuxt', '@vee-validate/nuxt', '@nuxt/image', 'nuxt-schema-org', '@nuxtjs/sitemap', 'nuxt-og-image'],
+  modules: ['nuxt-icons', 'nuxt-viewport', 'nuxt-swiper', '@pinia/nuxt', '@vee-validate/nuxt', '@nuxt/image', 'nuxt-schema-org', '@nuxtjs/sitemap'],
 
   viewport: {
     breakpoints: {
