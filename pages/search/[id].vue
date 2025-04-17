@@ -3,6 +3,7 @@
     <Title>{{ property.property.name }}</Title>
     <Meta name="title" :content="property.property.name" />
     <Meta name="description" :content="property.property.description" />
+    <Meta name="image" :content="property.property.image" />
     <Meta property="og:type" content="product" />
     <Meta property="og:url" :content="currentUrl" />
     <Meta property="og:title" :content="property.property.name" />
@@ -60,7 +61,7 @@ const currentUrl = computed(() => `${origin.value}${route.fullPath}`);
 watch(property, () => {
   useSchemaOrg({
     '@context': 'https://schema.org',
-    '@type': 'RealEstateListing',
+    '@type': 'Product',
     name: property.value.property.name,
     image: property.value.property.image,
     description: property.value.property.description,
