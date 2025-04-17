@@ -23,7 +23,7 @@ export default defineNuxtConfig({
         { name: "description", content: 'Busca, encuentra y compra el inmueble perfecto con Grupo Casas & mas, el buscador de inmuebles que te ofrece la mejor selección de propiedades. ¡Empieza tu búsqueda hoy mismo!' },
         { property: 'og:title', content: 'Grupo Casas & más' },
         { property: 'og:description', content: 'Busca, encuentra y compra el inmueble perfecto con Grupo Casas & más.' },
-        { property: 'og:image', content: 'https://www.grupocasasymas.com/logo-header.png' },
+        { property: 'og:image', content: 'https://www.grupocasasymas.com/img/logo-header.svg' },
         { property: 'og:url', content: 'https://www.grupocasasymas.com/' },
         { property: 'og:type', content: 'website' },
       ],
