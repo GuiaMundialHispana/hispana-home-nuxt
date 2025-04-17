@@ -8,7 +8,7 @@
     <Meta property="og:title" :content="property.property.name" />
     <Meta property="og:description" :content="property.property.description" />
     <Meta property="og:image" :content="property.property.image" />
-    <Meta name="twitter:card" content="summary_large_image" />
+    <Meta name="twitter:card" :content="property.property.image" />
   </Head>
   <div v-if="property">
     <PopulationSearchDetailPropertySlides
