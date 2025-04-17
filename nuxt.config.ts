@@ -13,13 +13,16 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      title: 'Grupo Casas & mas',
+      title: 'Grupo Casas & más',
       titleTemplate: '%s',
       htmlAttrs: {
         lang: 'es'
       },
       meta: [
-        { name: 'viewport', content: 'width=device-width, initial-scale=1' }
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        { name: "description", content: 'Busca, encuentra y compra el inmueble perfecto con Grupo Casas & mas, el buscador de inmuebles\n' +
+            'que te ofrece la mejor selección de propiedades. ¡Empieza tu búsqueda hoy mismo!' },
+        { property: 'og:image' , content: '/images/logo-header.png' },
       ],
       link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.svg" }],
       script: [
