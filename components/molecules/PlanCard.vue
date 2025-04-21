@@ -118,6 +118,7 @@ const disabledPayment = computed(() => {
 });
 
 // Métodos
+const refer = useState('refer');
 function payment() {
   if (isLogged.value) {
     const planInformation = {
@@ -127,7 +128,7 @@ function payment() {
       name: props.plan.name,
       pictures: props.plan.pictures,
       planId: props.plan.id,
-      ref: route.query.ref
+      ref: refer.value
     };
 
     Swal.fire({

@@ -8,6 +8,7 @@ export default function useLogOut() {
   const user = useUserStore();
 
   async function logOut() {
+    const refer = useState('refer');
     await $fetch('auth/logout',{
       method: 'POST',
       baseURL: config.public.API,
@@ -21,6 +22,8 @@ export default function useLogOut() {
     token.value = '';
     useRouter().push("/")
     useUserStore().$reset();
+    refer.value = '';
+    localStorage.removeItem('ref')
 
     try {
       Swal.hideLoading();

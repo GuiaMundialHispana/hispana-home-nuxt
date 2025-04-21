@@ -6,6 +6,7 @@ export default async function useLogOut() {
   const config = useRuntimeConfig();
   const token = useState('token');
   const user = useUserStore();
+  const refer = useState('refer');
 
   await $fetch('auth/logout',{
     method: 'POST',
@@ -16,6 +17,8 @@ export default async function useLogOut() {
     onRequestError() {
       Swal.showLoading();
       localStorage.removeItem('token');
+      refer.value = '';
+      localStorage.removeItem('ref')
       useUserStore().$reset();
       isLogged.value = false;
       token.value = '';
@@ -31,6 +34,8 @@ export default async function useLogOut() {
     },
     onResponseError() {
       Swal.showLoading();
+      refer.value = '';
+      localStorage.removeItem('ref')
       localStorage.removeItem('token');
       useUserStore().$reset();
       isLogged.value = false;

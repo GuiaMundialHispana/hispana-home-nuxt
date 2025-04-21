@@ -14,6 +14,21 @@ import useRefresh from '~/composables/RefreshToken';
 
 const isLogged = useState<boolean>('isLogged', () => false);
 const { refresh_token } = useRefresh();
+const route = useRoute();
+const refer = useState<string>('refer', () => '');
+
+if(import.meta.client) {
+  let tokenReferClient = localStorage.getItem('ref');
+
+  if(route.query.ref) {
+    localStorage.setItem('ref', route.query.ref);
+    refer.value = route.query.ref;
+  }
+
+  if(tokenReferClient) {
+    refer.value = tokenReferClient;
+  }
+}
 
 onMounted(() => {
   const interval = setInterval(() => {
@@ -22,8 +37,16 @@ onMounted(() => {
     }
   }, 60000); // 2 minutes
 
-  onUnmounted(() => {
-    clearInterval(interval);
+  clearInterval(interval);
+
+  const handleBeforeUnload = () => {
+    localStorage.removeItem('ref');
+  };
+
+  window.addEventListener('beforeunload', handleBeforeUnload);
+
+  onBeforeUnmount(() => {
+    window.removeEventListener('beforeunload', handleBeforeUnload);
   });
 });
 </script>
