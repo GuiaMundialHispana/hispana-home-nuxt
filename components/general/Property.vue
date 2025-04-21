@@ -10,7 +10,7 @@
       v-if="$route.fullPath != '/profile?tab=anuncio'"
     />
     <!-- Editar la propiedad/ pero debo validar si esta logueado no solo con la ruta -->
-    <NuxtLink :to="{ path: `edit-property`, query: { slug: property.slug }}"
+    <NuxtLink :to="{ path: `edit-ad`, query: { slug: property.slug }}"
       class="btn-icon small active absolute left-4 z-10 top-1"
       v-if="$route.fullPath === '/profile?tab=anuncio'"
     >
