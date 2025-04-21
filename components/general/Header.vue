@@ -81,7 +81,7 @@
             <li v-show="isLogged">
               <AtomsLink
                 @click="showMenu = false"
-                link-to="/PostProperty"
+                link-to="/create-ad"
                 icon-name="general/plus"
                 icon-position="left"
                 :icon-size=14
@@ -140,7 +140,7 @@ watch(showMenu, (newValue: boolean) => {
 
 function checkSell() {
   if(isLogged.value) {
-    navigateTo('/PostProperty');
+    navigateTo('/create-ad');
     showMenu.value = false
   } else {
     showMenu.value = false
