@@ -35,7 +35,7 @@
       class="my-3 justify-center"
     />
     <p class="title-price">Desde:</p>
-    <p class="price">US${{ showParsedPrice(property.price_us) }}</p>
+    <p class="price">US${{ formatCurrency(property.price_us) }}</p>
   </article>
 </template>
 
@@ -46,8 +46,8 @@ const props = defineProps<{
   propertyId: number;
 }>();
 
-function showParsedPrice(price: number) {
-  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+function formatCurrency(price: number) {
+  return new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(price,);
 }
 </script>
 

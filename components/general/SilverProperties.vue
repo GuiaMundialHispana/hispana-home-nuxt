@@ -27,7 +27,7 @@
       }"
     >
       <swiper-slide v-for="(property, index) in properties" :key="index">
-        <GeneralFeaturedProperties :property-id="property.id" plantype="silver" :property="property.property" />
+        <GeneralFeaturedProperties :property-id="property?.id" plantype="silver" :property="property?.property" />
       </swiper-slide>
     </Swiper>
   </section>

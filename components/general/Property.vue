@@ -73,7 +73,7 @@
       />
       <!-- Price -->
       <p class="price-title">Desde:</p>
-      <p class="price">US${{showParsedPrice(property.price_us)}}</p>
+      <p class="price">US${{formatCurrency(property.price_us)}}</p>
     </NuxtLink>
   </article>
 </template>
@@ -112,9 +112,9 @@ const user_store = useUserStore();
 const isFavorite = ref(false);
 const isLogged = useState('isLogged');
 
-const showParsedPrice = (price: number) => {
-  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-};
+function formatCurrency(price: number) {
+  return new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(price,);
+}
 
 const navigation = ref({
   nextEl: `.next-${props.propertyId}`,

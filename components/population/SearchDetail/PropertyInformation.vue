@@ -8,9 +8,9 @@
           <p class="text-neutral-black text-base font-normal">
             Precio
             <br>
-            <span class="text-primary-100 xl:text-[28px] text-xl xl:leading-[28px] font-semibold mt-2">US${{ showParsedPrice(property.price_us) }}</span>
+            <span class="text-primary-100 xl:text-[28px] text-xl xl:leading-[28px] font-semibold mt-2">US${{ formatCurrency(property.price_us) }}</span>
             <!-- <br /> -->
-            <!-- <span class="text-primary-100 xl:text-[28px] text-xl xl:leading-[28px] font-semibold mt-2">RD${{ showParsedPrice(property.price) }}</span> -->
+            <!-- <span class="text-primary-100 xl:text-[28px] text-xl xl:leading-[28px] font-semibold mt-2">RD${{ formatCurrency(property.price) }}</span> -->
           </p>
           <a href="#loan" class="btn-loan">
             <AtomsIcon class="mr-2.5" name="general/price" :size=18 />
@@ -166,8 +166,8 @@ export default {
     }
   },
   methods: {
-    showParsedPrice(price) {
-      return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    formatCurrency(price: number) {
+      return new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(price,);
     }
   }
 }

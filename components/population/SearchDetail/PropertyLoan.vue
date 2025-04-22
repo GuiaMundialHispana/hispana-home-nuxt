@@ -36,7 +36,7 @@
         <div class="flex md:flex-row flex-col gap-6 md:items-center">
           <div class="flex-none">
             <label class="m-0">Monto inicial</label>
-            <p class="text-bx"><b class="text-primary-100"> US${{ showParsedPrice(initial) }} |</b> {{ initialPercentage }}%</p>
+            <p class="text-bx"><b class="text-primary-100"> US${{ formatCurrency(initial) }} |</b> {{ initialPercentage }}%</p>
           </div>
           <!--  -->
           <div class="progress">
@@ -45,14 +45,14 @@
           <!--  -->
           <div class="flex-none">
             <label class="m-0">Monto del préstamo</label>
-            <p class="text-bx"><b class="text-primary-100"> US${{ showParsedPrice(loanAmount) }} |</b> {{ loanPercentage }}%</p>
+            <p class="text-bx"><b class="text-primary-100"> US${{ formatCurrency(loanAmount) }} |</b> {{ loanPercentage }}%</p>
           </div>
         </div>
         <hr class="border-[#ECECEC] my-4">
         <div class="flex md:flex-row flex-col md:items-center md:justify-end">
           <div class="md:mb-0 mb-4">
             <label class="m-0">Cuota mensual estimada</label>
-            <p class="text-[28px] text-primary-100 font-semibold md:text-right"> US${{ showParsedPrice(monthlyPayment) }}</p>
+            <p class="text-[28px] text-primary-100 font-semibold md:text-right"> US${{ formatCurrency(monthlyPayment) }}</p>
           </div>
         </div>
       </div>
@@ -93,8 +93,8 @@
         this.initialPercentage = initialPercent.toFixed(2);
         this.loanPercentage = loanPercent.toFixed(2);
       },
-      showParsedPrice(price) {
-        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      formatCurrency(price) {
+        return new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(price,);
       },
       
     },
