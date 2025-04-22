@@ -6,8 +6,6 @@
       {{property.address}}
     </span>
     <Swiper
-      :modules="[SwiperFreeMode]"
-      :effect="'fade'"
       :lazy="true"
       slides-per-view="auto"
       :space-between="2"
@@ -40,11 +38,20 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
-  planType: string;
-  property: Property;
-  propertyId: number;
-}>();
+defineProps({
+  plantype: {
+    type: String,
+    required: true,
+  },
+  property: {
+    type: Object as PropType<Property>,
+    required: true,
+  },
+  propertyId: {
+    type: Number,
+    required: true,
+  },
+})
 
 function formatCurrency(price: number) {
   return new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(price,);
