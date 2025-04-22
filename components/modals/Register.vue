@@ -39,6 +39,7 @@ let password = ref('');
 let password_confirmation = ref('');
 const emit = defineEmits(['close']);
 const isLogged = useState('isLogged');
+const refer = useState('refer')
 
 async function register() {
   Swal.showLoading()
@@ -50,7 +51,8 @@ async function register() {
       lastname: lastname.value,
       email: email.value,
       password: password.value,
-      password_confirmation: password_confirmation.value
+      password_confirmation: password_confirmation.value,
+      refered_token: refer.value
     },
     onResponse({response}) {
       Swal.hideLoading();
