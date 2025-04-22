@@ -111,7 +111,7 @@
 </template>
 
 <script lang="ts" setup>
-import Swal from 'sweetalert2';
+import {OnClickOutside} from "@vueuse/components";
 const user = useState('user');
 const viewport = useViewport();
 
@@ -122,6 +122,12 @@ const isLogged = useState('isLogged');
 const config = useRuntimeConfig();
 const { logOut } = useLogOut()
 const route = useRoute();
+
+defineComponent({
+  components: {
+    OnClickOutside
+  }
+})
 
 const menu = reactive([
   { name: 'Todos', route: '/resultados?type=All' },

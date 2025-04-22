@@ -37,7 +37,7 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: ['nuxt-icons', 'nuxt-viewport', 'nuxt-swiper', '@pinia/nuxt', '@vee-validate/nuxt', '@nuxt/image', 'nuxt-schema-org', '@nuxtjs/sitemap'],
+  modules: ['nuxt-icons', 'nuxt-viewport', 'nuxt-swiper', '@pinia/nuxt', '@vee-validate/nuxt', '@nuxt/image', 'nuxt-schema-org', '@nuxtjs/sitemap', '@nuxtjs/tailwindcss'],
 
   viewport: {
     breakpoints: {
@@ -62,6 +62,10 @@ export default defineNuxtConfig({
       tailwindcss: {},
       autoprefixer: {},
     },
+  },
+  
+  tailwindcss: {
+    cssPath: '~/assets/css/main.css',
   },
 
   runtimeConfig: {

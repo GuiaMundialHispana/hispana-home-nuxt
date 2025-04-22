@@ -234,6 +234,12 @@
 
 <script setup>
 import { OnClickOutside } from '@vueuse/components';
+defineComponent({
+  components: {
+    MultiRangeSlider,
+    OnClickOutside
+  }
+})
 </script>
 
 <script>

@@ -221,6 +221,13 @@
 import { OnClickOutside } from '@vueuse/components';
 import MultiRangeSlider from 'multi-range-slider-vue';
 
+defineComponent({
+  components: {
+    MultiRangeSlider,
+    OnClickOutside
+  }
+})
+
 const config = useRuntimeConfig();
 
 const { data: exclusive, status: exclusive_status } = useFetch('advertisements/home?plan=2', {
