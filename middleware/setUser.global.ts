@@ -1,32 +1,15 @@
-export default defineNuxtRouteMiddleware((to, from) => {
+export default defineNuxtRouteMiddleware(async (to, from) => {
   const isLogged = useState('isLogged');
   const token = useState('token');
-  const { getUser } = useUser();
-  if(import.meta.client) {
+  const {getUser} = useUser();
+  if (import.meta.client) {
     let tokenClient = window.localStorage.getItem('token');
-    if(tokenClient) {
+    if (tokenClient) {
       token.value = tokenClient;
-      getUser();
+      await getUser();
       isLogged.value = true;
     } else {
       isLogged.value = false;
     }
   }
-  // if(process.client) {
-  //   let get_token = window.localStorage.getItem('token');
-  //   if(get_token !== null) {
-  //     isLogged.value = true;
-  //     token.value = get_token;
-  //     getUser().catch(() => {
-  //       isLogged.value = false;
-  //     })
-  //     user_store.token = get_token;
-  //     use_auth.isLoggedIn = true;
-  //     user_store.get_user().catch(() => {
-  //       use_auth.isLoggedIn = false;
-  //     });
-  //   } else {
-  //     use_auth.isLoggedIn = false;
-  //   }
-  // }
 });
