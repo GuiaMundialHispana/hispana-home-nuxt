@@ -30,15 +30,14 @@ if(import.meta.client) {
   }
 }
 
+setInterval(async () => {
+  if (isLogged.value) {
+    console.log('Refreshing token...');
+    await refresh_token();
+  }
+}, 120000);
+
 onMounted(() => {
-  const interval = setInterval(() => {
-    if(isLogged.value) {
-      refresh_token()
-    }
-  }, 60000); // 2 minutes
-
-  clearInterval(interval);
-
   const handleBeforeUnload = () => {
     localStorage.removeItem('ref');
   };

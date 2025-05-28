@@ -1,10 +1,8 @@
-import Swal from 'sweetalert2';
 export default function useRefresh() {
-  const isLogged = useState('isLogged');
   const token = useState('token');
-
+  
   async function refresh_token() {
-    const {data, error} = await useFetch('auth/refresh',{
+    await $fetch('auth/refresh',{
       method: 'POST',
       baseURL: useRuntimeConfig().public.API,
       headers: {
@@ -13,31 +11,21 @@ export default function useRefresh() {
       onResponseError({response}) {
         let responseApi = response._data.message;
         if(response.status === 404 || responseApi === "Token invalid or not provided.") {
-          localStorage.removeItem('token');
-          isLogged.value = false;
-          Swal.showLoading();
-          useRouter().push("/").then(() => {
-            Swal.fire({
-              icon: 'error',
-              text: 'Por favor inicia sesion nuevamente',
-              showConfirmButton: false,
-              allowOutsideClick: false,
-              timer: 5000
-            });
-          });
+          useErrorResponseLogOut()
+        }
+      },
+      onResponse({response}) {
+        let responseApi = response._data;
+        if(responseApi.status === false || responseApi.code !== 200) {
+          useErrorResponseLogOut();
+        }
+        if(responseApi.status === true && responseApi.code === 200) {
+          token.value = responseApi.results.access_token;
+          localStorage.setItem('token', token.value);
+          return responseApi;
         }
       }
     });
-
-    if(data) {
-      let response = data.value;
-      let user_response = data.value.results.user;
-    }
-
-    if(data.value != null) {
-      token.value = data.value.results.access_token;
-      localStorage.setItem('token', token.value);
-    }
   }
 
   return { refresh_token }

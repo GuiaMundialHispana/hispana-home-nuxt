@@ -5,7 +5,6 @@ export default async function useLogOut() {
   const isLogged = useState('isLogged');
   const config = useRuntimeConfig();
   const token = useState('token');
-  const user = useUserStore();
   const refer = useState('refer');
 
   await $fetch('auth/logout',{

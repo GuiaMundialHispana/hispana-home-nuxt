@@ -1,10 +1,8 @@
 import Swal from 'sweetalert2';
 export default function useUser() {
-  const isLogged = useState('isLogged');
   const config = useRuntimeConfig();
   const token = useState('token');
   const user = useState('user', () => {});
-  const { logOut } = useLogOut();
   const pendingUserData = ref(false);
 
   async function getUser() {

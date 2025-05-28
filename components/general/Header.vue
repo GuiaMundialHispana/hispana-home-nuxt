@@ -70,7 +70,7 @@
                         Mis planes
                       </NuxtLink>
                     </li>
-                    <li @click="logOut(), showMenu = false">
+                    <li @click="useErrorResponseLogOut(), showMenu = false">
                       <AtomsIcon name="general/logout" class="mr-2.5" />
                       Cerrar sesión
                     </li>
@@ -119,8 +119,6 @@ const showMenu = ref(false);
 const userDropdown = ref(false);
 const displayModal = ref(false);
 const isLogged = useState('isLogged');
-const config = useRuntimeConfig();
-const { logOut } = useLogOut()
 const route = useRoute();
 
 defineComponent({
