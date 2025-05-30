@@ -3,7 +3,7 @@
     <NuxtLoadingIndicator />
     <GeneralHeader />
     <main class="lg:pt-[102px] pt-16">
-      <section class="pb-32">
+      <section class="pb-28">
         <div class="xl:container mx-auto lg:px-16 md:px-8 px-4">
           <div class="profile-wrapper">
             <figure v-if="pendingUserData" class="profile-image overflow-hidden">
@@ -90,7 +90,7 @@ onMounted(() => {
 }
 
 .user-filter {
-  @apply border-b border-gray-300 mb-10 flex md:overflow-hidden overflow-x-scroll;
+  @apply border-b border-gray-300 flex md:overflow-hidden overflow-x-scroll;
   & .btn-tab {
     @apply flex-none mr-8 hover:text-primary-100 hover:border-b hover:border-primary-100 text-neutral-black text-base pb-2;
     &.active { @apply text-primary-100 border-b border-primary-100;}

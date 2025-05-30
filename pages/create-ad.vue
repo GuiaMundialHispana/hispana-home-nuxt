@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import Swal from 'sweetalert2';
 import { useUserStore } from '~/stores/User';
 import { usePostsStore } from '~/stores/Post';
@@ -44,7 +44,7 @@ async function createAdvertisement() {
     form.append('images[' + index + ']',element);
   });
 
-  await useFetch('advertisements',{
+  await $fetch('advertisements',{
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -55,6 +55,7 @@ async function createAdvertisement() {
     onResponse({ response }) {
       Swal.hideLoading();
       const res = response._data;
+      console.log(res)
       if(res.code === 200 ) {
         Swal.fire({
           icon: 'success',
@@ -92,9 +93,17 @@ async function createAdvertisement() {
           });
         }
       }
-    }    
+    },
+    onResponseError(error) {
+      if(error.response._data.code === 500){
+        Swal.fire({
+          icon: 'error',
+          text:  'Error del servidor, por favor intente más tarde.',
+        });
+      }
+    }
   });
-};
+}
 
 </script>
 
