@@ -306,7 +306,7 @@ watch(price,(new_price) => {
   </div>
   <nav class="control-steps-postProperty">
     <AtomsButtons @click="emit('back')" btn-style="outline-primary">
-      Atras
+      Atrás
     </AtomsButtons>
     <AtomsButtons @click="emit('nexts')">
       Continuar

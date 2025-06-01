@@ -119,7 +119,7 @@ watch(newPreview.value, (newx) => {
   </div>
   <nav class="control-steps-postProperty">
     <AtomsButtons @click="emit('back')" btn-style="outline-primary">
-      Atras
+      Atrás
     </AtomsButtons>
   </nav>
 </template>

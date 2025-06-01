@@ -108,7 +108,7 @@ function send_plan(id,pictures) {
   </div>
   <nav class="control-steps-postProperty">
     <AtomsButtons @click="emit('back')" btn-style="outline-primary">
-      Atras
+      Atrás
     </AtomsButtons>
     <!-- :disabled="!next" -->
     <AtomsButtons @click="emit('nexts')">
