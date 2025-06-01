@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import {ref, watch} from 'vue';
 import { usePostsStore } from '~/stores/Post';
 
@@ -45,6 +45,7 @@ let log = null;
 let address = ref('');
 let pricePlaceholder = ref('pesos dominicanos');
 let priceInput = ref('');
+const mapNotSupported = ref(false);
 
 let countriesApi = await $fetch('generals/countries', {
   baseURL: config.public.API
@@ -83,13 +84,12 @@ async function getCities(sector_id) {
   cities.push(citiesApi.results.data);
 };
 
-function getAddress(lant, long, location) {
-  lat = lant;
-  log = long;
+function getAddress(lat:any, long:any, location:string) {
+  use_posts.lat = lat;
+  use_posts.log = long;
   address.value = location;
   use_posts.address = location;
-  // console.log(lat, log, address.value)
-};
+}
 
 getStates(props.countryId);
 getCities(props.sectorId);
@@ -205,8 +205,14 @@ watch(price,(new_price) => {
     <!-- Map -->
     <div class="col-span-3">
       <ClientOnly>
-        <PopulationEditPropertiesMap :lat="use_posts.lat" :long="use_posts.log" @send-location="getAddress"/>
+        <PopulationEditPropertiesMap :lat="use_posts.lat" :long="use_posts.log" @send-location="getAddress"  @mapNotSupported="mapNotSupported = true"/>
       </ClientOnly>
+      <div v-if="!mapNotSupported && use_posts.lat === 0 && use_posts.log === 0" class="bg-[yellow] bg-opacity-35 border-[yellow] border rounded-sm p-4 text-sm mt-3 text-center mb-5">
+        Por favor mueva el indicador en el mapa a la ubicación de la propiedad, esto nos ayudará a mostrarla en el mapa.
+      </div>
+      <div v-if="mapNotSupported" class="bg-[red] bg-opacity-35 border-[red] border rounded-sm p-4 text-sm mt-3 font-medium text-black text-center mb-5">
+        Por favor active la geolocalización en su navegador para poder ubicar la propiedad en el mapa.
+      </div>
     </div>
     <!-- Direccion -->
     <div class="col-span-3">

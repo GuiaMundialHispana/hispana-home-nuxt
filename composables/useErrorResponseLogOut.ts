@@ -16,7 +16,6 @@ export default async function useLogOut() {
       token: localStorage.getItem('token')
     },
     onResponse({response}) {
-      console.log(response)
       let response_data = response._data;
       if(response_data.status || response_data.code === 200) {
         Swal.showLoading();
