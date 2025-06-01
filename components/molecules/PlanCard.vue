@@ -1,7 +1,6 @@
 <template>
   <div class="plan-wrapper">
-    <!-- plan.id != 4 &&   -->
-    <span class="user-quantity" v-if="$route.path === '/create-ad' || $route.path === '/create-ad' || $route.path === '/edit-ad'">
+    <span class="user-quantity" v-if="userQuantity && $route.path === '/create-ad' || $route.path === '/create-ad' || $route.path === '/edit-ad'">
       {{ userQuantity }}
     </span>
     <span class="plan-category" :class="[renderPlanText]">{{ plan.name }}</span>
