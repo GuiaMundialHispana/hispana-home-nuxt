@@ -104,7 +104,7 @@ function send_plan(id,pictures) {
     </li>
   </ul>
   <div class="flex justify-center">
-    <AtomsLink link-to="/plans" class="mx-auto my-6">Adquirir mas planes</AtomsLink>
+    <AtomsLink link-to="/planes" class="mx-auto my-6">Adquirir mas planes</AtomsLink>
   </div>
   <nav class="control-steps-postProperty">
     <AtomsButtons @click="emit('back')" btn-style="outline-primary">

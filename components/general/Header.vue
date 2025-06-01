@@ -26,10 +26,10 @@
               Vender
             </li>
             <li class="nav-item" :class="{'active': route.fullPath === '/contact'}">
-              <NuxtLink to='/contact'  @click="showMenu = false">Contacto</NuxtLink>
+              <NuxtLink to='/contacto' @click="showMenu = false">Contacto</NuxtLink>
             </li>
             <li class="nav-item" :class="{'active': route.fullPath === '/plans'}">
-              <NuxtLink to='/plans'  @click="showMenu = false">Planes</NuxtLink>
+              <NuxtLink to='/planes' @click="showMenu = false">Planes</NuxtLink>
             </li>
             <li class="mb-4 lg:mb-0" v-show="!isLogged">
               <AtomsButtons @click="showMenu = false; displayModal = true">
