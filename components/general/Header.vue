@@ -70,7 +70,7 @@
                         Mis planes
                       </NuxtLink>
                     </li>
-                    <li @click="useErrorResponseLogOut(), showMenu = false">
+                    <li @click="useErrorResponseLogOut(); showMenu = false">
                       <AtomsIcon name="general/logout" class="mr-2.5" />
                       Cerrar sesión
                     </li>

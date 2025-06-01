@@ -1,5 +1,7 @@
 import Swal from 'sweetalert2';
 import { useUserStore } from '~/stores/User';
+import {usePostsStore} from "~/stores/Post";
+import {useAuthStore} from "~/stores/Auth";
 
 export default async function useLogOut() {
   const isLogged = useState('isLogged');
@@ -13,18 +15,44 @@ export default async function useLogOut() {
     body: {
       token: localStorage.getItem('token')
     },
+    onResponse({response}) {
+      console.log(response)
+      let response_data = response._data;
+      if(response_data.status || response_data.code === 200) {
+        Swal.showLoading();
+        refer.value = '';
+        localStorage.removeItem('token');
+        localStorage.removeItem('ref')
+        isLogged.value = false;
+        token.value = '';
+        useUserStore().$reset();
+        usePostsStore().$reset();
+        useAuthStore().$reset();
+        useRouter().push("/").then(() => {
+          Swal.fire({
+            icon: 'success',
+            text: 'Sesión cerrada correctamente',
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            timer: 5000
+          });
+        });
+      }
+    },
     onRequestError() {
       Swal.showLoading();
       localStorage.removeItem('token');
       refer.value = '';
       localStorage.removeItem('ref')
-      useUserStore().$reset();
       isLogged.value = false;
       token.value = '';
+      useUserStore().$reset();
+      usePostsStore().$reset();
+      useAuthStore().$reset();
       useRouter().push("/").then(() => {
         Swal.fire({
           icon: 'error',
-          text: 'Por favor inicia sesion nuevamente',
+          text: 'Por favor iniciar sesión nuevamente',
           showConfirmButton: false,
           allowOutsideClick: false,
           timer: 5000
@@ -37,12 +65,14 @@ export default async function useLogOut() {
       localStorage.removeItem('ref')
       localStorage.removeItem('token');
       useUserStore().$reset();
+      usePostsStore().$reset();
+      useAuthStore().$reset();
       isLogged.value = false;
       token.value = '';
       useRouter().push("/").then(() => {
         Swal.fire({
           icon: 'error',
-          text: 'Por favor inicia sesion nuevamente',
+          text: 'Por favor inicia sesión nuevamente',
           showConfirmButton: false,
           allowOutsideClick: false,
           timer: 5000

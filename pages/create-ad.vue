@@ -67,6 +67,7 @@ async function createAdvertisement() {
         setTimeout(() => {
           useRouter().push("/profile?tab=anuncio");
         }, 3000);
+        use_posts.$reset();
       }
 
       if(res.code === 400) {

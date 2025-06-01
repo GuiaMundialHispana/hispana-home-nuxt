@@ -52,7 +52,6 @@
 </template>
 
 <script setup>
-import { useUserStore } from '~/stores/User';
 
 const config = useRuntimeConfig();
 const token = useState('token')
