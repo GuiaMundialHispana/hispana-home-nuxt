@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import { useForm } from "vee-validate";
 import * as yup from "yup";
 import {ref, watch} from 'vue';
@@ -8,7 +8,6 @@ const use_posts = usePostsStore();
 const config = useRuntimeConfig();
 const emit = defineEmits(['nexts'])
 const currencyTab = ref(true);
-const name = ref('');
 let price = ref(Number);
 let price_us = ref(Number);
 let price_temp = ref(Number);
@@ -28,11 +27,9 @@ const features = useGetFeatures().features;
 const feature = ref([]);
 let sector = ref(0);
 let displaySector = ref(false);
-let city = ref([]);
 let displayCity = ref(false);
-// let categories = [];
-let lat = ref(null);
-let log = ref(null);
+const mapNotSupported = ref(false);
+
 let address = ref('');
 let pricePlaceholder = ref('pesos dominicanos');
 let priceInput = ref('');
@@ -49,19 +46,19 @@ const schema = yup.object({
   property_status: yup.string().required("Este campo es requerido"),
   meter: yup.number().required("Este campo es requerido y debe ser un numero"),
   meter_2: yup.number().required("Este campo es requerido y debe ser un numero"),
-  description: yup.string().required("La descripcion es requerida"),
+  description: yup.string().required("La descripción es requerida")
 });
 
 const { handleSubmit, setFieldValue} = useForm({
   validationSchema: schema,
 });
 
-function getAddress(lant, long, location) {
-  lat.value = lant;
-  log.value = long;
+function getAddress(lat:any, long:any, location:string) {
+  use_posts.lat = lat;
+  use_posts.log = long;
   address.value = location;
   setFieldValue('address', location);
-};
+}
 
 function currencyFormat() {
   let valor = priceInput.value.replace(/[^\d.]/g, '');
@@ -142,11 +139,15 @@ watch(price_temp,(new_price) => {
 });
 
 const onSubmit = handleSubmit((values) => {
+  if( use_posts.lat === 0 || use_posts.log === 0) {
+    window.scrollTo(0, 0);
+    return alert('Por favor mueva el indicador en el mapa a la ubicación de la propiedad');
+  }
   use_posts.name = values.name;
   use_posts.price = price.value;
   use_posts.price_us = price_us.value;
-  use_posts.lat = lat.value;
-  use_posts.log = log.value;
+  use_posts.lat;
+  use_posts.log;
   use_posts.address = values.address;
   use_posts.country = values.country;
   use_posts.sector = values.sector;
@@ -171,11 +172,9 @@ const onSubmit = handleSubmit((values) => {
   <form @submit="onSubmit" class="mx-4 px-4 md:px-8 sm:grid sm:grid-cols-3 sm:mx-auto gap-4 max-w-[995px]" :validation-schema="schema">
     <label class="col-span-3 sm:mb-2 mb-5">
       Nombre del proyecto
-      <!-- <input class="form-control" v-model="name" placeholder="Nombre del proyecto" type="text"> -->
       <Field class="form-control" name="name" type="text" placeholder="Nombre del proyecto" />
       <ErrorMessage name="name" />
     </label>
-    <!-- TODO Price -->
     <div class="flex col-span-3 sm:mb-2 mb-5">
       <label class="w-full">
         Precio
@@ -205,8 +204,14 @@ const onSubmit = handleSubmit((values) => {
     <!-- Map -->
     <div class="col-span-3">
       <ClientOnly>
-        <PopulationPostPropertiesMap @send-location="getAddress"/>
+        <PopulationPostPropertiesMap v-if="!mapNotSupported" @send-location="getAddress" @mapNotSupported="mapNotSupported = true" />
       </ClientOnly>
+      <div v-if="!mapNotSupported && use_posts.lat === 0 && use_posts.log === 0" class="bg-[yellow] bg-opacity-35 border-[yellow] border rounded-sm p-4 text-sm mt-3 text-center mb-5">
+        Por favor mueva el indicador en el mapa a la ubicación de la propiedad, esto nos ayudará a mostrarla en el mapa.
+      </div>
+      <div v-if="mapNotSupported" class="bg-[red] bg-opacity-35 border-[red] border rounded-sm p-4 text-sm mt-3 font-medium text-black text-center mb-5">
+        Por favor active la geolocalización en su navegador para poder ubicar la propiedad en el mapa.
+      </div>
     </div>
     <!-- Direccion -->
     <div class="col-span-3">
@@ -246,7 +251,7 @@ const onSubmit = handleSubmit((values) => {
       </Field>
       <ErrorMessage name="city" />
     </label>
-
+    <!---->
     <div class="col-span-3 gap-4 sm:grid grid-cols-2">
       <label class="w-full sm:mb-2 mb-5">
         Habitaciones
@@ -273,7 +278,7 @@ const onSubmit = handleSubmit((values) => {
         <ErrorMessage name="property_status" />
       </div>
     </div>
-    <!-- TODO Amenidades -->
+    <!-- Amenidades -->
     <div class="col-span-3">
       <label for="amenities" class="mb-2">Otras amenidades</label>
       <div class="amenities-wrapper scrollbar">
@@ -306,7 +311,7 @@ const onSubmit = handleSubmit((values) => {
         <ErrorMessage name="meter_2" />
       </label>
     </div>
-    <!-- Descripcion -->
+    <!-- Descripción -->
     <div class="flex flex-col col-span-3">
       <label>Descripción</label>
       <Field as="textarea" name="description" type="text" placeholder="Descripcion de la propiedad" />
@@ -315,7 +320,7 @@ const onSubmit = handleSubmit((values) => {
     <!--  -->
     <div class="col-span-3 flex justify-center w-full gap-4">
       <AtomsButtons @click="$emit('back')" btn-style="outline-primary">
-        Atras
+        Atrás
       </AtomsButtons>
       <AtomsButtons @click="onSubmit">
         Continuar
