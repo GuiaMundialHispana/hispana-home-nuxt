@@ -69,17 +69,12 @@ const { pendingUserData } = useUser();
 const user = useState('user');
 const route = useRoute();
 
-onMounted(() => {
-  const interval = setInterval(() => {
-    if(isLogged.value) {
-      refresh_token()
-    }
-  }, 60000); // 2 minutes
-
-  onUnmounted(() => {
-    clearInterval(interval);
-  });
-});
+setInterval(async () => {
+  if (isLogged.value) {
+    console.log('Refreshing token...');
+    await refresh_token();
+  }
+}, 120000);
 </script>
 
 <style lang="postcss" scoped>
