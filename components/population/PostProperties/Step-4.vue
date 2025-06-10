@@ -35,8 +35,8 @@ let pricePlaceholder = ref('pesos dominicanos');
 let priceInput = ref('');
 
 const schema = yup.object({
-  name: yup.string().required("El nombre es requrido"),
-  address: yup.string().required("La direccion es requerida"),
+  name: yup.string().required("El nombre es requerido"),
+  address: yup.string().required("La dirección es requerida"),
   country: yup.string().required("El pais es requerido"),
   sector: yup.string().required("El sector es requerido"),
   city: yup.string().required("La ciudad es requerida"),
