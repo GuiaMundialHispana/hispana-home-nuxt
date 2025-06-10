@@ -106,7 +106,6 @@ const showFilterDrodown = computed(() => {
 })
 
 function getFilterResults(e) {
-  console.log(e);
   createQuery.value = e;
   createQuery.value.type = route.query.type;
 }
@@ -116,6 +115,7 @@ const { data, status: properties_status } = await useLazyFetch('advertisements/s
   baseURL: config.public.API,
   transform:(data) => {
     let response = data.results.data;
+    properties.value = [];
     propertiesVip.value = [];
     propertiesExclusive.value = [];
     propertiesSilver.value = [];
