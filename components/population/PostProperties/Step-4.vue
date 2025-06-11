@@ -128,13 +128,19 @@ watch(currencyTab,(new_value) => {
   }
 });
 
+const { data:dollar } = useFetch('https://portal.guiamundialhispana.com/api/v1/dollar-rate', {
+  method: 'GET',
+  transform(data){
+    return data.results.rate;
+  }
+});
 watch(price_temp,(new_price) => {
   if (currencyTab.value === true) {
     price.value = parseInt(new_price);
-    price_us.value = parseInt(new_price / 58);
+    price_us.value = parseInt(new_price / dollar.value);
   } else {
     price_us.value = parseInt(new_price);
-    price.value = parseInt(new_price * 58);
+    price.value = parseInt(new_price * dollar.value);
   }
 });
 
