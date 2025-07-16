@@ -32,7 +32,6 @@ if(import.meta.client) {
 
 setInterval(async () => {
   if (isLogged.value) {
-    console.log('Refreshing token...');
     await refresh_token();
   }
 }, 120000);
