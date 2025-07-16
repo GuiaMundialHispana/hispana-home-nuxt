@@ -346,8 +346,10 @@ const maxPrice = ref(50000000);
 const picked = ref('RD');
 const price = ref('');
 const priceRangeSteps = ref(500000);
+const currentPicked = useState('currentPicked', () => picked.value);
 watch(picked, (newPicked:any) => {
   queryBody.price_type = newPicked;
+  currentPicked.value = newPicked;
   if (newPicked === 'USD') {
     barMinValue.value = 0;
     barMaxValue.value = 1000000;

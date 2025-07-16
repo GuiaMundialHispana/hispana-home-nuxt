@@ -73,7 +73,8 @@
       />
       <!-- Price -->
       <p class="price-title">Desde:</p>
-      <p class="price">US${{formatCurrency(property.price_us)}}</p>
+      <p v-if="currentPicked === 'USD'" class="price">US${{formatCurrency(property.price_us)}}</p>
+      <p v-else class="price">RD${{formatCurrency(property.price)}}</p>
     </NuxtLink>
   </article>
 </template>
@@ -105,6 +106,7 @@ const props = defineProps({
   }
 });
 
+const currentPicked = useState('currentPicked')
 const config = useRuntimeConfig();
 const route = useRouter();
 const auth = useAuthStore();

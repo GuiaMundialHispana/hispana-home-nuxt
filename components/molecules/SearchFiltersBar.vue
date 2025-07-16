@@ -286,7 +286,8 @@ export default {
       features: [],
       seletedFeatured: [],
       categories: [],
-      selectedCategories: []
+      selectedCategories: [],
+      currentPicked: useState('currentPicked', () => this.picked)
     }
   },
   components: {
@@ -352,6 +353,7 @@ export default {
   watch: {
     picked(newPicked) {
       this.queryBody.price_type = newPicked;
+      this.currentPicked = newPicked;
       this.$emit('sendProperties', this.queryBody);
       if (newPicked === 'USD') {
         this.barMinValue = 0,
